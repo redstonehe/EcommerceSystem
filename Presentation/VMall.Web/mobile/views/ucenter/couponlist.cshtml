@@ -1,0 +1,85 @@
+﻿@model VMall.Web.Mobile.Models.CouponListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "优惠劵";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<div class="myAssetsNav">
+    <a href="@Url.Action("accountinfo")"><strong>资产账户</strong></a>
+    @if (WorkContext.IsDirSaleUser)
+    { 
+        <a href="@Url.Action("CashCouponList")" ><strong>汇购卡</strong></a>
+    }
+    <a href="javascript:void(0);" class="hot"><strong>优惠券</strong></a>
+    <a href="@Url.Action("subrecommendlist")" ><strong>分享会员</strong></a>
+</div>
+
+<div class="cards">
+
+    @foreach (DataRow row in Model.CouponList.Rows)
+    {
+        if (row["storeid"].ToString() != WebHelper.GetConfigSettings("YX"))
+        {
+            if (row["storeid"].ToString() != "37")
+            { 
+        <div class="card @if (TypeHelper.ObjectToInt(row["oid"]) > 0 || (TypeHelper.ObjectToInt(row["oid"]) == 0 && TypeHelper.ObjectToDateTime(row["validtime"]) < DateTime.Now))
+                         {<text>gray-card</text>}
+                         else
+                         {<text>yellow-card</text>}">
+            <strong class="price">¥@row["money"]</strong>
+            <span class="type">@row["name"] &nbsp;&nbsp;
+                @if (TypeHelper.ObjectToInt(row["orderamountlower"]) > 0)
+                {
+                    <i>【满 @row["orderamountlower"]可用】</i>
+                }
+
+                券号：@row["couponsn"]
+
+            </span>
+            <span class="type">使用范围：
+                @if (row["channelid"] != "")
+                {
+                    List<ChannelInfo> channelList = Channel.GetChannelListByWhere(string.Format(" chid in ({0}) ", row["channelid"].ToString()));
+                    var channelNames = "";
+                    foreach (var item in channelList)
+                    {
+                        channelNames += item.Name + ",";
+                    }
+                    @("限以下专区使用（" + @channelNames.TrimEnd(',') + "）")
+                }
+                else if (row["storename"].ToString() == "" && row["channelid"] == "")
+                {
+                    @:全场通用
+        }
+                else
+                {
+                    @("限以下店铺使用（" + row["storename"] + "）")
+                                    
+                }
+            </span>
+            <span class="type">
+                @if (TypeHelper.ObjectToInt(row["oid"]) > 0)
+                {
+                    @:已使用
+             }
+                else if (TypeHelper.ObjectToInt(row["oid"]) == 0 && TypeHelper.ObjectToDateTime(row["validtime"]) < DateTime.Now)
+                {
+                    @:已过期
+                                }
+            </span>
+            <span class="expire">
+                @TypeHelper.ObjectToDateTime(row["activatetime"]).ToString("yyyy-MM-dd HH:mm") -
+                @TypeHelper.ObjectToDateTime(row["validtime"]).ToString("yyyy-MM-dd HH:mm")
+                到期</span>
+        </div>
+            }
+        }
+    }
+
+</div>
+<div class="getcoupon">
+    <a href="@Url.Action("couponcenter", "coupon")">领取更多优惠券 -></a>
+
+</div>

@@ -1,0 +1,295 @@
+﻿@model VMall.Web.Mobile.Models.ConfirmOrderGiftModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "领用赠品";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 6;
+}
+<style>
+    body {
+        font-family: "Microsoft YaHei";
+        color: #444;
+    }
+</style>
+<script>
+    $(function () {
+        $(".pricewarn").click(function () {
+            var diglog = $(".price-tips").html();
+            layer.open({
+                type: 0,
+                content: '因可能存在系统缓存、页面更新、促销活动导致价格变动异常等不确定性情况出现，商品售价以本结算页商品价格为准；如有疑问，请您返回购物车删除产品重新添加或者立即联系客服咨询。',
+                title: ['价格说明', 'border-bottom: 1px solid #CFCFCF'],
+                btn: '知道了',
+                anim: 'up',
+                area: ['600px', '360px'],
+                shadeClose: false, //点击遮罩关闭
+                //content: diglog// $("#showMsg")// diglog//$("#header")
+            });
+        })
+    });
+</script>
+<div id="mainBlock">
+    <div class="allCon">
+        <div class="title">收货人信息</div>
+        <div class="con">
+            <a href="javascript:getShipAddressList()">
+                @if (Model.DefaultFullShipAddressInfo != null)
+                {
+                    <p>@Model.DefaultFullShipAddressInfo.Consignee @Model.DefaultFullShipAddressInfo.Mobile </p>
+                    <p style="font-size: 14px;">@Model.DefaultFullShipAddressInfo.ProvinceName @Model.DefaultFullShipAddressInfo.CityName @Model.DefaultFullShipAddressInfo.CountyName @Model.DefaultFullShipAddressInfo.Address </p>
+                }
+                else
+                { 
+                    <text><p>
+                        您还没有配送地址，请先添加。<a href="javascript:void(0)" onclick="getShipAddressList()">点击添加</a>
+                    <p>
+                        </text>
+                }
+            </a>
+            <span class="icon-arr"></span>
+        </div>
+
+        <div class="title">支付信息</div>
+        <div class="con">
+            <a href="javascript:showPayPluginList()"><span>@Model.DefaultPayPluginInfo.FriendlyName</span></a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="title">
+            商品确认
+            <div class="right pricewarn">
+                <a href="javascript:javascript:void(0);"><i></i>价格说明</a>
+            </div>
+        </div>
+        <div class="" style="padding: 0">
+            <div class="cartItme" style="border: none;">
+
+                <div class="proInfo" style="margin: 0;">
+
+                    <div class="proInfo2">
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", Model.Pid } })" class="proImg">
+                            <img src="/upload/store/@Model.Product.StoreId/product/show/thumb300_300/@Model.Product.ShowImg" width="80" height="80" /></a>
+                        <div class="text">
+                            <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", Model.Product.Pid } })" >@Model.Product.Name</a>
+
+                            <span class="nosend">
+                                @{
+                                    var RegionName = string.Empty;
+                                    StoreShipTemplateInfo TempInfo = Stores.GetStoreShipTemplateById(Model.Product.StoreSTid);
+                                    if (TempInfo != null)
+                                    {
+                                        if (!string.IsNullOrEmpty(TempInfo.NoSendArea))
+                                        {
+                                            RegionName = Regions.GetRegionNamesByregionids(TempInfo.NoSendArea, TempInfo.NoSendCity);
+                                        }
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(RegionName) && !Model.isSend)
+                                {
+                                    @:(以下地区不支持发货：@RegionName)
+                                                }
+                            </span>
+
+                            <div class="price">
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">数量：<span>1 件 </span></a>
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">单价：<span>¥ 0.00 </span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subSum f12">
+
+                    <p class=""><span>运费：<i class="hg_yahei" id="fare_1_1">@Model.AllShipFee</i></span></p>
+                    <p class=""><span>商品合计：<i class="hg_red f16 hg_yahei">@Model.AllProductAmount</i></span></p>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="con am-input-group" id="buyerRemarkDiv" style="width: 100%; border-top: 1px #f1f1f1 solid">
+            <input class="text am-form-field" type="text" value="" id="buyerRemark" name="buyerRemark" style="margin: 10px;" placeholder="订单备注" />
+        </div>
+        <script type="text/javascript">
+            function openInvoice(obj) {
+                $("#invoiceDiv").show();
+            }
+            function closeInvoice(obj) {
+                $("#invoiceDiv").hide();
+                $("#invoice").val("");
+            }
+        </script>
+    </div>
+
+    <div class="orderInfo">
+        <span class="bg-border"><span class="icon"></span></span>
+        <div style="padding: 10px 30px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ordersummaryT">
+                <tr>
+                    <td>商品金额</td>
+                    <td align="right">¥@Model.AllProductAmount</td>
+                </tr>
+                <tr>
+                    <td>运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</td>
+                    <td align="right">¥@Model.AllShipFee.ToString("0.00")</td>
+                </tr>
+
+                <tr>
+                    <td>应付金额</td>
+                    <td align="right" class="allPrice">¥@Model.AllOrderAmount</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p style="height: 24px; line-height: 24px; text-align: right; color: #808080;">（*赠品概不支持退换货哦）</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <form action="@Url.Action("confirmordergift")" method="post" id="confirmOrderForm">
+        <input type="hidden" id="pid" name="pid" value="@Model.Pid" />
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+        @if (Model.DefaultFullShipAddressInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultFullShipAddressInfo.SAId" name="saId" id="saId" />
+        }
+        else
+        { 
+            <input type="hidden" value="0" name="saId" id="saId" />
+        }
+        @if (Model.DefaultPayPluginInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultPayPluginInfo.SystemName" name="payName" id="payName" />
+        }
+        else
+        {
+            <input type="hidden" value="" name="payName" id="payName" />
+        }
+    </form>
+
+    <a href="javascript:submitOrderGift()" class="redBt subOrder" id="addorder" style="border-radius: 0;">提交领用订单</a>
+    <a href="javascript:;" class="redBt subOrder" id="order_loading" style="border-radius: 0;display:none">正在提交...</a>
+
+
+</div>
+
+<div class="allCon" id="shipAddressListBlock" style="display: none;"></div>
+<form name="addShipAddressForm" action="" id="addShipAddressBlock" style="display: none;" class="am-form am-form-horizontal">
+    <div class="shipContent">
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">收货人</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="consignee" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">手机号</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="mobile" class="text" value="" maxlength="11" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-3 am-form-label">所在地区</label>
+
+            <div class="am-u-sm-3">
+                <select id="provinceId" name="provinceId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="cityId" name="cityId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="regionId" name="regionId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">详细地址</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="address" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group ">
+            <div class="am-u-sm-12">
+                <a href="javascript:void(0)" onclick="javascript:addShipAddress()" class="am-btn am-btn-default am-btn-block">提交</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="allCon" id="payPluginListBlock" style="display: none;">
+    <div class="title">支付信息</div>
+    @foreach (PluginInfo info in Model.PayPluginList)
+    {
+        if (info.SystemName != "alipay" && info.SystemName != "custompay")
+        {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+        }
+    }
+</div>
+<script type="text/javascript">
+    window.alert = function (msg) { layerOpenMsgDiv(msg) };
+
+    function submitOrderGift() {
+        var id = document.getElementById("Id").value;
+        var pid = document.getElementById("pid").value;
+        var saId = document.getElementById("saId").value;
+        var payName = document.getElementById("payName").value;
+        var buyerRemark = document.getElementById("buyerRemark") ? document.getElementById("buyerRemark").value : "";
+
+        //防重复提交
+        $("#addorder").hide();
+        $("#order_loading").show();
+        Ajax.post("/mob/ucenter/submitordergift", { 'id': id, 'pid': pid, 'saId': saId, 'payName': payName, 'buyerRemark': buyerRemark },
+                false, function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state != "success") {
+                        alert(result.content);
+                        $("#addorder").show();
+                        $("#order_loading").hide();
+                    }
+                    else {
+                        window.location.href = result.content;
+                        
+                    }
+                });
+    }
+
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+

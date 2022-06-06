@@ -1,0 +1,23 @@
+﻿@model VMall.Web.Mobile.Models.SubRecommendListModel
+@{int k = 1 + Model.PageModel.PageIndex * Model.PageModel.PageSize;}
+@foreach (var item in Model.UserList.OrderBy(x => x.Uid).ToList().FindAll(x => x.ParentLevel == 1))
+{
+    string showName = string.IsNullOrEmpty(item.Mobile) ? (string.IsNullOrEmpty(item.UserName) ? "" : item.UserName) : item.Mobile;
+    <tr>
+        <td>@k</td>
+        <td>@showName</td>
+        <td>@item.RealName</td>
+        <td>@Enum.GetName(typeof(AgentTypeEnum), item.AgentType)</td>
+        <td>@item.RegisterTime.ToString("yyyy-MM-dd")</td>
+
+    </tr>
+    k++;
+}
+
+
+@*<script>
+    subhasUserNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>*@
+
+
+

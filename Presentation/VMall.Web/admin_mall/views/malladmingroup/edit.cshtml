@@ -1,0 +1,132 @@
+﻿@model VMall.Web.MallAdmin.Models.MallAdminGroupModel
+@section header{
+    <title>编辑管理员组</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <style type="text/css">
+        .actionDiv {
+            width: 160px;
+            float: left;
+        }
+
+            .actionDiv label {
+                width: 135px;
+                display: inline-block;
+            }
+
+        .addTable table td {
+            height: 36px;
+        }
+    </style>
+    <script type="text/javascript">
+    @{
+        StringBuilder sb = new StringBuilder();
+        if (Model.ActionList != null)
+        {
+            foreach (string action in Model.ActionList)
+            {
+                sb.AppendFormat("\"{0}\",", action);
+            }
+        }
+        if (sb.Length > 0)
+        {
+            sb.Remove(sb.Length - 1, 1);
+        }
+    }
+        var actionArray = new Array(@Html.Raw(sb.ToString()));
+        $(function () {
+            for (var i = 0; i < actionArray.length; i++) {
+                $("#" + actionArray[i]).attr("checked", true);
+                var aid = $("#" + actionArray[i]).attr("data-aid");
+                var agid = $("#" + actionArray[i]).attr("data-agid");
+                //$("#" + actionArray[i]).parent().next().attr("href", "/malladmin/malladminaction/operaterights?aid='"+aid+"'&mallAGid="+agid);
+                $("#" + actionArray[i]).parent().append("<a class='editOperate' href='/malladmin/malladminaction/operaterights?aid=" + aid + "&mallAGid=" + agid + "'>[操作权限]</a>");
+            }
+
+
+            $("input[name='ActionList']").click(function () {
+
+                if ($(this).attr("checked") == false) {
+                    $(this).next().remove();
+                }
+            });
+        })
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">管理员组管理 &gt;&gt; 编辑管理员组
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <div>
+                <p style="color: red; margin: 0 15px 20px; font-size: 16px; border: 1px solid #ffd800; border-top: none; height: 30px; line-height: 30px; padding: 5px;">勾选相应菜单并提交成功后才能编辑该菜单栏下的具体操作权限，不提交直接编辑操作权限无效;取消菜单先取消该菜单下的所有操作权限，再取消该菜单的权限</p>
+            </div>
+            <table width="80%">
+                <tr>
+                    <td width="76px" align="right">名称：</td>
+                    <td>@Html.TextBoxFor(x => x.AdminGroupTitle, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.AdminGroupTitle)</td>
+                </tr>
+
+                @{
+        List<MallAdminActionInfo> mallAdminActionTree = ViewData["mallAdminActionTree"] as List<MallAdminActionInfo>;
+                }
+                @foreach (MallAdminActionInfo info in mallAdminActionTree.FindAll(x => x.ParentId == 0 && x.DisplayOrder == 0).OrderBy(x => x.Aid))
+                {
+                    <tr>
+                        <td align="right" width="120px">@info.Title：</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            @foreach (MallAdminActionInfo item in mallAdminActionTree.FindAll(x => x.ParentId == info.Aid && x.DisplayOrder == 0).OrderBy(x => x.Aid))
+                            { 
+                                <div class="actionDiv">
+                                    <label>
+                                        <input type="checkbox" name="ActionList" value="@item.Action.Trim()" id="@item.Action.Trim()" class="checkbox" data-aid="@item.Aid" data-agid="@Model.MallAGid"/>@item.Title</label>
+                                    @* <a class='editOperate' href='javascript:void(0);'>[操作权限]</a>*@
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <span style="color:red">PS:* 订单列表和订单详情有依赖关系，选中时同时选中，不选中时亦需要不同时选中</span>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

@@ -1,0 +1,151 @@
+﻿@model VMall.Web.Mobile.Models.ProductModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "商品暂时下架啦-" + Model.ProductInfo.Name;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 3;
+}
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="/mobile/css/swiper.min.css">
+<!-- Swiper JS -->
+<script src="/mobile/scripts/swiper.min.js"></script>
+<style>
+    .flashsaletime .starttime b, .flashsaletime .endtime b {
+        background: url(/images/flashsale_time.jpg) no-repeat;
+        color: #fff;
+        text-align: center;
+        line-height: 28px;
+        width: 28px;
+        height: 28px;
+        text-decoration: none;
+        font-style: normal;
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .sellout {
+        background: #ddd;
+        font-size: 2rem;
+        color: #333;
+    }
+
+    .outsaleview {
+        text-align: center;
+        padding: 20px 0 50px;
+    }
+
+    .outsaletitle {
+        color: #b0b0b0;
+        font-size: 22px;
+        margin: 10px;
+    }
+
+        .outsaletitle a {
+            color: #333;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+    .swiper-pagination-bullet {
+        margin: 0 4px;
+    }
+
+    .out-recommend {
+        position: relative;
+        margin: 0;
+        height: 50px;
+        font-size: 30px;
+        font-weight: 400;
+        color: #757575;
+        border-top: 1px solid #e0e0e0;
+        -webkit-font-smoothing: antialiased;
+    }
+
+        .out-recommend span {
+            position: absolute;
+            top: -20px;
+            left: 290px;
+            height: 40px;
+            width: 400px;
+            line-height: 40px;
+            text-align: center;
+            display: block;
+            background-color: #fff;
+        }
+
+    .swiper-button-prev {
+        background: url("/images/swiper_button_004.png") no-repeat;
+        width: 35px;
+        height: 80px;
+        background-size: 200%;
+    }
+
+    .swiper-button-next {
+        background: url("/images/swiper_button_004.png") -35px 0 no-repeat;
+        width: 35px;
+        height: 80px;
+        background-size: 200%;
+    }
+</style>
+<script type="text/javascript" src="/mobile/scripts/jquery.bxslider.min.js"></script>
+
+<div class="conBox">
+    <div class="outsaleview">
+        <p>
+            <img src="/images/outsale.png" width="80%" alt="商品暂时下架" />
+        </p>
+        <p class="outsaletitle">您查看的商品暂时下架啦</p>
+        <p class="outsaletitle">
+            <a href="/mob">商城首页</a>|
+            <a href="@Url.Action("orderlist", "ucenter")">我的订单</a>
+        </p>
+    </div>
+</div>
+
+
+@if (Model.RelateProductList.Count > 0)
+{
+    <div class="img-list" style="width:auto;">
+        <p>为你推荐：</p>
+        <!-- Swiper -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+
+                @foreach (var info in Model.RelateProductList)
+                { 
+                    <div class="swiper-slide">
+                        <a href="@Url.Action("product", new RouteValueDictionary { { "pid", info.Pid } })" class ="">
+                            <div>
+                                <img src="/upload/store/@info.StoreId/product/show/thumb190_190/@info.ShowImg" alt="" width="100%"  onerror="this.style.display='none'"/>
+                                <div style="display: block;">
+                                    <p>@info.Name</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+        <!-- Initialize Swiper -->
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '',
+                slidesPerView: 4,
+                scrollbar: '.swiper-scrollbar',
+                scrollbarHide: false,
+                paginationHide: true,
+                slidesOffsetAfter: 100,
+                spaceBetween: 30
+            });
+        </script>
+    </div>
+}
+
+
+

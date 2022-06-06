@@ -1,0 +1,218 @@
+﻿@model VMall.Web.Models.SubRecommendListModel
+@using VMall.Core;
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "分享会员-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "分享会员";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+@*<script src="@{@WorkContext.ScriptCDN}/scripts/jquery.jOrgChart.js" type="text/javascript"></script>*@
+@*<script src="@{@WorkContext.ScriptCDN}/scripts/OrgChart.js" type="text/javascript"></script>*@
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; min-height: 493px; max-height: none;">
+            <h2 id="memberRT" style="position: relative;">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+                
+                    <a class="moreshare" style="font-size: 12px; color: red; cursor: pointer; float: right; margin-right: 20px;">邀请更多</a>
+
+                <div class="showCode" style="position: absolute; top: -8px; right: 75px; border: 1px solid #ddd; cursor: pointer; padding: 10px; z-index: 9999999; display: none; background-color: #F5F5F5;">
+                    <img src="@ViewData["codeImg"]" alt="" width="200" height="280" />
+                </div>
+                <div class="clear"></div>
+            </h2>
+            @if (Model.UserList.Count > 0)
+            {
+                <div id="subList">
+                    <table width="100%" border="0" cellspacing="0" class="dingdan">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>会员编号</th>
+                                <th>会员姓名</th>
+                                <th>代理等级</th>
+                                <th>加入时间</th>
+                                <th>订单总金额</th>
+                                <th>订单总海米</th>
+                                @*<th>预结算海米</th>*@
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int k = 1;}
+                            @foreach (var item in Model.UserList.OrderBy(x => x.Uid).ToList().FindAll(x => x.ParentLevel == 1))
+                            {
+                                string showName = string.IsNullOrEmpty(item.UserName) ? (string.IsNullOrEmpty(item.Email) ? (string.IsNullOrEmpty(item.Mobile) ? item.NickName : item.Mobile) : item.Email) : item.UserName;
+                                <tr>
+                                    <td>@k</td>
+                                    <td>@showName</td>
+                                    <td>@item.RealName</td>
+                                    <td>
+                                        @if (item.AgentType == 4) {
+                                            <i>大区经销商 </i>
+                                        }
+                                        @if (item.AgentType == 3) {
+                                            <i>VIP经销商 </i>
+                                        }
+                                        @if (item.AgentType == 2) {
+                                            <i>星级经销商 </i>
+                                        }
+                                        @if (item.AgentType == 1) {
+                                            <i>事业伙伴 </i>
+                                        }
+                                        @if (item.AgentType == 0) {
+                                            <i></i>
+                                        }
+
+                                    </td>
+                                    <td>@item.RegisterTime.ToString("yyyy-MM-dd")</td>
+                                    @{decimal sumOrdrAmount = Model.OrderList.FindAll(x => x.Uid == item.Uid).Sum(x => x.OrderAmount);}
+                                    <td><a href="#" style="color: blue;text-decoration:underline;">@sumOrdrAmount.ToString("0.00")</a></td>
+                                    @{decimal sumPreSettleHaimi = Model.OrderProductList.FindAll(x => x.Uid == item.Uid).Sum(x => x.ProductHaiMi * x.BuyCount);}
+                                    <td>@sumPreSettleHaimi.ToString("0.00")</td>
+                                    @*@{List<OrderInfo> list = Model.OrderList.FindAll(x => x.Uid == item.Uid && x.OrderState != (int)OrderState.Completed);
+                                      StringBuilder oidList = new StringBuilder();
+                                      foreach (OrderInfo row in list)
+                                      {
+                                          oidList.AppendFormat("{0},", row.Oid);
+                                      }
+                                      if (oidList.Length > 0)
+                                      {
+                                          oidList.Remove(oidList.Length - 1, 1);
+                                      }
+                                      List<OrderProductInfo> userOPList = Orders.GetOrderProductList(oidList.ToString());
+                                    }
+                                    <td>@(Convert.ToDouble(userOPList.Sum(x => x.ProductHaiMi * x.BuyCount))*0.3)</td>*@
+                                    
+                                </tr>
+                                      k++;
+                            }
+                        </tbody>
+                    </table>
+                    @Html.WebPager(Model.PageModel)
+                </div>
+                      
+@*<div id="JOrgDiv" class="JOrgDiv" style="width: 800px; height: 300px; overflow: auto; position: relative;">
+                    <script language="javascript">
+                        @(ViewData["treeStr"])
+
+                        //无滚动条时控制个数以及宽度实现横向和纵向文字切换 --纵向文字不美观-不推荐使用
+                        //var showType = 1;
+                        var totalCount = uid@(WorkContext.Uid).Nodes.length;
+                        var maxCount = 50;
+                        if (totalCount <= maxCount) showType = 1;
+                        var OrgShows = new OrgShow(uid@(WorkContext.Uid));
+                        //var boxwidth = showType == 1 ? 50 : 25;
+                        OrgShows.TargetDivId = "JOrgDiv";//显示目标div
+                        OrgShows.Top = 10;//顶部定位
+                        OrgShows.Left = 0;//左侧定位
+                        OrgShows.IntervalWidth = 5;//横向线条之间宽度间隔
+                        OrgShows.IntervalHeight = 50;//竖向线条长度
+                        OrgShows.ShowType = 1;//文字方向 1为横向 2为竖向
+                        OrgShows.BoxHeight = 45;//
+                        // OrgShows.BoxWidth = 100;//
+                        OrgShows.LineSize = 2;  //设置线条大小
+                        OrgShows.LineColor = "#000";  //设置线条颜色
+
+                        OrgShows.Run();
+
+                    </script>
+                </div>*@
+            
+            }
+            else
+            {
+                <div class="norecommend">
+                    <p>
+                        <h3>您还没有分享任何会员 </h3>
+                    </p>
+                    <p>
+                        <h3>赶快邀好友加入吧</h3>
+                    </p>
+                    <p>
+                        <img src="@(ViewData["codeImg"])" alt="" onerror="src='/images/60.jpg'" width="200" height="280"/>
+                    </p>
+                    <p>
+                        注册即送100元红包
+                        <br />
+                        遇见更健康的生活方式
+                    </p>
+                </div>
+            }
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script>
+    $('.moreshare,.showCode').mouseover(function () {
+        $(".showCode").show().stop(true, false).animate({ top: "0px" }, 100);
+    });
+    $('.moreshare,.showCode').mouseleave(function () {
+        $(".showCode").stop(true, false).animate({ top: "-25px" }, 100, function () {
+            $(".showCode").hide();
+        });
+    });
+</script>
+
+@*<script>
+    jQuery(document).ready(function () {
+        //loadtree();
+    });
+    //menu_list为json数据
+    //parent为要组合成html的容器
+
+    function showall(menu_list, parent) {
+        for (var menu in menu_list) {
+            //如果有子节点，则遍历该子节点
+            if (menu_list[menu].children.length() > 0) {
+                //创建一个子节点li
+                var li = $("<li></li>");
+                //将li的文本设置好，并马上添加一个空白的ul子节点，并且将这个li添加到父亲节点中
+                $(li).append(" <a  href='javascript:void(0)'  onclick='xx(" + menu_list[menu].id + ");'>" + menu_list[menu].name + "</a>").append("<ul></ul>").appendTo(parent);
+                //将空白的ul作为下一个递归遍历的父亲节点传入
+                showall(menu_list[menu].children, $(li).children().eq(1));
+            }
+                //如果该节点没有子节点，则直接将该节点li以及文本创建好直接添加到父亲节点中
+            else {
+                $("<li></li>").append(" <a href='javascript:void(0)' onclick='xx(" + menu_list[menu].id + ");'>" + menu_list[menu].name + "</a>").appendTo(parent);
+            }
+        }
+    }
+
+    function loadtree() {
+        $.ajax({
+            url: '/UCenter/getSubList',
+
+            type: 'POST',
+
+            //data: { id: nodeId },
+
+            cache: false,
+
+            error: function () { alert('Error loading  document'); },
+
+            success: function (result) {
+                //var json = eval("(" + result + ")");;//这里中间的括号为中括号 使数据类似[{"username":"张三","content":"沙发"}];的格式
+                //eval("(" + result + ")")
+                $("#f").append(result);
+                //alert(result);
+                //var showlist = $("<ul id='org' style='display:none'></ul>");
+                //showall(result, showlist);
+                //$("#f").append(showlist);
+                //$("#org").jOrgChart();
+            }
+        });
+
+
+    }
+</script>*@
+
+
+

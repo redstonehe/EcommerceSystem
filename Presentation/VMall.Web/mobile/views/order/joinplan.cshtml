@@ -1,0 +1,229 @@
+﻿@{
+     Layout = "~/mobile/views/shared/_layout.cshtml";
+     ViewBag.SubTitle = "加入蓝钻计划";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+     .radio {
+        width:30px;
+        font-size:24px;
+    }
+    #managerType {
+         font-size:14px;
+    }
+    .reg {text-align:center;
+          margin:40px;
+    }
+    .reg th {
+    font-weight: normal;
+    font-size: 14px;
+    /*color: #999;
+    padding-right: 10px;*/
+    width: 190px;
+    text-align: right;
+    height: 30px;
+}
+    html body .reg .regBt {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    display: block;
+    text-align: center;
+    width: 170px;
+    padding: 7px 0;
+    font-weight: normal;
+    margin-top: 10px;
+        margin-left: 50px;
+}
+html body .redBT {
+    padding: 1px 10px;
+    background: #D02424;
+    color: #FFF;
+    border: 1px solid #9F1F24;
+}
+</style>
+<div class="reg box">
+    @*<div style="margin-left: 94px; margin-bottom: 20px;">
+        <h2>加入蓝钻计划</h2>
+    </div>*@
+    <form name="registerForm" action="">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+            <tr class="succ_on">
+                <th width="190"><em>*</em>推荐人编号：</th>
+                <td width="275">
+                    <input type="text" id="parentCode" name="parentCode" @(string.IsNullOrEmpty(ViewData["parentCode"].ToString())?"":"readOnly=true") value="@(ViewData["parentCode"].ToString())" class="text" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            @*<tr class="succ_on" id="managerType">
+                <th width="190"><em></em>安置人确立方式：</th>
+                <td width="275">
+                    <input type="radio" name="managertype" onclick="setType1();" value="0" checked="checked" class="radio" />系统分配
+                    <input type="radio" name="managertype" onclick="setType2();" value="1"   class="radio" />自主填写
+                </td>
+                <td>&nbsp;</td>
+            </tr>*@
+            <tr class="succ_on" id="managerCodeTr">
+                <th width="190"><em></em>安置人编号：</th>
+                <td width="275">
+                    <input type="text" id="managerCode" name="managerCode" value="" class="text" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on" id="managerAreaTr">
+                <th width="190"><em></em>安置分区：</th>
+                <td width="275">
+                    <select style="width:153px;text-align:center;margin:0 auto;" id="managerArea" name="managerArea">
+                        <option value="1">
+                            &nbsp;A&nbsp;区&nbsp;
+                        </option>
+                        <option value="2">
+                            &nbsp;B&nbsp;区&nbsp;
+                        </option>
+                    </select>
+
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>电话：</th>
+                <td width="275">
+                    <input type="text" id="userPhone" name="userPhone" value="" class="text" maxlength="11"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>身份证号：</th>
+                <td width="275">
+                    <input type="text" id="userCard"  name="userCard" value="" class="text" maxlength="18"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td><a href="javascript:void(0);" class="regBt redBT" onclick=" return join(this)">立即加入</a></td>
+                <td>&nbsp;</td>
+                
+            </tr>
+        </table>
+    </form>
+    @*<a href="/order/joinresult?parentCode=1111&managerCode=1111">加入成功</a>*@
+</div>
+<script>
+    var type = 0;
+    
+    //$(function () {
+        
+    //        $("#managerCodeTr").hide();
+    //        $("#managerAreaTr").hide();
+        
+    //});
+    //function setType1() {
+    //    $("#managerCodeTr").hide();
+    //    $("#managerAreaTr").hide();
+       
+    //}
+    //function setType2() {
+    //    $("#managerCodeTr").show();
+    //    $("#managerAreaTr").show();
+    //    type = 1;
+        
+    //}
+    function join($this) {
+        if (checkInput()) {
+            //按钮置位不可用
+            $($this).removeAttr("onclick").css("color", "#fff");
+            $($this).html("正在提交...").css("color", "#fff");
+            $.post("/order/JoinPlan", { 'oids': '@(ViewData["oids"])', 'parentCode': $.trim($("#parentCode").val()), 'managerCode': $.trim($("#managerCode").val()), 'managerArea': $.trim($("#managerArea").val()), 'userCard': $.trim($("#userCard").val()), 'userPhone': $.trim($("#userPhone").val()) }, function (data) {
+                var result = eval("(" + data + ")");
+                if (result.state == "success") {
+                    //var logout = $(".headerLink a[href*='/account/logout']");
+
+                    //alert("加入蓝钻计划成功\r\n" + "推荐人：" + result.content[0].msg.ParentCode + "\r\n安置人：" + result.content[0].msg.ManagerCode + "");
+                    window.location.href = "/mob/order/joinresult?parentCode=" + result.content[0].msg.ParentCode + "&managerCode=" + result.content[0].msg.ManagerCode;
+                    //if (logout.length > 0) {
+                    //    //清楚用户缓存
+                    //    delCookie("UserCookie");
+                    //}
+                    // window.location.href = "/account/login?returnUrl=http://" + window.location.host;
+
+                }
+                else if (result.state == "exception") {
+                    alert(result.content);
+                }
+                else if (result.state == "error") {
+                    showVerifyError(result.content);
+                    $("#parentCode").focus();
+                    $($this).html("立即加入").css("color", "#fff").attr("onclick", "return join(this);");
+                }
+            });
+        }
+    }
+    
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+    function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(name);
+        if (cval != null)
+            document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString() + "domain=haihui.com;path=/";
+    }
+    function setCookie(name, value,date) {
+        var Days = date;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + "domain=haihui.com;path=/";
+    }
+    //处加入加入蓝钻计划的反馈信息
+    function joinPlanResponse(data) {
+        
+    }
+
+    //检查输入
+    function checkInput() {
+        if ($.trim($("#parentCode").val()) == "") {
+            alert("推荐人编号不能为空");
+            $("#parentCode").focus();
+            return false;
+        }
+        //$('input:radio[name="managertype"]:checked').val() == 1 
+        //if ($("#managerCode").val() == "") {
+        //    alert("安置人编号不能为空");
+        //    return false;
+        //}
+        if ($.trim($("#userPhone").val()) == "") {
+            alert("电话号码不能为空");
+            $("#userPhone").focus();
+            return false;
+        }
+        var patrn = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!patrn.test($.trim($("#userPhone").val()))) {
+            alert('对不起,您输入的手机号码格式错误,请重新输入,谢谢!');
+            $("#userPhone").focus();
+            return false;
+        }
+        if ($.trim($("#userCard").val()) == "") {
+            alert("身份证号码不能为空");
+            $("#userCard").focus();
+            return false;
+        }
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (reg.test($.trim($("#userCard").val())) === false) {
+            alert("身份证输入不合法,请重新输入");
+            $("#userCard").focus();
+            return false;
+        }
+
+        return true;
+    }
+    
+
+</script>
+
+

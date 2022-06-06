@@ -1,0 +1,129 @@
+﻿@model VMall.Web.Mobile.Models.OrderInfoModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单详情";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+</style>
+@*@{var osn = Model.OrderInfo.OSN.Trim();
+  var osnT = osn.Substring(0, osn.Length - 1) + "<i style='font-size: 22px;vertical-align: middle;padding-top: -6px;display: inline-block;height: 25px;font-weight: bolder;'>*</i>";}*@
+<div class="pro">
+
+    <div class="proI2">
+        <p>
+            订单编号：@Model.OrderInfo.OSN
+            @* @if ((int)Model.OrderInfo.OrderState < 90)
+            { 
+                                        
+                @osnT
+            }
+            else
+            {
+                @osn
+            }*@
+        </p>
+        <p>订单金额：¥@Model.OrderInfo.SurplusMoney</p>
+        <p>订单日期：@Model.OrderInfo.AddTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+        <div class="proBt" style="text-align: center;">
+            <a href="@Url.Action("orderactionlist", new RouteValueDictionary { { "oid", Model.OrderInfo.Oid } })" class="redBt" >订单跟踪</a>
+            @if (Model.OrderInfo.OrderState == (int)OrderState.Completed && Model.OrderInfo.IsReview == 0)
+            {
+                <a class="redBt" href="@Url.Action("revieworder", new RouteValueDictionary { { "oid", Model.OrderInfo.Oid } })">商品评价</a>
+            }
+        </div>
+    </div>
+   
+    @foreach (OrderProductInfo info in Model.OrderProductList)
+    {
+        <div class="orderproItme">
+            <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">
+                <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg"></a>
+            <div class="order-msg">
+                <p class="title">
+                    @if (info.Type == 3)
+                    {
+                        <span style="color: red;">[套装]</span>
+                    }@info.Name
+                </p>
+                <p class="price">¥@info.DiscountPrice</p>
+                <p>x @info.RealCount</p>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    }
+
+    <div class="proI2">
+        <p class="i2Title">@Model.OrderInfo.Consignee<span>@Model.OrderInfo.Mobile</span></p>
+        <div class="hr"></div>
+        <p class="i2Title">
+            @if (Model.RegionInfo != null)
+            {
+                @Model.RegionInfo.ProvinceName @Model.RegionInfo.CityName @Model.RegionInfo.Name @Model.OrderInfo.Address
+            }
+            else
+            {
+                @Model.OrderInfo.Address
+            }
+        </p>
+        <div class="hr"></div>
+        <p class="i2Title">确认收货时间：
+                    @if (Model.OrderInfo.ReceivingTime < Model.OrderInfo.AddTime)
+                        {
+                            @:未收货
+                        }
+                        else
+                        {
+                           @Model.OrderInfo.ReceivingTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        }
+                    
+         </p>
+    </div>
+
+    <div class="proI2">
+        <p class="i2Title">付款方式:<span>@Model.OrderInfo.PayFriendName</span></p>
+        <div class="hr"></div>
+        <p>商品金额:<span class="price">¥@Model.OrderInfo.ProductAmount</span></p>
+        <p>运费:<span class="price">+¥@Model.OrderInfo.ShipFee</span></p>
+        <p>满减:<span class="price">-¥@Model.OrderInfo.FullCut.ToString("0.00")</span></p>
+        @* <p>税费:<span class="price">¥@Model.OrderInfo.PayFee</span></p>*@
+        
+        <p>@(MallKey.MallDiscountName_JiangJin)抵扣:<span class="price">-¥@Model.OrderInfo.HaiMiDiscount</span></p>
+        <p>@(MallKey.MallDiscountName_JiFen)减免:<span class="price">-¥@Model.OrderInfo.HongBaoDiscount</span></p>
+        <p>优惠券:<span class="price">-¥@Model.OrderInfo.CouponMoney.ToString("0.00")</span></p>
+       @* <p>汇购卡券:<span class="price">-¥@Model.OrderInfo.CashDiscount</span></p>
+        <p>代理账户抵现:<span class="price">-¥@Model.OrderInfo.AgentDiscount</span></p>
+        <p>佣金账户抵现:<span class="price">-¥@Model.OrderInfo.CommisionDiscount</span></p>*@
+        <div class="hr"></div>
+        <p class="i2Title">应支付金额:<span class="price" style="font-size:20px;font-weight:bold;color:red;">¥@Model.OrderInfo.SurplusMoney</span></p>
+    </div>
+    <div class="proI2">
+        <p class="i2Title">发票、订单备注</p>
+        <div class="hr"></div>
+        <p class="i2Title">发票:@Model.OrderInfo.InvoiceMore</p>
+        <p class="i2Title">订单备注:@Model.OrderInfo.BuyerRemark</p>
+    </div>
+    <div class="proI2">
+        <p class="i2Title">配送信息</p>
+        <div class="hr"></div>
+        <p class="i2Title">配送方式:@Model.OrderInfo.ShipCoName</p>
+        @*<p class="i2Title">配送时间:@Model.OrderInfo.ShipTime.ToString("yyyy-MM-dd HH:mm:ss")</p>*@
+        <p class="i2Title">快递单号:@Model.OrderInfo.ShipSN</p>
+    </div>
+
+</div>
+

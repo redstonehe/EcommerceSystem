@@ -1,0 +1,185 @@
+﻿@model VMall.Web.Mobile.Models.CartModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "我的购物车";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 5;
+}
+<style>
+    
+</style>
+
+<div id="cartBody">
+   @Html.Partial("/mobile/views/cart/ajaxindex.cshtml")
+</div>
+
+<div id="fullSendBlock" class="HGbox" style="display: none;">
+    <div class="HGtitle">
+        <div class="left">请选择商品</div>
+        <div class="right"><a href="javascript:closeFullSendBlock()" class="redBt">取消</a></div>
+        <div class="right" style="margin: 0px 10px 0px 0px;"><a href="javascript:addFullSend()" class="redBt">确定</a></div>
+        <div class="clear"></div>
+    </div>
+    <div id="fullSendProductList"></div>
+</div>
+<div id="fullSendMask" class="bg" style="display: none; position: absolute; left: 0px; top: 0px; background-color: #000; filter: alpha(opacity=90); opacity: 0.9; width: 100%; height: 100%; z-index: 8888;"></div>
+
+
+<script type="text/javascript">
+    //高度需要计算 .bg的高度 = 当前body的高度
+    document.getElementById("fullSendMask").style.height = document.body.scrollHeight + "px";
+</script>
+<script type="text/javascript">
+    function select_suittype(ele) {
+        $(".layer_4").hide();
+        $(".layer_5 i").hide();
+        $(".layer_5 span").removeClass("hottest");
+        $(ele).addClass("hottest");
+        $(ele).next().show();
+    }
+    Array.prototype.each = function (fn) {
+        fn = fn || Function.K;
+        var a = [];
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0; i < this.length; i++) {
+            var res = fn.apply(this, [this[i], i].concat(args));
+            if (res != null) a.push(res);
+        }
+        return a;
+    };
+    Array.prototype.contains = function (needle) {
+        for (i in this) {
+            if (this[i] == needle) return true;
+        }
+        return false;
+    }
+    Array.prototype.uniquelize = function () {
+        var ra = new Array();
+        for (var i = 0; i < this.length; i++) {
+            if (!ra.contains(this[i])) {
+                ra.push(this[i]);
+            }
+        }
+        return ra;
+    };
+    Array.intersect = function (a, b) {
+        return a.uniquelize().each(function (o) { return b.contains(o) ? o : null });
+    };
+    var agenttype = '@(WorkContext.PartUserInfo.AgentType)';
+    var suitpid = '@(WebHelper.GetConfigSettings("AgentSuitPid"))';
+    @*var agentStoreAmount='@(Carts.SumOrderProductAmount(Model.StoreCartList.Find(x=>x.StoreInfo.StoreId==WebHelper.GetConfigSettingsInt("AgentStoreId")).SelectedOrderProductList))';*@
+
+    //前往确认订单
+    function goConfirmOrder() {
+        if (isGuestSC == 0 && uid < 1) {
+            alert("请先登录");
+            return;
+        }
+        var inputList = document.getElementById("cartBody").getElementsByTagName("input");
+
+        var checkboxList = new Array();
+        for (var i = 0; i < inputList.length; i++) {
+            if (inputList[i].type == "checkbox") {
+                checkboxList.push(inputList[i]);
+            }
+        }
+
+        var valueList = new Array();
+        for (var i = 0; i < checkboxList.length; i++) {
+            if (checkboxList[i].checked) {
+                valueList.push(checkboxList[i].value);
+            }
+        }
+
+        var storeList = $("input[data-store='1']");
+        var storeboxList = new Array();
+        for (var i = 0; i < storeList.length; i++) {
+            var storeid = $(storeList[i]).attr("storeid");
+            var checkStore = $("input[storeid='" + storeid + "'][checked='checked'][name='cartItemCheckbox']");
+            if (checkStore.length > 0) {
+                storeboxList.push(storeid);
+            }
+        }
+        //var storevalueList = new Array();
+        //for (var i = 0; i < storeboxList.length; i++) {
+        //    if (storeboxList[i].checked) {
+        //        storevalueList.push($(storeboxList[i]).attr("storeid"));
+        //    }
+        //}
+        var checkproList = $("input[checked='checked'][name='cartItemCheckbox']");
+        var checkproboxList = new Array();
+        for (var i = 0; i < checkproList.length; i++) {
+            var pid = $(checkproList[i]).attr("data-pid");
+            checkproboxList.push(pid);
+        }
+
+        if (valueList.length < 1) {
+            alert("请先选择购物车商品");
+        }
+        else {
+            if (valueList.length != checkboxList.length) {
+                document.getElementById("selectedCartItemKeyList").value = valueList.join(',');
+            }
+            $("#selectedStoreKeyList").val(storeboxList.join(','));
+            @*if (parseInt(agenttype) <= 0)
+            {
+                var agentStoreAmount = parseFloat($(".storeSub_" + '@(WebHelper.GetConfigSettingsInt("AgentStoreId"))').html());
+                //alert(arrayIntersection(suitpid.split(','), checkproboxList));
+                //alert($.type(agentStoreAmount));
+                if (Array.intersect(suitpid.split(','), checkproboxList).length <= 0 && agentStoreAmount >= 10000)//选中不包含体验套餐
+                {
+                    var diglog=$("#showMsg").html();
+                    layer.open({
+                        type: 1,
+                        title: '确认',
+                        area: ['600px', '600px'],
+                        shadeClose: true, //点击遮罩关闭
+                        content: diglog// diglog//$("#header")
+                    });
+                    return;
+                }
+                //alert(22);
+                //return;
+            }*@
+            document.forms[0].submit();
+        }
+    }
+    //提交加入购物车
+    function submit_confirm_cart() {
+        var selectsuit = $(".layer_5 .hottest");
+        if (selectsuit.length <= 0) {
+            $(".layer_4 h2").html("请选择套餐包类型");
+            $(".layer_4").show();
+            return;
+        }
+        var suitpid = 0;
+        var selectsuitpid = selectsuit.attr("data-pid");
+        var pid = selectsuitpid;
+        var buyCount = 1;
+        
+           // window.location.href = "/mob/cart/addproduct?pid=" + pid + "&buyCount=" + buyCount + "&suitpid=" + suitpid;
+        
+        
+            Ajax.get("/mob/cart/addproduct?pid=" + pid + "&buyCount=" + buyCount + "&suitpid=" + suitpid, false, function () {
+                window.location.href = window.location.href;
+            })
+        
+
+    }
+    //求集合交集
+    function arrayIntersection(a, b) {
+        var ai = 0, bi = 0;
+        var result = new Array();
+        while (ai < a.length && bi < b.length) {
+            if (a[ai] < b[bi]) { ai++; }
+            else if (a[ai] > b[bi]) { bi++; }
+            else /* they're equal */
+            {
+                result.push(a[ai]);
+                ai++;
+                bi++;
+            }
+        }
+        return result;
+    }
+</script>

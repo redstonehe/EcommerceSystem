@@ -1,0 +1,145 @@
+﻿@model VMall.Web.Mobile.Models.AgentResultModel
+@{
+     Layout = "~/mobile/views/shared/_layout.cshtml";
+     ViewBag.SubTitle = "结果";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+     .radio {
+        width:30px;
+        font-size:24px;
+    }
+    #managerType {
+         font-size:14px;
+    }
+    .reg {text-align:center;
+          margin:40px;
+    }
+    .reg th {
+    font-weight: normal;
+    font-size: 14px;
+    /*color: #999;
+    padding-right: 10px;*/
+    width: 190px;
+    text-align: right;
+    height: 30px;
+}
+    html body .reg .regBt {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    display: block;
+    text-align: center;
+    width: 170px;
+    padding: 7px 0;
+    font-weight: normal;
+    margin-top: 10px;
+        margin-left: 50px;
+}
+html body .redBT {
+    padding: 1px 10px;
+    background: #D02424;
+    color: #FFF;
+    border: 1px solid #9F1F24;
+        padding: 4px 15px;
+    border: 1px solid #e4393c;
+    border-radius: 3px;
+    background-color: #f5f4f4;
+    background: -webkit-gradient(linear,0 0,0 100%,from(#FC5C5F),to(#e4393c));
+    line-height: 29px;
+    font-size: 14px;
+    color: #FFF;
+  
+    display: block;
+    text-align: center;
+    padding: 3px 0;
+    margin: 10px 0;
+}
+    th {
+        font-weight: normal;
+    font-size: 14px;
+    color: #999;
+    padding-right: 10px;
+    width: 190px;
+    text-align: right;
+    height: 60px;
+
+    }
+    .userFormC .text {
+    width: 238px;
+    height: 16px;
+    padding: 10px 25px 10px 5px;
+    border: 1px solid #cccccc;
+    float: none;
+    font-size: 14px;
+    color: #999;
+    overflow: hidden;
+    outline: none;
+}
+    .return {
+       padding: 1px 10px;
+    background: #D02424;
+    color: #FFF;
+    border: 1px solid #9F1F24;
+    padding: 4px 15px;
+    border: 1px solid #e4393c;
+    border-radius: 3px;
+    background-color: #f5f4f4;
+    background: -webkit-gradient(linear,0 0,0 100%,from(#FC5C5F),to(#e4393c));
+    line-height: 29px;
+    font-size: 14px;
+    color: #FFF;
+    display: block;
+    text-align: center;
+    padding: 3px 0;
+    margin: 10px auto;
+    width:60%;
+
+    }
+</style>
+<div class="userFormC">
+   <div class="result ">
+                @{PartUserInfo user = Users.GetPartUserById(Model.JoinUid);
+                  var agentRank = string.Empty;
+                  if (user.AgentType==1){
+                      agentRank = "事业伙伴";
+                  }
+                  else if (user.AgentType == 2)
+                  {
+                      agentRank = "星级经销商";
+                  }
+                  else if (user.AgentType == 3)
+                  {
+                      agentRank = "VIP经销商";
+                  }
+                  else if (user.AgentType == 4)
+                  {
+                      agentRank = "大区经销商";
+                  }
+                  else if (user.AgentType == 5)
+                  {
+                      agentRank = "合伙人";
+                  }
+                  }
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2>恭喜您，@(string.IsNullOrEmpty(user.UserName) ? (string.IsNullOrEmpty(user.Mobile) ?  "" : user.Mobile) : user.UserName)已成功成为汇购优选代理 @agentRank ！！！</h2>
+                </div>
+                <div style="text-align: center; font-size: 16px;">
+                    <p>推荐人：<span>@Model.ParentCode</span></p>
+                    <p>安置人：<span>@Model.ManagerCode</span></p>
+                </div>
+                <div class="return" >
+                    @*  <span id="timer" style="color:red;">5</span> 秒后自动返回*@
+                    <a href="/" style="font-size: 18px; color: #fff;">返回首页</a>
+                </div>
+            </div>
+    
+    
+</div>
+
+
+

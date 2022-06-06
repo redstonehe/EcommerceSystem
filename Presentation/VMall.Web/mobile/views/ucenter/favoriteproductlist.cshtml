@@ -1,0 +1,211 @@
+﻿@model VMall.Web.Mobile.Models.FavoriteProductListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "收藏商品"; ;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link rel="stylesheet" href="/mobile/static/dropload/dropload.css">
+<!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+@* <script src="/mobile/static/dropload/zepto.min.js"></script>*@
+<script src="/mobile/static/dropload/jquery.min.js"></script>
+
+<script src="/mobile/static/dropload/dropload.min.js"></script>
+
+<style>
+    /*table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+    table td {
+        border: 1px solid #f2f2f2;
+        padding: 5px;
+        vertical-align: middle;
+    }*/
+
+    /*#order_table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }*/
+    /*.viewport {
+        width: 900px;
+        max-width: 1000px;
+    }*/
+    .favProList img {
+        height: 65px;
+        width: 65px;
+        float: left;
+        margin: 5px;
+    }
+
+    .favProList a {
+        display: block;
+        text-align: left;
+        margin-left: 80px;
+        line-height: 1.5rem;
+    }
+
+    .grid1 {
+        width: 75%;
+    }
+
+    .grid2 {
+        width: 25%;
+    }
+
+    .red {
+        color: red;
+    }
+</style>
+
+<div class="myAssetsCon am-scrollable-horizontal inner">
+    <table class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-compact">
+        <thead id="order_table">
+            <tr>
+                <th class="grid1">商品信息</th>
+                <th class="grid2">操作</th>
+            </tr>
+        </thead>
+        <tbody id="order_table" class="lists">
+            
+            @Html.Partial("/mobile/views/ucenter/favprolistajax.cshtml", Model)
+            
+            @* @foreach (DataRow row in Model.ProductList.Rows)
+            {
+                <tr>
+                    <td >
+                        <div class="favProList">
+                    <img src="/upload/store/@(row["storeid"])/product/show/thumb300_300/@row["showimg"]" width="50" height="50"><a href="/product/@(row["pid"]).html">@row["name"]<br>
+                        <span class="red">@row["shopprice"]</span> 
+                                                                                                                         </a>
+                    
+                    <div class="clear"></div>
+                </div></td>
+          
+                    <td ><a href="javascript:delFavoriteProduct(@(row["pid"]));" class="redBt">删除</a></td>
+                </tr>
+            }*@
+        </tbody>
+    </table>
+
+</div>
+<script>
+    $(function () {
+
+        var page = 1;
+
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea: window,
+            autoLoad: false,
+            domUp: {
+                domClass: 'dropload-up',
+                domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate: '<div class="dropload-update">↑释放更新</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>'
+            },
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">————我已经到底啦————</div>'
+            },
+            loadUpFn: function (me) {
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/mob/ucenter/FavoriteProductList?page=' + page,
+                    //dataType: 'json',
+                    success: function (data) {
+                        //alert(data);
+                        var result = '';
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            //$('.lists').html(result);
+                            window.location.href = window.location.href;
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                            // 解锁loadDownFn里锁定的情况
+                            me.unlock();
+                            me.noData(false);
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            },
+            loadDownFn: function (me) {
+                page++;
+                $.ajax({
+                    type: 'GET',
+                    url: '/mob/ucenter/FavoriteProductList?page=' + page,
+                    // dataType: 'json',
+                    success: function (data) {
+
+                        if (data.indexOf("<tr>") <= -1) {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            $('.lists').append(data);
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            }
+        });
+    });
+        </script>
+@*<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getAccountDetailList(@WorkContext.Uid,favNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<script>
+    //获得订单列表
+    var favNextPageNumber = 2;
+    var favNextPage = false;
+    function getAccountDetailList(uid, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/FavoriteProductList?page=" + page, false, function (data) {
+            getDetailListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getDetailListResponse(data) {
+        $("#order_table").append(data);
+        if (favNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            favNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>*@

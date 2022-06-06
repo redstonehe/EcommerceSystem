@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.AsynStrategy.ThreadPool.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.AsynStrategy.ThreadPool.pdb
+C:\develop\德鹿商城\Strategies\VMall.AsynStrategy.ThreadPool\obj\Debug\VMall.AsynStrategy.ThreadPool.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Strategies\VMall.AsynStrategy.ThreadPool\obj\Debug\VMall.AsynStrategy.ThreadPool.dll
+C:\develop\德鹿商城\Strategies\VMall.AsynStrategy.ThreadPool\obj\Debug\VMall.AsynStrategy.ThreadPool.pdb

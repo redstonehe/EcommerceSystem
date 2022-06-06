@@ -1,0 +1,63 @@
+﻿@model  VMall.Web.Models.CashDetailModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "汇购卡使用详情-"+ WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "汇购卡使用详情";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; height: auto;">
+            <h2 id="memberRT">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+    
+    <div class="clear"></div>
+            </h2>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+                @*<thead>
+    <tr >
+      <th colspan="3">账户详情</th>
+    </tr>
+  </thead>*@
+                <tbody>
+                    <tr>
+                        <th>创建时间</th>
+                        <th>收入</th>
+                        <th>支出</th>
+                        <th>说明</th>
+                    </tr>
+                    
+                    @foreach (CashCouponDetailInfo info in Model.CashDetailList)
+                    {
+                        <tr>
+                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>@info.InAmount.ToString("0.00")</td>
+                            <td>@info.OutAmount.ToString("0.00")</td>
+                            <td>@info.DetailDes</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.WebPager(Model.PageModel).ShowSummary(false)
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

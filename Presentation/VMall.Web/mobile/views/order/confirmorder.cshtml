@@ -1,0 +1,1118 @@
+﻿@model VMall.Web.Mobile.Models.ConfirmOrderModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "确认订单";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 6;
+}
+<style>
+    body { /*font-size: 1rem;*/
+        font-family: "Microsoft YaHei";
+        /*background: #f0f0f0;*/
+        color: #444;
+        /*line-height: 0.22rem;*/
+    }
+
+</style>
+<script>
+    var isUserIdCard = '@(StringHelper.ArrayContainsForNum(System.Web.Configuration.WebConfigurationManager.AppSettings["QuanQiuGouStoreId"], Model.SelectedStoreKeyList) ? 1 : 0)';
+    //var isUserIdCard = '@(("," + Model.SelectedStoreKeyList + ",").Contains("," + System.Web.Configuration.WebConfigurationManager.AppSettings["QuanQiuGouStoreId"] + ",") ? 1 : 0)';
+    var isUseExCode = '@(Model.UseExCode ? 1 : 0)';
+
+    $(function () {
+        $(".pricewarn").click(function () {
+            var diglog = $(".price-tips").html();
+            layer.open({
+                type: 0,
+                content: '因可能存在系统缓存、页面更新、促销活动导致价格变动异常等不确定性情况出现，商品售价以本结算页商品价格为准；如有疑问，请您返回购物车删除产品重新添加或者立即联系客服咨询。',
+                title: ['价格说明', 'border-bottom: 1px solid #CFCFCF'],
+                btn: '知道了',
+                anim: 'up',
+                area: ['600px', '360px'],
+                shadeClose: false, //点击遮罩关闭
+                //content: diglog// $("#showMsg")// diglog//$("#header")
+            });
+        })
+
+    });
+
+</script>
+<div id="mainBlock">
+
+    <div class="allCon">
+        <div class="title">收货人信息</div>
+        <div class="con">
+            <a href="javascript:getShipAddressList()">
+                @if (Model.DefaultFullShipAddressInfo != null)
+                {
+                    <p>@Model.DefaultFullShipAddressInfo.Consignee @Model.DefaultFullShipAddressInfo.Mobile </p>
+                    <p style="font-size: 14px;">@Model.DefaultFullShipAddressInfo.ProvinceName @Model.DefaultFullShipAddressInfo.CityName @Model.DefaultFullShipAddressInfo.CountyName @Model.DefaultFullShipAddressInfo.Address </p>
+                }
+                else
+                { 
+                    <text><p>
+                        您还没有配送地址，请先添加。<a href="javascript:void(0)" onclick="getShipAddressList()">点击添加</a>
+                    <p>
+                        </text>
+                }
+            </a>
+            <span class="icon-arr"></span>
+        </div>
+
+        <div class="title">支付信息</div>
+        <div class="con">
+            <a href="javascript:showPayPluginList()"><span>@Model.DefaultPayPluginInfo.FriendlyName</span></a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="title">
+            商品确认
+            <div class="right pricewarn">
+                <a href="javascript:javascript:void(0);"><i></i>价格说明</a>
+            </div>
+        </div>
+        <div class="" style="padding: 0">
+            @{int k = 1;}
+            @foreach (StoreOrder storeOrder in Model.StoreOrderList)
+            {
+                <div class="cartItme" style="border: none;">
+                    <div class="cartTitle">
+                        <span class="cart-storename">@storeOrder.StoreCartInfo.StoreInfo.Name</span>
+                    </div>
+
+                    @foreach (CartItemInfo cartItemInfo in storeOrder.StoreCartInfo.CartItemList)
+                    {
+                        if (cartItemInfo.Type == 0)
+                        {
+                            CartProductInfo cartProductInfo = (CartProductInfo)cartItemInfo.Item;
+                            if (cartProductInfo.Selected)
+                            {
+                        <div class="proInfo @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : "")" style="margin: 0;">
+
+                            <div class="proInfo2">
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" class="proImg">
+                                    <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb300_300/@cartProductInfo.OrderProductInfo.ShowImg" width="80" height="80" /></a>
+                                <div class="text">
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" >@cartProductInfo.OrderProductInfo.Name</a>
+
+                                    <span class="nosend">
+                                        @{
+                                var RegionName = string.Empty;
+                                StoreShipTemplateInfo TempInfo = storeOrder.ShipTempList.Find(x => x.StoreSTid == cartProductInfo.OrderProductInfo.StoreSTid);
+                                if (TempInfo != null)
+                                {
+                                    if (!string.IsNullOrEmpty(TempInfo.NoSendArea))
+                                    {
+                                        RegionName = Regions.GetRegionNamesByregionids(TempInfo.NoSendArea, TempInfo.NoSendCity);
+                                    }
+                                }
+                                        }
+                                        @if (!string.IsNullOrEmpty(RegionName) && !storeOrder.isSend)
+                                        {
+                                            @:(以下地区不支持发货：@RegionName)
+                                                }
+                                    </span>
+
+                                    <div class="price">
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">数量：<span>@cartProductInfo.OrderProductInfo.RealCount 件 </span></a>
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">单价：<span>¥@cartProductInfo.OrderProductInfo.DiscountPrice </span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (cartProductInfo.GiftList.Count > 0)
+                            {
+                                <div class="ZP">
+                                    @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                                    {
+                                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", gift.Pid } })">[赠品] @gift.Name X @gift.RealCount</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                            }
+                        }
+                        else if (cartItemInfo.Type == 1)
+                        {
+                            CartSuitInfo cartSuitInfo = (CartSuitInfo)cartItemInfo.Item;
+                            if (cartSuitInfo.Checked)
+                            {
+                        <div class="preInfo1" style="margin-left: 10px;">
+
+                            <a class="redBt" href="javascript:; ">套装</a>
+                            <div class="price">
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0; background-color: #fff; display: inline-block;">数量：<span>@cartSuitInfo.BuyCount 件 </span></a>
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0; background-color: #fff; display: inline-block;">单价：<span>¥@cartSuitInfo.SuitPrice </span></a>
+                            </div>
+
+                        </div>
+                                foreach (CartProductInfo cartProductInfo in cartSuitInfo.CartProductList)
+                                {
+                        <div class="proInfo">
+
+                            <div class="proInfo2">
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" class="proImg">
+                                    <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb300_300/@cartProductInfo.OrderProductInfo.ShowImg" width="80" height="80" /></a>
+                                <div class="text">
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a>
+
+                                    <span class="nosend">
+                                        @{
+                                    var RegionName = string.Empty;
+                                    StoreShipTemplateInfo TempInfo = storeOrder.ShipTempList.Find(x => x.StoreSTid == cartProductInfo.OrderProductInfo.StoreSTid);
+                                    if (TempInfo != null)
+                                    {
+                                        if (!string.IsNullOrEmpty(TempInfo.NoSendArea))
+                                        {
+                                            RegionName = Regions.GetRegionNamesByregionids(TempInfo.NoSendArea, TempInfo.NoSendCity);
+                                        }
+                                    }
+                                        }
+                                        @if (!string.IsNullOrEmpty(RegionName) && !storeOrder.isSend)
+                                        {
+                                            @:(以下地区不支持发货：@RegionName)
+                                                }
+                                    </span>
+
+                                    <div class="nb">x @cartProductInfo.OrderProductInfo.RealCount</div>
+                                </div>
+                            </div>
+                            @if (cartProductInfo.GiftList.Count > 0)
+                            {
+                                <div class="ZP">
+                                    @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                                    {
+                                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", gift.Pid } })">[赠品] @gift.Name</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                                }
+                            }
+                        }
+                        else if (cartItemInfo.Type == 2)
+                        {
+                            CartFullSendInfo cartFullSendInfo = (CartFullSendInfo)cartItemInfo.Item;
+                            if (cartFullSendInfo.FullSendMainCartProductList.Exists(x => x.Selected))
+                            {
+                                if (cartFullSendInfo.FullSendMinorOrderProductInfo != null)
+                                {
+                        <div class="preInfo"><a class="redBt" href="javascript:;">满赠</a> 活动商品已购满 @cartFullSendInfo.FullSendPromotionInfo.LimitMoney 元,您已经换购了商品 <a href="javascript:getFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="gayBt" >重新换购</a></div>
+                        
+                        <div class="proInfo">
+                            <div class="proInfo2 change">
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartFullSendInfo.FullSendMinorOrderProductInfo.Pid } })" class="proImg">
+                                    <img src="/upload/store/@cartFullSendInfo.FullSendMinorOrderProductInfo.StoreId/product/show/thumb300_300/@cartFullSendInfo.FullSendMinorOrderProductInfo.ShowImg" width="80" height="80" /></a>
+                                <div class="text">
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartFullSendInfo.FullSendMinorOrderProductInfo.Pid } })">@cartFullSendInfo.FullSendMinorOrderProductInfo.Name</a>
+
+                                    <div class="nb">x1</div>
+                                </div>
+                            </div>
+                        </div>
+                                }
+                                else if (cartFullSendInfo.FullSendPromotionInfo != null)
+                                {
+                        <div class="preInfo"><a class="redBt" href="javascript:;">满赠</a> 活动商品已购满 @cartFullSendInfo.FullSendPromotionInfo.LimitMoney 元， 您只需再加价 @cartFullSendInfo.FullSendPromotionInfo.AddMoney 元， 即可 <a href="javascript:getFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="gayBt" >换购商品</a></div>
+                                }
+                            }
+                            foreach (CartProductInfo cartProductInfo in cartFullSendInfo.FullSendMainCartProductList)
+                            {
+                                if (cartProductInfo.Selected)
+                                {
+                        <div class="proInfo @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : "")">
+                            <div class="proInfo2">
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" class="proImg">
+                                    <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb300_300/@cartProductInfo.OrderProductInfo.ShowImg" width="80" height="80" /></a>
+                                <div class="text">
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a>
+
+                                    <span class="nosend">
+                                        @{
+                                    var RegionName = string.Empty;
+                                    StoreShipTemplateInfo TempInfo = storeOrder.ShipTempList.Find(x => x.StoreSTid == cartProductInfo.OrderProductInfo.StoreSTid);
+                                    if (TempInfo != null)
+                                    {
+                                        if (!string.IsNullOrEmpty(TempInfo.NoSendArea))
+                                        {
+                                            RegionName = Regions.GetRegionNamesByregionids(TempInfo.NoSendArea, TempInfo.NoSendCity);
+                                        }
+                                    }
+                                        }
+                                        @if (!string.IsNullOrEmpty(RegionName) && !storeOrder.isSend)
+                                        {
+                                            @:(以下地区不支持发货：@RegionName)
+                                                }
+                                    </span>
+
+                                    <div class="price">
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">数量：<span>@cartProductInfo.OrderProductInfo.RealCount 件 </span></a>
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">单价：<span>¥@cartProductInfo.OrderProductInfo.DiscountPrice </span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (cartProductInfo.GiftList.Count > 0)
+                            {
+                                <div class="ZP">
+                                    @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                                    {
+                                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", gift.Pid } })">[赠品] @gift.Name</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                                }
+                            }
+                        }
+                        else if (cartItemInfo.Type == 3)
+                        {
+                            CartFullCutInfo cartFullCutInfo = (CartFullCutInfo)cartItemInfo.Item;
+                            if (cartFullCutInfo.FullCutCartProductList.Exists(x => x.Selected))
+                            {
+                                if (cartFullCutInfo.IsEnough)
+                                {
+                        <div class="preInfo"><a class="redBt" href="javascript:;">满减</a> 活动商品已购满 @cartFullCutInfo.LimitMoney 元，优惠 @cartFullCutInfo.CutMoney 元</div>
+                                }
+                                else
+                                {
+                        <div class="preInfo"><a class="redBt" href="javascript:;">满减</a> 活动商品购满 @cartFullCutInfo.LimitMoney 元，即可享受满减 @cartFullCutInfo.CutMoney 元</div>
+                                }
+                            }
+                            foreach (CartProductInfo cartProductInfo in cartFullCutInfo.FullCutCartProductList)
+                            {
+                                if (cartProductInfo.Selected)
+                                {
+                        <div class="proInfo @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : "")">
+                            <div class="proInfo2">
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" class="proImg">
+                                    <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb300_300/@cartProductInfo.OrderProductInfo.ShowImg" width="80" height="80" /></a>
+                                <div class="text">
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a>
+
+                                    <span class="nosend">
+                                        @{
+                                    var RegionName = string.Empty;
+                                    StoreShipTemplateInfo TempInfo = storeOrder.ShipTempList.Find(x => x.StoreSTid == cartProductInfo.OrderProductInfo.StoreSTid);
+                                    if (TempInfo != null)
+                                    {
+                                        if (!string.IsNullOrEmpty(TempInfo.NoSendArea))
+                                        {
+                                            RegionName = Regions.GetRegionNamesByregionids(TempInfo.NoSendArea, TempInfo.NoSendCity);
+                                        }
+                                    }
+                                        }
+                                        @if (!string.IsNullOrEmpty(RegionName) && !storeOrder.isSend)
+                                        {
+                                            @:(以下地区不支持发货：@RegionName)
+                                                }
+                                    </span>
+
+                                    <div class="price">
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">数量：<span>@cartProductInfo.OrderProductInfo.RealCount 件 </span></a>
+                                        <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">单价：<span>¥@cartProductInfo.OrderProductInfo.DiscountPrice </span></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @if (cartProductInfo.GiftList.Count > 0)
+                            {
+                                <div class="ZP">
+                                    @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                                    {
+                                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", gift.Pid } })">[赠品] @gift.Name</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                                }
+                            }
+                        }
+                    }
+                    <div class="subSum f12">
+
+                        <p class=""><span>运费：<i class="hg_yahei" id="fare_1_1">@storeOrder.ShipFee.ToString("0.00")</i></span></p>
+                        @*<p class=""><span>可用红包减免：<i class="hg_yahei">-@Carts.SumOrderProductHongBaoCutAmount(storeOrder.StoreCartInfo.SelectedOrderProductList)</i></span></p>*@
+                        @* <p class=""><span>优惠：<i class="hg_yahei">-@Carts.SumOrderProductDiscount(storeOrder.StoreCartInfo.SelectedOrderProductList)</i></span></p>*@
+                        <p class=""><span>商品合计：<i class="hg_red f16 hg_yahei">@storeOrder.ProductAmount</i></span></p>
+                    </div>
+                </div>
+                    if (Model.StoreOrderList.Count != k)
+                    {
+                <div class="bg_div"></div>
+                    }
+                    k++;
+            }
+        </div>
+        <div class="title">其它信息</div>
+        <div class="con">
+            <a href="javascript:getValidCouponList()"><span>选择优惠券</span></a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="con" id="validCouponList" style="display: none;">
+        </div>
+        <div id="selectCouponList"></div>
+        <script>
+            function useCoupon(obj) {
+                var checkboxList = document.getElementById("validCouponList").getElementsByTagName("input");
+                for (var i = 0; i < checkboxList.length; i++) {
+                    checkboxList[i].checked = false;
+                }
+                obj.checked = true;
+                var selectCoupon = $("input[name='couponId']:checked");
+                var couponMoney = selectCoupon.attr("data-money");
+                //alert(couponMoney);
+                var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                if ((@Model.AllOrderAmount -couponMoney - haiMiCount - hongBaoCount - CashCount - daiLiCount - YongJinCount) < 0) {
+                    obj.checked = false;
+                    alert("优惠抵扣总金额不能大于订单金额");
+                    return;
+                }
+                $("#couponmoney").html("-" + couponMoney);
+                $(".allPrice").html("¥" + (@Model.AllOrderAmount -couponMoney - haiMiCount - hongBaoCount - CashCount - daiLiCount - YongJinCount).toFixed(2));
+            }
+        </script>
+        @{var userHongBao = 0M;
+          AccountInfo hongBaoAccount = Model.UserAccountInfo.Find(x => x.AccountId == (int)AccountType.积分账户);
+          if (hongBaoAccount != null)
+          {
+              userHongBao = System.Math.Round(hongBaoAccount.Banlance, 2);
+          }
+        }
+        @if (Model.AllHonBaoCutFee > 0)
+        {
+            <div class="con">
+                @* <input class="radio" type="radio" value="1" id="nouserHongBao" name="userHongBao" style="display: inline-block" checked="checked" onclick="closeHongBao();" />&nbsp;不&nbsp;使&nbsp;用
+            <input class="radio" type="radio" value="0" id="userHongBao" name="userHongBao" style="display: inline-block;" onclick="openHongBao();" />使用红包*@
+
+                本次使用：<input class="text" type="text" value="@(userHongBao > Model.AllHonBaoCutFee ? Model.AllHonBaoCutFee : userHongBao)" id="hongBaoCount" name="hongBaoCount" onblur="checkHongBao(@userHongBao,@Model.AllHonBaoCutFee)" style="margin:10px;" />
+                @MallKey.MallDiscountName_JiFen
+            <a href="javascript:void(0)" style="display: inline-block;"><span></span><span style="font-size: 14px; color: #666; padding-left: -5px;">拥有<strong style="color: #f00;"> @userHongBao</strong> @(MallKey.MallDiscountName_JiFen),当前订单可用 @(MallKey.MallDiscountName_JiFen) ：<strong style="color: #005ea7;">@Model.AllHonBaoCutFee</strong></span></a>
+
+            </div>@*
+        
+         <div class="con"  id="hongbaoDiv">  </div>*@
+            <script>
+                //function openHongBao(obj) {
+                //    $("#hongbaoDiv").show();
+                //}
+                //function closeHongBao(obj) {
+                //    $("#hongbaoDiv").hide();
+                //    $("#hongBaoCount").val(0);
+                //}
+                function checkHongBao(hasPayCreditCount, maxUsePayCreditCount) {
+                    var obj = $("#hongBaoCount");
+                    var usePayCreditCount = obj.val();
+                    var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                    var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                    var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                    var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                    var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                    if (isNaN(usePayCreditCount)) {
+                        obj.val(0);
+                        alert("请输入数字");
+                    }
+                    else if (usePayCreditCount < 0) {
+                        obj.val(0);
+                        alert("不能输入负数");
+                    }
+                    else if (usePayCreditCount > hasPayCreditCount && usePayCreditCount <= maxUsePayCreditCount) {
+                        obj.val(hasPayCreditCount);
+                        alert("金额不足,最多可用数" + hasPayCreditCount + "");
+                    }
+                    else if (usePayCreditCount > maxUsePayCreditCount) {
+                        obj.val(maxUsePayCreditCount);
+                        alert("该订单最多可用数" + maxUsePayCreditCount);
+                    }
+                    if ((@Model.AllOrderAmount -obj.val() - CashCount - haiMiCount - couponMoney - daiLiCount - YongJinCount) < 0) {
+                        obj.val(0);
+                        alert("优惠抵扣总金额不能大于订单金额");
+                        $("#hongBaoCount").focus();
+                        return;
+                    }
+                    $(".hongbaocut").html("-¥" + obj.val());
+                    $(".allPrice").html("¥" + (@Model.AllOrderAmount -obj.val() - CashCount - haiMiCount - couponMoney - daiLiCount - YongJinCount).toFixed(2));
+                }
+            </script>
+        }
+        <div class="con">
+            @{var userHaimi = 0M;
+              AccountInfo haiMiAccount = Model.UserAccountInfo.Find(x => x.AccountId == (int)AccountType.商城钱包);
+              if (haiMiAccount != null)
+              {
+                  userHaimi = System.Math.Round(haiMiAccount.Banlance, 2);
+              }
+            }
+            <input class="radio" type="radio" value="1" id="nouserHaiMi" name="userHaiMi" style="display: inline-block" checked="checked" onclick="closeHaiMi();" />&nbsp;不&nbsp;使&nbsp;用
+            
+            <input class="radio" type="radio" value="0" id="userHaiMi" name="userHaiMi" style="display: inline-block;" onclick="openHaiMi();" />使用 @(MallKey.MallDiscountName_JiangJin)抵现
+            <a href="javascript:void(0)" style="display: inline-block;"><span></span><span class="tip">拥有<strong style="color: #f00;"> @userHaimi</strong> @(MallKey.MallDiscountName_JiangJin)</span></a>
+        </div>
+        <div class="con" style="display: none;" id="haimiDiv">
+            本次使用：<input class="text" type="text" value="0" id="haiMiCount" name="haiMiCount" onblur="checkHaiMi(@userHaimi,@Model.AllOrderAmount)" style="margin:10px;" />
+            @(MallKey.MallDiscountName_JiangJin)
+        </div>
+        <script type="text/javascript">
+            function openHaiMi(obj) {
+                $("#haimiDiv").show();
+            }
+            function closeHaiMi(obj) {
+                $("#haimiDiv").hide();
+                $("#haiMiCount").val(0);
+            }
+            function checkHaiMi(hasPayCreditCount, maxUsePayCreditCount) {
+                var obj = $("#haiMiCount");
+                var usePayCreditCount = obj.val();
+                var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                if (isNaN(usePayCreditCount)) {
+                    obj.val(0);
+                    alert("请输入数字");
+                }
+                else if (usePayCreditCount < 0) {
+                    obj.val(0);
+                    alert("不能输入负数");
+                }
+                else if (usePayCreditCount > hasPayCreditCount) {
+                    obj.val(hasPayCreditCount);
+                    alert("金额不足,最多可用数" + hasPayCreditCount + "");
+                }
+                else if (usePayCreditCount > maxUsePayCreditCount) {
+                    obj.val(maxUsePayCreditCount);
+                    alert("该订单最多可用数" + maxUsePayCreditCount);
+                }
+                if ((@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - daiLiCount - YongJinCount) < 0) {
+                    obj.val(0);
+                    alert("优惠抵扣总金额不能大于订单金额");
+                    $("#haiMiCount").focus();
+                    return;
+                }
+                $(".savemoney").html("-¥" + obj.val());
+
+                $(".allPrice").html("¥" + (@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - daiLiCount - YongJinCount).toFixed(2));
+            }
+
+        </script>
+        @if (Model.isUserAgentDiscount)
+        {
+            <div class="con">
+                @{var userDaiLi = 0M;
+                  AccountInfo daiLiAccount = Model.UserAccountInfo.Find(x => x.AccountId == (int)AccountType.代理账户);
+                  if (daiLiAccount != null)
+                  {
+                      userDaiLi = System.Math.Round(daiLiAccount.Banlance, 2);
+                  }
+                }
+                <input class="radio" type="radio" value="1" id="nouserDaili" name="userDaiLi" style="display: inline-block" checked="checked" onclick="closeDaiLi();" />&nbsp;不&nbsp;使&nbsp;用
+            
+            <input class="radio" type="radio" value="0" id="userDaiLi" name="userDaiLi" style="display: inline-block;" onclick="openDaiLi();" />使用代理账户支付
+            <a href="javascript:void(0)" style="display: inline-block;"><span></span><span class="tip">账户余额：<strong style="color: #f00;"> @userDaiLi</strong> </span></a>
+            </div>
+        
+            <div class="con" style="display: none;" id="dailiDiv">
+                本次使用：<input class="text" type="text" value="0" id="daiLiCount" name="daiLiCount" onblur="checkDaiLi(@userDaiLi,@Model.AllOrderAmount)" style="margin:10px;" />@*,当前订单可用：<strong style="color: #005ea7;">@Model.AllOrderAmount</strong>*@
+            </div>
+            <script type="text/javascript">
+                function openDaiLi(obj) {
+                    $("#dailiDiv").show();
+                }
+                function closeDaiLi(obj) {
+                    $("#dailiDiv").hide();
+                    $("#daiLiCount").val(0);
+                }
+                function checkDaiLi(hasPayCreditCount, maxUsePayCreditCount) {
+                    var obj = $("#daiLiCount");
+                    var usePayCreditCount = obj.val();
+                    var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                    var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                    var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                    var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                    var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                    if (isNaN(usePayCreditCount)) {
+                        obj.val(0);
+                        alert("请输入数字");
+                    }
+                    else if (usePayCreditCount < 0) {
+                        obj.val(0);
+                        alert("不能输入负数");
+                    }
+                    else if (usePayCreditCount > hasPayCreditCount) {
+                        obj.val(hasPayCreditCount);
+                        alert("金额不足,最多可用" + hasPayCreditCount + "");
+                    }
+                    else if (usePayCreditCount > maxUsePayCreditCount) {
+                        obj.val(maxUsePayCreditCount);
+                        alert("该订单最多可用" + maxUsePayCreditCount);
+                    }
+                    if ((@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - haiMiCount - YongJinCount) < 0) {
+                        obj.val(0);
+                        alert("优惠抵扣总金额不能大于订单金额");
+                        $("#daiLiCount").focus();
+                        return;
+                    }
+                    $("#agentCut").html("-" + obj.val());
+
+                    $(".allPrice").html("¥" + (@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - haiMiCount - YongJinCount).toFixed(2));
+                }
+            </script>
+        }
+        @if (Model.isUserCommisionDiscount)
+        {
+            <div class="con">
+                @{var userYongJin = 0M;
+                  AccountInfo YongJinAccount = Model.UserAccountInfo.Find(x => x.AccountId == (int)AccountType.佣金账户);
+                  if (YongJinAccount != null)
+                  {
+                      userYongJin = System.Math.Round(YongJinAccount.Banlance, 2);
+                  }
+                }
+                <p class="order_discount order_switch">
+                    @*<input class="radio" type="radio" value="1" id="nouserYongJin" name="userYongJin" style="display: inline-block" checked="checked" onclick="closeYongJin();" />&nbsp;不&nbsp;使&nbsp;用
+            
+            <input class="radio" type="radio" value="0" id="userYongJin" name="userYongJin" style="display: inline-block;" onclick="openYongJin();" />*@
+                    <span>使用佣金账户支付</span>
+
+                    <span class="tip">账户余额：<strong style="color: #f00;"> @userYongJin</strong> </span>
+                    <i class="fr"></i>
+                </p>
+            </div>
+            <div class="con order_switch_info" style="display: none;" id="YongJinDiv">
+                <span>本次使用：</span> <input class="text" type="text" value="0" id="YongJinCount" name="YongJinCount" onblur="checkYongJin(@userYongJin,@Model.AllOrderAmount)" style="margin:10px;" />@*,当前订单可用：<strong style="color: #005ea7;">@Model.AllOrderAmount</strong>*@
+            </div>
+            <script type="text/javascript">
+                $('.order_discount').click(function (e) {
+                    var oul = $(this).find('i');
+                    if ($(oul).hasClass('active')) {
+                        $(oul).removeClass("active");
+                        $("#YongJinDiv").hide();
+                        $("#YongJinCount").val(0);
+                    }
+                    else {
+                        $(oul).addClass("active");
+                        $("#YongJinDiv").show();
+                    }
+                    //$(this).find('i').toggleClass('active');
+                    //$(this).parent().find('.fpnumber').toggleClass('bolck0');
+                });
+
+                function openYongJin(obj) {
+                    $("#YongJinDiv").show();
+                }
+                function closeYongJin(obj) {
+                    $("#YongJinDiv").hide();
+                    $("#YongJinCount").val(0);
+                }
+                function checkYongJin(hasPayCreditCount, maxUsePayCreditCount) {
+                    var obj = $("#YongJinCount");
+                    var usePayCreditCount = obj.val();
+                    var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                    var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                    var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                    var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                    var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                    if (isNaN(usePayCreditCount)) {
+                        obj.val(0);
+                        alert("请输入数字");
+                    }
+                    else if (usePayCreditCount < 0) {
+                        obj.val(0);
+                        alert("不能输入负数");
+                    }
+                    else if (usePayCreditCount > hasPayCreditCount) {
+                        obj.val(hasPayCreditCount);
+                        alert("金额不足,最多可用" + hasPayCreditCount + "");
+                    }
+                    else if (usePayCreditCount > maxUsePayCreditCount) {
+                        obj.val(maxUsePayCreditCount);
+                        alert("该订单最多可用" + maxUsePayCreditCount);
+                    }
+                    if ((@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - haiMiCount - daiLiCount) < 0) {
+                        obj.val(0);
+                        alert("优惠抵扣总金额不能大于订单金额");
+                        $("#YongJinCount").focus();
+                        return;
+                    }
+                    $("#commisionCut").html("-" + obj.val());
+
+                    $(".allPrice").html("¥" + (@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney - haiMiCount - daiLiCount).toFixed(2));
+                }
+            </script>
+        }
+        <div class="con" style="">
+            <p class="order_invoice order_switch">
+                @*<input class="radio" type="radio" value="1" id="nouserInvoice" name="userInvoice" style="display: inline-block" checked="checked" onclick="closeInvoice();" />不需要发票
+            <input class="radio" type="radio" value="0" id="userInvoice" name="userInvoice" style="display: inline-block;" onclick="openInvoice();" />*@
+                <span>需要发票</span>
+                <i class="fr"></i>
+            </p>
+        </div>
+        <div class="con " style="display: none;" id="invoiceDiv">
+            <div class="invoice-list">
+                <ul class="ul-type">
+                    <li class="invoice-name">发票类型：</li>
+
+                    <li class="invoice-item  invoice-type" value="0" onclick="selectinvoicetype(0)">普通发票<b></b></li>
+                    <li class="invoice-item invoice-type" value="1" onclick="selectinvoicetype(1)">增值税专用发票<b></b>
+                    <li class="invoice-item invoice-item-selected  invoice-type" value="2" onclick="selectinvoicetype(2)">不开发票<b></b></li>
+                    <li class="clear"></li>
+                </ul>
+            </div>
+            <div class="invoice-list">
+                <ul class="ul-body">
+                    <li class="invoice-name">发票主体：</li>
+                    <li class="invoice-item invoice-item-selected invoice-body" value="0" onclick="selectinvoicebody(0)">个人<b></b> </li>
+                    <li class="invoice-item invoice-body" value="1" onclick="selectinvoicebody(1)">单位发票<b></b></li>
+                    <li class="clear"></li>
+                </ul>
+            </div>
+            <p class="invoice-title-p ">
+                <span class="invoice-detail">发票抬头：</span>
+                <input type="text" name="invoice-title" id="invoice-title" class="text invoice-input invoice-title am-form-field" value="" />
+            </p>
+            <p class="invoice-id-p ">
+                <span class="invoice-detail">纳税人识别号：</span>
+                <input type="text" name="invoice-id" id="invoice-id" class="text invoice-input invoice-id am-form-field" value="" />
+            </p>
+            <p class="invoice-regaddr-p ">
+                <span class="invoice-detail">注册地址：</span>
+                <input type="text" name="invoice-regaddr" id="invoice-regaddr" class="text invoice-input invoice-regaddr am-form-field" value="" />
+            </p>
+            <p class="invoice-regmobile-p ">
+                <span class="invoice-detail">注册电话：</span>
+                <input type="text" name="invoice-regmobile" id="invoice-regmobile" class="text invoice-input invoice-regmobile am-form-field" value="" maxlength="11" />
+            </p>
+            <p class="invoice-bank-p ">
+                <span class="invoice-detail">开户银行：</span>
+                <input type="text" name="invoice-bank" id="invoice-bank" class="text invoice-input invoice-bank am-form-field" value="" />
+            </p>
+            <p class="invoice-bankno-p ">
+                <span class="invoice-detail">银行帐号：</span>
+                <input type="text" name="invoice-bankno" id="invoice-bankno" class="text invoice-input invoice-bankno am-form-field" value="" />
+            </p>
+            <p class="invoice_warn">
+                提示：1.如须开具发票请填写正确的发票信息。
+                <br />
+                2.活动产品及某些特定产品不支持开发票。
+            </p>
+
+        </div>
+        <script>
+            $('.order_invoice').click(function (e) {
+                var oul = $(this).find('i');
+                if ($(oul).hasClass('active')) {
+                    $(oul).removeClass("active");
+                    $("#invoiceDiv").hide();
+
+                }
+                else {
+                    $(oul).addClass("active");
+                    $("#invoiceDiv").show();
+                }
+                //$(this).find('i').toggleClass('active');
+                //$(this).parent().find('.fpnumber').toggleClass('bolck0');
+            });
+            $(function () {
+                $(".invoice-body").removeClass("invoice-item-selected");
+                $(".invoice-id-p,.invoice-regaddr-p,.invoice-regmobile-p,.invoice-bank-p,.invoice-bankno-p").hide();
+            })
+            function selectinvoicetype(type) {
+                $(".invoice-type").removeClass("invoice-item-selected");
+                if (type == 0) {
+                    $(".ul-body").show();
+                    $(".invoice-type").eq(0).addClass("invoice-item-selected");
+                }
+                else if (type == 1) {
+                    $(".ul-body").show();
+                    $(".invoice-type").eq(1).addClass("invoice-item-selected");
+                    $(".invoice-body").removeClass("invoice-item-selected");
+                    $(".invoice-body").eq(1).addClass("invoice-item-selected");
+                    $(".invoice-id-p,.invoice-regaddr-p,.invoice-regmobile-p,.invoice-bank-p,.invoice-bankno-p").show();
+                }
+                else {
+                    //$(".ul-body").hide();
+                    $(".invoice-type").eq(2).addClass("invoice-item-selected");
+                    $(".invoice-body").removeClass("invoice-item-selected");
+                    //$(".invoice-title-p,.invoice-id-p,.invoice-regaddr-p,.invoice-regmobile-p,.invoice-bank-p,.invoice-bankno-p").hide();
+                    $(".invoice-title,.invoice-id,.invoice-regaddr,.invoice-regmobile,.invoice-bank,.invoice-bankno").val("");
+                }
+            }
+            function selectinvoicebody(type) {
+                var invoicetype = $(".ul-type .invoice-item-selected").val();
+                if (type == 0) {
+                    if (invoicetype == 0) {
+                        $(".invoice-body").removeClass("invoice-item-selected");
+                        $(".invoice-body").eq(0).addClass("invoice-item-selected");
+                        $(".invoice-id-p,.invoice-regaddr-p,.invoice-regmobile-p,.invoice-bank-p,.invoice-bankno-p").hide();
+                        $(".invoice-id,.invoice-regaddr,.invoice-regmobile,.invoice-bank,.invoice-bankno").val("");
+                    } else if (invoicetype == 1) {
+                        alert("增值税专用发票不支持个人开票");
+                    }
+                }
+                else if (type == 1) {
+                    if (invoicetype == 0 || invoicetype == 1) {
+                        $(".invoice-body").removeClass("invoice-item-selected");
+                        $(".invoice-body").eq(1).addClass("invoice-item-selected");
+                        $(".invoice-id-p,.invoice-regaddr-p,.invoice-regmobile-p,.invoice-bank-p,.invoice-bankno-p").show();
+                    }
+                }
+            }
+        </script>
+        <div class="con am-input-group" id="buyerRemarkDiv" style="width:100%">
+            <input class="text am-form-field" type="text" value="" id="buyerRemark" name="buyerRemark" style="margin: 10px;" placeholder="订单备注" />
+        </div>
+        @if (Model.isUserCsahCoupon)
+        {
+            <div class="con" style="padding: 20px 20px;">
+                <input id="cashcouponCard" type="checkbox" class="paytype-cash" onclick="userCash(this)" @(Model.SelectCashPay ? "checked=checked" : "")/>
+                <span style="height: 24px; line-height: 24px; display: inline-block; vertical-align: top;">使用汇购卡<span style="margin-left: 20px; color: #808080;">(可用汇购卡 <b style="color: red;">@Model.CashCouponList.Count</b> 张)</span>
+                    <br />
+                    <span class="cashwarn" style="@(Model.SelectCashPay ? "display: block" : "display: none")">* 汇购卡支付不结算PV，汇购卡支付不支持特价产品
+                    </span>
+                </span>
+
+            </div>
+            <div class="con"  id="CashSumCon" style="@(Model.SelectCashPay ? "display: block" : "display: none")">
+                <ul>
+                    @foreach (var item in Model.CashCouponList)
+                    {
+                        <li>
+                            <input type="checkbox" value="@item.CashId" name="cashId" style="height: 18px;    width: 18px;"/>
+                            卡号： @item.CashCouponSN &nbsp;&nbsp;
+                            <br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可用余额：<span class="cashamount">@item.Banlance</span> &nbsp;&nbsp;
+                            <br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期：@item.ValidTime.ToString("yyyy-MM-dd HH:mm")
+                        </li>
+                    }
+                </ul>
+                本次使用：<input class="text" type="text" value="0" id="CashCount" name="CashCount" onblur="checkCash(@Model.AvailCashCouponAmount)" style="margin:10px;" />
+                汇购卡券
+            <a href="javascript:void(0)" style="display: inline-block;"><span></span><span style="font-size: 14px; color: #666; padding-left: -5px;">,当前订单可用汇购卡券：<strong style="color: #005ea7;">@Model.AvailCashCouponAmount</strong></span></a>
+                <br />
+                支付密码：<input type="password" class="text" id="paypassword" name="paypassword" value="" style="margin: 10px;" />
+            </div>
+            <script>
+
+                function userCash(obj) {
+                    if ($(obj).is(':checked')) {
+                        selectCashPay(1);
+                        $("#CashSumCon").show();
+                        $(".cashwarn").show();
+                    } else {
+                        selectCashPay(0);
+                        var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                        var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                        var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                        var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                        var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                        $("#CashCount").val(0);
+                        $("input[name='cashId']").attr("checked", false);
+                        $("#cashmoney").html("¥-0.00");
+                        $("#totalmoney").html("¥" + (@Model.AllOrderAmount -haiMiCount - hongBaoCount - couponMoney - daiLiCount - YongJinCount).toFixed(2));
+                        $("#CashSumCon").hide();
+                        $(".cashwarn").hide();
+                    }
+                }
+                function checkCash(maxUseCashCount) {
+                    var hasCashCount = 0;// parseFloat($("input[name='cashId']:checked").next().html());
+                    var selectCash = $("input[name='cashId']:checked");
+                    var selectTotalCashCount = 0;
+                    for (var i = 0; i < selectCash.length; i++) {
+                        if (selectCash[i].checked == true) {
+                            selectTotalCashCount += parseFloat($($("input[name='cashId']:checked")[i]).next().next().html());
+                        }
+                    }
+                    hasCashCount = selectTotalCashCount;
+                    var obj = $("#CashCount");
+                    var useCashCount = parseFloat(obj.val());
+                    var daiLiCount = ($("#daiLiCount").length > 0 ? $("#daiLiCount").val() : 0);
+                    var YongJinCount = ($("#YongJinCount").length > 0 ? $("#YongJinCount").val() : 0);
+                    var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                    var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                    var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                    if (isNaN(useCashCount)) {
+                        obj.val(0);
+                        alert("请输入数字");
+                    }
+                    else if (useCashCount < 0) {
+                        obj.val(0);
+                        alert("不能输入负数");
+                    }
+                    else if (useCashCount > hasCashCount) {
+                        obj.val(hasCashCount);
+                        alert("金额不足,最多可用数" + hasCashCount + "");
+                    }
+                    else if (useCashCount > maxUseCashCount) {
+                        obj.val(maxUseCashCount);
+                        alert("该订单最多可用数" + maxUseCashCount);
+                    }
+                    if ((@Model.AllOrderAmount -obj.val() - haiMiCount - hongBaoCount - couponMoney - daiLiCount - YongJinCount) < 0) {
+                        obj.val(0);
+                        alert("优惠抵扣总金额不能大于订单金额");
+                        $("#CashCount").focus();
+                        return;
+                    }
+                    $(".cashmoney").html("¥" + obj.val());
+                    $(".allPrice").html("¥" + (@Model.AllOrderAmount -obj.val() - haiMiCount - hongBaoCount - couponMoney - daiLiCount - YongJinCount).toFixed(2));
+                }
+            </script>
+        }
+        @if (Model.UseExCode)
+        { 
+            <div class="con">
+                <p style="margin: 10px 0;">选择兑换码：</p>
+                <ul style="margin: 10px 0;">
+                    @foreach (var item in Model.VaildEexCodeList)
+                    {
+                        <li>
+                            <input type="checkbox" value="@item.exid" name="excodeid" />&nbsp;&nbsp;
+                                @item.exsn &nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                有效期：@item.validtime.ToString("yyyy-MM-dd HH:mm")
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (StringHelper.ArrayContainsForNum(System.Web.Configuration.WebConfigurationManager.AppSettings["QuanQiuGouStoreId"], Model.SelectedStoreKeyList))
+        { 
+            <div class="con" id="idcardDiv">
+                <p style="margin: 10px 0;">
+                    <input type="hidden" name="isuseridcard" id="isuseridcard" value="@(StringHelper.ArrayContainsForNum(System.Web.Configuration.WebConfigurationManager.AppSettings["QuanQiuGouStoreId"], Model.SelectedStoreKeyList) ? 1 : 0)" />
+                    <strong style="padding-right: 10px; color: #005ea7;"><span style="color: #ff6a00;">根据</span>【海关总署令147号第二十二条】 规定，个人海外购必须提供身份证进行入关申报，<span style="color: #ff6a00; font-weight: bold;">身份证号必须与收货人一致</span>，否则无法通关。</strong>
+                </p>
+                输入身份证:
+                <input class="text" type="text" value="" id="idcard" name="idcard" maxlength="18" style="margin: 10px 0; line-height: 40px; height: 40px; width: 90%;" />
+            </div>
+        }
+        <script type="text/javascript">
+            function openInvoice(obj) {
+                $("#invoiceDiv").show();
+            }
+            function closeInvoice(obj) {
+                $("#invoiceDiv").hide();
+                $("#invoice").val("");
+            }
+        </script>
+        @*<div class="con">
+            <a href="javascript:void(0)"><span>@Model.PayCreditName 支付</span><span class="tip">可用 @Model.MaxUsePayCredits @Model.PayCreditName，抵¥ @Html.Raw(Credits.PayCreditsToMoney(Model.MaxUsePayCredits).ToString()) 元</span></a>
+            <input class="checkbox" type="checkbox" value="@Model.MaxUsePayCredits" id="payCreditCount" name="payCreditCount" style="position:absolute; right:10px; top:50%; margin-top:-9px;" />
+        </div>*@
+    </div>
+
+    <div class="orderInfo">
+        <span class="bg-border"><span class="icon"></span></span>
+        <div style="padding: 10px 30px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ordersummaryT">
+                <tr>
+                    <td>商品金额</td>
+                    <td align="right">¥@Model.AllProductAmount</td>
+                </tr>
+                <tr>
+                    <td>运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</td>
+                    <td align="right">¥@Model.AllShipFee.ToString("0.00")</td>
+                </tr>
+                @*<tr>
+                    <td>税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</td>
+                    <td align="right">¥@Model.PayFee</td>
+                </tr>*@
+                <tr>
+                    <td>@(MallKey.MallDiscountName_JiangJin)抵现</td>
+                    <td align="right" class="savemoney">-0.00</td>
+                </tr>
+                @*<tr>
+                    <td>代理账户抵现</td>
+                    <td align="right" class="agentCut" id="agentCut">-0.00</td>
+                </tr>*@
+                @*<tr>
+                    <td>佣金账户抵现</td>
+                    <td align="right" class="commisionCut" id="commisionCut">-0.00</td>
+                </tr>*@
+                @if (Model.AllFullCut > 0)
+                {
+                    <tr>
+                        <td>满减</td>
+                        <td align="right" class="manjian">-¥@(Model.AllFullCut.ToString("0.00"))</td>
+                    </tr>
+                }
+                <tr>
+                    <td>@(MallKey.MallDiscountName_JiFen)减免</td>
+                    <td align="right" class="hongbaocut">-¥@(userHongBao > Model.AllHonBaoCutFee ? Model.AllHonBaoCutFee : userHongBao)</td>
+                </tr>
+                <tr>
+                    <td>优惠券</td>
+                    <td align="right" id="couponmoney">-¥0.00</td>
+                </tr>
+
+                @*                <tr>
+                    <td>汇购卡券</td>
+                    <td align="right" class="cashmoney">-¥0.00</td>
+                </tr>*@
+                <tr>
+                    <td>应付金额</td>
+                    <td align="right" class="allPrice">¥@(Model.AllOrderAmount - (userHongBao > Model.AllHonBaoCutFee ? Model.AllHonBaoCutFee : userHongBao))</td>
+                </tr>
+                <tr>
+
+                    <td colspan="2">
+                        <p style="height: 24px; line-height: 24px; text-align: right; color: #808080;">（*本商城所有活动产品概不退换货哦）</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <input type="hidden" id="fullCut" value="@Model.AllFullCut" />
+    <form action="@Url.Action("confirmorder")" method="post" id="confirmOrderForm">
+        <input type="hidden" id="selectedCartItemKeyList" name="selectedCartItemKeyList" value="@Model.SelectedCartItemKeyList" />
+        <input type="hidden" id="selectedStoreKeyList" name="selectedStoreKeyList" value="@Model.SelectedStoreKeyList" />
+        @if (Model.DefaultFullShipAddressInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultFullShipAddressInfo.SAId" name="saId" id="saId" />
+        }
+        else
+        { 
+            <input type="hidden" value="0" name="saId" id="saId" />
+        }
+        @if (Model.DefaultPayPluginInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultPayPluginInfo.SystemName" name="payName" id="payName" />
+        }
+        else
+        {
+            <input type="hidden" value="" name="payName" id="payName" />
+        }
+        <input type="hidden" value="@(Model.SelectCashPay ? 1 : 0)" name="selectCashPay" id="selectCashPay" />
+    </form>
+    @if (StringHelper.ArrayContainsForNum(WebHelper.GetConfigSettingsInt("AgentStoreId") + "," + WebHelper.GetConfigSettingsInt("AgentSuitStoreId"), Model.SelectedStoreKeyList))
+    { 
+        <div style="margin-left: 10px; line-height: 45px; font-size: 14px; color: #808080; display: inline-block;">
+            <input type="checkbox" name="agreen" checked="" class="agreesign" />阅读并同意
+                    <a href="javascript:;" id="usesigning" class="usesigning" onclick="usesign();">《代理用户电子签约协议》</a>
+
+        </div>
+    }
+    <a href="javascript:submitOrder()" class="redBt subOrder" id="addorder" style="border-radius: 0;">提交订单</a>
+    <a href="/mob/cart" class="subOrder" style="background: #e4e4e4; padding: 4px 15px; line-height: 36px; font-size: 14px; color: #333">返回购物车修改</a>
+    @*<a href="javascript:void(0)"  class="errorBt subOrder">提交订单</a>*@
+
+</div>
+
+<div class="allCon" id="shipAddressListBlock" style="display: none;"></div>
+<form name="addShipAddressForm" action="" id="addShipAddressBlock" style="display: none;" class="am-form am-form-horizontal">
+    <div class="shipContent">
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">收货人</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="consignee" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">手机号</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="mobile" class="text" value="" maxlength="11" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-3 am-form-label">所在地区</label>
+
+            <div class="am-u-sm-3">
+                <select id="provinceId" name="provinceId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="cityId" name="cityId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="regionId" name="regionId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">详细地址</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="address" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group ">
+            <div class="am-u-sm-12">
+                <a href="javascript:void(0)" onclick="javascript:addShipAddress()" class="am-btn am-btn-default am-btn-block">提交</a>
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+<div class="allCon" id="payPluginListBlock" style="display: none;">
+    <div class="title">支付信息</div>
+    @foreach (PluginInfo info in Model.PayPluginList)
+    {
+        if (info.SystemName != "alipay" && info.SystemName != "custompay")
+        {
+            if (info.SystemName != "IPSpay")
+            {
+                if (info.SystemName == "IPSWXpay")
+                {
+                    if (WebHelper.GetConfigSettings("TestUidList").Split(',').ToList().Contains(WorkContext.Uid.ToString()))
+                    {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+                    }
+                }
+                else
+                {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+                }
+            }
+        }
+
+    }
+</div>
+
+@*<div class="allCon" id="validCouponListBlcok" style="display: none;">
+    <div class="title">优惠劵</div>
+    <div id="validCouponList"></div>
+    <a href="javascript:confirmSelectedCoupon()" class="redBt subOrder">确认</a>
+</div>*@
+
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+

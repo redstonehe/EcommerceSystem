@@ -1,0 +1,160 @@
+﻿@model VMall.Web.Mobile.Models.DrawCashHistoryModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.AccountName + "提现历史记录"; ;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+
+<style>
+    /*table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+
+    table td {
+        border: 1px solid #808080;
+        padding: 5px;
+        vertical-align: middle;
+    }
+
+    #order_table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }*/
+
+    .viewport {
+        width: 900px;
+        max-width: 1000px;
+        /*margin: 0 auto;*/
+    }
+
+    .grid1 {
+        width: 20%;
+    }
+
+    .grid2 {
+        width: 10%;
+    }
+
+    .grid3 {
+        width: 10%;
+    }
+
+    .grid4 {
+        width: 60%;
+    }
+
+    .news-more {
+        width: 95%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        background: #e4e4e4;
+        color: #333;
+    }
+</style>
+
+
+<div class="myAssetsCon am-scrollable-horizontal">
+    <table class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-compact">
+        <tbody id="order_table">
+            <tr style="background: #DCDCDC;">
+                <th>提现单号</th>
+                <th>创建时间</th>
+                <th>提现金额</th>
+                <th>提现税费</th>
+                <th>提现手续费</th>
+                <th>实际金额</th>
+                <th>银行信息 </th>
+                <th>状态</th>
+                <th>处理结果</th>
+            </tr>
+            @Html.Partial("/mobile/views/ucenter/drawcashhistoryajax.cshtml", Model)
+            @*@foreach (var info in Model.HistoryList)
+            {
+                <tr>
+                    <td>@info.DrawCashSN</td>
+                    <td>@info.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@info.Amount.ToString("0.00")</td>
+                    <td>@info.TaxAmount.ToString("0.00")</td>
+                    <td>@info.Poundage.ToString("0.00")</td>
+                    <td>@info.ActualAmount.ToString("0.00")</td>
+                    <td>@info.BankName :
+                        <br />
+                        @(string.IsNullOrEmpty(info.BankCardCode) ? "" : info.BankCardCode.Substring(0, 3) + "****" + info.BankCardCode.Substring(info.BankCardCode.Length - 3, 3))</td>
+                    <td>
+                        @if (info.State == 0)
+                        {  
+                            @:处理失败，已撤销
+                                }
+                        else if (info.State == 1)
+                        {
+                            @:等待处理 
+                                    }
+                        else if (info.State == 2)
+                        { 
+                            @:处理成功
+                                    }
+                    </td>
+                    <td>
+                        @info.Result
+                    </td>
+                </tr>
+            }*@
+        </tbody>
+    </table>
+
+</div>
+<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getAccountDetailList(accountDetailNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<div style="position: relative;">
+    <div class="footerTop">
+        <div class="clear"></div>
+    </div>
+    <a href="@Url.Action("rewarddraw", new { uid = WorkContext.Uid, accountId = (int)AccountType.佣金账户, accountName = AccountType.佣金账户 })" class="news-more">去提现</a>
+
+</div>
+<script>
+    //获得订单列表
+    var accountDetailNextPageNumber = 2;
+    var detailhasNextPage = false;
+    function getAccountDetailList(page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/DrawHistory?pageNumber=" + page, false, function (data) {
+            getDetailListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getDetailListResponse(data) {
+        $("#order_table").append(data);
+        if (detailhasNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            accountDetailNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>

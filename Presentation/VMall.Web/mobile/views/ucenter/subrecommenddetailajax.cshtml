@@ -1,0 +1,63 @@
+﻿@model VMall.Web.Mobile.Models.SubRecommendDetailModel
+@{
+    Layout = null;
+}
+
+@foreach (OrderInfo row in Model.OrderList)
+{
+    string state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row.OrderState));
+                List<OrderProductInfo> orderProductList = Orders.GetOrderProductList(TypeHelper.ObjectToInt(row.Oid), Model.OrderProductList);
+                <tr>
+                    <td>@row.OSN</td>
+                    <td>@(row.AddTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                     <td>@row.OrderAmount</td>
+                    <td>@orderProductList.Sum(x => x.ProductHaiMi * x.BuyCount).ToString("0.00")</td>
+                    
+                    <td>
+                        
+                        @switch (state)
+                                {
+                                    case "WaitPaying":
+                                    @:等待付款
+            break;
+                                    case "Confirming":
+                                    @:待确认
+            break;
+                                    case "Confirmed":
+                                    @:已确认
+            break;
+                                    case "PreProducting":
+                                    @:备货中
+            break;
+                                    case "Sended":
+                                    @:已发货
+            break;
+                                    case "Completed":
+                                    @:已完成
+            break;
+                                    case "Settled":
+                                    @:已结算
+                                    break;
+                                    case "Cancelled":
+                                    @:取消
+            break;
+                                    case "Returned":
+                                    @:退货
+            break;
+                                    case "Changed":
+                                    @:换货
+            break;
+                                    case "Locked":
+                                    @:锁定
+            break;
+                                    default:
+                                    @:未知状态
+            break;
+                                }
+                    </td>
+                </tr>
+}
+
+
+
+

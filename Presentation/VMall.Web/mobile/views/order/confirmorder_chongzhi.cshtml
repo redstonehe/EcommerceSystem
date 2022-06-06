@@ -1,0 +1,385 @@
+﻿@model VMall.Web.Mobile.Models.ConfirmOrder_ChongZhiModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "手机充值-确认订单";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 6;
+}
+<style>
+    body { /*font-size: 1rem;*/
+        font-family: "Microsoft YaHei";
+        /*background: #f0f0f0;*/
+        color: #444;
+        /*line-height: 0.22rem;*/
+    }
+
+    .cashamount {
+        color: #E4393C;
+        width: 60px;
+        display: inline-block;
+    }
+
+    #CashSumCon ul li {
+        border-bottom: 1px dashed #e4e4e4;
+        padding: 5px 10px;
+    }
+
+    .con input[type=text] {
+        padding: 5px;
+    }
+
+    .con input[type=password] {
+        padding: 5px;
+    }
+
+    .con .cartItme .proInfo .proInfo2 .text a {
+        padding: 5px 0;
+    }
+
+    .paytype-cash {
+        height: 24px;
+        width: 24px;
+    }
+
+    .ordersummaryT tr td {
+        width: 50%;
+    }
+
+    .subSum p {
+        text-align: right;
+        height: 24px;
+        line-height: 24px;
+        padding-right: 10px;
+    }
+
+    .subSum i {
+        color: #f00;
+    }
+
+    .proInfoItem {
+        display: block;
+        padding: 5px 30px 5px 10px;
+    }
+
+        .proInfoItem span {
+            color: #f00;
+        }
+
+    .preInfo a[class='redBt'], .preInfo a[class='gayBt'], .preInfo1 a[class='redBt'] {
+        padding: 0 10px;
+        display: inline-block;
+        color: #fff;
+        background: #FB5433;
+    }
+
+    .preInfo a[class='gayBt'] {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+    .proInfo {
+        margin: 0;
+    }
+
+    .preInfo {
+        margin: 10px;
+    }
+
+    .cashwarn {
+        color: red;
+        display: none;
+        margin-bottom: 5px;
+    }
+
+    .info {
+        margin: 20px;
+    }
+
+    .phoneipt {
+        height: 38px;
+        line-height: 38px;
+        width: 50%;
+        border: 1px solid #ccc;
+        padding: 0 10px;
+        font-size: 20px;
+        color: #333;
+        margin-right: 8px;
+        border: 1px solid #7abd54;
+    }
+
+    .mobiletips {
+        color: red;
+    }
+
+    .mobileMsg {
+        color: green;
+    }
+</style>
+<script type="text/javascript">
+       
+    isGuestSC = @WorkContext.MallConfig.IsGuestSC;
+    //展示产品列表
+    function showChongZhiList() {
+        //document.getElementById("payPluginShowBlock").style.display = "none";
+        document.getElementById("ChongZhiListBlock").style.display = "";
+    }
+    //选择产品
+    function selectProduct(pid) {
+        document.getElementById("pid").value = pid;
+        document.getElementById("confirmOrderForm").submit();
+    }
+    function checkmobile(ele) {
+        var mobile = $.trim($(ele).val());
+        var pid = $("#pid").val();
+        if ($.trim(mobile).length == 0) {
+            $(".mobileMsg").html("请输入手机号").css("color","red");
+            return ;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            $(".mobileMsg").html("请输入正确的手机号码").css("color","red");
+            return ;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/order/ajaxGetMobileArea?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { mobile: mobile,pid:pid },
+            success: function (result) {
+                var mobileResult= new Array();
+                mobileResult=result.split('-');
+                var type=mobileResult[0];
+                var city=mobileResult[1];
+                var area=mobileResult[2];
+                var showMsg=city.split(' ')[0]+type.substring(2,4);
+                $("#areaid").val(area);
+                $("#mobiletips").val(showMsg);
+                $(".mobileMsg").html(showMsg).css("color","green");
+            }
+        });
+    }
+    //提交订单
+    function submitOrder_ChongZhi() {
+        var pid = document.getElementById("pid").value;
+        var areaid = $("#areaid").val() ;
+        var payName = document.getElementById("payName").value;
+        var phoneipt = $.trim($(".phoneipt").val()) ;
+        if (phoneipt.length == 0) {
+            alert("请输入手机号");
+            return ;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(phoneipt))) {
+            alert('请输入正确的手机号码!!!');
+            return ;
+        }
+        $("#CZMobile").val(phoneipt) ;
+        var CZMobile=phoneipt;
+        var mobiletips= $("#mobiletips").val();
+            
+        var couponIdList = "";
+        var couponIdCheckboxList = document.getElementById("validCouponList").getElementsByTagName("input");
+        for (var i = 0; i < couponIdCheckboxList.length; i++) {
+            if (couponIdCheckboxList[i].checked == true) {
+                couponIdList += couponIdCheckboxList[i].value + ",";
+            }
+        }
+        if (couponIdList.length > 0)
+            couponIdList = couponIdList.substring(0, couponIdList.length - 1);
+
+        var haiMiCount = $("#haiMiCount") ? $("#haiMiCount").val() : 0;
+            
+        var couponSN = document.getElementById("couponSN") ? document.getElementById("couponSN").value : "";
+            
+        //防重复提交
+        $(".orderSumRight .addOrderBtn").html("正在提交...").attr("href", "javascript:void(0);");
+        Ajax.post("/mob/order/SubmitOrder_ChongZhi",
+                { 'pid': pid,  'payName': payName,  'haiMiCount': haiMiCount, 'couponIdList': couponIdList, 'couponSNList': couponSN,'CZMobile':CZMobile,'mobiletips':mobiletips,'areaid':areaid },
+                false,
+                submitOrderResponse)
+    }
+</script>
+<div id="mainBlock">
+
+    <div class="allCon">
+
+        <div class="title">支付信息</div>
+        <div class="con">
+            <a href="javascript:showPayPluginList()"><span>@Model.DefaultPayPluginInfo.FriendlyName</span></a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="title">充值信息</div>
+        <div class="info" style="padding: 0">
+            手机号码：<input type="type"  class="phoneipt" name="name" value="@Model.CZMobile" onblur="checkmobile(this);" />
+            <span class="mobileMsg">@Model.mobiletips</span>
+
+        </div>
+        <div class="info" style="padding: 0">
+            充值金额：<span class="f18"> @Model.Product.MarketPrice</span>
+
+        </div>
+        <div class="info" style="padding: 0">
+            销售价格：<span class="f18"> @Model.Product.ShopPrice</span>
+
+        </div>
+        <div class="title">其它信息</div>
+        @*<div class="con">
+            <a href="javascript:getValidCouponList()"><span>选择优惠券</span></a>
+            <span class="icon-arr"></span>
+        </div>*@
+        <div class="con" id="validCouponList" style="display: none;">
+        </div>
+        <div id="selectCouponList"></div>
+        <script>
+            function useCoupon(obj) {
+                var checkboxList = document.getElementById("validCouponList").getElementsByTagName("input");
+                for (var i = 0; i < checkboxList.length; i++) {
+                    checkboxList[i].checked = false;
+                }
+                obj.checked = true;
+                var selectCoupon = $("input[name='couponId']:checked");
+                var couponMoney = selectCoupon.attr("data-money");
+                //alert(couponMoney);
+
+                var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                var haiMiCount = ($("#haiMiCount").length > 0 ? $("#haiMiCount").val() : 0);
+                var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                if ((@Model.AllOrderAmount -couponMoney - haiMiCount - hongBaoCount - CashCount) < 0) {
+                    obj.checked = false;
+                    alert("优惠抵扣总金额不能大于订单金额");
+                    return;
+                }
+                $("#couponmoney").html("-" + couponMoney);
+                $(".allPrice").html("¥" + (@Model.AllOrderAmount -couponMoney - haiMiCount - hongBaoCount - CashCount).toFixed(2));
+            }
+        </script>
+
+        <div class="con">
+            @{var userHaimi = 0M;
+              AccountInfo haiMiAccount = Model.UserAccountInfo.Find(x => x.AccountId == (int)AccountType.商城钱包);
+              if (haiMiAccount != null)
+              {
+                  userHaimi = System.Math.Round(haiMiAccount.Banlance, 2);
+              }
+            }
+            <input class="radio" type="radio" value="1" id="nouserHaiMi" name="userHaiMi" style="display: inline-block" checked="checked" onclick="closeHaiMi();" />&nbsp;不&nbsp;使&nbsp;用
+            
+            <input class="radio" type="radio" value="0" id="userHaiMi" name="userHaiMi" style="display: inline-block;" onclick="openHaiMi();" />使用@(MallKey.MallDiscountName_JiangJin)抵现
+            <a href="javascript:void(0)" style="display: inline-block;"><span></span><span class="tip">拥有<strong style="color: #f00;"> @userHaimi</strong> @(MallKey.MallDiscountName_JiangJin)</span></a>
+        </div>
+        <div class="con" style="display: none;" id="haimiDiv">
+            本次使用：<input class="text" type="text" value="0" id="haiMiCount" name="haiMiCount" onblur="checkHaiMi(@userHaimi,@Model.AllOrderAmount)" style="margin:10px;" />
+            @(MallKey.MallDiscountName_JiangJin)
+        </div>
+        <script type="text/javascript">
+            function openHaiMi(obj) {
+                $("#haimiDiv").show();
+            }
+            function closeHaiMi(obj) {
+                $("#haimiDiv").hide();
+                $("#haiMiCount").val(0);
+            }
+            function checkHaiMi(hasPayCreditCount, maxUsePayCreditCount) {
+                var obj = $("#haiMiCount");
+                var usePayCreditCount = obj.val();
+                var hongBaoCount = ($("#hongBaoCount").length > 0 ? $("#hongBaoCount").val() : 0);
+                var CashCount = ($("#CashCount").length > 0 ? $("#CashCount").val() : 0);
+                var couponMoney = ($("input[name='couponId']:checked").length > 0 ? $("input[name='couponId']:checked").attr("data-money") : 0);
+                if (isNaN(usePayCreditCount)) {
+                    obj.val(0);
+                    alert("请输入数字");
+                }
+                else if (usePayCreditCount < 0) {
+                    obj.val(0);
+                    alert("不能输入负数");
+                }
+                else if (usePayCreditCount > hasPayCreditCount) {
+                    obj.val(hasPayCreditCount);
+                    alert("金额不足,最多可用数" + hasPayCreditCount + "");
+                }
+                else if (usePayCreditCount > maxUsePayCreditCount) {
+                    obj.val(maxUsePayCreditCount);
+                    alert("该订单最多可用数" + maxUsePayCreditCount);
+                }
+                if ((@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney) < 0) {
+                    obj.val(0);
+                    alert("优惠抵扣总金额不能大于订单金额");
+                    $("#haiMiCount").focus();
+                    return;
+                }
+                $(".savemoney").html("-¥" + obj.val());
+
+                $(".allPrice").html((@Model.AllOrderAmount -obj.val() - CashCount - hongBaoCount - couponMoney));
+            }
+
+        </script>
+
+    </div>
+
+    <div class="orderInfo">
+        <span class="bg-border"><span class="icon"></span></span>
+        <div style="padding: 10px 30px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ordersummaryT">
+                <tr>
+                    <td>商品金额</td>
+                    <td align="right">¥@Model.AllProductAmount</td>
+                </tr>
+                <tr>
+                    <td>@(MallKey.MallDiscountName_JiangJin)抵现</td>
+                    <td align="right" class="savemoney">-0.00</td>
+                </tr>
+                <tr>
+                    <td>应付金额</td>
+                    <td align="right" class="allPrice">¥@(Model.AllOrderAmount)</td>
+                </tr>
+                <tr>
+
+                    <td colspan="2">
+                        <p style="height: 24px; line-height: 24px; text-align: right; color: #808080;">（*本商城所有活动产品概不退换货哦）</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <form action="@Url.Action("confirmorder_chongzhi", new { pid = Model.Pid })" method="post" id="confirmOrderForm">
+        <input type="hidden" id="pid" name="pid" value="@Model.Pid" />
+        <input type="hidden" id="CZMobile" name="CZMobile" value="@Model.CZMobile" />
+        <input type="hidden" id="areaid" name="areaid" value="@Model.areaid" />
+        <input type="hidden" id="mobiletips" name="mobiletips" value="@Model.mobiletips" />
+
+        @if (Model.DefaultPayPluginInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultPayPluginInfo.SystemName" name="payName" id="payName" />
+        }
+        else
+        {
+            <input type="hidden" value="" name="payName" id="payName" />
+        }
+
+    </form>
+
+    <a href="javascript:submitOrder_ChongZhi()" class="redBt subOrder" style="border-radius: 0;">提交订单</a>
+    <a href="/mob/recharge" class=" subOrder" style="background: #e4e4e4; padding: 4px 15px; line-height: 36px; font-size: 14px; color: #333">返回</a>
+
+
+</div>
+
+
+<div class="allCon" id="payPluginListBlock" style="display: none;">
+    <div class="title">支付信息</div>
+    @foreach (PluginInfo info in Model.PayPluginList)
+    {
+        if (info.SystemName != "alipay" && info.SystemName != "custompay")
+        {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+        }
+    }
+</div>
+
+@*<div class="allCon" id="validCouponListBlcok" style="display: none;">
+    <div class="title">优惠劵</div>
+    <div id="validCouponList"></div>
+    <a href="javascript:confirmSelectedCoupon()" class="redBt subOrder">确认</a>
+</div>*@

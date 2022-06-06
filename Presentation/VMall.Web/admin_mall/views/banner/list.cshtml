@@ -1,0 +1,172 @@
+﻿@model VMall.Web.MallAdmin.Models.BannerListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>banner列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @* <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">Banner管理</a></li>
+            <li class="active">Banner列表</li>
+        </ol>
+        <div class="right">
+            <a href="@Url.Action("add")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm("list", "banner"))
+    {
+       <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>类型：</label>
+                                @Html.DropDownListFor(x => x.Type, ViewData["bannerTypeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>标题：</label>
+                                @Html.TextBox("Title", Model.Title, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" id="Search" name="Search" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>图片</th>
+                                        <th>地址</th>
+                                        <th>标题</th>
+                                        <th>类型</th>
+                                        <th>排序</th>
+                                        <th>显示</th>
+                                        <th>显示时间</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (BannerInfo info in Model.BannerList)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@info.Id" selectItem="true" name="idList" /></td>
+                                            <td>
+                                                <img width="100" height="60" src="/upload/banner/@info.Img" /></td>
+                                            <td>@info.Url</td>
+                                            <td>@info.Title</td>
+                                            <td>
+                                                @if (info.Type == 0)
+                                                {
+                                                    @:PC
+    }
+                                                else if (info.Type == 1)
+                                                {
+                                                    @:手机
+    }
+                                                else if (info.Type == 2)
+                                                {
+                                                    @:手机端全球购
+    }
+                                                else if (info.Type == 3)
+                                                {
+                                                    @:手机端汇生鲜
+    }
+                                                else if (info.Type == 4)
+                                                {
+                                                    @:手机端和治友德
+    }
+                                                else if (info.Type == 5)
+                                                {
+                                                    @:手机端活动专区
+    }
+                                                else if (info.Type == 6)
+                                                {
+                                                    @:微商订货系统
+    }
+                                                else if (info.Type == 7)
+                                                {
+                                                    @:红包专区
+    }
+                                                else
+                                                {
+                                                    @:未知
+    }
+                                            </td>
+                                            <td>@info.DisplayOrder</td>
+                                            <td>
+                                                @if (info.IsShow == 1)
+                                                {
+                                                    @:是
+    }
+                                                else
+                                                {
+                                                    @:否 
+    }
+                                            </td>
+                                            <td>@info.StartTime.ToString("f")
+                                                <br />
+                                                @info.EndTime.ToString("f")</td>
+                                            <td>
+                                                @Html.ActionLink("[编辑]", "edit", new { id = info.Id }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[删除]", "del", new { idList = info.Id }, new { @class = "deleteOperate" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+        <div class="dataListEdit">
+            <a href="#" delUrl="@Url.Action("del")" class="batch batchDel">批量删除</a>
+            <a href="#" showUrl="@Url.Action("ShowBatch")" class="batch batchShow" style="margin-left:50px;">批量显示</a>
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+        <div class="table_bottom"></div>
+    }
+}

@@ -1,0 +1,72 @@
+﻿@model VMall.Web.Models.SubmitResultModel
+@using VMall.Web;
+@{
+    Layout = "~/views/shared/_layout_order.cshtml";
+    ViewBag.Title = "订单提交结果-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+
+    .payTip {
+        width: 390px;
+        margin: 0 auto;
+        padding-top: 30px;
+    }
+</style>
+
+<div class="buyTip box">
+    <div class="buyTipInner">
+        <img src="/images/ok.gif" width="43" height="48" />
+        @if (Model.AllPayMoney > 0)
+        {
+            //if (((IPayPlugin)Model.PayPlugin.Instance).PayMode == 1)
+            //{
+            @:提交成功,支付方式为@{@Model.PayPlugin.FriendlyName}<a href="@Url.Action("payshow", new RouteValueDictionary { { "oidList", Model.OidList } })"  class="redBT">点击前往支付</a>
+        //}
+
+        }
+        else
+        { 
+            @:您的订单已经提交成功,我们会尽快为您发货
+            decimal chongXiaoCount = Orders.GetListForChongXiao(WorkContext.Uid);
+            if (WorkContext.IsDirSaleUser && chongXiaoCount >= 600)
+            {
+            <a href="/order/ResultPay?oids=@Model.OidList&paystatus=1">去设置分期</a>
+            }
+        }
+    </div>
+    @if (Model.AllPayMoney > 0)
+    { 
+        <div class="payTip">
+            请在30分钟内付款哦~
+        </div>
+    }
+</div>
+@*@if (Model.OrderList.FindAll(x => x.StoreId.ToString() == WebSiteConfig.HealthenStoreId).Sum(x => x.ProductAmount) >= 5800 && !WorkContext.IsDirSaleUser && (Model.PayPlugin.SystemName == "cod" || Model.PayPlugin.SystemName == "emsremit"))
+{//海之圣专区满5800 才有加入资格 
+    <div id="joinPlan" style="text-align: center; margin: 0 auto; width: 1002px; padding: 20px 0; font-size: 20px">
+        <div style="width: 650px; margin: 0 auto;">
+            <p style="text-align: center; margin-left: -85px;">您的订单金额已符合蓝钻计划，是否加入？</p>
+            <div id="choseJoin" style="text-align: center; margin: 20px auto; margin-left: -125px;">
+                <a href="@Url.Action("joinplan", new RouteValueDictionary { { "oids", Model.OrderList.FindAll(x => x.StoreId.ToString() == WebSiteConfig.HealthenStoreId).FirstOrDefault().Oid } })">加入</a>
+                <a href="@Url.Action("orderlist", "ucenter")">不加入
+
+                </a>
+            </div>
+        </div>
+    </div>
+}*@
+

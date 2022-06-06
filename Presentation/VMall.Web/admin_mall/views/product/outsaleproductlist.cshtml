@@ -1,0 +1,181 @@
+﻿@model VMall.Web.MallAdmin.Models.ProductListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>下架商品</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link rel="stylesheet" type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/product.js"></script>
+    <script type="text/javascript">
+        productPageType = 2;
+    </script>
+    <script>
+        function output() {
+            var StoreId = $("#StoreId").val();
+            var CateId = $("#CateId").val();
+            var BrandId = $("#BrandId").val();
+            var Pid = $("#Pid").val();
+            var ProductName = $.trim($("#ProductName").val());
+            var State = 1;
+            window.open("/malladmin/product/OutPutList?StoreId=" + StoreId + "&CateId=" + CateId + "&BrandId=" + BrandId + "&Pid=" + Pid + "&ProductName=" + ProductName + "&State=" + State);
+        }
+        function search() {
+            $("form").submit();
+        }
+
+    </script>
+}
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">商品管理</a></li>
+            <li class="active">下架商品</li>
+        </ol>
+
+        <div class="right">
+            <a href="@Url.Action("addproduct")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加商品</a>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </h1>
+    @using (Html.BeginForm())
+    {
+    
+        <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+        <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />
+        
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+
+                            <div class="form-group">
+                                <label>商品店铺：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                    <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>商品分类：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.CategoryName" onclick="openCategorySelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="CateId" id="CateId" name="CateId" value="@Model.CateId" />
+                                    <input type="hidden" class="CategoryName" id="CategoryName" name="CategoryName" value="@Model.CategoryName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>商品品牌：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.BrandName" onclick="openBrandSelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="BrandId" id="BrandId" name="BrandId" value="@Model.BrandId" />
+                                    <input type="hidden" class="BrandName" id="BrandName" name="BrandName" value="@Model.BrandName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>商品编号：</label>
+                                @Html.TextBox("Pid", Model.Pid, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>商品名称：</label>
+                                @Html.TextBox("ProductName", Model.ProductName, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" id="SearchProduct" name="SearchProduct" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>编号</th>
+                                        <th>商品名称</th>
+                                        <th>店铺名称</th>
+                                        <th>商品价格</th>
+                                        @*<th>商品PV</th>*@
+                                        <th>商品@(MallKey.MallCoin)</th>
+                                        <th>添加时间</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.ProductList.Rows)
+                                    {
+                                    <tr>
+                                        <td align="center">
+                                            <input type="checkbox" value="@row["pid"]" selectItem="true" name="pidList" />
+                                        </td>
+                                        <td>@row["pid"]</td>
+                                        <td><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", row["pid"] }, { "area", "mob" } })" class="btn-link" target="_blank">@row["pname"]</a></td>
+                                        <td>@row["sname"]</td>
+                                        <td align="center">
+                                            <input type="text" url="@Url.Action("updateproductshopprice", new { pid = row["pid"] })" value="@row["shopprice"]" style=" width:100px;" class="shoppriceinput unselectedsortinput" />
+                                        </td>
+                                        @*<td>@TypeHelper.ObjectToDecimal(row["pv"]).ToString("0.00")</td>*@
+                                        <td>@TypeHelper.ObjectToDecimal(row["haimi"]).ToString("0.00")</td>
+                                        <td>@TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td>
+                                            @Html.ActionLink("[图片]", "productimagelist", new { pid = row["pid"] }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[搜索关键词]", "productkeywordlist", new { pid = row["pid"] }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[关联商品]", "relateproductlist", new { pid = row["pid"] }, new { @class = "editOperate" })
+                                            <a href="#" class="onsaletag editOperate" url="@Url.Action("onsaleproduct", new { pidList = row["pid"] })">[上架]</a>
+                                            @Html.ActionLink("[编辑]", "editproduct", new { pid = row["pid"] }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[删除]", "recycleproduct", new { pidList = row["pid"] }, new { @class = "deleteOperate" })
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+
+        <div class="dataListEdit">
+            <a href="javascript:void(0)" onSaleUrl="@Url.Action("onsaleproduct")" class="batch batchOnSale">批量上架</a>
+            <a href="javascript:void(0)" recycleUrl="@Url.Action("recycleproduct")" class="batch batchRecycle">批量删除</a>
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

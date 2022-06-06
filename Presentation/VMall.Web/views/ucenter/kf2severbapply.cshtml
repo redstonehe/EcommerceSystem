@@ -1,0 +1,377 @@
+﻿@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "尚睿淳卡转出申请-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "转出申请";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+<link href="/admin_mall/content/css/uploadify.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.CSSCDN}/scripts/layer/layer.js" type="text/javascript"></script>
+
+<style>
+    /*==========以下部分是Validform必须的===========*/
+    .Validform_checktip {
+        margin-left: 8px;
+        line-height: 20px;
+        height: 20px;
+        overflow: hidden;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .Validform_right {
+        color: #71b83d;
+        padding-left: 20px;
+        background: url(../images/right.png) no-repeat left center;
+    }
+
+    .Validform_wrong {
+        color: red;
+        padding-left: 20px;
+        white-space: nowrap;
+        background: url(../images/error.png) no-repeat left center;
+    }
+
+    .Validform_loading {
+        padding-left: 20px;
+        background: url(../images/onLoad.gif) no-repeat left center;
+    }
+
+    .Validform_error {
+        background-color: #ffe7e7;
+    }
+
+    #Validform_msg {
+        color: #7d8289;
+        font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+        width: 280px;
+        -webkit-box-shadow: 2px 2px 3px #aaa;
+        -moz-box-shadow: 2px 2px 3px #aaa;
+        background: #fff;
+        position: absolute;
+        top: 0px;
+        right: 50px;
+        z-index: 99999;
+        display: none;
+        filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
+    }
+
+        #Validform_msg .iframe {
+            position: absolute;
+            left: 0px;
+            top: -1px;
+            z-index: -1;
+        }
+
+        #Validform_msg .Validform_title {
+            line-height: 25px;
+            height: 25px;
+            text-align: left;
+            font-weight: bold;
+            padding: 0 8px;
+            color: #fff;
+            position: relative;
+            background-color: #000;
+        }
+
+        #Validform_msg a.Validform_close:link, #Validform_msg a.Validform_close:visited {
+            line-height: 22px;
+            position: absolute;
+            right: 8px;
+            top: 0px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #Validform_msg a.Validform_close:hover {
+            color: #cc0;
+        }
+
+        #Validform_msg .Validform_info {
+            padding: 8px;
+            border: 1px solid #000;
+            border-top: none;
+            text-align: left;
+        }
+</style>
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .info th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 45px;
+    }
+
+    .info .succ_on .text {
+        border: 1px solid #C0C0C0;
+    }
+
+    .info .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+        .info .text:focus {
+            border: 1px solid #3879d9;
+        }
+
+    .info .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 270px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+    }
+
+    .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .select {
+        width: 270px;
+        text-align: center;
+        margin: 0 auto;
+        height: 38px;
+        border: 1px solid #C0C0C0;
+    }
+
+    .upload {
+        position: relative;
+        height: 90px;
+        line-height: 90px;
+    }
+
+    .uploadProgressBar {
+        position: absolute;
+        top: 0px;
+        left: 94px;
+        width: 400px;
+    }
+
+    .uploadPreview {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border: 1px solid #cfcfcf;
+        width: 88px;
+        height: 88px;
+        line-height: 88px;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    //弹窗组件
+    window.alert = function (msg) { layerOpenMsgDiv(msg) };
+    //$(function () {
+    //    $(".userInfoForm").Validform({
+    //        btnSubmit: ".submitReg",
+    //        tiptype: function (msg, o) {
+    //            if (o.type == 3) {
+    //                // 只有在验证失败的时候，才会弹出相关的信息
+    //                alert(msg);
+    //            }
+    //        }
+    //    });
+    //});
+</script>
+<script type="text/javascript">
+    function submitReg() {
+        var Amount = parseInt($.trim($("#Amount").val()));
+        var CardNumber = $.trim($("#CardNumber").val());
+        var CardUserName = $.trim($("#CardUserName").val());
+        var CardMobile = $.trim($("#CardMobile").val());
+        var Remark = $.trim($("#Remark").val());
+        var verifyCode = $.trim($(".verifyCode").val());
+        if (!checkInput(Amount,CardNumber, CardUserName, CardMobile, verifyCode)) {
+            return;
+        }
+        $(".submitReg").hide();
+        $(".regLoding").show();
+        Ajax.post("/ucenter/Kf2SeverbApplySubmit",
+                { 'Amount': Amount, 'CardNumber': CardNumber, 'CardUserName': CardUserName, 'CardMobile': CardMobile, 'Remark': Remark, 'verifyCode': verifyCode }, false, function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state == "success") {
+                        var msg = "提交成功";
+                        var yesFunc = function () {
+                            layer.closeAll(); //如果设定了yes回调，需进行手工关闭
+                            window.location.href = window.location.href;
+                        };
+                        var cancelFunc = function () {
+                            window.location.href = window.location.href;
+                        };
+                        layerOpen2(msg, yesFunc, cancelFunc);
+                    }
+                    else if (result.state == "error") {
+                        alert(result.content[0].msg);
+                        $(".submitReg").show();
+                        $(".regLoding").hide()
+                        $("#verifyImage").click();
+                    }
+                    else {
+                        alert("提交失败");
+                        $(".submitReg").show();
+                        $(".regLoding").hide()
+                        $("#verifyImage").click();
+                    }
+                });
+    }
+    //检查输入
+    function checkInput(Amount,CardNumber, CardUserName, CardMobile, verifyCode) {
+        if (Amount <= 0) {
+            alert("请选择金额");
+            $("#Amount").focus();
+            return false;
+        }
+        if (CardNumber == "") {
+            alert("卡号不能为空");
+            $("#CardNumber").focus();
+            return false;
+        }
+        var regName = /[\u4e00-\u9fa5]+/gi;
+        if (regName.test(CardNumber)) {
+            alert("请输入正确的数字格式的卡号");
+            $(".CardNumber").focus();
+            return false;
+        }
+        if (CardUserName == "") {
+            alert("姓名不能为空");
+            $("#CardUserName").focus();
+            return false;
+        }
+        if (CardMobile == "") {
+            alert("请输入收货手机号码");
+            $(".CardMobile").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test(CardMobile)) {
+            alert('请输入正确的手机号码!!!');
+            $(".CardMobile").focus();
+            return;
+        }
+        if (verifyCode == "") {
+            alert("请输入验证码");
+            $(".verifyCode").focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="bigBox" id="member">
+    <div class="box info">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="position: relative;">
+            <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+            <a href="@Url.Action("Kf2SeverbHistory", new { uid = WorkContext.Uid })" style="font-size: 12px; color: red; cursor: pointer; float: right; margin-right: 20px;">申请历史记录</a>
+            <form name="userInfoForm" class="userInfoForm" action="" method="post">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="memberTable">
+
+                    <tr class="succ_on">
+                        <th width="190">持卡人姓名：</th>
+                        <td width="275">
+                            <input type="text" id="CardUserName" name="CardUserName" value="" class="text" maxlength="10" /></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">持卡人手机号：</th>
+                        <td width="275">
+                            <input type="text" id="CardMobile" name="CardMobile" value="" class="text" maxlength="11" datatype="m" errormsg="格式错误" />
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">申请金额：</th>
+                        <td width="275">
+                            <select id="Amount" name="Amount" class="select">
+                                <option value="0">请选择金额</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                                <option value="2000">2000</option>
+                                <option value="5000">5000</option>
+                                <option value="10000">10000</option>
+                            </select>
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">会员卡号：</th>
+                        <td width="275">
+                            <input type="text" id="CardNumber" name="CardNumber" value="" class="text" maxlength="100" datatype="m" errormsg="格式错误" />
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">备注：</th>
+                        <td width="275">
+                            <textarea rows="10" cols="70" id="Remark" name="Remark" datatype="m" errormsg="格式错误" /></textarea>
+                        </td>
+                        <td><em class="required"></em></td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">验证码：</th>
+                        <td>
+                            <input type="text" name="verifyCode" autocomplete="off" class="YZM text left verifyCode" maxlength="4" style="width: 200px; margin-right: 10px; float: left;" />
+                            <img id="verifyImage" style="cursor: hand" title="点击刷新验证码" onclick="this.src='/tool/verifyimage?time=' + new Date()" src="/tool/verifyimage" height="34" class="left" />
+                            <a href="javascript:$('#verifyImage').click();" style="margin-left: 5px; height: 34px; line-height: 34px;">看不清，换一张</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">&nbsp;</th>
+                        <td>
+                            <span class="submitBT submitReg" style="font-size: 14px; padding: 3px 20px;" onclick="submitReg()">提交</span>
+                            <span class="submitBT regLoding" style="font-size: 14px; padding: 3px 20px; display: none;">正在提交...</span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="dcwarn  f26  p-t-25">
+                    <p class="text-666666 f24" style="">
+                        温馨提示：<br>
+                        1、此余额转出申请仅为尚睿淳咖啡董事卡余额转入施惠葆肌肤健康中心使用，不支持申请退款或转入汇购其他账户余额。<br>
+                        2、余额申请转出当天处理，每日申请以 15 点为截止时间，次日正常使用，15点以后顺延一天。<br>
+                        3、余额申请转出支持以下类型会员卡:董事卡、全国通用券、董事至尊卡。<br>
+                        4、转出申请请填写正确的卡号、卡关联的姓名和手机号，以便后台核对信息。<br>
+                        5、填写卡号能加快工作人员信息核对，以便更快为您处理申请。<br />
+                        6、申请金额如果超过您填写信息名下卡号，则已卡内余额为准。<br />
+                        7、请务必本人申请转移申请，勿代为别人申请或填写其他人的申请信息，否则系统会审核不通过。<br />
+                        8、最终解释权归天津尚睿淳所有。
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

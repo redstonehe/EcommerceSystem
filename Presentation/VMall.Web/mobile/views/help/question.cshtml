@@ -1,0 +1,30 @@
+﻿@model VMall.Web.Mobile.Models.QuestionModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.HelpInfo.Title;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 8;
+}
+<link href="/mobile/css/main.css" rel="stylesheet" type="text/css">
+
+<style>
+    .linkbtn {
+        display: inline-block;
+        width: 150px;
+        height: 30px;
+        background: #F9A4B0;
+        line-height: 30px;
+        color: #fff;
+    }
+    .myAssetsCon .norecommend p img {
+    width:95%;border:0;}
+</style>
+
+<div class="myAssetsCon">
+    <div class="norecommend">
+        @Html.Raw(Model.HelpInfo.Description)
+    </div>
+</div>
+
+
+

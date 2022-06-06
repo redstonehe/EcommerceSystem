@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@(ViewBag.Title)</title>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="content-language" content="zh-CN" />
+    <meta name="copyright" content="© @WorkContext.MallConfig.SiteUrl" />
+    <meta name="author" content="EMC" />
+    <meta name="keywords" content="@WorkContext.MallConfig.SEOKeyword" />
+    <meta name="description" content="@WorkContext.MallConfig.SEODescription" />
+    
+    <link href="@{@WorkContext.CSSCDN}/css/base.css?dd" rel="stylesheet" type="text/css" />
+    <link href="@{@WorkContext.CSSCDN}/css/home2016.css" rel="stylesheet" type="text/css" />
+    <script src="@{@WorkContext.ScriptCDN}/scripts/jquery.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/scripts/utils.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/scripts/common.js?v=1706" type="text/javascript"></script>
+    <script src="@{@WorkContext.CSSCDN}/scripts/layer/layer.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        uid = @WorkContext.Uid;
+        isGuestSC = @WorkContext.MallConfig.IsGuestSC;
+        scSubmitType = @WorkContext.MallConfig.SCSubmitType;
+    </script>
+    <style type="text/css">
+        .clickactive {
+            background: #cccccc;
+        }
+    </style>
+    
+
+    @if (ViewBag.Mark == 1)
+    { //首页
+       
+        <link rel="stylesheet" type="text/css" href="/css/jquery.bxslider.css" />
+        @*<script src="@{@WorkContext.ScriptCDN}/scripts/MSClass.js" type="text/javascript"></script>*@
+        <script type="text/javascript" src="/scripts/jquery.bxslider.min.js"></script>
+    }
+    @if (ViewBag.Mark == 2)
+    {//列表页
+        <link href="@{@WorkContext.CSSCDN}/css/list.css" rel="stylesheet" type="text/css" />
+    }
+    @if (ViewBag.Mark == 3)
+    { //产品详情页
+        <link href="@{@WorkContext.CSSCDN}/css/content.css" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/scripts/product.js?v=201701" type="text/javascript"></script>
+        
+        <script src="@{@WorkContext.ScriptCDN}/scripts/magiczoom/jquery.jqzoom-core-pack.js" type="text/javascript" charset="utf-8"></script>
+        
+        @*<link href="@{@WorkContext.ScriptCDN}/scripts/magiczoom/magiczoom.css" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/scripts/magiczoom/magiczoom.js?ddd" type="text/javascript"></script>*@
+        <script type="text/javascript">
+            pid = @Model.Pid;
+        </script>
+    }
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c8d2c38707f173fb442c13fd57999023";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+</script>
+
+    @if (ViewBag.Mark == 4)
+    {//汇购优选
+        <link href="@{@WorkContext.CSSCDN}/css/list.css" rel="stylesheet" type="text/css" />
+    }
+</head>
+<body>
+    @Html.Partial("/views/publicpage/header2016.cshtml")
+
+    @RenderBody()
+
+    @if (ViewBag.Mark != 4){
+    @Html.Partial("/views/publicpage/footer2016.cshtml")
+    }else{
+        @Html.Partial("/views/publicpage/youxuan_ footer.cshtml")
+    }
+    @*<style>
+        .retuntop_box {
+            width: 60px;
+            right: 8px;
+            top: 50%;
+            position: fixed;
+            _position: absolute;
+            _top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-85));
+            display: block;
+            z-index: 850;
+        }
+
+        #weixincode, .tc {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .wx, .wtc {
+            height: 120px;
+            top: 0;
+            position: relative;
+        }
+
+        .wxtxt {
+            width: 40px;
+            height: 40px;
+            font-size: 14px;
+            padding: 13px 10px;
+            text-align: center;
+            background: #ededed;
+            line-height: 18px !important;
+        }
+
+        .codeshow {
+            text-align: center;
+            width: 134px;
+            height: 154px;
+            position: absolute;
+            left: -200px;
+            top: 0;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 20px;
+            display: none;
+        }
+
+        .qqserver, .tc {
+            border-top: 1px solid #ddd;
+            margin-top: 1px;
+            cursor: pointer;
+             background-color: #A1A1A1;
+        }
+
+        .tc {
+            height: 74px;
+        }
+
+        .wtc {
+            height: 148px;
+        }
+
+        .re_top {
+            display: none;
+        }
+
+            .re_top a {
+                background: #000 url("/images/topreturn.png") no-repeat scroll 18px 21px;
+                cursor: pointer;
+                display: block;
+                height: 60px;
+                opacity: 0.5;
+                overflow: hidden;
+                text-indent: -999999px;
+                transition: opacity 0.3s ease-in 0s, opacity 0.3s ease-out 0s;
+                width: 60px;
+            }
+
+                .re_top a:hover {
+                    opacity: 1;
+                    transition: opacity 0.3s ease-in 0s, opacity 0.3s ease-out 0s;
+                }
+
+        #qqzixun div {
+            margin: 5px auto;
+        }
+
+        #qqzixun {
+            text-align: center;
+            width: 104px;
+            height: 174px;
+            position: absolute;
+            left: -180px;
+            top: 0;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 10px;
+            display: none;
+        }
+
+        .btn-phone {
+            /*background: url(../images/r_phone.png) 0px 0px no-repeat ;*/
+            background-color: #EDEDED;
+        }
+
+        .btn {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .btn-phone:hover {
+            background-color: #AEAEAE;
+        }
+
+        .phoneshow {
+            text-align: center;
+            width: 176px;
+            height: 196px;
+            position: absolute;
+            left: -200px;
+            top: 0;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding:2px;
+            display: none;
+        }
+    </style>*@
+    @*/****侧边栏*****/*@
+    @*<div class="retuntop_box">
+        <div id="weixincode">
+            <div class="wx">
+                <img src="/images/weixinsao.png" width="60" height="60">
+                <p class="wxtxt">微信扫码</p>
+            </div>
+        </div>
+        <div class="codeshow" style="display: none;">
+            <img src="/images/weixincode.png" width="135" height="156">
+            <span></span>
+        </div>
+        <div class="qqserver">
+            <a >
+                <img src="/images/qqzixun.jpg" width="60" height="74" alt="点击咨询" title="点击咨询">
+            </a>
+        </div>
+        <div id="qqzixun">
+            <div style="background-color: #0D9F9F; height: 30px; line-height: 30px; text-align: center; margin: 0; color: white;">在线客服</div>
+            <div style="position: relative;">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3352854566&site=qq&menu=yes">
+                    <img src="/images/qq.png" alt="" /><span style="position: absolute; left: 25px; top: 3px;">&nbsp;&nbsp;客服蚁一</span></a>
+            </div>
+            <div style="position: relative;">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2016673279&site=qq&menu=yes">
+                    <img src="/images/qq.png" alt="" /><span style="position: absolute; left: 25px; top: 3px;">&nbsp;&nbsp;客服蚁二</span></a>
+            </div>
+            <div style="position: relative;">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3020155643&site=qq&menu=yes">
+                    <img src="/images/qq.png" alt="" /><span style="position: absolute; left: 25px; top: 3px;">&nbsp;&nbsp;客服蚁三</span></a>
+            </div>
+            <div style="position: relative;">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2073989186&site=qq&menu=yes">
+                    <img src="/images/qq.png" alt="" /><span style="position: absolute; left: 25px; top: 3px;">&nbsp;&nbsp;客服蚁四</span></a>
+            </div>
+            <div style="position: relative;">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3319605900&site=qq&menu=yes">
+                    <img src="/images/qq.png" alt="" /><span style="position: absolute; left: 25px; top: 3px;">&nbsp;&nbsp;客服蚁五</span></a>
+            </div>
+        </div>
+        <div class="btn btn-phone">
+            <div>
+                <a>
+                    <img src="/images/r_phone2.png" alt="" width="60" height="60"/></a>
+            </div>
+        </div>
+        <div class="phoneshow">
+            <div>
+                <a>
+                    <img src="/images/servicephone.jpg" alt="" /></a>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+            $('.wx').mouseover(function(){
+                $(this).stop(true,false).animate({top:"-60px"},200);
+            });
+            $('.wtc').mouseover(function(){
+                $(this).stop(true,false).animate({top:"-74px"},200);
+            });
+            $('.wx,.wtc').mouseleave(function(){
+                $(this).stop(true,false).animate({top:"0"},200);
+            });
+            $("#weixincode,.codeshow span,.codeshow").mouseover(function(){
+                $(".codeshow").show().stop(true,false).animate({left:"-185px"},100);
+            });
+            $("#weixincode,.codeshow span,.codeshow").mouseleave(function(){
+                $(".codeshow").stop(true,false).animate({left:"-200px"},100,function(){
+                    $(".codeshow").hide();
+                });
+            });
+
+            $(".qqserver,#qqzixun").mouseover(function(){
+                $("#qqzixun").show().stop(true,false).animate({left:"-130px"},100);
+            });
+            $(".qqserver,#qqzixun").mouseleave(function(){
+                $("#qqzixun").stop(true,false).animate({left:"-145px"},100,function(){
+                    $("#qqzixun").hide();
+                });
+            });
+
+            $(".btn-phone,.phoneshow").mouseover(function(){
+                $(".phoneshow").show().stop(true,false).animate({left:"-185px"},100);
+            });
+            $(".btn-phone,.phoneshow").mouseleave(function(){
+                $(".phoneshow").stop(true,false).animate({left:"-200px"},100,function(){
+                    $(".phoneshow").hide();
+                });
+            });
+
+            }*@
+</body>
+</html>

@@ -1,0 +1,105 @@
+﻿@model VMall.Web.Mobile.Models.SelectFindPwdTypeModel
+@{
+    Layout = "~/mobile/views/shared/_layout_account.cshtml";
+    ViewBag.SubTitle = "选择找回方式";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<script>
+    function confirmVoiceCode(uid) {
+        Ajax.get("/mob/account/SendFindPwdMobileVoice?uid=" + uid, false, function (data) {
+            var result = eval("(" + data + ")");
+            if (result.state == "success") {
+                $("#sendSuccess").show();
+                $(".voice-code").attr("onclick", "javascript:void(0);").find("a").css("color", "gray");
+                timeCheckForFindPwdVoice(120, $(".voice-code"), uid);
+
+            } else {
+                alert(result.content)
+            }
+        })
+    }
+    function timeCheckForFindPwdVoice(n, o, param) {
+        var t = n;
+        if (n == 0) {
+            $(o).find("a").css("color", "#008cff");
+            $(o).attr("onclick", "confirm" + "VoiceCode(" + param + ")");
+            window.location.href = window.location.href;
+            n = t;
+
+        } else {
+            n--;
+            $(o).find("span").html('&nbsp;' + n + '&nbsp; S');
+            setTimeout(function () {
+                timeCheckForFindPwdVoice(n, o, param);
+            }, 1000);
+        }
+    }
+
+</script>
+<div class="loginTable">
+    <div class="itmeT">@Model.PartUserInfo.NickName ，您好</div>
+    <div class="itmeC">
+        <select class="select" style="width: 75%; display: block; float: left;" onchange="selectTypeClick(this)">
+            @if (Model.PartUserInfo.VerifyMobile == 1)
+            {
+                <option value="0" selected="selected">通过手机号 @Html.Raw(string.IsNullOrEmpty(Model.PartUserInfo.Mobile) ? "" : CommonHelper.HideMobile(Model.PartUserInfo.Mobile))</option>
+            }
+            else if (Model.PartUserInfo.VerifyEmail == 1)
+            {
+                <option value="1" @if (Model.PartUserInfo.VerifyMobile == 0)
+                                  {<text>selected="selected"</text>}>通过邮箱 @Html.Raw(string.IsNullOrEmpty(Model.PartUserInfo.Email) ? "" : CommonHelper.HideEmail(Model.PartUserInfo.Email))</option>
+            }
+            else
+            {
+                <option value="0" selected="selected">您还没有验证手机或邮箱，无法通过手机或邮箱找回</option>
+            }
+        </select>
+        @if (Model.PartUserInfo.VerifyMobile == 1)
+        {
+            <a href="javascript:sendFindPwdMobile(@Model.PartUserInfo.Uid)"  class="redBt sendMobileCode" >获取验证码</a>
+        }
+        <div class="clear"></div>
+    </div>
+    @if (Model.PartUserInfo.VerifyMobile == 1)
+    {
+        <div class="itmeC">
+            <p style="margin:10px;color: gray;cursor:pointer;" class="voice-code" onclick="confirmVoiceCode(@Model.PartUserInfo.Uid);">
+                        短信验证码收不到？试试<a href="javascript:;" style="color: #008cff; text-decoration: none;">语音验证码</a>
+                        <span style="color: red;"></span>
+                    </p>
+        </div>
+    }
+    <div class="itmeC">
+        <p style="margin: 10px; color: red; display: none;" id="sendSuccess">发送成功，验证码5分钟内有效</p>
+    </div>
+    <div id="mobileBut" @if (Model.PartUserInfo.VerifyMobile == 0)
+                        {<text>style="display:none;"</text>}>
+        <div class="itmeC">
+            <input type="text" id="moibleCode" class="text" placeholder="输入您收到的验证码" />
+        </div>
+        <div class="itmeC"><a href="javascript:verifyFindPwdMobile(@Model.PartUserInfo.Uid, document.getElementById('moibleCode').value)" class="redBt btnNext">下一步</a></div>
+    </div>
+    <div id="emailBut" @if (Model.PartUserInfo.VerifyMobile == 1)
+                       {<text>style="display:none;"</text>} class="itmeC">
+        @if (Model.PartUserInfo.VerifyEmail == 1)
+        {
+            <a href="javascript:sendFindPwdEmail(@Model.PartUserInfo.Uid)" class="redBt btnNext" >发送验证邮件</a>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function selectTypeClick(obj) {
+        var item = getSelectedOption(obj);
+        if (item.value == "0") {
+            document.getElementById("mobileBut").style.display = "block";
+            document.getElementById("emailBut").style.display = "none";
+        }
+        else {
+            document.getElementById("mobileBut").style.display = "none";
+            document.getElementById("emailBut").style.display = "block";
+        }
+    }
+</script>
+

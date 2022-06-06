@@ -1,0 +1,8 @@
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.EMSRemit\obj\Debug\VMall.PayPlugin.EMSRemit.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.EMSRemit\db.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.EMSRemit\plugin.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.EMSRemit\views\adminemsremit\config.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.EMSRemit\VMall.PayPlugin.EMSRemit.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.EMSRemit\VMall.PayPlugin.EMSRemit.pdb
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.EMSRemit\obj\Debug\VMall.PayPlugin.EMSRemit.dll
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.EMSRemit\obj\Debug\VMall.PayPlugin.EMSRemit.pdb

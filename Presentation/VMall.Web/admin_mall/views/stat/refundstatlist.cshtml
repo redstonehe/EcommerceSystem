@@ -1,0 +1,224 @@
+﻿@model VMall.Web.MallAdmin.Models.SaleListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>退款统计</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*  <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    @*<script>
+        function output() {
+            //var StoreId = $("#StoreId").val();
+            //var CateId = $("#CateId").val();
+            //var BrandId = $("#BrandId").val();
+            //var Pid = $("#Pid").val();
+            //var ProductName = $.trim($("#ProductName").val());
+            //var State = 0;
+            var startDate = $("#StartTime").val();
+            var endDate = $("#EndDate").val();
+            window.open("/malladmin/Stat/OutPutSaleList?startDate=" + startDate + "&endDate=" + endDate);
+        }
+    </script>*@
+    <script>
+        $(function () {
+            if ($("#IsOutPut")) {
+                $("#IsOutPut").val("0");
+            }
+        });
+        function search() {
+            $("#IsOutPut").val("0");
+            $("form").submit();
+        }
+        function output() {
+            $("#IsOutPut").val("1");
+            $("form").submit();
+        }
+    </script>
+    <style>
+        .over-x {
+            overflow-x: auto;
+        }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">报表统计</a></li>
+            <li class="active">退款统计</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("refundstatlist", "stat", FormMethod.Post, new { id = "mainForm", @class = "over-x" }))
+    {
+        <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>开始时间：</label>
+                                @Html.TextBox("StartTime", Model.StartTime, new { @class = "form-control", onclick = "WdatePicker({el:'StartTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <label>结束时间：</label>
+                                @Html.TextBox("EndTime", Model.EndTime, new { @class = "form-control", onclick = "WdatePicker({el:'EndTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="Search" name="Search" class="btn btn-default  searchBut submit">
+                                    <i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+                
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body" style="overflow-x: hidden; overflow-y: auto; width: 2200px; padding-right: 8px">
+                            <table id="example2" class="table table-bordered table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>店铺</th>
+                                        <th>订单时间</th>
+                                        <th>订单编号</th>
+                                        <th>会员编码</th>
+                                        <th>会员手机</th>
+                                        <th>会员姓名</th>
+                                        <th>产品金额</th>
+                                        <th>满减</th>
+                                        <th>物流费</th>
+                                        <th name="sortTitle" column="orderamount" direction="ASC">订单金额</th>
+                                        @*<th>海米抵扣</th>
+                        <th>代理账户抵扣</th>*@
+                                        <th>佣金账户抵扣</th>
+                                        @*<th>红包减免</th>*@
+                                        <th>优惠券抵扣</th>
+                                        @*<th>汇购卡抵扣</th>*@
+                                        <th>订单折扣</th>
+                                        <th name="sortTitle" column="surplusmoney" direction="ASC">应付金额</th>
+                                        <th>支付方式</th>
+                                        <th>支付时间</th>
+                                        <th>支付单号</th>
+                                        <th>退款金额</th>
+                                        <th>退款方式</th>
+                                        <th>退款单号</th>
+                                        <th>退款流水号</th>
+                                        <th>退款时间</th>
+                                        <th>退款备注</th>
+                                        <th>订单状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.SaleProductList.Rows)
+                                    {
+                                        <tr>
+                                            <td>@row["storename"]</td>
+                                            <td>
+                                                <div>@(TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm:ss"))</div>
+                                            </td>
+                                            <td><a href="@Url.Action("orderinfo", "order", new { oid = row["oid"] })" class="btn-link">@row["osn"].ToString().Trim()</a></td>
+                                            <td>@row["username"]</td>
+                                            <td>@row["usermobile"]</td>
+                                            <td>@row["realname"]</td>
+                                            <td>@row["productamount"]</td>
+                                            <td>@row["fullcut"]</td>
+                                            <td>@row["shipfee"]</td>
+                                            <td>@row["orderamount"]</td>
+                                            @*<td>@row["haimidiscount"]</td>
+                            <td>@row["agentdiscount"]</td>*@
+                                            <td>@row["commisiondiscount"]</td>
+                                            @*<td>@row["hongbaodiscount"]</td>*@
+                                            <td>@row["couponmoney"]</td>
+                                            @* <td>@row["cashdiscount"]</td>*@
+                                            <td>@row["discount"]</td>
+                                            <td>@row["surplusmoney"]</td>
+
+                                            <td>@row["payfriendname"]</td>
+                                            <td>
+                                                <div>
+                                                    <div>@(TypeHelper.ObjectToDateTime(row["paytime"]).ToString("yyyy-MM-dd HH:mm:ss"))</div>
+                                            </td>
+                                            <td>@row["paysn"]</td>
+                                            <td>@row["refundmoney"]</td>
+                                            <td>@row["refundfriendname"]</td>
+                                            <td>@row["refundsn"]</td>
+                                            <td>@row["refundtransn"]</td>
+                                            <td>@row["refundtime"]</td>
+                                            <td>@row["refundremark"]</td>
+                                            <td>
+                                                @switch ((OrderState)TypeHelper.ObjectToInt(row["orderstate"]))
+                                                {
+                                                    case OrderState.WaitPaying:
+                                                    @:等待付款
+            break;
+                                                    case OrderState.Confirming:
+                                                    @:待确认
+            break;
+                                                    case OrderState.Confirmed:
+                                                    @:已确认
+            break;
+                                                    case OrderState.PreProducting:
+                                                    @:备货中
+            break;
+                                                    case OrderState.Sended:
+                                                    @:已发货
+            break;
+                                                    case OrderState.Completed:
+                                                    @:已完成
+            break;
+                                                    case OrderState.Cancelled:
+                                                    @:取消
+            break;
+                                                    case OrderState.Returned:
+                                                    @:退货
+            break;
+                                                    case OrderState.Locked:
+                                                    @:锁定
+            break;
+                                                    default:
+                                                    @:未知状态
+            break;
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

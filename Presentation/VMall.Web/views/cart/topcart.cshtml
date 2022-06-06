@@ -1,0 +1,124 @@
+﻿@model VMall.Web.Models.CartModel
+@{
+    Layout = null;
+}
+@if (Model != null && Model.StoreCartList.Count > 0)
+{
+    <div class="productlist">
+        @foreach (StoreCartInfo storeCartInfo in Model.StoreCartList)
+        {
+            foreach (CartItemInfo cartItemInfo in storeCartInfo.CartItemList)
+            {
+                if (cartItemInfo.Type == 0)
+                {
+                    CartProductInfo cartProductInfo = (CartProductInfo)cartItemInfo.Item;
+            <div class="productitem">
+                <div class="item-left Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" >
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" /></a>
+                </div>
+
+                <div class="item-mid Fleft"><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a></div>
+                <div class="item-right Fleft">
+                    <p class="redfont">¥@cartProductInfo.OrderProductInfo.DiscountPrice </p>
+                    <p>×@cartProductInfo.OrderProductInfo.RealCount</p>
+                    <p><a href="javascript:void(0)" onclick="deleteCartProduct(@cartProductInfo.OrderProductInfo.Pid,1)">删除</a></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+                }
+                else if (cartItemInfo.Type == 1)
+                {
+                    CartSuitInfo cartSuitInfo = (CartSuitInfo)cartItemInfo.Item;
+            <div class="productitem">
+                <div class="item-left Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartSuitInfo.CartProductList[0].OrderProductInfo.Pid } })" >
+                        <img src="/upload/store/@cartSuitInfo.CartProductList[0].OrderProductInfo.StoreId/product/show/thumb60_60/@cartSuitInfo.CartProductList[0].OrderProductInfo.ShowImg" width="50" height="50" /></a>
+                </div>
+
+                <div class="item-mid Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartSuitInfo.CartProductList[0].OrderProductInfo.Pid } })">
+                        <span style="color: red;">[套装]</span>
+                        @cartSuitInfo.CartProductList[0].OrderProductInfo.Name</a>
+                </div>
+                <div class="item-right Fleft">
+                    <p class="redfont">¥@cartSuitInfo.SuitPrice </p>
+                    <p>×@cartSuitInfo.BuyCount</p>
+                    <p><a href="javascript:void(0)" onclick="delCartSuit(@cartSuitInfo.PmId,0)">删除</a></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+                }
+                else if (cartItemInfo.Type == 2)
+                {
+                    CartFullSendInfo cartFullSendInfo = (CartFullSendInfo)cartItemInfo.Item;
+                    foreach (CartProductInfo cartProductInfo in cartFullSendInfo.FullSendMainCartProductList)
+                    {
+            <div class="productitem">
+                <div class="item-left Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" >
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" /></a>
+                </div>
+
+                <div class="item-mid Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">
+                        <span style="color: red;">
+                            @if (cartFullSendInfo.IsEnough)
+                            {
+                                @:[满赠]
+                             }
+                        </span>
+                        @cartProductInfo.OrderProductInfo.Name</a>
+                </div>
+                <div class="item-right Fleft">
+                    <p class="redfont">¥@cartProductInfo.OrderProductInfo.DiscountPrice </p>
+                    <p>×@cartProductInfo.OrderProductInfo.RealCount</p>
+                    <p><a href="javascript:void(0)" onclick="delCartSuit(cartProductInfo.OrderProductInfo.Pid,0)">删除</a></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+                    }
+                }
+                else if (cartItemInfo.Type == 3)
+                {
+                    CartFullCutInfo cartFullCutInfo = (CartFullCutInfo)cartItemInfo.Item;
+                    foreach (CartProductInfo cartProductInfo in cartFullCutInfo.FullCutCartProductList)
+                    {
+            <div class="productitem">
+                <div class="item-left Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })" >
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" /></a>
+                </div>
+
+                <div class="item-mid Fleft">
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">
+                        <span style="color: red;">
+                            @if (cartFullCutInfo.IsEnough)
+                            {
+                                @:[满减]
+                            }
+                        </span>
+                        @cartProductInfo.OrderProductInfo.Name</a>
+                </div>
+                <div class="item-right Fleft">
+                    <p class="redfont">¥@cartProductInfo.OrderProductInfo.DiscountPrice </p>
+                    <p>×@cartProductInfo.OrderProductInfo.RealCount</p>
+                    <p><a href="javascript:void(0)" onclick="delCartSuit(cartProductInfo.OrderProductInfo.Pid,0)">删除</a></p>
+                </div>
+                <div class="clear"></div>
+            </div>
+                    }
+                }
+            }
+        }
+    </div>
+    <div class="shoppingTotal"><span>共<strong>@Model.TotalCount</strong>件商品</span>  <span style="">合计<b>¥@Model.OrderAmount</b></span></div>
+    <div class="goforpay" onclick="window.location.href='/cart'">去购物车结算</div>
+    <div class="cartProudctCount" style="display: none;">@Model.TotalCount</div>
+}
+else
+{
+    <div class="shoppingNone">购物车中还没有商品！</div> 
+    <div class="cartProudctCount" style="display: none;">0</div>
+}
+

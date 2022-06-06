@@ -1,0 +1,86 @@
+﻿@model VMall.Web.Mobile.Models.AjaxMallSearchModel
+@{
+    Layout = null;
+}
+<script>
+    hasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>
+<div class="proItme">
+    @{
+        string pids = string.Join(",", Model.ProductList.Select(x => x.Pid));
+        List<SinglePromotionInfo> lsit = Promotions.GetVailiSingleListByPidsAndendTime(pids, DateTime.Now);
+    }
+    <div id="mallSearchProductListBlock">
+        @foreach (StoreProductInfo info in Model.ProductList)
+        {
+            bool ZJDiscount = false;
+            bool TJDiscount = false;
+            bool ZKJDiscount = false;
+            SinglePromotionInfo singleInfo = lsit.Find(x => x.Pid == info.Pid);
+            if (singleInfo != null)
+            {
+                if (singleInfo.DiscountType == 1 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZJDiscount = true;
+                }
+                if (singleInfo.DiscountType == 5 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    TJDiscount = true;
+                }
+                if (singleInfo.DiscountType == 0 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZKJDiscount = true;
+                }
+            }
+            <div class="proItme">
+                <a href="@Url.Action("product", new RouteValueDictionary { { "pid", info.Pid } })">
+                    <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg" width="100" height="100" class="img" />
+                    @if (ZKJDiscount)
+                    {
+                        <i class="zkj_icon"></i> 
+                    }
+                    @if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488 || info.Pid == 2796 || info.Pid == 2746))
+                    {
+                        <i class="chaozhi_99_icon"></i>
+              
+                    }
+                    <span class="proDt">
+                        <strong class="proDD DD1">@info.Name
+
+                        </strong>
+                        @if (ZJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(info.ShopPrice - singleInfo.DiscountValue) <i class="salewarn">降</i></b>
+                        }
+                        else if (TJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(singleInfo.DiscountValue) <i class="salewarn">降</i></b>
+@*
+            <b class="proDD DD3" style="color:#9C9A9C;font-size:20px;"><del>¥@info.ShopPrice</del></b>*@
+                        }
+                        else if (ZKJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(((double)(info.ShopPrice * singleInfo.DiscountValue) / 10.00).ToString("f2")) <i class="salewarn">降</i></b>
+@*
+            <b class="proDD DD3" style="color:#9C9A9C;font-size:20px;"><del>¥@info.ShopPrice</del></b>*@
+                        }
+                        else if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488))
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@info.ShopPrice  <i class="chaozhi_99 salewarn">99超值套餐</i></b>
+                        }
+                        else
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@info.ShopPrice</b>}
+                        @*<p class="proDD DD4">@info.ReviewCount 人评价，@Html.Raw(info.GetStarLevel().ToString())%好评</p>*@
+                    </span>
+                </a>
+                @*<div class="ico"><a href="#">赠</a><a href="#" style="background:red;">减</a></div>*@
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+

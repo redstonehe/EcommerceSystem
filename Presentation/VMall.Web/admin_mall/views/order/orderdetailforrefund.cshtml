@@ -1,0 +1,503 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderDetailForRefundModel
+@section header{
+    <title>订单部分退款</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <style type="text/css">
+        .addTable table {
+            border-right: 1px solid #d1d1d1;
+            border-bottom: 1px solid #d1d1d1;
+            margin-top: 20px;
+            margin-left: 16px;
+        }
+
+            .addTable table th {
+                background: #dbeffa;
+                font-weight: normal;
+                height: 26px;
+                padding-left: 4px;
+            }
+
+                .addTable table th a {
+                    padding-left: 8px;
+                }
+
+            .addTable table td {
+                border-left: 1px solid #d1d1d1;
+                border-top: 1px solid #d1d1d1;
+                height: 26px;
+                padding-left: 10px;
+            }
+
+                .addTable table td.pImg {
+                    padding: 10px;
+                }
+
+        .admin tr td a {
+            display: inline-block;
+            color: #fff;
+            background-color: #428bca;
+            padding: 4px 12px;
+            margin: 20px 60px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            /*text-shadow: 0 1px 1px rgba(255,255,255,0.75);*/
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            .admin tr td a:hover {
+                background-color: #006dcc;
+            }
+
+        .admin tr td {
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            color: #fff;
+            background-color: #428bca;
+            padding: 4px 12px;
+            margin: 20px 60px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            /*text-shadow: 0 1px 1px rgba(255,255,255,0.75);*/
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background-color: #006dcc;
+            }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">订单管理 &gt;&gt; 订单部分退款
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="97%">
+                <tr>
+                    <th colspan="8" align="left">基本信息</th>
+                </tr>
+                <tr>
+                    <td width="150px">订单序号：</td>
+                    <td width="320px">@Model.OrderInfo.Oid</td>
+                    <td width="150px">订单编号：</td>
+                    <td>@Model.OrderInfo.OSN</td>
+
+                    <td width="150px">订单状态：</td>
+                    <td>
+                        @{string state = string.Empty;
+                          if (Model.OrderInfo.OrderState == (int)OrderState.Completed || Model.OrderInfo.OrderState == (int)OrderState.Returned)
+                          {
+                              if (Model.OrderInfo.OrderState == (int)OrderState.Completed)
+                              {
+                                  state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState)) + "-" + Model.OrderInfo.ReturnType.ToString() + "-" + Model.OrderInfo.ChangeType.ToString();
+                              }
+                              else if (Model.OrderInfo.OrderState == (int)OrderState.Returned)
+                              {
+                                  state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState)) + "-" + Model.OrderInfo.ReturnType.ToString();
+                              }
+                          }
+                          else
+                          {
+                              state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState));
+
+                          }
+                        }
+                        @switch (state)
+                        {
+                            case "WaitPaying":
+                            @:等待付款
+            break;
+                            case "Confirming":
+                            @:待确认
+            break;
+                            case "Confirmed":
+                            @:已确认
+            break;
+                            case "PreProducting":
+                            @:备货中
+            break;
+                            case "Sended":
+                            @:已发货
+            break;
+                            case "Completed-0-0":
+                            @:已完成
+            break;
+                            case "Completed-0-1":
+                            @:<span style="color:red;">换货审核中</span>
+            break;
+                            case "Completed-0-2":
+                            @:<span style="color:red;">换货审核通过</span>
+            break;
+                            case "Completed-0-3":
+                            @:<span style="color:red;">换货等待发货</span>
+            break;
+                            case "Completed-0-4":
+                            @:<span style="color:red;">换货确认收货</span>
+            break;
+                            case "Completed-0-5":
+                            @:<span>换货完成</span>
+            break;
+                            case "Completed-1-0":
+                            @:<span style="color:red;">退货审核中</span>
+            break;
+                            case "Settled":
+                            @:已结算
+                                    break;
+                            case "Cancelled":
+                            @:取消
+            break;
+                            case "Returned-2":
+                            @:<span style="color:red;">退货审核通过</span>
+            break;
+                            case "Returned-3":
+                            @:<span style="color:red;">退款审核中</span>
+            break;
+                            case "Returned-4":
+                            @:退款成功
+            break;
+                            case "Changed":
+                            @:换货
+            break;
+                            case "Locked":
+                            @:锁定
+            break;
+                            default:
+                            @:未知状态
+            break;
+                        }
+                    </td>
+                    <td>下单时间：</td>
+                    <td>@Model.OrderInfo.AddTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+                <tr>
+                    <th colspan="8" align="left">支付信息</th>
+                </tr>
+                <tr>
+                    <td width="150px">支付方式：</td>
+                    <td width="320px">@Model.OrderInfo.PayFriendName</td>
+                    <td width="150px">支付时间：</td>
+                    <td>
+                        @if (Model.OrderInfo.OrderState <= (int)OrderState.WaitPaying)
+                        {
+                            @:未支付
+    }
+                        else
+                        {
+                            @Model.OrderInfo.PayTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        }
+                    </td>
+                    <td>支付单号：</td>
+                    <td>@Model.OrderInfo.PaySN</td>
+                    <td></td>
+                    <td></td>
+                    
+                </tr>
+            </table>
+
+            <table width="97%">
+                <tr>
+                    <th colspan="9" align="left">订单商品</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td align="center" width="60">商品图片</td>
+                    <td>商品名称</td>
+                    <td width="140">货号</td>
+                    <td width="80">价格</td>
+                    <td width="50">数量</td>
+                    <td width="80">小计</td>
+                    <td width="80">PV</td>
+                    <td width="80">海米</td>
+                </tr>
+                @foreach (OrderProductInfo info in Model.OrderProductList)
+                {
+                    <tr>
+                         <td align="center" width="40px">
+                                <input type="radio" value="@info.Pid"  name="pid" />
+                         </td>
+                        <td align="center" class="pImg">
+                            <img width="60px" height="60px" src="/upload/store/@{@info.StoreId}/product/show/thumb@{@ViewData["size"]}/@info.ShowImg" /></td>
+                        <td>@if (info.Type == 3)
+                            { <span style="color: red;">[套装]</span>}@info.Name</td>
+                        <td>@info.PSN</td>
+                        <td>@info.DiscountPrice</td>
+                        @if (info.Type == 1)
+                        {
+                            <td>@info.RealCount</td>
+                        }
+                        else
+                        {
+                            <td>@info.RealCount</td>
+                        }
+                        <td>@if (info.Type == 3)
+                            {
+                            @Html.Raw((info.DiscountPrice * info.RealCount).ToString())}
+                            else
+                            {
+                            @Html.Raw((info.DiscountPrice * info.BuyCount).ToString())
+                            }
+
+                        </td>
+                        <td>
+                            @if (Model.OrderInfo.CashDiscount > 0)
+                            {
+                                @: 0.00
+                             }
+                            else
+                            {
+                                @info.ProductPV
+                            }
+                        </td>
+                        <td>
+                            @if (Model.OrderInfo.CashDiscount > 0)
+                            {
+                                @: 0.00
+                            }
+                            else
+                            {
+                                @info.ProductHaiMi
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            <table width="97%">
+                <tr>
+                    <th colspan="6" align="left">订单金额</th>
+                </tr>
+                <tr>
+                    <td>商品合计：</td>
+                    <td>@Model.OrderInfo.ProductAmount</td>
+                    <td width="150px">订单合计：</td>
+                    <td width="320px">@Model.OrderInfo.OrderAmount</td>
+                    <td width="150px">应付金额：</td>
+                    <td>@Model.OrderInfo.SurplusMoney</td>
+                </tr>
+                <tr>
+                    <td>订单折扣：</td>
+                    <td>@Model.OrderInfo.Discount</td>
+                    <td>配送费用：</td>
+                    <td>@Model.OrderInfo.ShipFee</td>
+                    <td>满减：</td>
+                    <td>@Model.OrderInfo.FullCut</td>
+                </tr>
+                <tr>
+                    <td>优惠劵金额：</td>
+                    <td>@Model.OrderInfo.CouponMoney</td>
+                    <td>海米抵扣：</td>
+                    <td>@Model.OrderInfo.HaiMiDiscount</td>
+                    <td>红包减免：</td>
+                    <td>@Model.OrderInfo.HongBaoDiscount</td>
+                </tr>
+                <tr>
+                    <td>汇购卡券减免：</td>
+                    <td>@Model.OrderInfo.CashDiscount
+                    </td>
+                    <td>订单包含PV：</td>
+                    <td>
+                        @if (Model.OrderInfo.CashDiscount > 0)
+                        { 
+                            @: 0.00
+                        }
+                        else
+                        {
+                            @Model.OrderProductList.Sum(x => x.BuyCount * x.ProductPV)
+                        }
+                    </td>
+                    <td>订单包含海米：</td>
+                    <td>
+                        @if (Model.OrderInfo.CashDiscount > 0)
+                        { 
+                            @: 0.00
+                        }
+                        else
+                        {
+                            @Model.OrderProductList.Sum(x => x.BuyCount * x.ProductHaiMi)
+                        }
+                    </td>
+                </tr>
+            </table>
+
+
+            <table width="97%" id="adminoperate" class="admin">
+                <tr>
+                    <th colspan="4" align="left">管理操作</th>
+                </tr>
+                <tr>
+                    <td width="100px">
+                        @{
+                        OrderState orderState = (OrderState)Model.OrderInfo.OrderState;
+                        if (orderState == OrderState.WaitPaying)
+                        {
+                            //银行汇款
+                            if (Model.OrderInfo.PayMode == 2)
+                            {
+@*<a href="@Url.Action("payorder", new { oid = Model.OrderInfo.Oid })">付款</a>*@
+                                if (WorkContext.OperateRights.Exists(x => x.Operate == "BankTransferConfirm"))
+                                {
+                            <a href="@Url.Action("BankTransferConfirm", new { oid = Model.OrderInfo.Oid })">汇款确认</a>
+                                }
+                            }
+                            
+@*if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                            {
+                            <a href="@Url.Action("cancelorder", new { oid = Model.OrderInfo.Oid })">取消</a>
+                            }*@
+                            
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "updateorderdiscount"))
+                            {
+                            <a href="@Url.Action("updateorderdiscount", new { oid = Model.OrderInfo.Oid })">修改折扣</a>
+                            }
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "updateordershipfee"))
+                            {
+                            <a href="@Url.Action("updateordershipfee", new { oid = Model.OrderInfo.Oid })">修改配送费用</a>
+                            }
+                        }
+                        else if (orderState == OrderState.Confirming)
+                        {
+                            if (Model.OrderInfo.PayMode == 0)
+                            {
+@*if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                                {
+                            <a href="@Url.Action("cancelorder", new { oid = Model.OrderInfo.Oid })">取消</a>
+                                }*@
+
+                                if (WorkContext.OperateRights.Exists(x => x.Operate == "updateorderdiscount"))
+                                {
+                            <a href="@Url.Action("updateorderdiscount", new { oid = Model.OrderInfo.Oid })">修改折扣</a>
+                                }
+                                if (WorkContext.OperateRights.Exists(x => x.Operate == "updateordershipfee"))
+                                {
+                            <a href="@Url.Action("updateordershipfee", new { oid = Model.OrderInfo.Oid })">修改配送费用</a>
+                                }
+                            }
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "confirmorder"))
+                            {
+                            <a href="@Url.Action("confirmorder", new { oid = Model.OrderInfo.Oid })">确认</a>
+                            }
+@*if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                            {
+                            <a href="@Url.Action("cancelorder", new { oid = Model.OrderInfo.Oid })">取消</a>
+                            }*@
+                        }
+                        else if (orderState == OrderState.Confirmed)
+                        {
+@*if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                            {
+                            <a href="@Url.Action("cancelorder", new { oid = Model.OrderInfo.Oid })">取消</a>
+                            } *@
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "preorderproduct"))
+                            {
+                            <a href="@Url.Action("preorderproduct", new { oid = Model.OrderInfo.Oid })">备货</a>
+                            }
+                        }
+                        else if (orderState == OrderState.PreProducting)
+                        {
+
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "sendorderproduct"))
+                            {
+                            <a href="@Url.Action("sendorderproduct", new { oid = Model.OrderInfo.Oid })">发货</a>
+                            }
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                            {
+                            <a href="javascript:void(0);" onclick="cancelBeforeSend(@Model.OrderInfo.Oid)">取消</a>
+                            }
+                        }
+                        else if (orderState == OrderState.Sended)
+                        {
+                            if (Model.OrderInfo.IsExtendReceive != 1)
+                            {
+                                if (WorkContext.OperateRights.Exists(x => x.Operate == "ExtendReceive"))
+                                {
+                            <a href="@Url.Action("ExtendReceive", new { oid = Model.OrderInfo.Oid })">延长收货期</a>
+                                }
+                            }
+@*<a href="@Url.Action("completeorder", new { oid = Model.OrderInfo.Oid })">完成</a>
+                            <a href="@Url.Action("returnorderproduct", new { oid = Model.OrderInfo.Oid })">退货</a>*@
+                        }
+                        else if (orderState == OrderState.Completed)
+                        {
+@*<a href="@Url.Action("returnorderproduct", new { oid = Model.OrderInfo.Oid })">退货</a>*@
+                        }
+                        if (orderState == OrderState.WaitPaying || orderState == OrderState.Confirming || orderState == OrderState.Confirmed)
+                        {
+                            if (WorkContext.OperateRights.Exists(x => x.Operate == "ordercancel"))
+                            {
+                            <a href="javascript:void(0);" onclick="cancelOrder(@Model.OrderInfo.Oid)">取消</a>
+                            }
+                        }
+                        if (Model.OrderInfo.IsDelete == 1)
+                        {
+                            <a href="@Url.Action("CancelDelete", new { oid = Model.OrderInfo.Oid })">取消删除</a>
+                        }
+                        }
+                    </td>
+                </tr>
+            </table>
+
+            <table width="97%">
+                <tr>
+                    <th colspan="4">订单跟踪</th>
+                </tr>
+                <tr>
+                    <td width="80px">操作人</td>
+                    <td width="150px">操作时间</td>
+                    <td>操作备注：</td>
+                </tr>
+                @foreach (OrderActionInfo info in Model.OrderActionList)
+                {
+                    <tr>
+                        <td>@info.RealName</td>
+                        <td>@info.ActionTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        @if (info.ActionType == 4)
+                        { 
+                            <td>您的订单已经发货,发货方式为:@Model.OrderInfo.ShipCoName,物流单号：@Model.OrderInfo.ShipSN</td>
+                        }
+                        else
+                        {
+                            <td>@info.ActionDes</td>
+                        }
+                    </tr>
+                }
+            </table>
+
+            <div style="margin: 15px;">
+                <p style="background: #dbeffa; width: 100%;"> 申请退款信息 </p>
+                <div style="margin: 20px 0; ">
+                    <table>
+                        <tr>
+                            <td>产品</td>
+                            <td>
+                                <input type="text" value="11" />
+
+                            </td>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                    </table>
+                    <a href="javascript:void(0);" onclick="creatqr();" class="btn" style="color: #fff;">提交部分退款信息</a>
+
+                </div>
+            </div>
+
+            <br />
+        </div>    
+    }
+}

@@ -1,0 +1,22 @@
+﻿@model VMall.Web.Mobile.Models.ResetPwdModel
+@{
+    Layout = "~/mobile/views/shared/_layout_account.cshtml";
+    ViewBag.SubTitle = "重置密码";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+
+<div class="loginTable">
+    <form name="resetPwdForm" action="">
+        <div class="itmeC">
+            <input type="password" class="text" name="password" placeholder="新密码" /></div>
+        <div class="itmeC">
+            <input type="password" class="text" name="confirmPwd" placeholder="确认密码" /></div>
+        <div class="itmeC">
+            <span style="color:red;">*&nbsp;密码最好包含大小字母、数字以及符号组成，且长度必须在6～16个字符之间，过于简单的密码会增加帐号被他人盗用的风险！</span></div>
+        <div class="itmeC">
+            <a href="javascript:resetPwd('@Model.V')" class="redBt" style="display:block; padding:0; height:38px; width:99%; text-align:center; line-height:38px;">重置</a>
+        </div>
+    </form>
+</div>
+

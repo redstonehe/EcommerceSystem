@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>XX商城</title>
+    <!--<meta http-equiv="refresh" content="1;url=/mob" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="/mobile/css/base.css" rel="stylesheet" type="text/css" />
+    <script src="/mobile/scripts/jquery.js" type="text/javascript"></script>
+    <script src="/mobile/scripts/common.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        //$(function () {
+        //    window.location.href = '/mob';
+        //});
+        // 以下方式直接跳转
+
+        // 以下方式定时跳转
+        //setTimeout("javascript:location.href='hello.html'", 5000);
+    </script>
+</head>
+<body>
+    <div class="viewport">
+        <header>
+            <div class="new-header">
+                <a href="javascript:pageBack()" class="new-a-back"><span>返回</span></a>
+                <h2>错误页面</h2>
+                <a href="javascript:navSH()" class="new-a-brn"><span>导航键</span></a>
+            </div>
+            <div class="new-brn-tab" id="nav" style="display: none;">
+                <div class="new-tbl-type">
+                    <a href="/mob" class="new-tbl-cell"><span class="icon">首页</span><p style="color: #6e6e6e;">首页</p>
+                    </a>
+                    <a href="/mob/category/list" class="new-tbl-cell"><span class="icon2 on">分类搜索</span><p style="color: #6e6e6e;" class="on">分类搜索</p>
+                    </a>
+                    <a href="/mob/cart/index" class="new-tbl-cell"><span class="icon3">购物车</span><p style="color: #6e6e6e;">购物车</p>
+                    </a>
+                    <a href="/mob/ucenter/index" class="new-tbl-cell"><span class="icon4 on">个人中心</span><p style="color: #6e6e6e;" class="on">个人中心</p>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div style="padding: 40px; font-size: 20px; text-align: center;">抱歉，处理您的请求时出错,请联系我们</div>
+        <footer style="position: relative;">
+            <div class="footerTop">
+                <div class="clear"></div>
+            </div>
+
+            <div class="copyright" align="center">
+                <p>Copyright © 2016-2018 </p>
+                <p style="margin-top: 10px;">
+                    XX商城 www.xxx.com 版权所有
+                </p>
+            </div>
+            <div id="returnTop" style="position: fixed; bottom: 60px; right: 20px; width: 35px; height: 35px; display: none;" onclick="$('body,html').animate({scrollTop:0},700);">
+                <img src="/images/returntop.png" alt="" width="50" height="50" />
+
+            </div>
+        </footer>
+
+
+        <script>
+            window.onscroll = function () {
+                var scroll_top = document.documentElement.scrollTop || document.body.scrollTop;
+                if (parseInt(scroll_top) < 300) {
+                    $("#returnTop").fadeOut(200);
+                }
+                else {
+                    $("#returnTop").fadeIn(200);
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

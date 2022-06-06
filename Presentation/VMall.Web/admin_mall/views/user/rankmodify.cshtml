@@ -1,0 +1,80 @@
+﻿@model VMall.Web.MallAdmin.Models.RankModifyModel
+
+@section header{
+    <title>代理等级修改</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <style type="text/css">
+        #OldAgentType, #OldDS2AgentRank {
+            pointer-events: none;
+            background-color: rgb(235, 235, 228);
+        }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt;代理等级修改
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm())
+    {
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <!-- /.box-header -->
+                <!-- form start -->
+                <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" />
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @readonly = "readonly" })@Html.ValidationMessageFor(x => x.UserName)
+                    </div>
+                    <div class="form-group">
+                        <label>手机</label>
+                        @Html.TextBoxFor(x => x.Moblie, new { @class = "form-control", @readonly = "readonly" })@Html.ValidationMessageFor(x => x.Moblie)
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        @Html.TextBoxFor(x => x.RealName, new { @class = "form-control", @readonly = "readonly" })@Html.ValidationMessageFor(x => x.RealName)
+                    </div>
+                    <div class="form-group">
+                        <label>原代理等级</label>
+                        @Html.DropDownListFor(x => x.OldAgentType, ViewData["AgentTypeList"] as List<SelectListItem>, new { @class = "form-control", @readonly = "readonly" }) @Html.ValidationMessageFor(x => x.OldAgentType)
+                    </div>
+                    <div class="form-group">
+                        <label>新代理等级</label>
+                        @Html.DropDownListFor(x => x.NewAgentType, ViewData["AgentTypeList"] as List<SelectListItem>, new { @class = "form-control" }) @Html.ValidationMessageFor(x => x.NewAgentType)
+                    </div>
+                    <div class="form-group">
+                        <label>说明</label>
+                        <div class="text-red">
+                            <span >1. 修改会员代理等级可能会影响原上级的返利结算，请妥善修改。</span>
+                            <br />
+                            2.
+                        </div>
+                        
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary btn-block addBt" id="sumbitBut">提交</button>
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#sumbitBut").click(function () {
+                                $("form:first").submit();
+                                return false;
+                            })
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    }
+}

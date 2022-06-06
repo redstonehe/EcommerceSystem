@@ -1,0 +1,167 @@
+﻿@model VMall.Web.MallAdmin.Models.PluginListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>插件列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @* <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //卸载按钮
+            $(".uninstall").click(function () {
+                if (!confirm("您确认卸载此插件吗？")) {
+                    return false;
+                }
+            });
+
+            //安装按钮
+            $(".install").click(function () {
+                if (!confirm("您确认安装此插件吗？")) {
+                    return false;
+                }
+            });
+        });
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">插件管理</a></li>
+            <li class="active">插件列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <!-- Main content -->
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-10">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">已安装支付插件</h3>
+                        </div>
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-1">插件名称</th>
+                                    <th class="col-xs-1">插件描述</th>
+                                    <th class="col-xs-1">是否默认</th>
+                                    <th class="col-xs-1">插件作者</th>
+                                    <th class="col-xs-1">插件版本</th>
+                                    <th class="col-xs-1">兼容版本</th>
+                                    <th class="col-xs-1">排序</th>
+                                    <th class="col-xs-3">管理操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (PluginInfo info in Model.InstalledPluginList)
+                                {
+                                    <tr>
+
+                                        <td>@info.FriendlyName</td>
+                                        <td>@info.Description</td>
+                                        <td>
+                                            @if (info.IsDefault == 0)
+                                            {
+                                                @:否
+                            }
+                                            else
+                                            { 
+                                                @:是
+                            }
+                                        </td>
+                                        <td>@info.Author</td>
+                                        <td>@info.Version</td>
+                                        <td>@info.SupVersion</td>
+                                        <td>@info.DisplayOrder</td>
+                                        <td>
+                                            @Html.ActionLink("[编辑]", "edit", new { systemName = info.SystemName }, new { @class = "editOperate" })
+                                            @*@Html.ActionLink("[配置]", "config", new { systemName = info.SystemName }, new { @class = "editOperate" })*@
+                                            @Html.ActionLink("[卸载]", "uninstall", new { systemName = info.SystemName }, new { @class = "deleteOperate uninstall" })
+                                            @if (info.IsDefault == 0)
+                                            {
+                                                @Html.ActionLink("[设为默认]", "default", new { systemName = info.SystemName }, new { @class = "editOperate" })
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                        <div class="box-header with-border">
+                            <h3 class="box-title">未安装支付插件</h3>
+                        </div>
+
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-1">插件名称</th>
+                                    <th class="col-xs-1">插件描述</th>
+                                    <th class="col-xs-1">是否默认</th>
+                                    <th class="col-xs-1">插件作者</th>
+                                    <th class="col-xs-1">插件版本</th>
+                                    <th class="col-xs-1">兼容版本</th>
+                                    <th class="col-xs-1">排序</th>
+                                    <th class="col-xs-3">管理操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (PluginInfo info in Model.UninstalledPluginList)
+                                {
+                                    <tr>
+
+                                        <td>@info.FriendlyName</td>
+                                        <td>@info.Description</td>
+                                        <td>
+                                            @if (info.IsDefault == 0)
+                                            {
+                                                @:否
+                            }
+                                            else
+                                            { 
+                                                @:是
+                            }
+                                        </td>
+                                        <td>@info.Author</td>
+                                        <td>@info.Version</td>
+                                        <td>@info.SupVersion</td>
+                                        <td>@info.DisplayOrder</td>
+                                        <td>
+                                            @Html.ActionLink("[编辑]", "edit", new { systemName = info.SystemName }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[配置]", "config", new { systemName = info.SystemName }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[安装]", "install", new { systemName = info.SystemName }, new { @class = "deleteOperate install" })
+                                            @if (info.IsDefault == 0)
+                                            {
+                                                @Html.ActionLink("[设为默认]", "default", new { systemName = info.SystemName }, new { @class = "editOperate" })
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+    <!-- /.content -->
+
+    <div class="table_bottom">
+    </div>
+}

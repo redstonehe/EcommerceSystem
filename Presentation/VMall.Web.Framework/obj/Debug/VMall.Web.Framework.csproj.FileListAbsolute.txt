@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web.Framework\obj\Debug\VMall.Web.Framework.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Presentation\VMall.Web.Framework\bin\Debug\VMall.Web.Framework.dll
+C:\develop\德鹿商城\Presentation\VMall.Web.Framework\bin\Debug\VMall.Web.Framework.pdb
+C:\develop\德鹿商城\Presentation\VMall.Web.Framework\obj\Debug\VMall.Web.Framework.dll
+C:\develop\德鹿商城\Presentation\VMall.Web.Framework\obj\Debug\VMall.Web.Framework.pdb

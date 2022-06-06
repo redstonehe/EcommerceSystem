@@ -1,0 +1,268 @@
+﻿@model VMall.Web.MallAdmin.Models.NetChartModel
+@section header{
+    <title>帐号列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+    <link href="/admin_mall/content/css/master.css" rel="stylesheet" type="text/css" />
+    <script src="/admin_mall/content/js/jquery.blockui.js" type="text/javascript"></script>
+    <script src="/admin_mall/content/js/OrgChart.js?ddd" type="text/javascript"></script>
+    <style>
+        a.editOperate {
+            display: inline-block;
+            color: #fff;
+            background-color: #428bca;
+            padding: 5px;
+            margin: 5px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            /* text-shadow: 0 1px 1px rgba(255,255,255,0.75); */
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            a.editOperate:hover {
+                background-color: #006dcc;
+                color: #fff;
+            }
+            #upper:before{background: url(/admin_mall/content/images/upper.png) no-repeat;margin-bottom: -3px;width: 18px;background-size: 100%;height: 18px;display:inline-block;content: "";
+            }
+    </style>
+    <script type="text/JavaScript">
+
+        var size = 1.0;
+        function onMouseOV(memno, grade, fname, event) {
+
+            event.onmousemove = function (e) {
+                if (size < 1 && !isIE910()) {
+                    var event = window.event || e;
+                    var Mouse = document.getElementById("blow_up_node"),
+                        top = event.clientY > (window.screen.availHeight / 2) ? -30 : 10,
+                        left = event.clientX > (window.screen.availWidth / 2) ? -120 : 20;
+                    Mouse.style.top = event.clientY + top + "px";
+                    Mouse.style.left = event.clientX + left + "px";
+                    Mouse.style.display = "block";
+                    $("#memno").html("<b>" + memno + "</b>");
+                    $("#blowImg").attr("src", "/common/grade/right_grade_" + grade + ".gif");
+                    $("#fullname").text(fname);
+                }
+            }
+            /*if(size<1){
+            $("#blow_up_node").show();
+            var ev = window.event; 
+            var mousePos = mouseCoords(ev); 
+            var detailDiv = document.getElementById("blow_up_node"); //将要弹出的层 
+            detailDiv.style.left = (mousePos.x + 10) + "px"; 
+            detailDiv.style.top = (mousePos.y + 18) + "px"; 
+            $("#memno").html("<b>"+memno+"</b>");
+            $("#blowImg").attr("src","/common/grade/right_grade_"+grade+".gif");
+            $("#fullname").text(fname);
+            }*/
+        }
+        function onMouseOu() {
+            $("#blow_up_node").hide();
+
+        }
+
+        function IsIE() {
+            var OsObject = "";
+            if (navigator.userAgent.indexOf("MSIE") > 0) {
+                return true;
+            }
+        }
+        function isIE910() {
+            if (window.navigator.userAgent.indexOf("MSIE 8.0") >= 1 || window.navigator.userAgent.indexOf("MSIE 7.0") >= 1 || window.navigator.userAgent.indexOf("MSIE 6.0") >= 1) { return true }
+        }
+
+        function mouseCoords(ev) {
+            if (ev.pageX || ev.pageY) {
+                return {
+                    x: ev.pageX,
+                    y: ev.pageY
+                };
+            }
+            /*ie 与 ff的边界 处理不同*/
+            if (IsIE()) {
+                return { x: ev.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft, y: ev.clientY + document.documentElement.scrollTop - document.documentElement.clientTop }
+            }
+            else {
+                return { x: ev.clientX + document.body.scrollLeft - document.body.clientLeft, y: ev.clientY + document.body.scrollTop - document.body.clientTop }
+            }
+        }
+
+        function zoomout() {
+            size = size + 0.05;
+            fnRotateScale();
+        }
+
+        function zoomin() {
+            size = size - 0.05;
+            if (size > 0.2) {
+                fnRotateScale();
+            } else {
+                //alert("<fmt:message key='command.cannotsmall'/>");
+            }
+
+        }
+        function set() {
+            document.getElementById("JOrgDiv").style.cssText = document.getElementById("JOrgDiv").style.cssText + ';-ms-transform-origin: 0% 0%;-ms-transform: scale(' + size + '); -webkit-transform: scale(' + size + ');-webkit-transform-origin: 0% 0%;-moz-transform: scale(' + size + ');-moz-transform-origin: 0% 0%; ';
+
+        }
+
+
+        var fnRotateScale = function () {
+            var dom = document.getElementById("JOrgDiv"), angle = 0, scale = size;
+            if (dom && dom.nodeType === 1) {
+                angle = parseFloat(angle) || 0;
+                scale = parseFloat(scale) || 1;
+                if (typeof (angle) === "number") {
+                    //IE 
+                    var rad = angle * (Math.PI / 180);
+                    var m11 = Math.cos(rad) * scale, m12 = -1 * Math.sin(rad) * scale, m21 = Math.sin(rad) * scale, m22 = m11;
+                    if (!dom.style.Transform) {
+                        dom.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + m11 + ",M12=" + m12 + ",M21=" + m21 + ",M22=" + m22 + ",SizingMethod='auto expand')";
+                    }
+                    //Modern 
+                    set()
+                }
+            }
+        };
+
+        var scrollFunc = function (e) {
+
+
+            //平台、设备和操作系统
+            var system = {
+                win: false,
+                mac: false,
+                xll: false
+            };
+            //检测平台
+            var p = navigator.platform;
+            system.win = p.indexOf("Win") == 0;
+            system.mac = p.indexOf("Mac") == 0;
+            system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+            //跳转语句，如果是手机,PAD访问则禁止鼠标滑轮缩放
+            if (system.win || system.mac || system.xll) {
+                e = e || window.event;
+                if (e.wheelDelta) {//IE/Opera/Chrome 
+                    //鼠标滑轮缩放
+                    if (e.wheelDelta < 0) {
+                        zoomin()
+                    } else if (e.wheelDelta > 0) {
+                        zoomout()
+                    }
+                } else if (e.detail) {//Firefox 
+                    //鼠标滑轮缩放
+                    if (e.detail < 0) {
+                        zoomout();
+                    } else if (e.detail > 0) {
+                        zoomin();
+                    }
+                }
+                if (e && e.preventDefault) {
+                    //禁止滚动条
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                    e.returnvalue = false;
+                    return false;
+                }
+            } else {
+                return true;
+            }
+
+        }
+        /*注册事件*/
+        if (document.addEventListener) {
+            document.addEventListener('DOMMouseScroll', scrollFunc, false);
+        }//W3C 
+        window.onmousewheel = document.onmousewheel = scrollFunc;//IE/Opera/Chrome 
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 推荐网络(图形)
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回用户列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("RecommendNetChart", "user"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="35">
+                            <input type="hidden" name="Uid" value="@Model.Uid" />
+                            <img id="searchImg" src="/admin_mall/content/images/search1.gif" />
+                        </td>
+                        @*<td>账号名：
+                        </td>
+                        <td width="300">
+                            @Html.TextBox("UserName", Model.UserName, new { height = "18" })
+                            <span style="color: red;">(用户名/手机号/邮箱任一)</span>
+                        </td>*@
+                        
+                        <td >查询层数：
+                        </td>
+                        <td width="110" >
+                            @Html.TextBox("LevelCount", Model.LevelCount, new { height = "18" })
+                        </td>
+                        <td>
+                            
+                            <a id="upper" name="upper"  style="width: 63px; height: 24px;border:1px solid #707070;padding: 3px;" class="searchBut " href= "/malladmin/user/RecommendNetChart?uid=@(Model.user.Pid)" > 上一层</a>
+                        </td>
+                        <td>
+                            <input id="SearchUser" name="SearchUser" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="dataList" id="zoom" style="background: url(/admin_mall/content/images/bkgd.png) repeat top left;">
+              <div style="position: fixed; right:  15px;top: 80px ;z-index: 100;">
+                <span onclick="zoomout();" title="放大" style="border:1px solid #9F9F9F;background:#E9E9E9;display:block;padding:5px;">
+                    <img src="/admin_mall/content/images/search_plus.png" style="width: 20px;height: auto;">
+                </span><br>
+                <span onclick="javascript:zoomin();" title="缩小" style="border:1px solid #9F9F9F;background:#E9E9E9;display:block;padding:5px;">
+                    <img src="/admin_mall/content/images/search_minus.png" style="width: 20px;height: auto;">
+                </span>
+            </div>
+            <div id="JOrgDiv" class="JOrgDiv" style="width: 100%; height: 700px; /*overflow: auto;*/ position: relative;color: white;font-family: tahoma;font-weight: lighter;padding-top: 40px;">
+                    <script language="javascript">
+                        @(ViewData["treeStr"])
+
+                        //无滚动条时控制个数以及宽度实现横向和纵向文字切换 --纵向文字不美观-不推荐使用
+                        //var showType = 1;
+                        var totalCount = uid@(Model.Uid).Nodes.length;
+                        var maxCount = 50;
+                        if (totalCount <= maxCount) showType = 1;
+                        var OrgShows = new OrgShow(uid@(Model.Uid));
+                        //var boxwidth = showType == 1 ? 50 : 25;
+                        OrgShows.TargetDivId = "JOrgDiv";//显示目标div
+                        OrgShows.Top = 10;//顶部定位
+                        OrgShows.Left = 0;//左侧定位
+                        OrgShows.IntervalWidth = 8;//横向线条之间宽度间隔
+                        OrgShows.IntervalHeight = 50;//竖向线条长度
+                        OrgShows.ShowType = 1;//文字方向 1为横向 2为竖向
+                        OrgShows.BoxHeight = 45;//
+                        OrgShows.BoxWidth = 100;//
+                        OrgShows.LineSize = 2;  //设置线条大小
+                        OrgShows.LineColor = "#000";  //设置线条颜色
+
+                        OrgShows.Run();
+
+                    </script>
+                </div>
+        </div>
+
+    }
+}

@@ -1,0 +1,209 @@
+﻿@model VMall.Web.Mobile.Models.ChangeModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单 申请换货";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<script>
+
+    function applyChange() {
+        var oid = $("#changeoid").val();
+        var said = $('input:radio[name="addressid"]:checked').val();
+        var changeType = $('input:radio[name="changetype"]:checked').val();
+        var changeDesc = $("#changeDesc").val();
+
+        if (!checkSubmit(said, changeType, changeDesc)) {
+            return;
+        }
+        //防重复提交
+        $(".shrBT .redBT").html("正在提交...").removeAttr("onclick");
+        // said,int changeType,string changeDesc,int oid = -1
+        Ajax.post("/mob/ucenter/changeapply",
+                { 'oid': oid, 'said': said, 'changeType': changeType, 'changeDesc': changeDesc },
+                false,
+                function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state != "success") {
+                        alert(result.content);
+                    }
+                    else {
+                        alert(result.content);
+                        window.location.href = "/mob/ucenter/orderlist";
+                    }
+                })
+    }
+    function checkSubmit(said, changeType, changeDesc) {
+        if (said < 1) {
+            alert("请选择收货地址");
+            return false;
+        }
+        if ($.trim(changeType) != "0" && $.trim(changeType) != "1") {
+            alert("请使用正确的换货类型");
+            return false;
+        }
+
+        if ($.trim(changeDesc).length > 125) {
+            alert("备注信息最多只能输入125个字");
+            return false;
+        }
+        return true;
+    }
+</script>
+<style>
+    .SHtitle li {margin:5px;border-bottom:1px dashed gray;
+    }
+</style>
+<div class="myAssetsCon">
+    <div >
+        <h2 style="margin-bottom:5px;">
+                    <strong style="font-size:24px;">订单信息：</strong>&nbsp; 
+                <div class="clear"></div>
+                </h2>
+        <div style="margin-bottom: 20px; border-bottom: 1px dashed #808080;">
+                            订单号：@Model.OrderInfo.OSN
+                            <br />
+                            订单金额：@Model.OrderInfo.OrderAmount
+
+                        </div>
+        @if (Model.State)
+                {
+                    <div>
+                        
+                        <div style="margin-bottom: 20px; border-bottom: 1px dashed #808080;">
+                            <h3>换货地址：</h3>
+
+                            <div id="addressList" style="margin-left: 20px;">
+                                <ul class="SHtitle">
+                                    @foreach (var item in Model.ShipAddressList)
+                                    {
+                                        <li>
+                                            <input type="radio" name="addressid" value="@item.SAId" @(item.IsDefault == 1 ? "checked='checked'" : "") data-isdef="@item.IsDefault" onclick="clicksiglnadd();" />@item.Consignee @item.Mobile @item.ProvinceName - @item.CityName - @item.CountyName @item.Address</li>
+                                    }
+                                   
+                                        @*<p style="margin: 10px 0;"><a href="javascript:getShipAddressList();" class="greenBT">添加收获地址</a></p>*@
+
+                                </ul>
+                                <div id="shipAddressBlock" style="display: none; margin-bottom: 20px;">
+                                    <form name="shipAddressForm" action="" style="position: relative;">
+                                        <div class="closediv" onclick="cancelAdd();"><a href="javascript:void(0);">×</a></div>
+                                        <input type="hidden" name="saId" value="" />
+                                        <div class="SHtable">
+                                            <ul>
+                                                <li>
+                                                    <em>*</em>&nbsp;备&nbsp;注&nbsp;名：
+                                                        <input type="text" name="alias" value="" class="text" maxlength="15" style="width: 200px" />
+                                                </li>
+
+                                                <li>
+                                                    <em>*</em>&nbsp;收&nbsp;货&nbsp;人：
+                                                        <input type="text" name="consignee" value="" class="text" maxlength="15" style="width: 200px" />
+                                                </li>
+
+                                                <li>
+                                                    <em>*</em>所在地区：
+                                                    <select id="provinceId" name="provinceId" class="areaS">
+                                                        <option selected="selected" value="-1">请选择</option>
+                                                    </select>
+                                                    <select id="cityId" name="cityId" class="areaS">
+                                                        <option selected="selected" value="-1">请选择</option>
+                                                    </select>
+                                                    <select id="regionId" name="regionId" class="areaS">
+                                                        <option selected="selected" value="-1">请选择</option>
+                                                    </select>
+                                                </li>
+
+                                                <li>
+                                                    <em>*</em>&nbsp;详细地址：<input type="text" name="address" value="" class="text" style="width: 480px" />
+                                                </li>
+
+                                                <li>
+                                                    <em>*</em>&nbsp;&nbsp;手&nbsp;机&nbsp;号：<input type="text" name="mobile" value="" class="text" maxlength="15" style="width: 200px" />&nbsp;&nbsp;或固定电话<input type="text" name="phone" value="" class="text" maxlength="15" style="width: 200px" />
+
+                                                </li>
+
+                                                <li>&nbsp;电子邮箱： 
+                                                    <input type="text" name="email" value="" class="text" maxlength="15" style="width: 200px" />
+                                                </li>
+
+                                                <li>&nbsp;邮政编码：
+                                                    <input type="text" name="zipcode" value="" class="text" maxlength="15" style="width: 200px" />
+                                                </li>
+
+                                                <li>&nbsp;默认地址：
+                                                    <input type="checkbox" name="isDefault" checked="checked" />
+                                                </li>
+
+                                                <li>
+
+                                                    <a href="javascript:addShipAddress()" id="addShipAddressBut" style="" class="greenBT" style="padding: 3px 20px; font-size: 16px;">新增</a>
+                                                    <a href="javascript:cancelAdd()" id="editShipAddressBut" style="" class="greenBT" style="padding: 3px 20px; font-size: 16px;">取消</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                    <script type="text/javascript">
+                                        function cancelAdd() {
+                                            $("#shipAddressBlock").css("display", "none");
+                                        }
+                                        function openAddAddressDiv() {
+                                            $("#shipAddressBlock").css("display", "block");
+                                        }
+                                        //绑定省列表的改变事件
+                                        Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+                                            var selectedProvinceId = getSelectedOption(this).value;
+                                            if (selectedProvinceId > 0) {
+                                                document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+                                                bindCityList(selectedProvinceId, document.getElementById("cityId"));
+                                            }
+                                        })
+
+
+                                        //绑定市列表的改变事件
+                                        Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+                                            var selectedCityId = getSelectedOption(this).value;
+                                            if (selectedCityId > 0) {
+                                                bindCityList(selectedCityId, document.getElementById("regionId"));
+                                            }
+                                        })
+
+                                        //绑定省列表
+                                        bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+                                        if (cityId > 0) {
+                                            bindCityList(provinceId, document.getElementById("cityId"), cityId);
+                                            bindCountyList(cityId, document.getElementById("regionId"), countyId);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3>换货操作：</h3>
+                            <br />
+                              <input type="radio" name="changetype" value="0" checked="checked" />同规格
+                    <input type="radio" name="changetype" value="1" />新规格
+                            <br />
+                            退货原因:
+                        <br />
+                             <textarea name="desc" cols="100" rows="5" id="changeDesc"></textarea>
+                        </div>
+                        <div class="shrBT" style="margin: 10px auto; text-align: center; height: 35px; line-height: 35px;">
+                            <input type="hidden" name="changeoid" id="changeoid" value="@Model.OrderInfo.Oid" />
+                            <input type="button" onclick="applyChange()" class="regBt redBT" value="提&nbsp;交 " style="height: 35px; width: 135px; font-size: 18px;" />
+                        </div>
+                    </div>
+                   
+                }
+                else
+                {
+                    <div>@Model.Message</div>
+                }
+    </div>
+
+
+</div>
+
+

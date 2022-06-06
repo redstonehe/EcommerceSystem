@@ -1,0 +1,33 @@
+﻿@model VMall.Web.Mobile.Models.AccountDetailModel
+@foreach (var item in Model.AccountDetailList)
+{
+    <tr>
+        <td>@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+        <td>
+            @if (item.InAmount > 0)
+            { 
+                @:收入
+                                }
+            @if (item.OutAmount > 0)
+            {
+                @:支出
+                                }
+
+        </td>
+        <td>
+            @if (item.InAmount > 0)
+            { 
+                @("+" + item.InAmount.ToString("f2"))
+            }
+            @if (item.OutAmount > 0)
+            {
+                @("-" + item.OutAmount.ToString("f2"))
+            }
+        </td>
+        <td>@item.CurBanlance.ToString("0.00")</td>
+        <td align="left">@item.DetailDes</td>
+    </tr>
+}
+@*<script>
+    detailhasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>*@

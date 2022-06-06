@@ -1,0 +1,90 @@
+﻿@model List<VMall.Core.PartUserInfo>
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>管理员组列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">管理员组管理</a></li>
+            <li class="active">管理员成员</li>
+        </ol>
+        管理员组管理 &gt;&gt; 
+        <div class="right">
+            <a href="@Url.Action("add", "user")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <a href="@Url.Action("list")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-reply fa-lg"></i>返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <div class="table_top"></div>
+    @using (Html.BeginForm("groupuserlist", "malladmingroup"))
+    {
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            @if (Model.Count > 0)
+                            {
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>用户名</th>
+                                            <th>手机/邮箱</th>
+                                            <th>昵称</th>
+                                            <th>所属管理员组</th>
+                                            <th>管理操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{string groupName = MallAdminGroups.GetMallAdminGroupById(Model.First().MallAGid).Title;}
+                                        @foreach (var info in Model)
+                                        {
+                                            <tr>
+                                                <td>@info.UserName</td>
+                                                <td>@info.Mobile
+                                                    <br />
+                                                    @info.Email
+                                                </td>
+                                                <td>
+                                                    @info.NickName
+                                                </td>
+                                                <td>@groupName</td>
+                                                <td>
+                                                    @Html.ActionLink("[编辑]", "edit", "user", new { uid = info.Uid }, new { @class = "editOperate" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            }
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+    }
+    <div class="table_bottom"></div>
+}

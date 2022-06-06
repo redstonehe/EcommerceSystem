@@ -1,0 +1,167 @@
+﻿@model VMall.Web.Models.AgentResultModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "结果-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "结果";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .info th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 60px;
+    }
+
+    .info .succ_on .text {
+        border: 1px solid #C0C0C0;
+    }
+
+    .info .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+        .info .text:focus {
+            border: 1px solid #3879d9;
+        }
+
+    .info .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 270px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+    }
+
+    .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .select {
+        width: 270px;
+        text-align: center;
+        margin: 0 auto;
+        height: 38px;
+        border: 1px solid #C0C0C0;
+    }
+
+    .result {
+        background: #FFF;
+        /*width: 900px;*/
+        height: 150px;
+        padding: 30px 0;
+        border: 1px solid #DDD;
+        font-family: arial,"宋体";
+    }
+
+    /*.box div {
+        text-align: center;
+    }*/
+
+        .box div p {
+            width: 200px;
+            margin: 20px auto;
+        }
+
+            .box div p span {
+                color: red;
+            }
+
+    .return {
+        height: 40px; text-align: center;
+    }
+
+        .return a:hover {
+            color: #D02424;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box info">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="position: relative;">
+           
+            <div class="result ">
+                @{PartUserInfo user = Users.GetPartUserById(Model.JoinUid);
+                  var agentRank = string.Empty;
+                  if (user.AgentType==1){
+                      agentRank = "事业伙伴";
+                  }
+                  else if (user.AgentType == 2)
+                  {
+                      agentRank = "星级经销商";
+                  }
+                  else if (user.AgentType == 3)
+                  {
+                      agentRank = "VIP经销商";
+                  }
+                  else if (user.AgentType == 4)
+                  {
+                      agentRank = "大区经销商";
+                  }
+                  else if (user.AgentType == 5)
+                  {
+                      agentRank = "合伙人";
+                  }
+                  }
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2>恭喜您，@(string.IsNullOrEmpty(user.UserName) ? (string.IsNullOrEmpty(user.Mobile) ?  "" : user.Mobile) : user.UserName)已成功成为汇购优选代理 @agentRank ！！！</h2>
+                </div>
+                <div style="text-align: center; font-size: 16px;">
+                    <p>推荐人：<span>@Model.ParentCode</span></p>
+                    <p>安置人：<span>@Model.ManagerCode</span></p>
+                </div>
+                <div class="return" style="margin-top: 30px;">
+                    @*  <span id="timer" style="color:red;">5</span> 秒后自动返回*@
+                    <a href="/" style="font-size: 18px; color: orange;">返回首页</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+ 
+
+</script>
+
+
+
+

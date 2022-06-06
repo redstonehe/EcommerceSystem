@@ -1,0 +1,128 @@
+﻿@model VMall.Web.Mobile.Models.ProductReviewListModel
+@{
+    Layout = null;
+   
+}
+
+@{
+    int reviewLayer1 = 100;
+    int reviewLayer2 = 0;
+    int reviewLayer3 = 0;
+
+    int goodStars = Model.ProductInfo.Star1 + Model.ProductInfo.Star2 + Model.ProductInfo.Star3;
+    int allStars = goodStars + Model.ProductInfo.Star4 + Model.ProductInfo.Star5;
+
+    if (allStars != 0)
+    {
+        reviewLayer1 = goodStars * 100 / allStars;
+        reviewLayer2 = Model.ProductInfo.Star4 * 100 / allStars;
+        reviewLayer3 = 100 - reviewLayer1 - reviewLayer2;
+    }
+}
+<div class="pj">
+    <div class="pjHeader">
+        <div class="pjItme"><font class="nb">100<span>%</span></font><span style="font-size: 14px; color: #6c6c6c; display: block; margin-top: 5px;">好评度</span></div>
+        <div class="pjChart">
+            <div class="itme">
+                <p>好评<span>（100%）</span></p>
+                <span class="line">
+                    <div class="inLine" style="width:100%"></div>
+                </span></div>
+            <div class="itme">
+                <p>中评<span>（0%）</span></p>
+                <span class="line">
+                    <div class="inLine" style="width:0%"></div>
+                </span></div>
+            <div class="itme">
+                <p>差评<span>（0%）</span></p>
+                <span class="line">
+                    <div class="inLine" style="width:0%"></div>
+                </span></div>
+        </div>
+        <div class="clear"></div>
+        <div class="table" style="height: 40px;line-height: 40px;">
+            <div class="cell @if (Model.ReviewType == 1)
+                             {<text>on</text>}"><span><a  @if (Model.ReviewType == 1){<text>style="color:#fff;"</text>} href="javascript:changeReview(@Model.ProductInfo.Pid,2,1,1);">好评</a></span><b></b></div>
+            <div class="cell @if (Model.ReviewType == 2)
+                             {<text>on</text>}"><span><a @if (Model.ReviewType == 2){<text>style="color:#fff;"</text>} href="javascript:changeReview(@Model.ProductInfo.Pid,2,2,1);">中评</a></span><b></b></div>
+            <div class="cell @if (Model.ReviewType == 3)
+                             {<text>on</text>}"><span><a @if (Model.ReviewType == 3){<text>style="color:#fff;"</text>} href="javascript:changeReview(@Model.ProductInfo.Pid,2,3,1);">差评</a></span><b></b></div>
+        </div>
+    </div>
+    <div class="pjCon">
+        @foreach (DataRow row in Model.ProductReviewList.Rows)
+        {
+            <div class="itme">
+                <div class="start"><b style=" width:@Html.Raw((TypeHelper.ObjectToInt(row["star"]) / 5 * 100).ToString())%;"></b></div>
+                <h3>
+                    @*<i>心得：</i>*@
+                    <p>@row["message"]</p>
+                </h3>
+                <span class="info">
+                     @{string NickName = string.Empty;
+              string showNickName = string.Empty;
+              try
+              {
+                  if (string.IsNullOrEmpty(row["nickname"].ToString()))
+                  {
+                      NickName = row["shownickname"].ToString().Trim();
+                  }
+                  else
+                  {
+                      NickName = row["nickname"].ToString().Trim();
+                  }
+
+                  if (NickName.Length == 0)
+                  {
+                      showNickName = "***";
+                  }
+                  else if (NickName.Length == 1)
+                  {
+                      showNickName = NickName + "***";
+                  }
+                  else if (NickName.Length == 2)
+                  {
+                      showNickName ="***" + NickName.Substring(NickName.Length - 1);
+                  }
+                  else
+                  {
+                      showNickName = NickName.Substring(0, 1) + "***" + NickName.Substring(NickName.Length - 1);
+                  }
+              }
+              catch
+              {
+                  showNickName = "";
+              }
+              }
+                    <b>@showNickName</b>@row["buytime"]</span>
+                
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .selectPage a {margin:10px;
+    }
+</style>
+@if (Model.ProductReviewList.Rows.Count > 0)
+{
+    <div class="selectPage">
+        @if (Model.PageModel.HasPrePage)
+        { 
+            <a href = "javascript:changeReview(@Model.ProductInfo.Pid,2, @Model.ReviewType ,@Model.PageModel.PrePageNumber);" style="text-decoration: underline;color:blue;">上一页</a>
+        }
+        else
+        {
+            <a href="javascript:;" style="text-decoration: underline;color:blue;">上一页</a>
+        }
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a href = "javascript:changeReview(@Model.ProductInfo.Pid,2, @Model.ReviewType ,@Model.PageModel.NextPageNumber);" style="text-decoration: underline;color:blue;">下一页</a>
+        }
+        else
+        {
+            <a href="javascript:;" style="text-decoration: underline;color:blue;">下一页</a>
+        }
+    </div>
+}
+

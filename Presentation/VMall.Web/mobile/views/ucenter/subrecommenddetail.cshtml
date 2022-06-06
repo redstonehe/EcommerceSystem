@@ -1,0 +1,143 @@
+﻿@model VMall.Web.Mobile.Models.SubRecommendDetailModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "会员详情";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 9;
+}
+
+<style>
+    /*table tr {
+        height: 35px;
+        line-height: 35px;
+        border:1px solid #ddd;
+    }
+
+    table td {
+        border: 1px solid #ddd;
+    }*/
+    .viewport {
+        width: 600px;
+        max-width: 800px;
+        /*margin: 0 auto;*/
+    }
+
+    /*#order_table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }*/
+</style>
+
+
+<div class="myAssetsCon">
+    <table style="text-align: center; margin: 0 auto; " width="100%" border="1" cellspacing="1" cellpadding="1">
+        <tbody id="order_table">
+            <tr style="background: #DCDCDC;">
+                <th>订单号</th>
+                <th>购买时间</th>
+                <th>订单金额</th>
+                <th>包含海米</th>
+                 
+                <th>备注</th>
+            </tr>
+
+            @foreach (OrderInfo row in Model.OrderList)
+            {
+                string state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row.OrderState));
+                List<OrderProductInfo> orderProductList = Orders.GetOrderProductList(TypeHelper.ObjectToInt(row.Oid), Model.OrderProductList);
+                <tr>
+                    <td>@row.OSN</td>
+                    <td>@(row.AddTime.ToString("yyyy-MM-dd HH:mm:ss"))</td>
+                     <td>@row.OrderAmount</td>
+                    <td>@orderProductList.Sum(x => x.ProductHaiMi * x.BuyCount).ToString("0.00")</td>
+                    
+                    <td>
+                        
+                        @switch (state)
+                                {
+                                    case "WaitPaying":
+                                    @:等待付款
+            break;
+                                    case "Confirming":
+                                    @:待确认
+            break;
+                                    case "Confirmed":
+                                    @:已确认
+            break;
+                                    case "PreProducting":
+                                    @:备货中
+            break;
+                                    case "Sended":
+                                    @:已发货
+            break;
+                                    case "Completed":
+                                    @:已完成
+            break;
+                                    case "Settled":
+                                    @:已结算
+                                    break;
+                                    case "Cancelled":
+                                    @:取消
+            break;
+                                    case "Returned":
+                                    @:退货
+            break;
+                                    case "Changed":
+                                    @:换货
+            break;
+                                    case "Locked":
+                                    @:锁定
+            break;
+                                    default:
+                                    @:未知状态
+            break;
+                                }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getSubOrderList(@Model.Uid,'@Model.StartAddTime','@Model.EndAddTime',@Model.OrderState,suborderListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<script>
+    //获得订单列表
+    var suborderListNextPageNumber = 2;
+    var subhasNextPage = false;
+    function getSubOrderList(uid, startAddTime, endAddTime, orderState, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/SubRecommendDetail?uid=" + uid + "&startAddTime=" + startAddTime + "&endAddTime=" + endAddTime + "&orderState=" + orderState + "&page=" + page, false, function (data) {
+            getOrderListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getOrderListResponse(data) {
+        $("#order_table").append(data);
+        if (subhasNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            suborderListNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>
+

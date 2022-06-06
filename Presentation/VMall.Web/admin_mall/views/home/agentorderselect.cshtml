@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>有机胚芽报单选择-@WorkContext.MallConfig.SiteTitle</title>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script src="/scripts/utils.js" type="text/javascript"></script>
+    <script src="/scripts/common.js" type="text/javascript"></script>
+    <script src="/scripts/region.js" type="text/javascript"></script>
+    <style type="text/css">
+        .maindiv div {
+            float: left;
+            height: 300px;
+            width: 49%;
+            margin-left:10px;
+            border: 1px dotted #808080;
+        }
+
+            .maindiv div a {
+                text-align: center;
+                height: 80px;
+                line-height: 80px;
+                color: #fff;
+                background-color: #428bca;
+                padding: 4px 12px;
+                margin: 10px 60px;
+                font-size: 20px;
+                cursor: pointer;display: block;
+            }
+            .maindiv div p {
+            margin: 10px 60px;
+            text-align:left;
+            }
+    </style>
+    <script>
+        function gosubmit() {
+            alert(1);
+            $("form").submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="maindiv">
+        <div>
+            <a href="/malladmin/home/AgentOrderForAgentSystem">已有会员报单</a>
+            <p>1.会员已经是汇购会员或直销会员</p>
+            <p>1.会员是汇购会员或直销会员：先行操作：修改代理等级，修改代理关系，再进行报单操作</p>
+        </div>
+        <div>
+            <a href="/malladmin/home/AgentOrderForAgentSystem_Nouser">新会员报单</a>
+            <p>1.会员不是汇购会员或直销会员</p>
+            <p>2.报单会员提供手机号已经被占用的情况</p>
+        </div>
+    </div>
+</body>
+</html>

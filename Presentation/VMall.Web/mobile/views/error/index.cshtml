@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "错误提示";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<style type="text/css">
+/*body {margin: 0px; padding:0px; font-family:"微软雅黑", Arial, "Trebuchet MS", Verdana, Georgia,Baskerville,Palatino,Times; font-size:16px;}*/
+div{margin-left:auto; margin-right:auto;}
+a {text-decoration: none; color: #1064A0;}
+a:hover {color: #0078D2;}
+img { border:none; }
+h1,h2,h3,h4 {
+/*	display:block;*/
+	margin:0;
+	font-weight:normal; 
+	font-family: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana ; 
+}
+h1{font-size:32px; color:#7ABD54; padding:20px 0px 10px 0px;}
+.box h2{color:#7ABD54; font-size:16px; padding:10px 0px 40px 0px;}
+
+#page{ padding:20px 20px 40px 20px; margin-top:30px;}
+.button{width:180px; height:28px; margin-left:0px; margin-top:10px; background:#D02424; border-bottom:4px solid ##D02424; text-align:center;}
+.button a{width:180px; height:28px; display:block; font-size:14px; color:#fff; }
+/*.button a:hover{ background:#5BBFFF;}*/
+</style>
+<script language="javascript" type="text/javascript">
+        //$(function () {
+        //    window.location.href = '/mob';
+        //});
+        // 以下方式直接跳转
+
+        // 以下方式定时跳转
+        //setTimeout("javascript:location.href='hello.html'", 5000);
+    </script>
+
+<div id="page" style="border-style:dashed;border-color:#e4e4e4;line-height:30px;background:url(sorry.png) no-repeat right;">
+	<h1>哎呀，您访问的页面出错啦~</h1>
+	<h2>Sorry, the site now can not be accessed. </h2>
+	<font color="#666666">你请求访问的页面，暂时找不到，我们建议你返回首页进行浏览，谢谢！</font><br /><br />
+	<div class="button">
+		<a href="/mob" title="返回首页">返回首页</a>
+	</div>

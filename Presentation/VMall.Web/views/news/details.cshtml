@@ -1,0 +1,19 @@
+﻿@model VMall.Web.Models.NewsModel
+@{
+    Layout = "~/views/shared/_layout_help.cshtml";
+    ViewBag.Title = Model.NewsInfo.Title + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 1;//产品页为3  非产品页不要用
+    ViewBag.IsBox1210 = 0;
+}
+
+<div class="box">
+<div id="news" class="box">
+<h1 class="newsTitle">@Model.NewsInfo.Title</h1>
+<div class="newsInfo">时间：@Model.NewsInfo.AddTime</div>
+<div class="edit">
+@Html.Raw(Model.NewsInfo.Body)
+</div>
+
+</div>
+
+</div>

@@ -1,0 +1,112 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="gb2312">
+    <title>@WorkContext.MallConfig.SiteTitle</title>
+    <script type="text/javascript" src="/scripts/jquery-1.7.1.js"></script>
+    <link href="/admin_mall/content/css/uploadify.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        //防止chrome缓存jquery.uploadify.js文件，而引起chrome崩溃
+        document.write("<script type='text/javascript' "
+            + "src='/admin_mall/scripts/jquery.uploadify.js?" + new Date()
+            + "'></s" + "cript>");
+    </script>
+    <script>
+        $(function () {
+            $("#uploadify").uploadify({
+                'formData': { 'uid': '@WorkContext.Uid', 'password': '@WorkContext.EncryptPwd' },
+                'swf': '/admin_mall/content/flashes/uploadify.swf',
+                'uploader': '/test/excelT',
+                'buttonText': '上传文件',
+                'height': 24,
+                'width': 80,
+                //'fileTypeDesc': 'All Files',
+                // 'fileTypeExts': '*.xls,*.xlsx',
+                'fileSizeLimit': '5000000',
+                'auto': true,
+                'multi': false,
+                'removeTimeout': 2,
+                'onUploadSuccess': function (file, data, response) {
+                    if (data == "-1")
+                        alert('上传图片不能为空');
+                    else if (data == "-2")
+                        alert('上传图片的类型不允许');
+                    else if (data == "-3")
+                        alert('上传图片超过系统允许的最大大小');
+                    else {
+                        alert(data)
+                        @* $(".uploadPreview").empty().append("<img width=\"88\" height=\"88\" src=\"@WorkContext.MallConfig.UploadServer/upload/store/@Model.StoreId/product/show/thumb@{@ViewData["size"].ToString()}/" + data + "\"  />");
+                        $("#ShowImg").val(data);
+                        $(".upload span[htmlFor='ShowImg']").empty();*@
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- cover begin -->
+    <div id="coverpage">
+        <div id="onepics">
+            <form method="post" action="/test/AddOrder_QD">
+                <p>订单ID:<input type="text" value="" id="oid" name="oid" />
+                </p>
+                <p>会员ID:<input type="text" value="" id="uid" name="uid" />
+                </p>
+                <p>是否分期<input type="text" value="2" id="PhasedType" name="PhasedType" />
+                    * isPhased，如果直销会员是新会员，传3，如果直销会员是老会员且没有选择分期，传1，如果直销会员是老会员且选择分期，传2</p>
+
+                <input type="submit" value="提交订单" />
+            </form>
+        </div>
+        <hr />
+        <div id="onepics2">
+            <form method="post" action="/test/QXOrder_QD">
+                <p>订单ID:<input type="text" value="" id="oid2" name="oid2" />
+                </p>
+                <p>会员ID:<input type="text" value="" id="uid2" name="uid2" />
+                </p>
+
+                <input type="submit" value="取消订单" />
+            </form>
+        </div>
+        <hr />
+        @*<div id="onepics3">
+            <form method="post" action="/test/excelT">
+                <input type="file" name="uploadify" id="uploadify" />
+                <input type="submit" value="导入" />
+            </form>
+        </div>*@
+
+        @*<hr />
+        <div id="onepics4">
+            <form method="post" action="/test/testUpdateAccount">
+                <p>订单ID:<input type="text" value="" id="oid2" name="oid2"/> </p>   
+                <p> 会员ID:<input type="text" value="" id="uid2" name="uid2" /> </p>  
+               
+                <input type="submit" value="取消订单" />
+            </form> 
+        </div>*@
+
+        @*<div id="onepics">
+            <form method="post" action="http://hgw.51shop.mobi/v2/openapi/catalog/allProducts">
+                <p>UID:<input type="text" value="1" id="ExtUid" name="ExtUid"/> </p>   
+                <p> Sign:<input type="text" value="2357cb1d82e59901d037aff2a5ec882ec9d3c285" id="Sign" name="Sign" /> </p>  
+             
+
+                <input type="submit" value="提交订单" />
+            </form> 
+        </div>*@
+    </div>
+
+    @*<div>
+        <img src="@(ViewData["codeImg"])" alt="" onerror="src='/images/60.jpg'" width="150" height="200"/>
+    </div>*@
+
+
+</body>
+</html>
+

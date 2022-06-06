@@ -1,0 +1,90 @@
+﻿@model VMall.Web.Mobile.Models.ShipAddressModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "添加配送地址";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 9;
+}
+
+<form name="shipAddressForm" action="" class="am-form am-form-horizontal">
+
+    @*<div class="title" style="margin-bottom: 5px;">收货人地址</div>*@
+    <div class="shipContent">
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">收货人</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="consignee" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">手机号</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="mobile" class="text" value="" maxlength="11" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-3 am-form-label">所在地区</label>
+
+            <div class="am-u-sm-3">
+                <select id="provinceId" name="provinceId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="cityId" name="cityId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <div class="am-u-sm-3">
+                <select id="regionId" name="regionId" class="select">
+                    <option selected="selected" value="-1">请选择</option>
+                </select>
+            </div>
+            <span class="am-form-caret"></span>
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-u-sm-3 am-form-label">详细地址</label>
+            <div class="am-u-sm-9">
+                <input type="text" name="address" class="text" value="" />
+            </div>
+        </div>
+
+        <div class="itmeC am-form-group ">
+            <div class="am-u-sm-12">
+                <a href="javascript:void(0)" onclick="javascript:addShipAddress()" class="am-btn am-btn-default am-btn-block">提交</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+

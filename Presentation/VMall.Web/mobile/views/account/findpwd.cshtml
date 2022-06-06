@@ -1,0 +1,25 @@
+﻿@model VMall.Web.Mobile.Models.FindPwdModel
+@{
+    Layout = "~/mobile/views/shared/_layout_account.cshtml";
+    ViewBag.SubTitle = "找回密码";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 1;
+}
+
+<div class="loginTable">
+    <form name="findPwdForm" action="">
+        <div class="itmeC">
+            <input type="text" class="text userName" name="@Model.ShadowName" placeholder="用户名/邮箱/手机" /></div>
+        @if (Model.IsVerifyCode)
+        {
+            <div class="itme">
+                <div class="itmeC">
+                    <input type="text" class="text" name="verifyCode" style="width: 100px; float: left;" placeholder="请输入验证码" maxlength="4" />
+                    <img id="verifyImage" src="/mob/tool/verifyimage" onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" style="width: 100px; margin: 0 10px; float: left; height: 40px;" />
+                    <a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/mob/tool/verifyimage?time=' + new Date()" class="left" style="line-height: 40px;">换一张</a></div>
+            </div>
+        }
+        <div class="itmeC"><a href="javascript:findPwd()" class="redBt" style="display: block; padding: 0; height: 38px; width: 99%; text-align: center; line-height: 38px;">下一步</a></div>
+    </form>
+</div>
+

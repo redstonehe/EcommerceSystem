@@ -1,0 +1,73 @@
+﻿@model VMall.Web.Models.ResetPwdModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>重置密码-@{@WorkContext.MallConfig.SiteTitle}</title>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="content-language" content="zh-CN" />
+    <meta name="copyright" content="© @WorkContext.MallConfig.SiteUrl" />
+    <meta name="author" content="EMC" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link href="@{@WorkContext.CSSCDN}/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+    <script src="@{@WorkContext.ScriptCDN}/scripts/jquery.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/scripts/utils.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/scripts/account.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<div id="loginTop" class="box">
+    <a href="/" class="left"><img src="/images/logo-65.jpg" width="280" height="80" /></a>
+    <h2>设置新密码</h2>
+    <div class="clear"></div>
+</div>
+
+<div class="findPassword box">
+<div class="step">
+<ul>
+    <li><s>1</s>验证身份</li>
+    <li><s>2</s>选择找回方式</li>
+    <li class="hot"><s>4</s>设置新密码</li>
+    <li><s>4</s>完成</li>
+    <div class="clear"></div>
+</ul>
+</div>
+
+<form name="resetPwdForm" action="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th width="190"><em>*</em>新密码：</th>
+    <td width="275"><input type="password" name="password" value="" class="text userName" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th width="190"><em>*</em>确认密码：</th>
+    <td width="275"><input type="password" name="confirmPwd" value="" class="text userName" /></td>
+    <td>&nbsp;</td>
+  </tr>
+    <tr>
+    <th width="190">&nbsp;</th>
+    <td width="400"><span style="color:red;">*&nbsp;密码最好包含大小字母、数字以及符号组成，且长度必须在6～16个字符之间，过于简单的密码会增加帐号被他人盗用的风险！</span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td><a href="#" class="passBt redBT" onclick="resetPwd('@Model.V')">提交</a></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</form>
+</div>
+
+
+ @Html.Partial("/views/publicpage/footernobar2016.cshtml")
+
+</body>
+</html>

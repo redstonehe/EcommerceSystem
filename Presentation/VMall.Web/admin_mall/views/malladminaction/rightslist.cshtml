@@ -1,0 +1,49 @@
+﻿@model VMall.Web.MallAdmin.Models.RightsListModel
+@section header{
+    <title>操作权限列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">权限管理 &gt;&gt; 操作权限列表
+        <div class="right">
+            <a href="@Url.Action("addrights",new {aid=Model.Aid})" class="menuBT">
+                <img src="/admin_mall/content/images/add.jpg" />添加操作</a>
+            <a href="@Url.Action("list")" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回菜单列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <div class="table_top"></div>
+    @using (Html.BeginForm("list", "malladminaction"))
+    {
+        <div class="dataList">
+            <div> <a href="javascript:void(0);">@Model.ParentActionInfo.Title > @Model.ActionInfo.Title</a></div>
+            <table width="50%" class="example" id="dnd-example" >
+                <thead>
+                    <tr>
+                        <th align="left" width="250">Action</th>
+                        <th align="left" >操作名称</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var info in Model.list)
+                    {
+                        <tr >
+                            <td>@info.Operate</td>
+                            <td>@info.OperateName</td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div class="table_bottom"></div>
+}

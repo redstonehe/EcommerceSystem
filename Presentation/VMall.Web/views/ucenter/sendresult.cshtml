@@ -1,0 +1,142 @@
+﻿
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "提交结果-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "提交结果";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .info th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 60px;
+    }
+
+    .info .succ_on .text {
+        border: 1px solid #C0C0C0;
+    }
+
+    .info .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+        .info .text:focus {
+            border: 1px solid #3879d9;
+        }
+
+    .info .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 270px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+    }
+
+    .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .select {
+        width: 270px;
+        text-align: center;
+        margin: 0 auto;
+        height: 38px;
+        border: 1px solid #C0C0C0;
+    }
+
+    <style > .result {
+        background: #FFF;
+        width: 900px;
+        height: 150px;
+        padding: 30px 0;
+        border: 1px solid #DDD;
+        font-family: arial,"宋体";
+    }
+
+    .box div {
+        /*text-align: center;*/
+    }
+
+        .box div p {
+            width: 200px;
+            margin: 20px auto;
+        }
+
+            .box div p span {
+                color: red;
+            }
+
+    .return {
+        height: 40px;
+    }
+
+        .return a:hover {
+            color: #D02424;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box info">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="position: relative;">
+           @* <h2 id="memberRT">@ViewBag.PositionTitle</h2>*@
+            <div class="result ">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2>提交成功！！！</h2>
+                </div>
+               
+                <div class="return" style="margin-top: 30px;text-align: center;">
+                    @*  <span id="timer" style="color:red;">5</span> 秒后自动返回*@
+                    <a href="@Url.Action("getstock")" style="font-size: 18px; color: orange;border: 1px solid orange;width: 100px;display: inline-block;height: 35px;line-height: 35px;">返回</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+ 
+
+</script>
+
+
+
+

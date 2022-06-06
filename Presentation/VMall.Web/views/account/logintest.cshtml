@@ -1,0 +1,241 @@
+﻿@model VMall.Web.Models.LoginModel
+@{
+    Layout = "~/views/shared/_layout_login.cshtml";
+    ViewBag.Title = "用户登陆-" + WorkContext.MallConfig.SiteTitle;
+   
+}
+<!-- 引入封装了failback的接口--initGeetest -->
+<script src="@{@WorkContext.ScriptCDN}/scripts/gt.js" type="text/javascript"></script>
+<div style="border-bottom:1px solid #dcdcdc">
+<div id="loginTop" class="box">
+    <a href="/" class="left"><img src="/images/logo-65.jpg" width="280" height="65" /></a>
+    <h2>欢迎登陆</h2>
+    <div class="clear"></div>
+</div>
+</div>
+<div class="box login">
+<a href="@Url.Action("register")" class="loginREG">免费注册</a>
+
+ @{
+     List<AdvertInfo> loginAdvertList = Adverts.GetAdvertList(77);
+     }
+ @if (loginAdvertList.Any())
+ {
+        <img src="/upload/advert/@loginAdvertList[0].Body" width="461" height="355" class="left" />
+    }
+<div class="right">
+  <form name="loginForm" action="">
+
+  <dl>
+      <dt>邮箱/用户名/已验证手机</dt>
+      <dd><input type="text" name="@Model.ShadowName" class="userName text" value="" style="text-align: left;"/></dd>
+  </dl>
+  
+  <dl>
+      <dt>密码</dt>
+      <dd><input type="password" name="password" class="passWord text" value=""/></dd>
+  </dl>
+      <dl>
+      <dt>完成验证</dt>
+      <dd>
+          @*<div id="embed-captcha"></div>
+    <p id="wait" class="show">正在加载验证码......</p>
+    <p id="notice" class="hide">请先拖动验证码到相应位置</p>         *@
+          <div id="captcha" style="">
+            <p id="wait" class="show">正在加载验证码......</p>
+        </div>
+
+      </dd>
+  </dl>
+      <script>
+          var handler = function (captchaObj) {
+              captchaObj.appendTo('#captcha');
+              captchaObj.onReady(function () {
+                  $("#wait").hide();
+              });
+              $('.loginIn').click(function () {
+                  var loginForm = document.forms["loginForm"];
+                  var accountName = loginForm.elements[shadowName].value;
+                  var password = loginForm.elements["password"].value;
+                  var verifyCode = loginForm.elements["verifyCode"] ? loginForm.elements["verifyCode"].value : undefined;
+                  var isRemember = loginForm.elements["isRemember"] ? loginForm.elements["isRemember"].checked ? 1 : 0 : 0;
+                  if (!verifyLogin(accountName, password, verifyCode)) {
+                      captchaObj.reset(); // 调用该接口进行重置
+                      return;
+                  }
+                  var result = captchaObj.getValidate();
+                  if (!result) {
+                      return alert('请完成验证');
+                  }
+                  $(".loginBt .loginIn").html("正在登录...").removeAttr("onclick");
+
+                  $.ajax({
+                      url: '/account/logintest',
+                      type: 'POST',
+                      //dataType: 'json',
+                      data: {
+                          myname: accountName,
+                          password: password,
+                          geetest_challenge: result.geetest_challenge,
+                          geetest_validate: result.geetest_validate,
+                          geetest_seccode: result.geetest_seccode
+                      },
+                      success: function (data) {
+                          //alert(111);
+                          var result = eval("(" + data + ")");
+                          if (result.state == "success") {
+                              window.location.href = returnUrl;
+                          }
+                          else if (result.state == "lockuser") {
+                              captchaObj.reset(); // 调用该接口进行重置
+                              alert(result.content);
+                          }
+                          else if (result.state == "error") {
+                              captchaObj.reset(); // 调用该接口进行重置
+                              showVerifyError(result.content);
+                              //$(".userName").focus();
+                              $(".loginBt .loginIn").html("登 &nbsp; 陆").attr("onclick", "logintest();");
+                          }
+                          //if (data.status === 'success') {
+                          //    alert('登录成功');
+                          //} else if (data.status === 'fail') {
+                          //    alert('登录失败，请完成验证');
+                          //    captchaObj.reset();
+                          //}
+                      }
+                  });
+              })
+              // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+              window.gt = captchaObj;
+          };
+
+          $.ajax({
+              url: "/account/GeekTest?t=" + (new Date()).getTime(), // 加随机数防止缓存
+              type: "get",
+              dataType: "json",
+              success: function (data) {
+
+                  // 调用 initGeetest 进行初始化
+                  // 参数1：配置参数
+                  // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+                  initGeetest({
+                      // 以下 4 个配置参数为必须，不能缺少
+                      gt: data.gt,
+                      challenge: data.challenge,
+                      offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                      new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                      product: "popup", // 产品形式，包括：float，popup
+                      width: "307px"
+                      // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                  }, handler);
+              }
+          });
+</script>
+@*<script>
+    var handlerEmbed = function (captchaObj) {
+        $("#embed-submit").click(function (e) {
+            var validate = captchaObj.getValidate();
+            if (!validate) {
+                $("#notice")[0].className = "show";
+                setTimeout(function () {
+                    $("#notice")[0].className = "hide";
+                }, 2000);
+                e.preventDefault();
+            }
+        });
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+        captchaObj.appendTo("#embed-captcha");
+        captchaObj.onReady(function () {
+            $("#wait")[0].className = "hide";
+        });
+        // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+    };
+    $.ajax({
+        // 获取id，challenge，success（是否启用failback）
+        url: "/account/GeekTest?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            // 使用initGeetest接口
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+            initGeetest({
+                width: '307px',
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success, // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                new_captcha: data.new_captcha
+                // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+            }, handlerEmbed);
+        }
+    });
+    //用户登录
+    function logintest() {
+        var loginForm = document.forms["loginForm"];
+
+        var accountName = loginForm.elements[shadowName].value;
+        var password = loginForm.elements["password"].value;
+        var verifyCode = loginForm.elements["verifyCode"] ? loginForm.elements["verifyCode"].value : undefined;
+        var isRemember = loginForm.elements["isRemember"] ? loginForm.elements["isRemember"].checked ? 1 : 0 : 0;
+        
+        //geetest_challenge, geetest_validate, geetest_seccode
+        var geetest_challenge = loginForm.elements["geetest_challenge"].value;
+        var geetest_validate = loginForm.elements["geetest_validate"].value;
+        var geetest_seccode = loginForm.elements["geetest_seccode"].value;
+        if (!verifyLogin(accountName, password, verifyCode)) {
+            return;
+        }
+        if ($.trim(geetest_challenge) == "")
+        {
+            alert("请先完成验证");
+            return ;
+        }
+        $(".loginBt .loginIn").html("正在登录...").removeAttr("onclick");
+        var parms = new Object();
+        parms[shadowName] = $.trim(accountName);
+        parms["password"] = password;
+        parms["verifyCode"] = verifyCode;
+        parms["isRemember"] = isRemember;
+        parms["geetest_challenge"] = geetest_challenge;
+        parms["geetest_validate"] = geetest_validate;
+        parms["geetest_seccode"] = geetest_seccode;
+        Ajax.post("/account/logintest", parms, false, function (data) {
+            var result = eval("(" + data + ")");
+            if (result.state == "success") {
+                window.location.href = returnUrl;
+            }
+            else if (result.state == "lockuser") {
+                alert(result.content);
+            }
+            else if (result.state == "error") {
+
+                showVerifyError(result.content);
+                //$(".userName").focus();
+                $(".loginBt .loginIn").html("登 &nbsp; 陆").attr("onclick", "logintest();");
+            }
+        })
+    }
+</script>*@
+ @* @if (Model.IsVerifyCode)
+  { 
+  <dl>
+      <dt>验证码</dt>
+      <dd><input type="text" name="verifyCode" autocomplete="off" class="YZM text left" maxlength="4" /><img id="verifyImage" style="cursor:hand" title="点击刷新验证码" onclick="this.src='/tool/verifyimage?time=' + new Date()" src="/tool/verifyimage" height="34" class="left" /><div class="clear"></div></dd>
+  </dl>
+  }*@
+  
+  <div class="loginBt">
+    @if (Model.IsRemember)
+    {
+        <label><input name="isRemember" type="checkbox" style="vertical-align:-2px; margin-right:3px;" value="1" />自动登陆 &nbsp; &nbsp; </label>
+    }
+        <a href="@Url.Action("findpwd")">忘记密码?</a>
+        <a href="javascript:void(0)" class="redBT loginIn" >登 &nbsp; 陆</a>
+  </div>
+  </form>
+</div>
+<div class="clear"></div> 
+</div>
+

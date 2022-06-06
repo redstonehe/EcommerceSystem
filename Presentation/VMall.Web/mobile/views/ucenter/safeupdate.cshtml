@@ -1,0 +1,154 @@
+﻿@model VMall.Web.Mobile.Models.SafeUpdateModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "账户安全";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ucenter.safe.js?v=201609" type="text/javascript"></script>
+<script>
+    function timeCheckForUpdateMobileVoice(n, o) {
+        var t = n;
+        if (n == 0) {
+            $(o).find("a").css("color", "#008cff");
+            $(o).attr("onclick", "confirm" + "VoiceCode()");
+            window.location.href = window.location.href;
+            n = t;
+        } else {
+            n--;
+            $(o).find("span").html('&nbsp;' + n + '&nbsp; S');
+            setTimeout(function () {
+                timeCheckForUpdateMobileVoice(n, o);
+            }, 1000);
+        }
+    }
+
+    //发送更新手机确认语音
+    function confirmVoiceCode() {
+        var updateMobileForm = document.forms["updateMobileForm"];
+
+        var v = updateMobileForm.elements["v"].value;
+        var mobile = updateMobileForm.elements["mobile"].value;
+
+        if (mobile.length == 0) {
+            alert("请输入手机号");
+            return;
+        }
+
+        Ajax.post("/mob/ucenter/SendUpdateMobileVoice?v=" + v, { 'mobile': mobile }, false, function (data) {
+            var result = eval("(" + data + ")");
+            if (result.state == "success") {
+                $("#sendSuccess").show();
+                $(".voice-code").attr("onclick", "javascript:void(0);").find("a").css("color", "gray");
+                timeCheckForUpdateMobileVoice(120, $(".voice-code"));
+
+            } else {
+                alert(result.content)
+            }
+        })
+    }
+</script>
+
+<div class="userForm">
+
+    <div class="userFormT">
+        <ul>
+            <li class="T1"><span >1</span></li>
+            <li class="Tline"><strong></strong></li>
+            <li class="T2"><span class="hot">2</span></li>
+        </ul>
+    </div>
+
+    <div class="userFormT" style="padding: 0 20px;">
+        <ul>
+            <li style="width: 96px;">身份验证</li>
+            <li>&nbsp;</li>
+            <li style="width: 96px; text-align: right;">修改安全信息</li>
+        </ul>
+    </div>
+
+    <div class="userFormC">
+        @if (Model.Action == "updatepassword")
+        {
+            <form name="updatePasswordForm" action="">
+                <input type="hidden" name="v" value="@Model.V"/>
+                <div class="con">
+                    <input type="password" name="password" class="text" placeholder="新密码" />
+                </div>
+                <div class="con">
+                    <input type="password" name="confirmPwd" class="text" placeholder="确认密码" />
+                </div>
+
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con">
+                    <span style="color: red;">*&nbsp;密码最好包含大小字母、数字以及符号组成，且长度必须在6～16个字符之间，过于简单的密码会增加帐号被他人盗用的风险！</span>
+                </div>
+                <div class="con"><a href="javascript:updatePassword()" class="redBt formSub">提交</a></div>
+            </form>
+        }
+        else if (Model.Action == "updatemobile")
+        {
+            <form name="updateMobileForm" action="">
+                <input type="hidden" name="v" value="@Model.V"/>
+                <div class="con">
+                    <input type="text" name="mobile" class="text" placeholder="新手机号" maxlength="11" />
+                </div>
+                <div class="tip">
+                    <a href="javascript:sendUpdateMobile()" class="redBt sendMobileCode">获取短信验证码</a>
+                    <a style="margin: 10px; color: red; display: none;" id="sendSuccess">发送成功，验证码5分钟内有效</a>
+                </div>
+                @*<div class="con">
+                    <p style="color: gray; cursor: pointer;" class="voice-code" onclick="confirmVoiceCode();">
+                        短信验证码收不到？试试<a href="javascript:;" style="color: #008cff; text-decoration: none;">语音验证码</a>
+                        <span style="color: red;"></span>
+                    </p>
+                </div>*@
+                <div class="con">
+                    <input type="text" name="moibleCode" class="text" placeholder="短信验证码" />
+                </div>
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con"><a href="javascript:updateMobile()" class="redBt formSub">提交</a></div>
+            </form>
+        }
+        else if (Model.Action == "updateemail")
+        {
+            <form name="updateEmailForm" action="">
+                <input type="hidden" name="v" value="@Model.V"/>
+                <div class="con">
+                    <input type="text" name="email" class="text" placeholder="新邮箱" />
+                </div>
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con"><a href="javascript:sendUpdateEmail()" class="redBt formSub">提交</a></div>
+            </form>
+        }
+        @if (Model.Action == "updatepaypassword")
+        {
+            <form name="updatePasswordForm" action="">
+                <input type="hidden" name="v" value="@Model.V"/>
+                <div class="con">
+                    <input type="password" name="password" class="text" placeholder="新密码" />
+                </div>
+                <div class="con">
+                    <input type="password" name="confirmPwd" class="text" placeholder="确认密码" />
+                </div>
+
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con">
+                    <span style="color: red;">*&nbsp;密码最好包含大小字母、数字以及符号组成，且长度必须在6～16个字符之间，过于简单的密码会增加帐号被他人盗用的风险！</span>
+                </div>
+                <div class="con"><a href="javascript:updatePayPassword()" class="redBt formSub">提交</a></div>
+            </form>
+        }
+    </div>
+
+</div>
+

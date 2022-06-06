@@ -1,0 +1,337 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "和治友德旗舰店";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+
+<link href="@{@WorkContext.CSSCDN}/mobile/css/home.css?aaaa" rel="stylesheet" type="text/css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="/mobile/css/swiper.min.css">
+<!-- Swiper JS -->
+<script src="/mobile/scripts/swiper.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/mobile/css/jquery.bxslider.css" />
+
+<script type="text/javascript" src="/mobile/scripts/jquery.bxslider.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/mobile/css/subindex.css" />
+<script>
+    window.onload = function () {
+        $(".slider").css("height", $(".sliderBox ul li").css("height"));
+    };
+
+    $(function(){
+        var a=$(".gprolist li a img").width();
+        $(".gprolist li a img").css("height", a);
+    });
+</script>
+<script>
+    window.onload = function () {
+        var $input = $('#keyword'), $wordList = $('#word-list2');
+        $input.on('input', function () {
+            var $val = $(this).val();
+
+            if ($.trim($val).length <= 0)
+                return;
+            setTimeout(function () {
+                $.ajax({
+                    type: 'get',
+                    cache: false,
+                    url: '/home/SearchWordTips',
+                    dataType: 'json',
+                    data: { word: $val },
+                    success: function (data) {
+                        $wordList.html('');
+                        //alert(data);
+                        if (data.length > 0) {
+                            var showLent = data.length;
+                            console.log(showLent);
+                            for (var i = 0 ; i < showLent; i++) {
+                                console.log(data[i].Keyword);
+                                var oList = document.createElement('li');
+                                var htmlText = '<a target="_blank" href="/mob/catalog/search?keyword=' + data[i].Keyword + '">' + data[i].Keyword + '</a>';
+                                oList.innerHTML = htmlText;
+                                $wordList[0].appendChild(oList);
+                            }
+                            $wordList.show();
+                        } else {
+                            $wordList.hide();
+                        }
+                    }
+                })
+            }, 1000);
+        });
+        
+    }
+</script>
+<div class="headerBar">
+
+    <div class=" topsearch" style="width: 100%">
+        <div class="cate-icon"><a href="/mob/category/list?chId=1"></a></div>
+        <div class="search-textfile">
+            <a href="javascript:mallSearch(document.getElementById('keyword').value)" class="searchBt"></a>
+            <input autocomplete="off" name="keyword" id="keyword" class="searchText">
+        </div>
+        <div class="clear"></div>
+        <ul id="word-list2">
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="homeBanner floor">
+    @{
+        BannerInfo[] bannerList = Banners.GetHomeBannerList(4).OrderBy(x => x.DisplayOrder).ToArray();
+    }
+    <div class="sliderBox">
+        <ul class="slider" id="bannerImgList" style="height: auto;">
+            @foreach (BannerInfo info in bannerList)
+            {
+                <li><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"></a></li>
+            }
+        </ul>
+        @if (bannerList.Length > 1)
+        {
+            <script type="text/javascript">
+                        
+                $(function () {
+                    var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                    var liList = document.getElementById("bannerImgList").getElementsByTagName("li");
+
+
+                    for (var i = 0; i < liList.length; i++) {
+                        liList[i].style.width = width + "px";
+                    }
+                    $('#bannerImgList').bxSlider({
+                        auto: true,
+                        mode: 'horizontal',
+                        //speed:5000,
+                        autoHover: true,
+                        pause: 5000,
+                        controls: false,
+                        autoControls: false,
+                    });
+                });
+                </script>
+        }
+        else
+        {
+            <div class="bannerBt" id="bannerTabList">
+                @for (int i = 0; i < bannerList.Length; i++)
+                {
+                    <span class="point @if (i == 0)
+                                       {<text>hot</text>}"></span> 
+                }
+            </div>
+            <script type="text/javascript">
+                //首页切换图片需要计算：根据当前分辨率计算每个图片的宽度赋值给li（图片是根据li的宽度自适应的）
+                var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                var liList = document.getElementById("bannerImgList").getElementsByTagName("li");
+                var spanList = document.getElementById("bannerTabList").getElementsByTagName("span");
+                $(".slider").css("height",$(".sliderBox").css("height"));
+                for (var i = 0; i < liList.length; i++) {
+                    liList[i].style.width = width + "px";
+                }
+                //banner滚动
+                var bannerImgIndex = 0;
+                var bannerImgCount = @bannerList.Length;
+                if(bannerImgCount > 1) {
+                    window.setInterval(function () {
+                        if (bannerImgIndex == (bannerImgCount - 1)) {
+                            bannerImgIndex = 0;
+                        }
+                        else {
+                            bannerImgIndex += 1;
+                        }
+                        for (var i = 0; i < liList.length; i++) {
+                            liList[i].style.display = "none";
+                            liList[i].setAttribute("type","nocheck");
+                        }
+                        for (var i = 0; i < spanList.length; i++) {
+                            spanList[i].className = "point";
+                        }
+                        liList[bannerImgIndex].style.display = "block";
+                        liList[bannerImgIndex].setAttribute("type","check");
+                        spanList[bannerImgIndex].className = "point hot";
+                    }, 3000)
+                }
+            </script>
+        }
+    </div>
+
+</div>
+<nav class="m-hg-nav">
+
+    <a href="/mob/channel/1-0-122-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/fohow_subindex/icon_fohow_bjsp.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">保健食品</div>
+    </a>
+    <a href="/mob/channel/1-0-170-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/fohow_subindex/icon_fohow_mzgh.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">美妆个护</div>
+    </a>
+    <a href="/mob/channel/1-0-177-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/fohow_subindex/icon_fohow_jjry.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">居家日用</div>
+    </a>
+    <a href="/mob/channel/1-0-183-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/fohow_subindex/icon_fohow_txnl.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">特效能量</div>
+    </a>
+    
+</nav>
+@*//}*@
+
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/1-0-122-0-0-0-0-1-1.html'">保健食品</h2>
+    <a href="/mob/channel/1-0-122-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/1-0-122-0-0-0-0-1-1.html">
+            <img src="/mobile//images/fohow_subindex/cate_fohow_bjsp.png" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @{
+                List<AdvertInfo> floor1 = Adverts.GetAdvertList(102).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor1)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/1-0-170-0-0-0-0-1-1.html'">美妆个护</h2>
+    <a href="/mob/channel/1-0-170-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/1-0-170-0-0-0-0-1-1.html">
+            <img src="/mobile/images/fohow_subindex/cate_fohow_mzgh.png" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+           
+            @{
+                List<AdvertInfo> floor2 = Adverts.GetAdvertList(103).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor2)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/1-0-177-0-0-0-0-1-1.html'">居家日用</h2>
+    <a href="/mob/channel/1-0-177-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+       
+        <a href="/mob/channel/1-0-177-0-0-0-0-1-1.html">
+            <img src="/mobile/images//fohow_subindex/cate_fohow_jjry.png" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @{
+                List<AdvertInfo> floor3 = Adverts.GetAdvertList(104).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor3)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/1-0-183-0-0-0-0-1-1.html'">特效能量</h2>
+    <a href="/mob/channel/1-0-183-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/1-0-183-0-0-0-0-1-1.html">
+            <img src="/mobile/images/fohow_subindex/cate_fohow_txnl.png" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+           
+            @{
+                List<AdvertInfo> floor4 = Adverts.GetAdvertList(105).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor4)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+

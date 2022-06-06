@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    
+    @{var sourceFolder = "/admin_mall/static";}
+    <link href="/admin_mall/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/admin_mall/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/admin_mall/static/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="/admin_mall/static/plugins/tab/css/style.min.css" rel="stylesheet" />
+    <link href="/admin_mall/static/css/AdminLTE.css" rel="stylesheet" />
+    <link href="/admin_mall/static/css/skins/skin-blue.css" rel="stylesheet" />
+    <link href="/admin_mall/static/nprogress.css" rel="stylesheet" />
+    <style type="text/css">
+        body,
+        body.full-height-layout div.wrapper,
+        html {
+            height: 100%;
+        }
+
+            body.full-height-layout div.content-wrapper {
+                height: calc(100% - 140px);
+            }
+
+            body.full-height-layout div#J_mainContent {
+                height: calc(100% - 40px);
+            }
+    </style>
+    <script src="@sourceFolder/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="/admin_mall//scripts/version2new.js"></script>
+
+    <script src="@sourceFolder/bootstrap/js/bootstrap.min.js"></script>
+    <script src="@sourceFolder/plugins/tab/js/contabs.js"></script>
+    <script src="@sourceFolder/plugins/layer/layer.js"></script>
+    <script src="@sourceFolder/js/app.js"></script>
+    <script src="@sourceFolder/nprogress.js"></script>
+
+    
+
+
+    @RenderSection("header", false)
+</head>
+<body style="overflow-x: hidden;">
+    @RenderSection("body")
+    
+</body>
+</html>

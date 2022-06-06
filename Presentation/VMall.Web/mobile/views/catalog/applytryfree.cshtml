@@ -1,0 +1,308 @@
+﻿@model VMall.Web.Mobile.Models.ApplyTryFreeModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "申请免费试用";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+
+<style>
+    #apply .text {
+        width: 200px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+    #apply select {
+        width: 108px;
+        height: 30px;
+    }
+
+    #addShipAddressBlock {
+        margin: 0 auto;
+        text-align: center;
+        width: 500px;
+    }
+
+    #addreddList {
+        margin-left: 20px;
+    }
+    html body .reg .regBt {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    display: block;
+    text-align: center;
+    width: 270px;
+    padding: 7px 0;
+    font-weight: normal;
+    margin-top: 10px;
+}
+html body .redBT {
+    padding: 1px 10px;
+    background: #D02424;
+    color: #FFF;
+    border: 1px solid #9F1F24;
+}
+    .showform div {
+    text-align:left;padding-left:5px;}
+</style>
+<script>
+    function userNewAdd() {
+        $("#addShipAddressBlock").show();
+        //$("#addreddList").hide();
+        $("#addreddList ul li input").attr("checked", false);
+
+    }
+    function userOldAdd() {
+        $("#addShipAddressBlock").hide();
+        //$("#addreddList").show();
+        $("#addreddList ul li input[data-isdef='1']").attr("checked", "checked");
+    }
+
+    function clicksiglnadd() {
+        $("#apply input[name='useAddress']").eq(0).attr("checked", "checked");
+    }
+
+    //$(function () {
+    //    if ($("input[name='useAddress']:checked").val() == "1") {
+    //        $("input[name='addressid']").bind("click", function () {
+    //            alert(11);
+    //        });
+    //    }
+
+    //});
+    @*$(function () {
+        var adderssCount=@(Model.shipAddress.Count);
+    });*@
+    function CheckInput() {
+        var useType = $('input:radio[name="useAddress"]:checked').val();
+        if (useType == 1) {//使用新地址，检查用户输入
+            if ($.trim($("#consignee").val()) == "") {
+                alert("联系人姓名不能为空");
+                $("#consignee").focus();
+                return false;
+            }
+            if ($.trim($("#provinceId").val()) < 0) {
+                alert('对不起,请选择省,谢谢!');
+                $("#provinceId").focus();
+                return false;
+            }
+            if ($("#cityId")[0].length > 1 && $("#cityId").val() < 0) {
+                alert('对不起,请选择市,谢谢!');
+                $("#cityId").focus();
+                return false;
+            }
+            if ($("#regionId")[0].length > 1 && $("#regionId").val() < 0) {
+                alert('对不起,请选择区,谢谢!');
+                $("#regionId").focus();
+                return false;
+            }
+            if ($.trim($("#address").val()) == "") {
+                alert("详细地址不能为空");
+                $("#address").focus();
+                return false;
+            }
+
+            if ($.trim($("#mobile").val()) == "") {
+                alert("请输入电话号码");
+                $("#mobile").focus();
+                return false;
+            }
+            var mobile = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+            if (!mobile.test($.trim($("#mobile").val()))) {
+                alert('对不起,您输入的手机号码格式错误,请重新输入,谢谢!');
+                $("#mobile").focus();
+                return false;
+            }
+            return true;
+        }
+        else {
+            if ($("#addreddList ul li input[checked='checked']").length < 1) {
+                alert('请选择已有地址列表或者使用新的地址,谢谢!');
+                return false;
+            }
+            return true;
+        }
+    }
+
+    function applyNow($this) {
+        if (CheckInput()) {
+
+            var pid = parseInt($("#pid").val());
+            var useAddress = parseInt($("input[name='useAddress']:checked").val());
+
+            var addressid = 0;
+            if (useAddress == "0") {
+                addressid = parseInt($("input[name='addressid']:checked").val());
+            }
+            var consignee = $("#consignee").val();
+
+            var mobile = $("#mobile").val();
+            var regionId = parseInt($("#regionId").val());
+            var address = $("#address").val()
+
+            $($this).html("正在提交...").css("color", "red").removeAttr("onclick");
+            $.ajax({
+                type: "POST",
+                url: "/Catalog/ApplyTryFree?r=" + Math.random(),
+                //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data: { pid: pid, useAddress: useAddress, addressid: addressid, consignee: consignee, mobile: mobile, regionId: regionId, address: address },//int pid, int useAddress, int addressid, string consignee, string mobile, int regionId, string address
+                success: function (result) {
+
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+
+                        alert(result.content);
+                        var userAgent = navigator.userAgent;
+                        if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Presto") != -1) {
+                            window.location.replace("about:blank");
+                        } else {
+                            window.opener = null;
+                            window.open("", "_self");
+                            window.close();
+                        }
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+
+        }
+    }
+    //展示验证错误
+    function showVerifyError(verifyErrorList) {
+        if (verifyErrorList != undefined && verifyErrorList != null && verifyErrorList.length > 0) {
+            var msg = "";
+            for (var i = 0; i < verifyErrorList.length; i++) {
+                msg += verifyErrorList[i].msg + "\n";
+            }
+            alert(msg)
+        }
+    }
+
+</script>
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+@*<script type="text/javascript" src="@{@WorkContext.ScriptCDN}/scripts/order.js"></script>*@
+<script type="text/javascript" src="@{@WorkContext.ScriptCDN}/mobile/scripts/region.js"></script>
+<div id="apply" style="width: auto;max-width：640px;min-width:300px; margin: 0 auto;" class="reg">
+    <div style="text-align: center; margin: 0 auto; width: 500px" class="showform">
+        <form name="addShipAddressForm" id="applyForm" onsubmit="return false;">
+            <input type="hidden" id="pid" name="pid" value="@ViewData["pid"]" />
+            <div @(Model.shipAddress.Count > 0 ? "" : "style='display:none;'")>
+                <input type="radio" name="useAddress" value="0" @(Model.shipAddress.Count > 0 ? "checked='checked'" : "")  onclick="userOldAdd();" />选择地址
+            </div>
+            @if (Model.shipAddress.Count > 0)
+            {
+                <div id="addreddList">
+                    <ul>
+                        @foreach (var item in Model.shipAddress)
+                        {
+                            <li>
+                                <input type="radio" name="addressid" value="@item.SAId" @(item.IsDefault == 1 ? "checked='checked'" : "") data-isdef="@item.IsDefault" onclick="clicksiglnadd();" />@item.Consignee @item.Mobile @item.ProvinceName - @item.CityName - @item.CountyName @item.Address</li>
+                        }
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" name="addressid" value="-1" />
+            }
+
+            <div>
+                <input type="radio" name="useAddress" value="1" @(Model.shipAddress.Count > 0 ? "" : "checked='checked'") onclick="userNewAdd();" />使用新地址
+            </div>
+            <div style="margin: 0 auto; text-align: center;">
+                <div id="addShipAddressBlock" @(Model.shipAddress.Count > 0 ? "style='display:none;'" : "")>
+
+                    <div>
+                        <div class="shrCell">
+                            <span><em>*</em>姓名：</span>
+                            <div class="cellCon">
+                                <input type="text" id="consignee" name="consignee" value="" class="text" />
+                            </div>
+                            @*<div class="error">请您填写收货人姓名</div>*@
+                        </div>
+
+                        <div class="shrCell">
+                            <span><em>*</em>所在地区：</span>
+                            <div class="cellCon">
+                                <select id="provinceId">
+                                    <option selected="selected" value="-1">请选择</option>
+                                </select>
+                                <select id="cityId">
+                                    <option selected="selected" value="-1">请选择</option>
+                                </select>
+                                <br />
+                                <select id="regionId">
+                                    <option selected="selected" value="-1">请选择</option>
+                                </select>
+                                @*<i>标“*”的为支持货到付款的地区,<a href="#">查看货到付款地区</a></i>*@
+                            </div>
+                        </div>
+
+                        <div class="shrCell">
+                            <span><em>*</em>详细地址：</span>
+                            <div class="cellCon">
+                                <input type="text" id="address" name="address" value="" class="text" />
+                            </div>
+                        </div>
+
+                        <div class="shrCell">
+                            <span><em>*</em>手机号码：</span>
+                            <div class="cellCon">
+                                <input type="text" id="mobile" name="mobile" value="" class="text" maxlength="11" /><br />
+                                @*&nbsp;&nbsp;或 &nbsp;&nbsp;固定电话：<br />
+                                <input type="text" id="phone" name="phone" value="" class="text" />*@
+                            </div>
+                            <span style="color: #99999C;">&nbsp;&nbsp;请务必保留有效的联系方式</br>便于销售人员与您及时取得联系</span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="shrBT">
+                    <a href="javascript:void(0)" onclick="applyNow(this)" class="regBt redBT">立即申请</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>

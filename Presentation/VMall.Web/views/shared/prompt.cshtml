@@ -1,0 +1,14 @@
+﻿@model VMall.Web.Framework.PromptModel
+@{
+    Layout = "~/views/shared/_layout.cshtml";
+    ViewBag.Title = "消息提示-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 0;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 0;
+}
+
+<div class="box">
+<div class="prompt">
+    @Html.Raw(Model.Message)
+</div>
+</div>
+

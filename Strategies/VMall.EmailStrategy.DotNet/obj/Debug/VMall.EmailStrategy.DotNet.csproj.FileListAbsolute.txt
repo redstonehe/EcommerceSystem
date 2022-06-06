@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.EmailStrategy.DotNet.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.EmailStrategy.DotNet.pdb
+C:\develop\德鹿商城\Strategies\VMall.EmailStrategy.DotNet\obj\Debug\VMall.EmailStrategy.DotNet.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Strategies\VMall.EmailStrategy.DotNet\obj\Debug\VMall.EmailStrategy.DotNet.dll
+C:\develop\德鹿商城\Strategies\VMall.EmailStrategy.DotNet\obj\Debug\VMall.EmailStrategy.DotNet.pdb

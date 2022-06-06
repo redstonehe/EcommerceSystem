@@ -1,0 +1,65 @@
+﻿@model VMall.Web.Mobile.Models.StoreSearchModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.Word + "-" + WorkContext.StoreInfo.Name;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 7;
+}
+
+<div class="storeSearch">
+    <div>
+        <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })"><i class="icon-volume @if (Model.SortColumn == 0)
+                                                                                                                                                                                                                                  { <text>on</text>}"></i><span>相关</span></a>
+    </div>
+    <div>
+        <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "sortColumn", 1 }, { "sortDirection", 0 }, { "page", 1 } })"><i class="icon-price @if (Model.SortColumn == 1)
+                                                                                                                                                                                                                                 { <text>on</text>}"></i><span>销量</span></a>
+    </div>
+    <div>
+        <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "sortColumn", 3 }, { "sortDirection", 0 }, { "page", 1 } })"><i class="icon-new @if (Model.SortColumn == 3)
+                                                                                                                                                                                                                               { <text>on</text>}"></i><span>评价</span></a>
+    </div>
+</div>
+
+
+<div class="storeI">
+    <ul class="storeList">
+
+        @foreach (PartProductInfo info in Model.ProductList)
+        {
+            <li><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">
+                <div class="img">
+                    <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg"></div>
+                <div class="p-info">@info.Name</div>
+                <div class="price">¥@info.ShopPrice</div>
+            </a></li>
+        }
+
+    </ul>
+</div>
+
+<div class="storeI" style="margin-bottom: 20px;">
+    <div class="pagination">
+        <a href="javascript:;" class="page-num">@if (Model.PageModel.TotalPages > 0)
+                                                {@Model.PageModel.PageNumber}
+                                                else
+                                                {<text>0</text>}/@Model.PageModel.TotalPages</a>
+        @if (Model.PageModel.HasPrePage)
+        { 
+            <a class="last" href = "@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.PrePageNumber } })">上一页</a>
+        }
+        else
+        {
+            <a class="last" href="javascript:;">上一页</a>
+        }
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a class="next" href = "@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.NextPageNumber } })">下一页</a>
+        }
+        else
+        {
+            <a class="next" href="javascript:;">下一页</a>
+        }
+    </div>
+</div>
+

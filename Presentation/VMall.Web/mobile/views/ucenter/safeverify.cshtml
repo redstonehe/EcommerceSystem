@@ -1,0 +1,156 @@
+﻿@model VMall.Web.Mobile.Models.SafeVerifyModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    var showTitle = string.Empty;
+    if (Model.Action == "updatepassword")
+    {
+        showTitle = "修改密码";
+    }
+    else if (Model.Action == "updateemail")
+    {
+        showTitle = "绑定邮箱";
+    }
+    else if (Model.Action == "updatemobile") { showTitle = "修改手机"; }
+    ViewBag.SubTitle = showTitle;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ucenter.safe.js?v=201609" type="text/javascript"></script>
+<script>
+    function timeCheckForSafeVerifyVoice(n, o) {
+        var t = n;
+        if (n == 0) {
+            $(o).find("a").css("color", "#008cff");
+            $(o).attr("onclick", "confirm" + "VoiceCode()");
+            window.location.href = window.location.href;
+            n = t;
+
+        } else {
+            n--;
+            $(o).find("span").html('&nbsp;' + n + '&nbsp; S');
+            setTimeout(function () {
+                timeCheckForSafeVerifyVoice(n, o);
+            }, 1000);
+        }
+    }
+
+    //发送验证手机短信
+    function confirmVoiceCode() {
+
+        Ajax.get("/mob/ucenter/SendVerifyMobileVoice", false, function (data) {
+            var result = eval("(" + data + ")");
+            if (result.state == "success") {
+                $("#sendSuccess").show();
+                $(".voice-code").attr("onclick", "javascript:void(0);").find("a").css("color", "gray");
+                timeCheckForSafeVerifyVoice(120, $(".voice-code"));
+
+            } else {
+                alert(result.content)
+            }
+        })
+    }
+</script>
+
+<div class="userForm">
+
+    <div class="userFormT">
+        <ul>
+            <li class="T1"><span class="hot">1</span></li>
+            <li class="Tline"><strong></strong></li>
+            <li class="T2"><span>2</span></li>
+        </ul>
+    </div>
+
+    <div class="userFormT" style="padding: 0 20px;">
+        <ul>
+            <li style="width: 96px;">身份验证</li>
+            <li>&nbsp;</li>
+            <li style="width: 96px; text-align: right;">修改安全信息</li>
+        </ul>
+    </div>
+
+    <div class="userFormC">
+        @if (Model.Mode == "password")
+        {
+            if (WorkContext.PartUserInfo.IsDirSaleUser && Model.Action == "updatepassword")
+            { 
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改密码，请联系客服</div>
+            }
+            else if (WorkContext.IsDirSaleUser && Model.Action == "updatepaypassword")
+            {
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改支付密码，请联系客服</div>
+            }
+            else
+            {
+            <form name="verifyPasswordForm" action="">
+                <input type="hidden" name="act" value="@Model.Action"/>
+                <div class="con hide" >
+                    <input type="password" name="password" class="text" placeholder="请输入登陆密码" value="123"/>
+                </div>
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con"><a href="javascript:verifyPassword()" class="redBt formSub">下一步</a></div>
+            </form>
+            }
+        }
+        else if (Model.Mode == "mobile")
+        {
+            if (WorkContext.PartUserInfo.IsDirSaleUser && Model.Action == "updatepassword")
+            { 
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改密码，请联系客服</div>
+            }
+            else if (WorkContext.IsDirSaleUser && Model.Action == "updatepaypassword")
+            {
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改支付密码，请联系客服</div>
+            }
+            else
+            {
+            <form name="verifyMobileForm" action="">
+                <input type="hidden" name="act" value="@Model.Action"/>
+                <div class="info">已验证手机：@Html.Raw(string.IsNullOrEmpty(WorkContext.UserMobile) ? "" : CommonHelper.HideMobile(WorkContext.UserMobile))</div>
+                <div class="tip">
+                    <a href="javascript:sendVerifyMobile()" class="redBt sendMobileCode">获取短信验证码</a>
+                    <a style="margin: 10px; color: red; display: none;" id="sendSuccess">发送成功，验证码5分钟内有效</a>
+                </div>
+                @*<div class="con">
+                    <p style="color: gray; cursor: pointer;" class="voice-code" onclick="confirmVoiceCode();">
+                        短信验证码收不到？试试<a href="javascript:;" style="color: #008cff; text-decoration: none;">语音验证码</a>
+                        <span style="color: red;"></span>
+                    </p>
+                </div>*@
+                <div class="con">
+                    <input type="text" name="moibleCode" class="text" placeholder="请填写短信验证码" />
+                </div>
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con"><a href="javascript:verifyMobile()" class="redBt formSub">下一步</a></div>
+            </form>
+            }
+        }
+        else if (Model.Mode == "email")
+        {
+            if (WorkContext.PartUserInfo.IsDirSaleUser && Model.Action == "updatepassword")
+            { 
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改密码，请联系客服</div>
+            }
+            else if (WorkContext.IsDirSaleUser && Model.Action == "updatepaypassword")
+            {
+            <div class="con" style="text-align: center; font-size: 18px">该帐号不支持修改支付密码，请联系客服</div>
+            }
+            else
+            {
+            <form name="sendVerifyEmailForm" action="">
+                <input type="hidden" name="act" value="@Model.Action"/>
+                <div class="info">已验证邮箱：@Html.Raw(string.IsNullOrEmpty(WorkContext.UserEmail) ? "" : CommonHelper.HideEmail(WorkContext.UserEmail))</div>
+                <div class="con">
+                    <input type="text" name="verifyCode" class="text" style="width: 76%; float: left;" placeholder="请输入图片验证码" /><img onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" src="/mob/tool/verifyimage" style="width: 20%; float: right; height: 26px;" /><div class="clear"></div>
+                </div>
+                <div class="con"><a href="javascript:sendVerifyEmail()" class="redBt formSub">下一步</a></div>
+            </form>
+            }
+        }
+    </div>
+
+</div>

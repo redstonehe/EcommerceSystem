@@ -1,0 +1,35 @@
+﻿@model VMall.Web.Mobile.Models.DrawCashHistoryModel
+@foreach (var info in Model.HistoryList)
+{
+    <tr>
+        <td>@info.DrawCashSN</td>
+        <td>@info.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+        <td>@info.Amount.ToString("0.00")</td>
+        <td>@info.TaxAmount.ToString("0.00")</td>
+        <td>@info.Poundage.ToString("0.00")</td>
+        <td>@info.ActualAmount.ToString("0.00")</td>
+        <td>@info.BankName :
+            <br />
+            @(info.BankCardCode.Substring(0, 3) + "****" + info.BankCardCode.Substring(info.BankCardCode.Length - 3, 3))</td>
+        <td>
+            @if (info.State == 0)
+            {  
+                @:处理失败，已撤销
+                                }
+            else if (info.State == 1)
+            {
+                @:等待处理 
+                                    }
+            else if (info.State == 2)
+            { 
+                @:处理成功
+                                    }
+        </td>
+        <td>
+            @info.Result
+        </td>
+    </tr>
+}
+<script>
+    detailhasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>

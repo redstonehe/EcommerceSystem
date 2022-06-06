@@ -1,0 +1,72 @@
+﻿@model VMall.Web.MallAdmin.Models.CashCouponModel
+@section header{
+    <title>添加汇购卡</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 添加汇购卡
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                <tr>
+                    <td width="76px" align="right">会员：</td>
+                    <td width="300px">
+                        @Html.TextBoxFor(x => x.UserName, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.UserName)
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                    <td style="color:red;">会员名为直销账号并且必须在商城登陆过才为有效用户名</td>
+                </tr>
+                <tr>
+                    <td align="right">面值：</td>
+                    <td> 
+                          @Html.TextBoxFor(x => x.CashAmount, new { @class = "input", size = "35"})@Html.ValidationMessageFor(x => x.CashAmount)
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="right">购买时间：</td>
+                    <td>@Html.TextBoxFor(x => x.CreationDate, new { @class = "input", size = "35", onfocus = "WdatePicker({el:'CreationDate'})" })@Html.ValidationMessageFor(x => x.CreationDate)
+                         
+                    </td>
+                </tr>
+                 
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

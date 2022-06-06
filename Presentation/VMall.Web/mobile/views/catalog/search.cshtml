@@ -1,0 +1,299 @@
+﻿@model VMall.Web.Mobile.Models.MallSearchModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.Word + " - 商城搜索";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+
+<div class="searchBox topsearch">
+    <div class="newSearch">
+        <input type="text" id="keyword" name="keyword" class="new-srch-input" value="@WorkContext.SearchWord" style="color:#999999;"><a href="javascript:document.getElementById('keyword').value=''" target="_self" class="new-s-close"></a><a href="javascript:mallSearch(document.getElementById('keyword').value);" target="_self" class="new-s-srch"><span></span></a>
+        <ul id="word-list2"></ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function closeSelectR() {
+        document.getElementById("filterBlock1").style.display = "none";
+        document.getElementById("filterBlock2").style.display = "none";
+        document.getElementById("filterBlock3").style.display = "none";
+    }
+    function filterBlockSH(type) {
+        if (type == 0) {
+            document.getElementById("filterBlock1").style.display = "none";
+            document.getElementById("filterBlock2").style.display = "none";
+            document.getElementById("filterBlock3").style.display = "none";
+        }
+        else {
+            document.getElementById("filterBlock1").style.display = "block";
+            document.getElementById("filterBlock2").style.display = "block";
+            document.getElementById("filterBlock3").style.display = "block";
+        }
+    }
+
+    function filterItemSH(obj) {
+        var divList1 = obj.parentNode.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList1.length; i++) {
+            divList1[i].style.display = "none";
+        }
+
+        var divList2 = obj.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList2.length; i++) {
+            divList2[i].style.display = "block";
+        }
+    }
+</script>
+<div class="proList">
+
+    @*<div class="new-tab-type">
+	<div class="new-tbl-type">
+        <a href="javascript:void(0)" class="new-tbl-cell on"><span class="new-bar"></span><span class="new-p-re">排序<span class="new-icon-down"></span></span></a>
+        <a href="javascript:filterBlockSH(1)" class="new-tbl-cell"><span class="new-bar"></span><span class="icon">筛选<span></span></span></a>            
+    </div>
+</div>*@
+
+    <div class="new-tab-type2" style="overflow: hidden; height: 34px">
+        <div class="new-tbl-type">
+            <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" class="new-tbl-cell w60"><span @(Model.SortColumn == 0 ? "class='on'" : "")>默认</span></a>
+
+            <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 1 ? "class='on'" : "")>销量
+                    @if (Model.SortColumn != 1)
+                    {
+                        <i class="icon_sort"></i>
+                    }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                    { 
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                    { 
+                        <i class="icon_sort_up"></i>
+                    }
+                </span></a>
+            <a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 2 ? "class='on'" : "")>价格
+                    @if (Model.SortColumn != 2)
+                    {
+                        <i class="icon_sort"></i>
+                    }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                    { 
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                    {  
+                        <i class="icon_sort_up"></i>
+                    }
+
+                </span></a>
+            @*<a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 3 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 3 ? "class='on'" : "")>评价
+             @if (Model.SortColumn != 3)
+             {
+                 <i class="icon_sort"></i>
+             }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 3)
+                    {  
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 3)
+                    {  
+                        <i class="icon_sort_up"></i>
+                    }
+                </span></a>*@
+            <a href="javascript:filterBlockSH(1)" class="new-tbl-cell w60"><span class="new-bar"></span><span class="icon">筛选<span></span></span></a>
+        </div>
+    </div>
+    @{
+        string pids = string.Join(",", Model.ProductList.Select(x => x.Pid));
+        List<SinglePromotionInfo> lsit = Promotions.GetVailiSingleListByPidsAndendTime(pids, DateTime.Now);
+    }
+    <div id="mallSearchProductListBlock">
+        @foreach (StoreProductInfo info in Model.ProductList)
+        {
+            bool ZJDiscount = false;
+            bool TJDiscount = false;
+            bool ZKJDiscount = false;
+            SinglePromotionInfo singleInfo = lsit.Find(x => x.Pid == info.Pid);
+            if (singleInfo != null)
+            {
+                if (singleInfo.DiscountType == 1 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZJDiscount = true;
+                }
+                if (singleInfo.DiscountType == 5 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    TJDiscount = true;
+                }
+                if (singleInfo.DiscountType == 0 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZKJDiscount = true;
+                }
+            }
+            <div class="proItme">
+                <a href="@Url.Action("product", new RouteValueDictionary { { "pid", info.Pid } })">
+                    <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg" width="100" height="100" class="img" />
+                    @if (ZKJDiscount)
+                    {
+                        <i class="zkj_icon"></i> 
+                    }
+                    @if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488 || info.Pid == 2796 || info.Pid == 2746))
+                    {
+                        <i class="chaozhi_99_icon"></i>
+              
+                    }
+                    <span class="proDt">
+                        <strong class="proDD DD1">@info.Name
+
+                        </strong>
+
+                        @if (ZJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(info.ShopPrice - singleInfo.DiscountValue) <i class="salewarn">降</i></b>
+@*
+            <b class="proDD DD3" style="color:#9C9A9C;font-size:20px;"><del>¥@info.ShopPrice</del></b>*@
+                        }
+                        else if (TJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(singleInfo.DiscountValue) <i class="salewarn">降</i></b>
+@*
+            <b class="proDD DD3" style="color:#9C9A9C;font-size:20px;"><del>¥@info.ShopPrice</del></b>*@
+                        }
+                        else if (ZKJDiscount)
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@(((double)(info.ShopPrice * singleInfo.DiscountValue) / 10.00).ToString("f2")) <i class="salewarn">降</i></b>
+@*
+            <b class="proDD DD3" style="color:#9C9A9C;font-size:20px;"><del>¥@info.ShopPrice</del></b>*@
+                        }
+                        else if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488 || info.Pid == 2796 || info.Pid == 2746))
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@info.ShopPrice  <i class="chaozhi_99 salewarn">99超值套餐</i></b>
+              
+                        }
+                        else
+                        {
+                            <b class="proDD DD3"><em class="f16">¥</em>@info.ShopPrice</b>}
+                        @*<p class="proDD DD4">@info.ReviewCount 人评价，@Html.Raw(info.GetStarLevel().ToString())%好评</p>*@
+                    </span>
+                </a>
+                @*<div class="ico"><a href="#">赠</a><a href="#" style="background:red;">减</a></div>*@
+            </div>
+        }
+    </div>
+    <div class="loading">
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a id="loadBut" href="javascript:getMallSearchProductList('@Model.Word',@Model.CateId,@Model.BrandId,@Model.FilterPrice,'@Model.FilterAttr',0,@Model.SortColumn,@Model.SortDirection,mspListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        else
+        {
+            <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        <div id="loadPrompt" style="display: none;" class="loadAnimate">
+            <p class="list-loading"><span></span>加载中...</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="filterBlock1" class="bg" style="display: none; position: absolute; left: 0px; top: 0px; background-color: rgb(13, 13, 13); filter: alpha(opacity=60); opacity: 0.6; width: 70%; height: 100%; z-index: 8888;" onclick="closeSelectR()"  ></div>
+<a id="filterBlock2" href="javascript:filterBlockSH(0)" class="new-abtn-slid" style="display: none; z-index: 8889; left: auto; right: 32%;"></a>
+<div id="filterBlock3" class="selectR" style="display: none;">
+    <ul>
+        @if (Model.FilterAttr.Length == 0)
+        {
+            if (Model.AAndVList.Count > 0)
+            {
+                StringBuilder attrRouteValue = new StringBuilder();
+                for (int i = 0; i < Model.AAndVList.Count; i++)
+                {
+                    attrRouteValue.Append("0-");
+                }
+                Model.FilterAttr = attrRouteValue.Remove(attrRouteValue.Length - 1, 1).ToString();
+            }
+            else
+            {
+                Model.FilterAttr = "0";
+            }
+        }
+
+        @if (Model.BrandList.Count > 0)
+        {
+            <li>
+                <a href="javascript:void(0)" onclick="filterItemSH(this)" class="dt">品牌</a>
+                <div class="selectCon">
+                    <ul>
+                        <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", 0 }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.BrandId == 0)
+                                                                                                                                                                                                                                                                                                                            { <text>class="on"</text>}><span>全部</span></a></li>
+                        @foreach (BrandInfo info in Model.BrandList)
+                        {
+                            <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", info.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.BrandId == info.BrandId)
+                                                                                                                                                                                                                                                                                                                                           {<text>class="on"</text>}><span>@info.Name</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+
+        @if (Model.CatePriceRangeList.Length > 0)
+        {
+            <li>
+                <a href="javascript:void(0)" onclick="filterItemSH(this)" class="dt">价格</a>
+                <div class="selectCon">
+                    <ul>
+                        <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", 0 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.FilterPrice == 0)
+                                                                                                                                                                                                                                                                                                                        { <text>class="on"</text>}><span>全部</span></a></li>
+                        @for (int i = 0; i < Model.CatePriceRangeList.Length; i++)
+                        {
+                            <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", Model.FilterAttr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", i + 1 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.FilterPrice == (i + 1))
+                                                                                                                                                                                                                                                                                                                                { <text>class="on"</text>}><span>@Model.CatePriceRangeList[i]</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+
+        @{
+            int order = 1;
+            string startStr;
+            string endStr;
+            string centerStr;
+            foreach (KeyValuePair<AttributeInfo, List<AttributeValueInfo>> item in Model.AAndVList)
+            {
+                if (item.Value.Count > 0)
+                {
+                    startStr = order != 1 ? Model.FilterAttr.Substring(0, StringHelper.IndexOf(Model.FilterAttr, order - 1) + 1) : "";
+                    endStr = order != Model.AAndVList.Count ? Model.FilterAttr.Substring(StringHelper.IndexOf(Model.FilterAttr, order)) : "";
+                    centerStr = StringHelper.TrimEnd(StringHelper.TrimStart(Model.FilterAttr, startStr), endStr);
+            <li>
+                <a href="javascript:void(0)" onclick="filterItemSH(this)" class="dt">@item.Key.Name</a>
+                <div class="selectCon">
+                    <ul>
+                        <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", startStr + "0" + endStr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (centerStr == "0")
+                                                                                                                                                                                                                                                                                                                                               { <text>class="on"</text>}><span>全部</span></a></li>
+                        @foreach (AttributeValueInfo info in item.Value)
+                        {
+                            <li><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", Model.Word }, { "filterAttr", startStr + info.AttrValueId + endStr }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (centerStr == info.AttrValueId.ToString())
+                                                                                                                                                                                                                                                                                                                                                                { <text>class="on"</text>}><span>@info.AttrValue</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </li>
+                }
+                order++;
+            }
+        }
+
+    </ul>
+</div>
+<script type="text/javascript">
+    //高度需要计算 .bg的高度 = 当前body的高度
+    document.getElementById("filterBlock1").style.height = document.body.scrollHeight + "px";
+    //document.getElementById("filterBlock3").style.height = document.body.scrollHeight + "px";
+</script>
+

@@ -1,0 +1,30 @@
+﻿<style>
+    .topAdv .close{position:absolute;right:0px;top:0px;background:#FFF;border:1px solid #DDD;display:block;width:20px;height:20px;line-height:16px;font-size:14px;text-align:center;/*background:#C2C2C2;*/color:#000}
+.topAdv .close:hover{background:#333}
+</style>
+@if (DateTime.Now<=new DateTime(2017,5,11))
+    {
+        <div id="topADBox" style="background:#fff;">
+            <div class="topAdv">
+                <a href="#">
+                    <img src="/images/mobtopadv.jpg" width="100%" height="80" alt=""/></a>
+                <a href="javascript:;" class="close" onclick="this.parentNode.style.display='none'">x</a>
+            </div>
+        </div>
+    }
+<header>
+  <div class="new-header">
+    <a href="javascript:pageBack()" class="new-a-back"><span>返回</span></a>
+    <h2 style="margin-top:0;">@ViewBag.SubTitle</h2>
+    <a href="javascript:navSH()" class="new-a-brn"><span>导航键</span></a> 
+  </div>
+  <div class="new-brn-tab" id="nav" style=" display:none;">
+    <div class="new-tbl-type"> 
+    <a href="@Url.Action("index", "home")" class="new-tbl-cell"><span class="icon">首页</span><p style="color:#6e6e6e;">首页</p></a> 
+    <a href="@Url.Action("list", "category")" class="new-tbl-cell"><span class="icon2 on">分类搜索</span><p style="color:#6e6e6e;" class="on">分类搜索</p></a> 
+    <a href="@Url.Action("index", "cart")" class="new-tbl-cell"><span class="icon3">购物车</span><p style="color:#6e6e6e;">购物车</p></a> 
+    <a href="@Url.Action("index", "ucenter")" class="new-tbl-cell"><span class="icon4 on">个人中心</span><p style="color:#6e6e6e;" class="on">个人中心</p></a> 
+    </div>
+  </div>
+</header>
+

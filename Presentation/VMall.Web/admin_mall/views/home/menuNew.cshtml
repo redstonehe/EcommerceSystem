@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+@*<script src="/admin_mall/js/jquery.min.js?v=2.1.4"></script>*@
+
+<script type="text/javascript">
+    document.write("<script src='/admin_mall/cache/menu/@{@WorkContext.MallAGid}.js?time=" + new Date() + "'></s" + "cript>")
+</script>
+<script type="text/javascript">
+    $(function () {
+        var menuLiList = "";
+        if (menuList != undefined && menuList != null && menuList.length > 0) {
+            for (var i = 0; i < menuList.length; i++) {
+               
+                if (i == 0) {
+                    menuLiList += "<li class='treeview'><a href='javascript:;'><i class='fa " + menuList[i].icon + "'></i><span>" + menuList[i].title + "</span> <span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span></a>";
+                }
+                else {
+                    menuLiList += "<li class='treeview'><a href='javascript:;'><i class='fa " + menuList[i].icon + "'></i><span>" + menuList[i].title + "</span> <span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span></a>";
+                }
+                menuLiList += "<ul class='treeview-menu'>";
+                for (var j = 0; j < menuList[i].subMenuList.length; j++) {
+                    menuLiList += "<li><a class='J_menuItem' data-content='content-info' href='" + menuList[i].subMenuList[j].url + "' data-iframe='true'>" + menuList[i].subMenuList[j].title + "</a></li>";
+                      
+                }
+                menuLiList += "</ul></li>";
+            }
+        }
+        if (menuLiList != "") {
+            $("#menu_start").after(menuLiList);
+        }
+        })
+</script>
+
+<script>
+    function openRight(ele) {
+        var url = $(ele).attr("data-url");
+        var title = $(ele).attr("data-title");
+        self.parent.frames["J_iframe"].addTab(url, title); //addTab(url, title);
+    };
+</script>

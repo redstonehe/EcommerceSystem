@@ -1,0 +1,137 @@
+﻿@model VMall.Web.Models.StoreSearchModel
+@{
+    Layout = "~/views/shared/_layout.cshtml";
+    ViewBag.Title = Model.Word + "-" + WorkContext.StoreInfo.Name + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 1;
+}
+
+@if (WorkContext.StoreInfo.Banner.Length > 0)
+{
+    <div id="DPbanner" style="zoom: 1; text-align: center; overflow: hidden;">
+        <a href="javascript:void(0)">
+            <img src="/upload/store/@WorkContext.StoreId/banner/@WorkContext.StoreInfo.Banner" width="1920" height="500" /></a>
+    </div>
+    <script type="text/javascript">
+        var storeBanner = document.getElementById("DPbanner");
+        var bannerImg = storeBanner.getElementsByTagName("img")[0];
+        var bodyW = document.body.offsetWidth;
+        var imgW = bannerImg.offsetWidth;
+        var imgH = bannerImg.offsetHeight;
+
+        if (bodyW <= imgW) {
+            storeBanner.style.width = bodyW + "px";
+            storeBanner.style.height = imgH + "px";
+            var aTag = storeBanner.getElementsByTagName("a")[0];
+            aTag.style.position = "absolute";
+            aTag.style.left = (-(imgW - bodyW) / 2) + "px";
+        }
+    </script>
+}
+
+@*@{
+    List<StoreClassInfo> storeClassList = Stores.GetStoreClassList(WorkContext.StoreId);
+}*@
+
+<div class="box1210" id="DP">
+    <div id="listL">
+
+        <div id="DPserach">
+            <div class="DPtitle">店内搜索</div>
+            <div class="storeseach">
+                关键字:
+    <input type="text" id="storeSearchKeyword" class="text searchinput" style="width: 168px" />
+                价格:
+    <input type="text" id="startPrice" class="text" style="" value="" />&nbsp;&nbsp;到&nbsp;&nbsp;
+    <input type="text" id="endPrice" class="text searchinput" style="" value="" />
+                <a href="javascript:void(0)" onclick="storeSearch(@WorkContext.StoreId, $('#storeSearchKeyword').val(),0,$('#startPrice').val(),$('#endPrice').val())" class="grayBT">搜&nbsp;&nbsp;索</a>
+                <a href="@Url.Action("index", new RouteValueDictionary { { "storeId", WorkContext.StoreId } })"  class="grayBT">返回店铺首页</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="listR">
+
+        <div class="orderList">
+            <dl>
+                <dt>排序:</dt>
+                <dd><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", 0 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                                                                                                  { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>down</text>}
+                                                                                                                                                                                                                                                                                                                                                                                          else if (Model.SortDirection == 0 && Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>up</text>}">相关度</a></dd>
+                <dd><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                                                                                                  { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>up</text>}
+                                                                                                                                                                                                                                                                                                                                                                                          else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>down</text>}">销量</a></dd>
+                <dd><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                                                                                                  { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>up</text>}
+                                                                                                                                                                                                                                                                                                                                                                                          else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>down</text>}">价格</a></dd>
+                <dd><a href="@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", 3 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 3)
+                                                                                                                                                                                                                                                                                                                                                                  { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 3)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>up</text>}
+                                                                                                                                                                                                                                                                                                                                                                                          else if (Model.SortDirection == 0 && Model.SortColumn == 3)
+                                                                                                                                                                                                                                                                                                                                                                                          { <text>down</text>}">评价</a></dd>
+                <div class="clear"></div>
+            </dl>
+
+
+            <div class="orderPage">
+                <span class="ProNB">共 @Model.PageModel.TotalCount 个商品</span>
+                <span class="orderPageNB"><b>@if (Model.PageModel.TotalPages > 0)
+                                             {@Model.PageModel.PageNumber}
+                                             else
+                                             {<text>0</text>}</b>/@Model.PageModel.TotalPages</span>
+                @if (Model.PageModel.HasPrePage)
+                { 
+                    <a href = "@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.PrePageNumber } })">&lt;</a>
+                }
+                else
+                {
+                     <a href="javascript:void(0);" class="disabled">&lt;</a>
+                }
+                @if (Model.PageModel.HasNextPage)
+                {
+                    <a href = "@Url.Action("search", new RouteValueDictionary { { "keyword", WorkContext.SearchWord }, { "storeId", WorkContext.StoreId }, { "storeCid", Model.StoreCid }, { "startPrice", Model.StartPrice }, { "endPrice", Model.EndPrice }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.NextPageNumber } })">&gt;</a>
+                }
+                else
+                {
+                     <a href="javascript:void(0);" class="disabled">&gt;</a>
+                }
+                <div class="clear"></div>
+            </div>
+
+        </div>
+
+        <div class="proList">
+            <ul>
+                @{int k = 1;}
+                @foreach (PartProductInfo info in Model.ProductList)
+                {
+                    <li @(k % 4 == 0 ? "style='padding-right:0;'" : "")>
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">
+                            <img src="/upload/store/@info.StoreId/product/show/thumb230_230/@info.ShowImg" onerror="src='/images/230.jpg'" width="100%" /><em>@info.Name</em></a>
+                        <b>¥@info.ShopPrice</b>
+                       @* <div class="info">
+                            <div class="star"><span class="star_yellow" style=" width:@Html.Raw((info.GetStarLevel() * 20).ToString())%;">&nbsp;</span></div>
+                            <a href="javascript:void(0);">已有 @info.ReviewCount 人评价</a>
+                        </div>*@
+                        <div class="info2">
+                            <span onclick="addProductToFavorite(@info.Pid)" class="addFav">加入收藏</span>
+                            <span onclick="addProductToCart(@info.Pid, 1)" class="addShopping">加入购物车</span>
+                        </div>
+                    </li>
+                    k++;
+                }
+                <div class="clear"></div>
+            </ul>
+            @Html.WebPager(Model.PageModel)
+        </div>
+
+    </div>
+    <div class="clear"></div>
+</div>
+

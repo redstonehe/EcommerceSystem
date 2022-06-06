@@ -1,0 +1,85 @@
+﻿<style>
+    .youxuanservice {
+        position: fixed;
+        _position: absolute;
+        width: 128px;
+        height: 500px;
+        z-index: -9999;
+        overflow: visible;
+        top: 205px;
+        right: 35px;
+        bottom: 0;
+        z-index: 99999999;
+    }
+
+    .yx_qq {
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        height: 305px;
+        margin-top: -52px;
+    }
+
+        .yx_qq ul {
+            margin-top: 52px;
+            margin-left: 15px;
+        }
+
+            .yx_qq ul li {
+                margin-top: 5px;
+                cursor: pointer;
+            }
+
+                .yx_qq ul li i {
+                    position: relative;
+                }
+
+                    .yx_qq ul li i span {
+                        position: absolute;
+                        top: -11px;
+                        left: 32px;
+                    }
+
+                        .yx_qq ul li i span:hover {
+                            color: #D02424;
+                        }
+    .yxweicode {text-align:center;margin-top:10px;border-top:1px dashed #ddd;
+    }
+        .yxweicode h3 {
+            margin-top: 5px;
+        }
+</style>
+<div class="youxuanservice">
+
+    <div class="yx_icon">
+        <img src="/images/hgyxservice_icon.png" alt="" />
+    </div>
+    <div class="yx_qq">
+        <ul>
+            @*onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=3139163680&site=qq&menu=yes');"*@
+            <li onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=3229229435&site=qq&menu=yes');">
+                <i>
+                    <img src="/images/qq.png" alt="Alternate Text" /><span>售前咨询1</span></i>
+            </li>
+            <li onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=1648426540&site=qq&menu=yes');">
+                <i>
+                    <img src="/images/qq.png" alt="Alternate Text" /><span>售前咨询2</span></i>
+            </li>
+            <li onclick="window.open('http://wpa.qq.com/msgrd?v=3&uin=3139163680&site=qq&menu=yes');">
+                <i>
+                    <img src="/images/qq.png" alt="Alternate Text" /><span>售前咨询3</span></i>
+            </li>
+           @* <li>
+                <i>
+                    <img src="/images/qq.png" alt="Alternate Text" /><span>售后咨询1</span></i>
+            </li>
+            <li>
+                <i>
+                    <img src="/images/qq.png" alt="Alternate Text" /><span>售后咨询2</span></i>
+            </li>*@
+        </ul>
+        <div class="yxweicode">
+            <h3>微信客服</h3>
+            <img src="/images/hgyxservice_weicode.jpg" alt="" width="110" height="110" />
+        </div>
+    </div>
+</div>

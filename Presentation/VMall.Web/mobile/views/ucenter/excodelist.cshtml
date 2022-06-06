@@ -1,0 +1,134 @@
+﻿@model List<ExChangeCouponsInfo>
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "兑换码";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<style>
+   
+    .cashitem {
+        /*background:url(/images/cashbg.png) no-repeat;background-size:300px;*/
+        width: 90%;
+        margin: 10px auto;
+        text-align: center;
+        padding: 10px 0;
+        position: relative;
+        border-bottom: 1px dashed #c8c7cc;
+        /*background:url(/images/excode2.png)  no-repeat top left;
+        background-size:80%;height: 320px;width: 100px;*/
+    }
+        /*.cashitem img {
+            width:50%;height:50%;
+        }*/
+    .cashvalue1 {
+        position: absolute;
+        top: 50%;
+        /*left: 40%;*/
+        width: 100%;
+        /*//text-align: left;*/
+    }
+    .cashvalue2 {
+        position: absolute;
+        top: 64%;
+        /*left: 40%;*/
+        width: 100%;
+        /*//text-align: left;*/
+    }
+        .cashvalue1 span, .cashvalue2 span {
+            /*color: #fff;*/
+            font-size: 18px;
+            font-weight: bolder;
+            margin: 2px;
+        }
+
+    .banlance {
+        margin-left: 10px;
+    }
+</style>
+
+
+<div class="myAssetsCon" >
+    @if (Model.Any())
+    {
+        foreach (var item in Model)
+        {
+        <div class="cashitem">
+           
+            @if (item.codetypeid == 2)
+            {
+                <img src="/images/excode2.png" alt="" width="90%" />
+            }
+            @if (item.codetypeid == 3)
+            {
+                <img src="/images/excode3.png" alt="" width="90%" />
+            }
+            @if (item.codetypeid == 4)
+            {
+                <img src="/images/excode4.png" alt="" width="90%" />
+            }
+            @if (item.codetypeid == 5)
+            {
+                <img src="/images/excode5.png" alt="" width="90%" height="60%" />
+            }
+            <p class="@(item.codetypeid>=3?"cashvalue2":"cashvalue1")" style="@(item.codetypeid>=3?"color:#c49964":"color:#cfcfcf")">
+                <span>兑换码:@item.exsn</span>
+                
+                <br />
+                <span>有效期:@item.validtime.ToString("yyyy/MM/dd")</span>
+                
+                <br />
+                @if (item.oid > 0)
+                {
+                    <span>已使用</span>
+                }
+                else if (item.oid == 0 && item.validtime < DateTime.Now)
+                {
+                    <span>已过期</span>
+                }
+            </p>
+
+        </div>
+        
+        }
+    }
+    else
+    { 
+        @:无
+    
+    }
+    @*<table style="text-align: center; margin: 0 auto; /*margin-bottom: 5%*/" width="100%" border="1" cellspacing="1" cellpadding="1">
+        <tbody id="order_table">
+            <tr style="background: #DCDCDC;">
+                <th>兑换码</th>
+                <th>创建时间</th>
+                <th>是否使用</th>
+                <th>有效期</th>
+               
+            </tr>
+
+            @foreach (var row in Model)
+            {
+                <tr>
+                    <td >@row.exsn</td>
+                    <td >@row.createtime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td > @if (row.oid > 0)
+                          {
+                                    @:已使用
+             }
+                          else if (row.oid == 0 && row.validtime < DateTime.Now)
+                          {
+                                    @:已过期
+                                }
+</td>
+                    <td >@row.validtime.ToString("yyyy-MM-dd HH:mm")</td>
+                  
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+</div>
+
+

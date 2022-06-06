@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.RDBSStrategy.SqlServer.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.RDBSStrategy.SqlServer.pdb
+C:\develop\德鹿商城\Strategies\VMall.RDBSStrategy.SqlServer\obj\Debug\VMall.RDBSStrategy.SqlServer.dll
+C:\develop\德鹿商城\Strategies\VMall.RDBSStrategy.SqlServer\obj\Debug\VMall.RDBSStrategy.SqlServer.pdb
+C:\develop\德鹿商城\Strategies\VMall.RDBSStrategy.SqlServer\obj\Debug\VMall.RDBSStrategy.SqlServer.csprojResolveAssemblyReference.cache

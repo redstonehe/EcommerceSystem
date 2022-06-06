@@ -1,0 +1,785 @@
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:24:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:25:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:26:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:27:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:28:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:29:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 1:30:23 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:17:02 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:17:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:18:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:19:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:20:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:21:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:22:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:23:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:24:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:25:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:26:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:27:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:28:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:29:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:30:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:31:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:32:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:33:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:34:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:35:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:36:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:37:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:38:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:39:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at SNIReadSyncOverAsync(SNI_ConnWrapper* , SNI_Packet** , Int32 )
+   at SNINativeMethodWrapper.SNIReadSyncOverAsync(SafeHandle pConn, IntPtr& packet, Int32 timeout)
+   at System.Data.SqlClient.TdsParserStateObject.ReadSniSyncOverAsync()
+   at System.Data.SqlClient.TdsParserStateObject.TryReadNetworkPacket()
+   at System.Data.SqlClient.TdsParserStateObject.TryPrepareBuffer()
+   at System.Data.SqlClient.TdsParserStateObject.TryReadByte(Byte& value)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:40:32 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:48:42 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:50:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:51:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:52:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:53:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:54:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:55:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:56:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:57:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:58:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 2:59:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 3:00:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 3:01:12 PM
+---------------------------------------------------
+Title：  订单操作服务异常
+Content：错误信息：   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText, DbParameter[] commandParameters) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 142
+   at VMall.Core.RDBSHelper.ExecuteNonQuery(CommandType cmdType, String cmdText) in c:\develop\德鹿商城\Libraries\VMall.Core\Data\RDBS\RDBSHelper.cs:line 125
+   at VMall.Services.Account.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Admin\Account.cs:line 274
+   at VMall.Services.Orders.OrderSettle() in c:\develop\德鹿商城\Libraries\VMall.Services\Orders.cs:line 3939
+   at VMall.EventStrategy.Timer.AutoSettleAccount.Execute(Object eventInfo) in c:\develop\德鹿商城\Strategies\VMall.EventStrategy.Timer\AutoSettleAccount.cs:line 26
+Time：   7/3/2019 3:02:12 PM
+---------------------------------------------------

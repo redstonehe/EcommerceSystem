@@ -1,0 +1,17 @@
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\VMall.Core.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\VMall.Core.pdb
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\BeIT.MemCached.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\log4net.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\Newtonsoft.Json.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\NPOI.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\NPOI.OOXML.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\NPOI.OpenXml4Net.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\NPOI.OpenXmlFormats.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\ThoughtWorks.QRCode.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\Utility.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\Newtonsoft.Json.xml
+C:\develop\德鹿商城\Libraries\VMall.Core\bin\Debug\NPOI.xml
+C:\develop\德鹿商城\Libraries\VMall.Core\obj\Debug\VMall.Core.dll
+C:\develop\德鹿商城\Libraries\VMall.Core\obj\Debug\VMall.Core.pdb
+C:\develop\德鹿商城\Libraries\VMall.Core\obj\Debug\VMall.Core.csprojResolveAssemblyReference.cache

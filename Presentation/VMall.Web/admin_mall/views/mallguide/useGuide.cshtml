@@ -1,0 +1,73 @@
+﻿@section header{
+    <title>操作指南</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+
+    <meta charset="utf-8" />
+    <title>操作指南 - 商城</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- basic styles -->
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script src="/scripts/jquery.js"></script>
+    <script src="/scripts/utils.js"></script>
+    <style>
+        .download {
+            color: #359fc0;
+            margin-left: 100px;
+            position: relative;
+        }
+
+            .download:before {
+                content: '';
+                background: url(/admin_mall/content/images/investdir_icon_01.png) no-repeat center;
+                width: 14px;
+                height: 14px;
+                display: block;
+                position: absolute;
+                left: -20px;
+                top: 50%;
+                margin-top: -6px;
+            }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">系统帮助 &gt;&gt; 操作指南
+    </h1>
+
+    <div class="box-body">
+        <ul class="todo-list ui-sortable">
+            <li>
+                <!-- drag handle -->
+                <span class="handle ui-sortable-handle">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <i class="fa fa-ellipsis-v"></i>
+                </span>
+                <!-- todo text -->
+                <span class="text">商城管理后台操作手册_part1</span>
+                <!-- Emphasis label -->
+                <a href="javaScript:;" class="download" style="color: #359fc0;">下载</a>
+                @*<small class="label label-danger">
+                    <i class="fa fa-clock-o"></i>下载</small>*@
+                <!-- General tools such as edit or delete-->
+                <div class="tools">
+                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-trash-o"></i>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+
+}
+
+
+
+
+
+
+

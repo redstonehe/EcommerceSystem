@@ -1,0 +1,335 @@
+﻿@model VMall.Web.MallAdmin.Models.HaiMiDrawCashListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>佣金提现列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js?20170613_3"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+
+    <style>
+        .createoid a:hover {
+            color: red;
+        }
+
+        .dataBatchEdit {
+            border: 1px solid #cccccc;
+            background-color: #e6e6e6;
+            margin-left: 15px;
+            margin-top: 20px;
+        }
+
+            .dataBatchEdit .success, .dataBatchEdit .fail {
+                margin: 5px;
+                border-bottom: 1px solid #cccccc;
+            }
+
+        .BatchEdit {
+            display: inline-block;
+            border: 1px solid #333;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function output() {
+            var csn = $("#CSN").val();
+            var Type = $("#Type").val();
+            var UserName = $("#UserName").val();
+            var realName = $("#RealName").val();
+            var accountid = $("#AccountId").val();
+            window.open("/malladmin/HaimiDrawCash/OutPutList?csn=" + csn + "&Type=" + Type + "&UserName=" + UserName + "&realName=" + realName + "&accountid=" + accountid);
+        }
+        function search() {
+            $("form").submit();
+        }
+        function successBatch() {
+            var successSns = $("#SuccessList").val();
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/HaimiDrawCash/BatchUpdateStateBySN?r=" + Math.random(),
+                data: { snList: successSns, state: 2 },
+                success: function (result) {
+                    if (result == "1") {
+                        alert("批量确认提现成功");
+                        window.location.href = window.location.href;
+                    }
+                    else if (result == "0") {
+                        alert("批量确认提现失败");
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        }
+        function failBatch() {
+            var failSns = $("#FailList").val();
+            var FailReason = $("#FailReason").val();
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/HaimiDrawCash/BatchUpdateStateBySN?r=" + Math.random(),
+                data: { snList: failSns, state: 0, result: FailReason },
+                success: function (result) {
+                    if (result == "1") {
+                        alert("批量撤销成功");
+                        window.location.href = window.location.href;
+                    }
+                    else if (result == "0") {
+                        alert("批量撤销失败");
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        }
+        function failopreation(ele) {
+            var id = $(ele).attr("data-id");
+            //alert(id);
+            var html = "<div style='padding:10px;'> <p>输入失败原因：</p>";
+            html += "<textarea type='text' id='failmark'rows='5' cols='45' name='failmark' ></textarea></div>";
+            var submit = function (v, h, f) {
+
+                //$.jBox.tip("你叫：" + f.yourname);
+                //$.jBox.tip("你叫：" + h.find("#yourname").val());
+                //$.jBox.tip("你叫：" + h.find(":input[name='yourname']").val());
+                //alert(f.failmark);
+                window.location.href = "/malladmin/HaimiDrawCash/UpdateState?Id=" + id + "&state=0&remark=" + f.failmark;
+                //$.ajax({
+                //    type: "POST",
+                //    url: "/malladmin/HaimiDrawCash/UpdateState?r=" + Math.random(),
+                //    data: { Id: id, state: 0, remark: f.failmark },
+                //    success: function (result) {
+                //        if (result == "1") {
+                //            $.jBox.tip("批量撤销成功");
+                //            window.location.href = window.location.href;
+                //        }
+                //        else if (result == "0") {
+                //            $.jBox.tip("批量撤销失败");
+                //            alert("批量撤销失败");
+                //            window.location.href = window.location.href;
+                //        }
+                //    }
+                //});
+                return true;
+            };
+
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+        $(function () {
+            $(".batchDrawFail").click(function () {
+
+                if ($("input[type='checkbox'][selectItem='true']:checked").length > 0) {
+                    var html = "<div style='padding:10px;'> <p>输入失败原因：</p>";
+                    html += "<textarea type='text' id='failmark'rows='5' cols='45' name='failmark' ></textarea></div>";
+                    var submit = function (v, h, f) {
+                        //var addMsg = '<input type="hidden" value="0" id="state" name="state" /><input type="hidden" value="' + f.failmark + '" id="remark" name="remark" />';
+                        var idsSelect = $("input[type='checkbox'][selectItem='true']:checked");
+                        var ids = "";
+                        idsSelect.each(function (i, n) {
+                            ids += $(this).val() + ",";
+                        });
+                        //alert(ids);
+                        //alert(ids.substr(0, ids.length - 1));
+                        //$(".batchDrawFail").append(addMsg);
+                        window.location.href = "/malladmin/HaimiDrawCash/BatchUpdateStateFail?ids=" + ids.substr(0, ids.length - 1) + "&state=0&remark=" + f.failmark;
+                        //doPostBack($(this).attr("delUrl"));
+                        return true;
+                    };
+                    $.jBox(html, { title: "确认信息", submit: submit });
+                }
+                else {
+                    alert("没有选中任何一项!");
+                }
+            })
+
+            $("tr").click(function () {
+                $(this).find("td").eq(0).find("input").attr("checked", "true");
+            });
+        });
+
+
+        function batchfailopreation() {
+            var id = $(ele).attr("data-id");
+            var html = "<div style='padding:10px;'> <p>输入失败原因：</p>";
+            html += "<textarea type='text' id='failmark'rows='5' cols='45' name='failmark' ></textarea></div>";
+            var submit = function (v, h, f) {
+
+                window.location.href = "/malladmin/HaimiDrawCash/UpdateState?Id=" + id + "&state=0&remark=" + f.failmark;
+
+                return true;
+            };
+
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">用户管理</a></li>
+            <li class="active">佣金提现列表</li>
+        </ol>
+        <div class="right">
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("incomelist", "HaimiDrawCash"))
+    {
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>账户类型：</label>
+                                @Html.DropDownListFor(x => x.AccountId, ViewData["accountitemList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>状态：</label>
+                                @Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>单号：</label>
+                                @Html.TextBox("CSN", Model.CSN, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>用户：</label>
+                                @Html.TextBox("UserName", Model.UserName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>姓名：</label>
+                                @Html.TextBox("RealName", Model.RealName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchCash" name="SearchCash" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>提现帐号类型</th>
+                                        <th>提现单号</th>
+                                        <th>用户(用户名/手机)</th>
+                                        <th>用户姓名</th>
+                                        <th>创建时间</th>
+                                        <th>提现金额</th>
+                                        <th>提现税费</th>
+                                        <th>提现手续费</th>
+                                        <th>实际金额</th>
+                                        <th>银行名称</th>
+                                        <th>开户地址</th>
+                                        <th>银行卡号</th>
+                                        <th>开户人</th>
+                                        <th>状态</th>
+                                        <th>处理结果</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.DrawCashList.Rows)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@row["Id"]" selectItem="true" name="idList" /></td>
+                                            <td>@row["AccountName"]</td>
+                                            <td>@row["DrawCashSN"]</td>
+                                            <td>@row["username"]
+                                                <br />
+                                                @row["mobile"] </td>
+                                            <td>@row["realname"]</td>
+                                            <td>@TypeHelper.ObjectToDateTime(row["CreateTime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>@row["Amount"]</td>
+                                            <td>@row["TaxAmount"]</td>
+                                            <td>@row["Poundage"]</td>
+                                            <td>@row["ActualAmount"]</td>
+                                            <td>@row["BankName"]</td>
+                                            <td>@row["BankProvice"] @row["BankCity"] @row["BankAddress"]</td>
+                                            <td>@row["BankCardCode"]</td>
+                                            <td>@row["BankUserName"]</td>
+                                            <td class="stateTd">
+                                                @if (TypeHelper.ObjectToInt(row["State"]) == 0)
+                                                {
+                                                    @:<span style="color:#808080;">处理失败，已撤销</span>
+      }
+                                                else if (TypeHelper.ObjectToInt(row["State"]) == 1)
+                                                {
+                                                    @:<span style="color:red;">等待处理</span>
+      }
+                                                else if (TypeHelper.ObjectToInt(row["State"]) == 2)
+                                                {
+                                                    @:<span style="color:#00B050">处理成功</span>
+      }
+                                            </td>
+                                            <td>@row["Result"]</td>
+                                            <td>
+                                                @if (TypeHelper.ObjectToInt(row["State"]) == 1)
+                                                {
+                                                    @Html.ActionLink("[完成]", "UpdateState", new { Id = row["Id"], State = 2 }, new { @class = "editOperate" }) 
+                                                    <a href="javascript:void(0);" class="editOperate" data-id="@row["Id"]" onclick="failopreation(this);">[撤销]</a>
+                                   
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+@*
+        
+        <div class="dataBatchEdit">
+            <div class="success">
+                下列提现单号：<textarea cols="20" id="SuccessList" name="UserCodeList" rows="3" style="width: 778px; height: 150px"></textarea>
+                (每一行表示一个提现单号)
+                <span class="BatchEdit" onclick="successBatch()">提现完成</span>
+            </div>
+            <div class="fail">
+                <span>下列提现单号：</span><textarea cols="50" id="FailList" name="FailList" rows="2" style="width: 300px; height: 50px"></textarea>
+                (每一行表示一个提现单号)
+                 ,失败原因：<textarea cols="20" id="FailReason" name="FailReason" rows="2" style="width: 300px; height: 50px"></textarea>
+                <span class="BatchEdit" onclick="failBatch()">提现撤销</span>
+            </div>
+        </div>*@
+        <div class="dataListEdit">
+            <a href="#" delUrl="@Url.Action("BatchUpdateState")" class="batch batchDrawSuccess">批量提现完成</a>
+            <a href="#" delUrl="@Url.Action("BatchUpdateState")" class="batch batchDrawFail">批量提现撤销</a>
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

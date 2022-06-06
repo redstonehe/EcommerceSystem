@@ -1,0 +1,121 @@
+﻿@model VMall.Web.Models.AgentStockModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "库存查询-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "库存查询";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<script>
+    function waitUpdate() {
+        alert("等待更新");
+    }
+</script>
+<div class="bigBox" id="member">
+<div class="box">
+@Html.Partial("/views/ucenter/leftNav.cshtml")
+
+<div id="memberR">
+    <h2 id="memberRT">@ViewBag.PositionTitle </h2>
+    
+    <table width="100%" border="0" cellspacing="0" class="dingdan">
+         <thead>
+          <tr>
+            <th valign="bottom">商品信息</th>
+            <th>库存数量</th>
+            <th>库存金额</th>
+            <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.AgentStockList.Rows)
+            {
+           <tr >
+                <td>
+                <div class="proList">
+                    <img src="/upload/store/@row["storeid"]/product/show/thumb60_60/@row["showimg"]" width="50" height="50" />
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", row["pid"] } })">@row["name"]<br /></a>
+                    <div class="clear"></div>
+                </div>
+                </td>
+                <td>@row["balance"]<br /></td>
+                <td>@row["agentamount"]<br /></td>
+                <td><a href="@Url.Action("GetStockDetail", new { pid=row["pid"]})">查看详情</a> <br />
+                    <a href="@Url.Action("AddSendOrder", new { pid=row["pid"]})">生成要货单</a> <br />
+                    @{decimal a = TypeHelper.ObjectToDecimal(row["balance"]) - TypeHelper.ObjectToInt(row["balance"]);}
+                    @if (a>0) { 
+                     <a href="javascript:waitUpdate();">补足差额</a>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <span style="color:#808080;margin-top:10px;    display: inline-block;">1.库存数量由于存在调换货，会存在一定尾数计数误差
+        <br />
+        2.库存数量不为整数时，库存数量非整数部分不可用，补足余额成整数件后可以使用
+    </span>
+    <h2 id="memberRT">要货单列表 </h2>
+    
+    <table width="100%" border="0" cellspacing="0" class="dingdan">
+         <thead>
+          <tr>
+            <th width="300px" valign="bottom">要货单号</th>
+            <th width="200px">订单产品</th>
+            <th width="100px">时间</th>
+            <th width="50px">数量</th>
+            <th width="50px">状态</th>
+               <th width="100px">详情</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.SendOrderList.Rows)
+            {
+           <tr >
+               <td>@row["sendosn"] <br />   
+                   @{  RegionInfo region = Regions.GetRegionById(TypeHelper.ObjectToInt(row["regionid"]));}
+
+                                @row["consignee"] &nbsp;&nbsp;@row["mobile"]
+                                <br />
+                                @if (region != null)
+                                {
+                                    @region.ProvinceName @region.CityName @region.Name @row["address"]
+                                }
+                                else
+                                {
+                                    @row["address"]
+                                }
+               </td>
+                <td>
+                <div class="proList">
+                    <img src="/upload/store/@row["storeid"]/product/show/thumb60_60/@row["showimg"]" width="50" height="50" />
+                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", row["pid"] } })">@row["name"]<br /></a>
+                     数量：@row["sendcount"]
+                    <div class="clear"></div>
+                </div>
+                </td>
+                <td>@row["creationdate"]</td>
+                <td>@row["sendcount"]</td>
+                <td>
+                   @if (row["sendstate"].ToString() == "1")
+                                { 
+                                    @:已发货
+}
+                                else
+                                {
+                                    @:未发货
+                                }</td>
+                <td>
+                    @row["shipsn"] <br />
+                 @row["shipconame"] <br />
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</div>

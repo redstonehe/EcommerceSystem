@@ -1,0 +1,134 @@
+﻿@model VMall.Web.Mobile.Models.FlashSaleModel
+@using VMall.Web.Mobile
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "秒杀专区";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+@*<div class="searchBox">
+    <div class="newSearch">
+        <input type="text" id="keyword" name="keyword" class="new-srch-input" value="" style="color: #999999;">
+        <a href="javascript:void(0);" onclick="$('#keyword').val('')" target="_self" class="new-s-close"></a>
+        <a href="javascript:mallSearch(document.getElementById('keyword').value);" target="_self" class="new-s-srch"><span></span></a>
+    </div>
+</div>*@
+@*<div style="min-width: 300px;
+    max-width: 640px;
+    margin: 0 auto;">
+    <img src="/images/fsts.jpg" alt="" max-width="640" min-width="300" width="105%" />
+</div>*@
+<script type="text/javascript">
+    function filterBlockSH(type) {
+        if (type == 0) {
+            document.getElementById("filterBlock1").style.display = "none";
+            document.getElementById("filterBlock2").style.display = "none";
+            document.getElementById("filterBlock3").style.display = "none";
+        }
+        else {
+            document.getElementById("filterBlock1").style.display = "block";
+            document.getElementById("filterBlock2").style.display = "block";
+            document.getElementById("filterBlock3").style.display = "block";
+        }
+    }
+
+    function filterItemSH(obj) {
+        var divList1 = obj.parentNode.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList1.length; i++) {
+            divList1[i].style.display = "none";
+        }
+
+        var divList2 = obj.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList2.length; i++) {
+            divList2[i].style.display = "block";
+        }
+    }
+</script>
+<div class="proList">
+
+  
+
+    <div class="new-tab-type2" style="overflow: hidden; height: 34px">
+        <div class="new-tbl-type">
+            <a href="@Url.Action("fslist", new RouteValueDictionary {  { "sortColumn", 0 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60"><span @if (Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                          {<text>class="on"</text>}>销量@{if (Model.SortDirection == 1 && Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                                                        { <text>↓</text>}
+                                                                                                                                                                                                                                                                                                                        else if (Model.SortDirection == 0 && Model.SortColumn == 0)
+                                                                                                                                                                                                                                                                                                                        { <text>↑</text>}}</span></a>
+            <a href="@Url.Action("fslist", new RouteValueDictionary { { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60"><span @if (Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                          {<text>class="on"</text>}>价格@{if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                                                        { <text>↓</text>}
+                                                                                                                                                                                                                                                                                                                        else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                                                                                                                                                                                                                                                                                                                        { <text>↑</text>}}</span></a>
+            <a href="@Url.Action("fslist", new RouteValueDictionary { { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60"><span @if (Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                          {<text>class="on"</text>}>评价@{if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                                                        { <text>↓</text>}
+                                                                                                                                                                                                                                                                                                                        else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                                                                                                                                                                                                                                                                                                                        { <text>↑</text>}}</span></a>
+            <a href="@Url.Action("fslist", new RouteValueDictionary {  { "sortColumn", 4 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60"><span @if (Model.SortColumn == 4)
+                                                                                                                                                                                                                                                                                          {<text>class="on"</text>}>人气@{if (Model.SortDirection == 1 && Model.SortColumn == 4)
+                                                                                                                                                                                                                                                                                                                        { <text>↓</text>}
+                                                                                                                                                                                                                                                                                                                        else if (Model.SortDirection == 0 && Model.SortColumn == 4)
+                                                                                                                                                                                                                                                                                                                        { <text>↑</text>}}</span></a>
+        </div>
+    </div>
+
+    <div id="categoryProductListBlock">
+        @Html.Partial("/mobile/views/Channel/ajaxfs.cshtml")
+    </div>
+    <div class="loading">
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a id="loadBut" href="javascript:getFlashSaleProductList(@Model.SortColumn,@Model.SortDirection,fsListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        else
+        {
+            <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        <div id="loadPrompt" style="display: none;" class="loadAnimate">
+            <p class="list-loading"><span></span>加载中...</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="filterBlock1" class="bg" style="display: none; position: absolute; left: 0px; top: 0px; background-color: rgb(13, 13, 13); filter: alpha(opacity=60); opacity: 0.6; width: 100%; height: 100%; z-index: 8888;"></div>
+<a id="filterBlock2" href="javascript:filterBlockSH(0)" class="new-abtn-slid" style="display: none; z-index: 8889; left: auto; right: 185px;"></a>
+<div id="filterBlock3" class="selectR" style="display: none;">
+    <ul>
+
+        
+
+        
+
+    </ul>
+</div>
+<script type="text/javascript">
+    //高度需要计算 .bg的高度 = 当前body的高度
+    document.getElementById("filterBlock1").style.height = document.body.scrollHeight + "px";
+
+    //获得频道商品列表
+    var fsListNextPageNumber = 2;
+    var hasNextPage = false;
+    function getFlashSaleProductList( sortColumn, sortDirection, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/channel/AjaxFSList?sortColumn=" + sortColumn + "&sortDirection=" + sortDirection + "&page=" + page, false, function (data) {
+            $("#categoryProductListBlock").append(data);
+            if (hasNextPage) {
+                $("#loadBut").css("display", "block");
+                $("#loadPrompt").css("display", "none");
+                fsListNextPageNumber += 1;
+            }
+            else {
+                $("#loadBut").css("display", "none");
+                $("#loadPrompt").css("display", "none");
+                $("#lastPagePrompt").css("display", "block");
+            }
+        })
+    }
+</script>
+

@@ -1,0 +1,162 @@
+﻿<style>
+    footer {
+        /* padding: 8px; */
+        background: #F4F4F4;
+        font-size: .85em;
+        padding: 10px 8px;
+        /*margin-bottom: 120px;*/
+    }
+
+        footer .footerTop {
+            border-bottom: 1px solid #ddd;
+            height: 1.8em;
+            line-height: 1.5em;
+        }
+
+        footer .copyright {
+            color: #666;
+            padding: .5em 0;
+        }
+
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+    /*--navfix--*/
+    .navfix {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #f7f7f7;
+        border-top: 1px solid #d9d9d9;
+        z-index: 9999;
+    }
+
+        .navfix li {
+            width: 20%;
+            text-align: center;
+            float: left;
+        }
+
+            .navfix li a {
+                padding: 0.5em 0 0;
+                display: inline-block;
+            }
+
+            .navfix li em {
+                width: 100%;
+                height: 1.75em;
+                display: inline-block;
+                text-align: center;
+                font-size: 1em;
+            }
+
+            .navfix li p {
+                font-size: 0.857em;
+                color: #999;
+            }
+
+        .navfix .F-home em {
+            background: url(/mobile/images/index.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-search em {
+            background: url(/mobile/images/search.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-classfic em {
+            background: url(/mobile/images/wecode.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-cart em {
+            background: url(/mobile/images/orderlist.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-member em {
+            background: url(/mobile/images/myuser.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix li.cur p {
+            color: #e4393c;
+        }
+
+        .navfix .F-home.cur em {
+            background: url(/mobile/images/index_on.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-search.cur em {
+            background: url(/mobile/images/search_on.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-classfic.cur em {
+            background: url(/mobile/images/wecode_on.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-cart.cur em {
+            background: url(/mobile/images/orderlist_on.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix .F-member.cur em {
+            background: url(/mobile/images/myuser_on.png) no-repeat center top;
+            background-size: 1.6em auto;
+        }
+
+        .navfix a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+    .clearfix {
+        margin: 0px;
+        padding:0px;
+    }
+
+        .clearfix li a p {
+            margin: 0px;
+        }
+</style>
+<script>
+    $(function () {
+        var ContorllName = '@WorkContext.Controller.ToString()';
+        var ActionName = '@WorkContext.Action.ToString()';
+        $("#" + ContorllName + "_" + ActionName).addClass("cur");
+    });
+</script>
+
+<div id="returnTop" style="position: fixed; bottom: 20%; right: 20px; width: 35px; height: 35px; display: none;" onclick="$('body,html').animate({scrollTop:0},700);">
+    <img src="/images/returntop.png" alt="" width="50" height="50" />
+
+</div>
+@*</footer>*@
+<div class="navfix">
+    <ul class="clearfix">
+        <li class="F-home" id="home_mindex"><a href="/mob"><em></em>
+            <p>首页</p>
+        </a></li>
+        <li class="F-search" id="catalog_searchindex"><a href="@Url.Action("searchindex", "catalog")"><em></em>
+            <p>搜索</p>
+        </a></li>
+        <li class="F-cart" id="ucenter_orderlist"><a href="@Url.Action("orderlist", "ucenter")"><em></em>
+            <p>订单</p>
+        </a></li>
+        <li class="F-member" id="ucenter_index"><a href="@Url.Action("index", "ucenter")"><em></em>
+            <p>我的</p>
+        </a></li>
+        <li class="F-classfic" id="codeimg_index"><a href="@Url.Action("sharecode", "ucenter")"><em></em>
+            <p>二维码</p>
+        </a></li>
+    </ul>
+</div>

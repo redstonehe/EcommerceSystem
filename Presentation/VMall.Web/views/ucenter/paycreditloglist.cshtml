@@ -1,0 +1,50 @@
+﻿@model VMall.Web.Models.PayCreditLogListModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "我的" + WorkContext.PayCreditName + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "我的" + WorkContext.PayCreditName;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="padding-bottom: 0px;">
+            <h2 id="memberRT">
+                <strong>可用@{@WorkContext.PayCreditName}<font color="#e4393c">@WorkContext.PayCreditCount</font>个</strong>&nbsp; 
+    @*<select style="float:none;">
+      <option>收支明细</option>
+      <option>收入</option>
+      <option>支出</option>
+    </select>
+    <div class="searchList"><a href="#">什么是积分?</a> &nbsp; <a href="#">如何获取积分?</a></div>*@
+                <div class="clear"></div>
+            </h2>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>收入/支出</th>
+                        <th>详细说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (CreditLogInfo info in Model.PayCreditLogList)
+                    {
+                        <tr>
+                            <td>@info.ActionTime</td>
+                            <td>@info.PayCredits</td>
+                            <td>@info.ActionDes</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.WebPager(Model.PageModel).ShowSummary(false)
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

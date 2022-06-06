@@ -1,0 +1,186 @@
+﻿@model VMall.Web.Models.OrderViewModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "订单查询" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "订单查询";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+ 
+}
+
+<style>
+    .viewItme {
+        margin-top: 10px;
+        background: #FFF;
+        /*border: 1px solid #c8c7cc;*/
+        display: block;
+        padding: 10px 0 10px 10px;
+        margin-bottom: 5px;
+    }
+    .news-more {
+        width: 95%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        font-size:18px;
+        background: #e4e4e4;
+        color: #333;
+    }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+
+        <div id="memberR" style="padding-bottom: 0px; height: auto;width:968px">
+            <div class="pro" id="orderListBlock">
+    
+    @if (Model.State)
+    {
+        if (Model.OrderInfoList.Count > 0)
+        {
+            foreach (var row in Model.OrderInfoList)
+            {
+                OrderState orderStates = new OrderState();
+                string state = string.Empty;
+                if (TypeHelper.ObjectToInt(row.OrderState) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row.OrderState) == (int)OrderState.Returned)
+                {
+                    if (TypeHelper.ObjectToInt(row.OrderState) == (int)OrderState.Completed)
+                    {
+                        state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row.OrderState)) + "-" + row.ReturnType.ToString() + "-" + row.ChangeType.ToString();
+                    }
+                    else if (TypeHelper.ObjectToInt(row.OrderState) == (int)OrderState.Returned)
+                    {
+                        state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row.OrderState)) + "-" + row.ReturnType.ToString();
+                    }
+                }
+                else
+                {
+                    state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row.OrderState));
+
+                }
+                OrderState orderState = (OrderState)TypeHelper.ObjectToInt(row.OrderState);
+       
+        <div class="viewItme">
+            <div class="proTitle">
+
+                <p class="proOsn">订单号：@row.OSN</p>
+
+                <p class="proOsn">订单日期：@row.AddTime.ToString("yyyy-MM-dd HH:mm")</p>
+
+                <p class="proOsn">
+                    状态:@switch (state)
+                       {
+                           case "WaitPaying":
+                        @:等待付款
+            break;
+                           case "Confirming":
+                        @:待确认
+            break;
+                           case "Confirmed":
+                        @:已确认
+            break;
+                           case "PreProducting":
+                        @:备货中
+            break;
+                           case "Sended":
+                        @:已发货
+            break;
+                           case "Completed-0-0":
+                        @:已完成
+            break;
+                           case "Completed-0-1":
+                        @:<span style="color:red;">换货审核中</span>
+            break;
+                           case "Completed-0-2":
+                        @:<span style="color:red;">换货审核通过</span>
+            break;
+                           case "Completed-0-3":
+                        @:<span style="color:red;">换货等待发货</span>
+            break;
+                           case "Completed-0-4":
+                        @:<span style="color:red;">换货确认收货</span>
+            break;
+                           case "Completed-0-5":
+                        @:<span>换货完成</span>
+            break;
+                           case "Completed-1-0":
+                        @:<span style="color:red;">退货审核中</span>
+            break;
+                           case "Settled":
+                        @:已结算
+                                    break;
+                           case "Cancelled":
+                        @:取消
+            break;
+                           case "Returned-2":
+                        @:<span style="color:red;">退货审核通过</span>
+            break;
+                           case "Returned-3":
+                        @:<span style="color:red;">退款审核中</span>
+            break;
+                           case "Returned-4":
+                        @:退款成功
+            break;
+                           case "Changed":
+                        @:换货
+            break;
+                           case "Locked":
+                        @:锁定
+            break;
+                           default:
+                        @:未知状态
+            break;
+                       }
+                </p>
+
+                <p class="proOsn">
+                    订单金额：<label>¥@row.SurplusMoney</label>
+                </p>
+               @* <p class="proOsn">
+                    物流信息：
+                    @if (row.OrderState >= 70 && row.OrderState < 110)
+                    { 
+                        <span>等待发货</span>
+                    }
+                    else if (row.OrderState >= 110 && row.OrderState < 140)
+                    { 
+                        <span>@row.ShipCoName</span>
+                       
+                        <span>单号：@row.ShipSN</span>
+                    }
+                    else
+                    {
+                    }
+
+                </p>*@
+            </div>
+        </div>
+            }
+        }
+        else
+        { 
+        <div class="viewItme">
+            <p style="text-align: center; font-size: 16px; margin: 10px;">暂无有效订单信息，如有疑问请进入个人中心查看或咨询客服</p>
+
+        </div>
+        }
+    }
+    else { 
+         <div class="viewItme">
+            <p style="text-align: center; font-size: 16px; margin: 10px;">验证码不正确</p>
+
+        </div>
+    }
+                <a href="javascript:history.go(-1);" class="news-more">返回</a>
+</div>
+            
+
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

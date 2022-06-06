@@ -1,0 +1,446 @@
+﻿@model VMall.Web.Models.CartModel
+@{
+    Layout = null;
+}
+@if (Model != null && Model.StoreCartList.Count > 0)
+{
+    <div id="buyDT">
+        <ul>
+            <li class="checkT">
+                <label>
+                    <input type="checkbox" checked="checked" id="selectAllBut_top" onclick="cancelOrSelectAllCartItem(this)" />全选</label>&nbsp;</li>
+            <li class="productT">商品</li>
+            <li class="priceT">单价(元)</li>
+            @*<li class="promotionT">优惠</li>*@
+            <li class="numberT">数量</li>
+            <li class="subTotal @(!WorkContext.IsDirSaleUser ? "width200" : "")">小计(元)</li>
+            @if (WorkContext.IsDirSaleUser)
+            {
+                <li class="numberT">PV</li>
+            }
+            <li class="actionT">操作</li>
+        </ul>
+    </div>
+
+            foreach (StoreCartInfo storeCartInfo in Model.StoreCartList)
+            {
+    <div class="buyItme">
+        <h2>
+            <label>
+                <input type="checkbox" id="storeCartCheckbox@{@storeCartInfo.StoreInfo.StoreId}" storeId="@storeCartInfo.StoreInfo.StoreId" data-store="1" checked="checked" onclick="cancelOrSelectStoreCart(this)"/>
+                <span class="storeTitle">@storeCartInfo.StoreInfo.Name</span>
+            </label>
+        </h2>
+        @foreach (CartItemInfo cartItemInfo in storeCartInfo.CartItemList)
+        {
+            if (cartItemInfo.Type == 0)
+            {
+                CartProductInfo cartProductInfo = (CartProductInfo)cartItemInfo.Item;
+            <div class="buyItmeC @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : (cartProductInfo.Selected ? "buyActive" : ""))">
+                <div class="cell checkC">
+                    <input type="checkbox" name="cartItemCheckbox" storeId="@storeCartInfo.StoreInfo.StoreId" @{if (cartProductInfo.Selected)
+                                                                                                                {<text>checked="checked"</text>}} value="0_@{@cartProductInfo.OrderProductInfo.Pid}" onclick="cancelOrSelectCartItem()" data-pid="@{@cartProductInfo.OrderProductInfo.Pid}"/>&nbsp;
+                </div>
+                <div class="cell productC">
+                    <div class="productC1">
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" />
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name
+                            @if (cartProductInfo.OrderProductInfo.SaleType == 2)
+                            { 
+                                <span style="color: red;">【保税仓发货】</span>
+                            }
+                            @if (cartProductInfo.OrderProductInfo.SaleType == 3)
+                            { 
+                                <span style="color: red;">【国际直邮】</span>
+                            }
+                        </a>
+                        <div class="clear"></div>
+                    </div>
+                    @if (cartProductInfo.GiftList.Count > 0)
+                    {
+                        <div class="productC2">
+                            @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                            {
+                                <p>[赠品] @gift.Name X @gift.RealCount</p>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="cell priceC">@*¥*@ @cartProductInfo.OrderProductInfo.DiscountPrice
+                    <br />
+                                <del style="color:#9C9A9C">@cartProductInfo.OrderProductInfo.ShopPrice</del>
+                </div>
+                @*@if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId == 0)
+                {
+                    <div class="priceC1 ">赠积分：<em>@cartProductInfo.OrderProductInfo.PayCredits</em></div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits == 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠优惠劵</div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠京豆(@cartProductInfo.OrderProductInfo.PayCredits)和优惠劵</div>
+                }
+                else
+                {
+                    <div class="nopriceC1"></div> 
+                }*@
+                <div class="cell numberC">
+                    <dl class="buyNB">
+                        <dd>
+                            @{
+                List<int> AJKPids = new List<int>() { 3233, 3234, 3235, 3236 };
+                    bool isAJK = AJKPids.Exists(x => x == cartProductInfo.OrderProductInfo.Pid);
+                            }
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((isAJK ? cartProductInfo.OrderProductInfo.BuyCount - 1 * cartProductInfo.OrderProductInfo.MinBuyCount : cartProductInfo.OrderProductInfo.BuyCount - 1).ToString()))" class="down">-</a>
+                            <input type="text" 
+                                @if (isAJK)
+                                {
+                                                <text>readonly="readonly"</text>
+                                }
+                                else
+                                {
+                                                <text>onfocus="numberFocus(this)" onblur="numberBlur(this,@cartProductInfo.OrderProductInfo.Pid,0,@cartProductInfo.OrderProductInfo.MinBuyCount)" </text>
+                                }   value="@cartProductInfo.OrderProductInfo.RealCount" />
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((isAJK ? cartProductInfo.OrderProductInfo.BuyCount + 1 * cartProductInfo.OrderProductInfo.MinBuyCount : cartProductInfo.OrderProductInfo.BuyCount + 1).ToString()))" class="up">+</a>
+                        </dd>
+                        <div class="clear"></div>
+                    </dl>
+                </div>
+                <div class="subTotalItem @(!WorkContext.IsDirSaleUser ? "width200" : "")">@((cartProductInfo.OrderProductInfo.DiscountPrice * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                @if (WorkContext.IsDirSaleUser)
+                {
+                    <div class="subPVtotalItem">@((cartProductInfo.OrderProductInfo.PV * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                }
+                <div class="cell actionC">
+                    <a href="javascript:void(0)" onclick="if (confirm('您确定要把该商品移出购物车吗？')) delCartProduct(@cartProductInfo.OrderProductInfo.Pid,0)">删除</a>
+                    <a href="javascript:void(0)" onclick="addProductToFavorite(@cartProductInfo.OrderProductInfo.Pid)">移入收藏夹</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            }
+            else if (cartItemInfo.Type == 1)
+            {
+                CartSuitInfo cartSuitInfo = (CartSuitInfo)cartItemInfo.Item;
+            <div class="buyItmeC @(cartSuitInfo.Checked ? "buyActive" : "")">
+                <div class="cell checkC">
+                    <input type="checkbox" name="cartItemCheckbox" storeId="@storeCartInfo.StoreInfo.StoreId" @{if (cartSuitInfo.Checked)
+                                                                                                                {<text>checked="checked"</text>}} value="1_@{@cartSuitInfo.PmId}" onclick="cancelOrSelectCartItem()"/>&nbsp;
+                </div>
+                <div class="cell productC">
+                    @foreach (CartProductInfo cartProductInfo in cartSuitInfo.CartProductList)
+                    {
+                        <div class="cartSuitItem">
+                            <div class="productC1">
+                                <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" />
+                                <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })"><span style="color: red;">[套装]</span>@cartProductInfo.OrderProductInfo.Name</a>
+                                <div class="clear"></div>
+                            </div>
+                            @if (cartProductInfo.GiftList.Count > 0)
+                            {
+                                <div class="productC2">
+                                    @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                                    {
+                                        <p>[赠品] @gift.Name</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="cell priceC">@cartSuitInfo.SuitPrice</div>
+                <div class="cell numberC">
+                    <dl class="buyNB">
+                        <dd>
+                            <a href="javascript:void(0)" onclick="changeSuitCount(@cartSuitInfo.PmId,@Html.Raw((cartSuitInfo.BuyCount - 1).ToString()))" class="down">-</a>
+                            <input type="text" onfocus="numberFocus(this)" onblur="numberBlur(this,@cartSuitInfo.PmId,1)" value="@cartSuitInfo.BuyCount" />
+                            <a href="javascript:void(0)" onclick="changeSuitCount(@cartSuitInfo.PmId,@Html.Raw((cartSuitInfo.BuyCount + 1).ToString()))" class="up">+</a>
+                        </dd>
+                        <div class="clear"></div>
+                    </dl>
+                </div>
+                <div class="subTotalItem @(!WorkContext.IsDirSaleUser ? "width200" : "")">@(cartSuitInfo.SuitPrice * cartSuitInfo.BuyCount)</div>
+                @if (WorkContext.IsDirSaleUser)
+                {
+                    <div class="subPVtotalItem">@(cartSuitInfo.CartProductList.Sum(x => x.OrderProductInfo.ProductPV * x.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                }
+                <div class="cell actionC">
+                    <a href="javascript:void(0)" onclick="if (confirm('您确定要把该套装移出购物车吗？')) delCartSuit(@cartSuitInfo.PmId,0)">删除</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            }
+            else if (cartItemInfo.Type == 2)
+            {
+                CartFullSendInfo cartFullSendInfo = (CartFullSendInfo)cartItemInfo.Item;
+                if (cartFullSendInfo.IsEnough)
+                {
+                    if (cartFullSendInfo.FullSendMinorOrderProductInfo != null)
+                    {
+            <div class="buyItme_header">
+                <div class="info">
+                    <s>满赠</s>活动商品已购满 @cartFullSendInfo.FullSendPromotionInfo.LimitMoney 元,您已经换购了商品 <a href="javascript:getFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="huangou">重新换购</a>
+                    <div class="changeBuy" id="fullSendBlock@{@cartFullSendInfo.FullSendPromotionInfo.PmId}">
+                        <h3>请选择换购商品，数量优先，换完为止！<a href="javascript:closeFullSendBlock(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="close">x</a></h3>
+                        <div class="changeBuyC" id="fullSendProductList@{@cartFullSendInfo.FullSendPromotionInfo.PmId}"></div>
+                        <div class="changeBuyBT">
+                            <a href="javascript:addFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="redBT">确定</a>
+                            <a href="javascript:closeFullSendBlock(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="whiteBT">取消</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="@Url.Action("fullsendmainproductlist", new RouteValueDictionary { { "pmId", cartFullSendInfo.FullSendPromotionInfo.PmId } })" class="more right">活动商品</a>
+            </div>
+            <div class="buyItme_header fullSendProductTitle">
+                <div class="info">[换购商品]@cartFullSendInfo.FullSendMinorOrderProductInfo.Name</div>
+                <a href="javascript:void(0)" onclick="delCartFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId,0)" class="delFullSend">删除</a>
+            </div>
+                    }
+                    else if (cartFullSendInfo.FullSendPromotionInfo != null)
+                    {
+            <div class="buyItme_header">
+                <div class="info">
+                    <s>满赠</s>活动商品已购满 @cartFullSendInfo.FullSendPromotionInfo.LimitMoney 元,再加 @cartFullSendInfo.FullSendPromotionInfo.AddMoney 元 <a href="javascript:getFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="huangou">换购商品</a>
+                    <div class="changeBuy" id="fullSendBlock@{@cartFullSendInfo.FullSendPromotionInfo.PmId}">
+                        <h3>请选择换购商品，数量优先，换完为止！<a href="javascript:closeFullSendBlock(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="close">x</a></h3>
+                        <div class="changeBuyC" id="fullSendProductList@{@cartFullSendInfo.FullSendPromotionInfo.PmId}"></div>
+                        <div class="changeBuyBT">
+                            <a href="javascript:addFullSend(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="redBT">确定</a>
+                            <a href="javascript:closeFullSendBlock(@cartFullSendInfo.FullSendPromotionInfo.PmId)" class="whiteBT">取消</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="@Url.Action("fullsendmainproductlist", new RouteValueDictionary { { "pmId", cartFullSendInfo.FullSendPromotionInfo.PmId } })" class="more right">活动商品</a>
+            </div>
+                    }
+                }
+
+                foreach (CartProductInfo cartProductInfo in cartFullSendInfo.FullSendMainCartProductList)
+                {
+            <div class="buyItmeC @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : (cartProductInfo.Selected ? "buyActive" : ""))">
+                <div class="cell checkC">
+                    <input type="checkbox" name="cartItemCheckbox" storeId="@storeCartInfo.StoreInfo.StoreId" @{if (cartProductInfo.Selected)
+                                                                                                                {<text>checked="checked"</text>}} value="0_@{@cartProductInfo.OrderProductInfo.Pid}" onclick="cancelOrSelectCartItem()"/>&nbsp;
+                </div>
+                <div class="cell productC">
+                    <div class="productC1">
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" />
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a>
+                        <div class="clear"></div>
+                    </div>
+                    @if (cartProductInfo.GiftList.Count > 0)
+                    {
+                        <div class="productC2">
+                            @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                            {
+                                <p>[赠品] @gift.Name</p>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="cell priceC">¥@cartProductInfo.OrderProductInfo.DiscountPrice</div>
+                @*@if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId == 0)
+                {
+                    <div class="priceC1 ">赠积分：<em>@cartProductInfo.OrderProductInfo.PayCredits</em></div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits == 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠优惠劵</div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠京豆(@cartProductInfo.OrderProductInfo.PayCredits)和优惠劵</div>
+                }
+                else
+                {
+                    <div class="nopriceC1"></div> 
+                }*@
+                <div class="cell numberC">
+                    <dl class="buyNB">
+                        <dd>
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((cartProductInfo.OrderProductInfo.BuyCount - 1).ToString()))" class="down">-</a>
+                            <input type="text" onfocus="numberFocus(this)" onblur="numberBlur(this,@cartProductInfo.OrderProductInfo.Pid,0)" value="@cartProductInfo.OrderProductInfo.RealCount" />
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((cartProductInfo.OrderProductInfo.BuyCount + 1).ToString()))" class="up">+</a>
+                        </dd>
+                        <div class="clear"></div>
+                    </dl>
+                </div>
+                <div class="subTotalItem @(!WorkContext.IsDirSaleUser ? "width200" : "")">@((cartProductInfo.OrderProductInfo.DiscountPrice * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                @if (WorkContext.IsDirSaleUser)
+                {
+                    <div class="subPVtotalItem">@((cartProductInfo.OrderProductInfo.PV * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                }
+                <div class="cell actionC">
+                    <a href="javascript:void(0)" onclick="if (confirm('您确定要把该商品移出购物车吗？')) delCartProduct(@cartProductInfo.OrderProductInfo.Pid,0)">删除</a>
+                    <a href="javascript:void(0)" onclick="addProductToFavorite(@cartProductInfo.OrderProductInfo.Pid)">移入收藏夹</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+                }
+            }
+            else if (cartItemInfo.Type == 3)
+            {
+                CartFullCutInfo cartFullCutInfo = (CartFullCutInfo)cartItemInfo.Item;
+                if (cartFullCutInfo.IsEnough)
+                {
+            <div class="buyItme_header">
+                <div class="info"><s>满减</s>活动商品已购满 @cartFullCutInfo.LimitMoney 元,优惠 @cartFullCutInfo.CutMoney 元</div>
+                <div class="price">&nbsp;</div>
+                <s>满减：¥@cartFullCutInfo.CutMoney</s><a href="@Url.Action("fullcutproductlist", new RouteValueDictionary { { "storeId", cartFullCutInfo.FullCutPromotionInfo.StoreId }, { "pmId", cartFullCutInfo.FullCutPromotionInfo.PmId } })" class="more right">活动商品</a>
+            </div>
+                }
+                else
+                {
+            <div class="buyItme_header">
+                <div class="info"><s>满减</s>活动商品购满 @cartFullCutInfo.LimitMoney 元,即可享受满减 @cartFullCutInfo.CutMoney 元</div>
+            </div>
+                }
+
+                foreach (CartProductInfo cartProductInfo in cartFullCutInfo.FullCutCartProductList)
+                {
+            <div class="buyItmeC @(cartProductInfo.OrderProductInfo.ProductState >= 1 || cartProductInfo.OrderProductInfo.ProductState == -1 ? "invalid" : (cartProductInfo.Selected ? "buyActive" : ""))">
+                <div class="cell checkC">
+                    <input type="checkbox" name="cartItemCheckbox" storeId="@storeCartInfo.StoreInfo.StoreId" @{if (cartProductInfo.Selected)
+                                                                                                                {<text>checked="checked"</text>}} value="0_@{@cartProductInfo.OrderProductInfo.Pid}" onclick="cancelOrSelectCartItem()"/>&nbsp;
+                </div>
+                <div class="cell productC">
+                    <div class="productC1">
+                        <img src="/upload/store/@cartProductInfo.OrderProductInfo.StoreId/product/show/thumb60_60/@cartProductInfo.OrderProductInfo.ShowImg" width="50" height="50" />
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", cartProductInfo.OrderProductInfo.Pid } })">@cartProductInfo.OrderProductInfo.Name</a>
+                        <div class="clear"></div>
+                    </div>
+                    @if (cartProductInfo.GiftList.Count > 0)
+                    {
+                        <div class="productC2">
+                            @foreach (OrderProductInfo gift in cartProductInfo.GiftList)
+                            {
+                                <p>[赠品] @gift.Name</p>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="cell priceC">¥@cartProductInfo.OrderProductInfo.DiscountPrice</div>
+                @*@if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId == 0)
+                {
+                    <div class="priceC1 ">赠积分：<em>@cartProductInfo.OrderProductInfo.PayCredits</em></div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits == 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠优惠劵</div>
+                }
+                else if (cartProductInfo.OrderProductInfo.PayCredits > 0 && cartProductInfo.OrderProductInfo.CouponTypeId > 0)
+                {
+                    <div class="priceC1 ">赠京豆(@cartProductInfo.OrderProductInfo.PayCredits)和优惠劵</div>
+                }
+                else
+                {
+                    <div class="nopriceC1"></div> 
+                }*@
+                <div class="cell numberC">
+                    <dl class="buyNB">
+                        <dd>
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((cartProductInfo.OrderProductInfo.BuyCount - 1).ToString()))" class="down">-</a>
+                            <input type="text" onfocus="numberFocus(this)" onblur="numberBlur(this,@cartProductInfo.OrderProductInfo.Pid,0)" value="@cartProductInfo.OrderProductInfo.RealCount" />
+                            <a href="javascript:void(0)" onclick="changePruductCount(@cartProductInfo.OrderProductInfo.Pid,@Html.Raw((cartProductInfo.OrderProductInfo.BuyCount + 1).ToString()))" class="up">+</a>
+                        </dd>
+                        <div class="clear"></div>
+                    </dl>
+                </div>
+                <div class="subTotalItem @(!WorkContext.IsDirSaleUser ? "width200" : "")">@((cartProductInfo.OrderProductInfo.DiscountPrice * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                @if (WorkContext.IsDirSaleUser)
+                {
+                    <div class="subPVtotalItem">@((cartProductInfo.OrderProductInfo.PV * cartProductInfo.OrderProductInfo.BuyCount).ToString("0.00"))</div>
+                }
+                <div class="cell actionC">
+                    <a href="javascript:void(0)" onclick="if (confirm('您确定要把该商品移出购物车吗？')) delCartProduct(@cartProductInfo.OrderProductInfo.Pid,0)">删除</a>
+                    <a href="javascript:void(0)" onclick="addProductToFavorite(@cartProductInfo.OrderProductInfo.Pid)">移入收藏夹</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+                }
+            }
+        }
+    </div>
+    <div class="subSum">
+        <div class="right">
+            @*<p class="left"><span>优惠：<i class="hg_yahei">-</i><i class="hg_yahei subTotalDiacount">@Carts.SumOrderProductDiscount(storeCartInfo.SelectedOrderProductList)</i></span></p>*@
+            <p class="left"><span>可用红包减免：<i class="hg_yahei">-</i><i class="hg_yahei subTotalDiacount">@Carts.SumOrderProductHongBaoCutAmount(storeCartInfo.SelectedOrderProductList)</i></span></p>
+            <p class="left"><span>合计：<i class="hg_yahei"></i>
+                <i class="hg_yahei subTotalPrice">@Carts.SumOrderProductAmount(storeCartInfo.SelectedOrderProductList)</i>
+                <i style="display:none;" class="hg_yahei @("storeSub_"+storeCartInfo.StoreInfo.StoreId)">@Carts.SumOrderProductAgentOrginAmount(storeCartInfo.SelectedOrderProductList)</i>
+                            </span></p>
+            @if (WorkContext.IsDirSaleUser)
+            {
+                <p class="left"><span>PV：<i class="hg_yahei"></i><i class="hg_yahei subTotalPV">@Carts.SumOrderProductPVAmount(storeCartInfo.SelectedOrderProductList).ToString("0.00")</i></span></p>
+            }
+        </div>
+    </div>
+            }
+
+    <div class="buySum">
+        @*<div class="left sum1">
+            <label>
+                <input type="checkbox" checked="checked" id="selectAllBut_bottom" onclick="cancelOrSelectAllCartItem(this)" />&nbsp;全选
+
+            </label>
+            <a href="javascript:void(0)" onclick="clearCart(0)">清空购物车</a>
+            
+        </div>*@
+        @*<div class="right sum2">
+            <div class="left">已选择<font color="red" id="totalCount">@Model.TotalCount</font>件商品</div>
+            <div class="left sum3">
+                <p>总计：<span class="right" id="productAmount">¥@Model.ProductAmount</span></p>
+                <p>已节省：<span class="right" id="fullCut">- ¥@Model.FullCut</span></p>
+            </div>
+            <div class="clear"></div>
+        </div>*@
+        <div class="clear"></div>
+        <div class="buySumBt">
+            <div class="left sum1">
+                <label>
+                    <input type="checkbox" checked="checked" id="selectAllBut_bottom" onclick="cancelOrSelectAllCartItem(this)" />&nbsp;全选
+                </label>
+                <a href="javascript:void(0)" onclick="batchDelete();">批量删除选中的商品</a>
+                <a href="javascript:void(0)" onclick="clearCart(0)">清空购物车</a>
+            </div>
+            <div class="buySumRight">
+                @if (WorkContext.IsDirSaleUser)
+                {
+                    <span>PV总计：</span>
+                    <b id="pvAmount">@Model.PVAmount.ToString("0.00")</b>
+                }
+                <span>已选择<font color="red" id="buySumtotalCount" style="font-size: 14px; font-weight: normal;">&nbsp;@Model.TotalCount&nbsp;</font>件商品 </span>
+                @if (Model.taxAmount > 0)
+                {
+                    <span>关税：</span><span style="color: #e4393c;"><span style="font-size: 16px;">@Model.taxAmount.ToString("0.00")</span> (元)  </span>
+                    if (Model.taxAmount <= 50)
+                    {
+                    <span style="color: #e4393c;">(免税)</span>
+                    }
+                    <span>&nbsp; &nbsp;</span>
+                }
+                <span>总计（不含运费）：</span>
+                <b id="orderAmount">¥@Model.OrderAmount.ToString("0.00")</b><form action="@Url.Action("confirmorder", "order")" method="post">
+                    <input name="selectedCartItemKeyList" id="selectedCartItemKeyList" value="" type="hidden" />
+                    <input name="selectedStoreKeyList" id="selectedStoreKeyList" value="" type="hidden" />
+                    <a href="javascript:void(0)" onclick="goConfirmOrder()" class="redBT">立即结算</a>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <ul id="noBuy">
+        @if (WorkContext.Uid < 1)
+        {
+            <li>购物车内暂时没有商品，<a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", Url.Action("index") } })">登录</a>后，将显示您之前加入的商品</li>
+            <li><a href="/">去首页</a>挑选喜欢的商品</li>
+        }
+        else
+        {
+            <li>购物车内暂时没有商品，<a href="/">去首页</a>挑选喜欢的商品</li>
+        }
+    </ul>   
+}

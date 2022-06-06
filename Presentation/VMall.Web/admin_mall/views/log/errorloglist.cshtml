@@ -1,0 +1,198 @@
+﻿@model VMall.Web.MallAdmin.Models.ErrorLogListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>商城错误日志列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <style>
+        .overflow_table_td {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4; /*//从第3行开始隐藏*/
+        }
+
+        .overflow_p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 900px;
+        }
+    </style>
+}
+
+@section body{
+    <section class="content-header" style="background-color: #f5f5f5;">
+        <h1></h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">日志管理</a></li>
+            <li class="active">错误日志列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+
+    </section>
+
+    @using (Html.BeginForm("errorloglist", "log"))
+    {
+       <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>标题：</label>
+                                @Html.TextBox("Title", Model.Title, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>开始时间：</label>
+                                @Html.TextBox("StartTime", Model.StartTime, new { @class = "form-control", onclick = "WdatePicker({el:'StartTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <label>结束时间：</label>
+                                @Html.TextBox("EndTime", Model.EndTime, new { @class = "form-control", onclick = "WdatePicker({el:'EndTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchLog" name="SearchLog" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">标题</th>
+                                        <th class="col-md-7 ">异常信息</th>
+                                        <th class="col-md-1">记录IP</th>
+                                        <th class="col-md-1">时间</th>
+                                        <th class="col-md-1">管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in Model.ErrorLogList)
+                                    {
+                                        <tr>
+                                            <td>@row.Title</td>
+                                            <td>
+                                                <p class="overflow_p">@row.Message</p>
+                                            </td>
+                                            <td>@row.IP</td>
+                                            <td>@(row.LogDate.ToString("f"))</td>
+                                            <td>
+                                                @*<a type="button" class="btn btn-default" data-toggle="modal" href="/malladmin/log/ErrorDetail?id=@(row.Id)" data-target="#modal-default" data-backdrop = "static">
+                                                    查看详情
+              
+                                                </a>*@
+                                                <button type="button" class="btn btn-default" data-toggle="modal"  data-target="#modal-default" data-backdrop = "static" data-id="@(row.Id)" data-errtitle="@(row.Title)" @*data-errmessage="@(row.Message)"*@>
+                                                    查看详情
+              
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <div class="dataListEdit">
+
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+    <script>
+        $(function () {
+
+            $('#modal-default').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                //var title = button.data('errtitle');
+                var title = button.context.dataset.errtitle;
+                var message = button.data('errmessage');
+                var modal = $(this);
+                //alert(message);
+                //button.data('whatever') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var id = button.context.dataset.id;
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: "/malladmin/log/ErrorDetailJson?id=" + id,
+                    dataType: "json",
+                    //data: { password: password },
+                    success: function (result) {
+                        //alert(result.Message);
+
+                        //alert(modal);
+                        modal.find('.modal-title').text(result.Title);
+                        modal.find('.modal-body').html(result.Message);
+                    }
+                });
+
+                //var modal = $(this);
+                //modal.find('.modal-title').text(title);
+                //modal.find('.modal-body p').html(message);
+
+
+            })
+            //$('#modal-default').on('hidden.bs.modal', function (event) {
+            //     $(this).removeData("bs.modal");
+            //})
+        });
+    </script>
+
+    <div class="modal fade in bs-example-modal-lg" id="modal-default" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">异常详情</h4>
+                </div>
+                <div class="modal-body">
+                    异常信息：<p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        关闭
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+}

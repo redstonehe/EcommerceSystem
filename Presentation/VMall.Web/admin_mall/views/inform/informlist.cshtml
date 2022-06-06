@@ -1,0 +1,155 @@
+﻿@model VMall.Web.MallAdmin.Models.InformListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>消息列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js?0124"></script>
+    <link rel="stylesheet" type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script>
+        function showmore(ele) {
+            var title = $(ele).attr("data-title");
+            var moreMsg = $(ele).next();
+            var html = moreMsg.html();
+            $.jBox(html, {
+                title: title, 
+                width: 1200, height: 750,
+                loaded: function (h) {
+                    $(".jbox-button-panel").eq(1).css("height", "auto");
+                }
+            });
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">会员管理</a></li>
+            <li class="active">消息列表</li>
+        </ol>
+        <div class="right">
+            <a href="@Url.Action("addinform")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加消息</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("informlist", "inform"))
+    {
+        <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+        <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>类型：</label>
+                                @Html.DropDownListFor(x => x.InformTypeId, ViewData["InformTypeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>标题：</label>
+                                @Html.TextBox("InformTitle", Model.InformTitle, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+
+                                <button type="button" id="SearchNews" name="SearchNews" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+               
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>会员ID
+                                        </th>
+                                        <th>会员</th>
+                                        <th>消息</th>
+                                        <th>正文</th>
+                                        <th name="sortTitle" column="consulttime" direction="DESC">时间</th>
+                                        <th>是否已读</th>
+                                        @* <th>操作</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.InformList.Rows)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" value="@row["id"]" selectItem="true" name="consultIdList" /></td>
+                                            <td>@row["uid"]</td>
+                                            <td>@row["mobile"]</td>
+                                            <td>
+                                                <div>@row["title"]</div>
+                                            </td>
+                                            <td>
+                                                @if (row["content"].ToString().Contains("img src="))
+                                                {
+                                                    <strong class="btn-link" style="cursor:pointer" onclick="showmore(this)" data-title="@row["title"]">【图文消息】@StringHelper.TextNoHTML(row["content"].ToString())</strong>
+                                                    <div class="hide">@row["content"]</div>
+                                                }
+                                                else
+                                                { 
+                                                    @row["content"].ToString().Trim()
+                                                }
+                                            </td>
+                                            <td>@TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>
+                                                @if (row["state"].ToString() == "0")
+                                                {
+                                                    <strong class="text-green">未读</strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong class="text-gray">已读</strong>
+                                                }
+                                            </td>
+                                            @*<td>
+                                                @if (row["state"].ToString() == "0")
+                                                {
+                                                    <a class="btn btn-primary btn-sm" href="@Url.Action("editinform", new { Id = row["id"] })">编辑</a>
+                                                }
+
+                                            </td>*@
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <div class="dataListEdit">
+            @*<a href="#" delUrl="@Url.Action("delnews")" class="batch batchDel">批量删除</a>*@
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

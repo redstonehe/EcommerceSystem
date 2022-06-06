@@ -1,0 +1,207 @@
+﻿@model VMall.Web.MallAdmin.Models.StoreShipFeeModel
+@section header{
+    <title>添加配送费用</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js?201708"></script>
+
+    @*<script type="text/javascript">
+        var provinceId = @ViewData["provinceId"]; //省id
+        var cityId = @ViewData["cityId"]; //市id
+
+        //绑定省列表
+        function bindProvinceList(provinceSelectObj, selectProvinceId) {
+            $.get("/malladmin/tool/ProvinceList", function (data) {
+                var provinceList = eval("(" + data + ")");
+                if (provinceList.length > 0) {
+                    var optionStr = "<option value='0'>全部</option>";
+                    for (var i = 0; i < provinceList.length; i++) {
+                        optionStr = optionStr + "<option value='" + provinceList[i].id + "'>" + provinceList[i].name + "</option>";
+                    }
+                    provinceSelectObj.html(optionStr);
+                    if (selectProvinceId == undefined)
+                        selectProvinceId = -1;
+                    provinceSelectObj.find("option[value=" + selectProvinceId + "]").attr("selected", true);
+                }
+                else {
+                    alert("加载省列表时出错！")
+                }
+            })
+        }
+
+        //绑定市列表
+        function bindCityList(provinceId, citySelectObj, selectCityId) {
+            $.get("/malladmin/tool/CityList?provinceId=" + provinceId, function (data) {
+                var cityList = eval("(" + data + ")");
+                if (cityList.length > 0) {
+                    var optionStr = "<option value='0'>全部</option>";
+                    for (var i = 0; i < cityList.length; i++) {
+                        optionStr = optionStr + "<option value='" + cityList[i].id + "'>" + cityList[i].name + "</option>";
+                    }
+                    citySelectObj.html(optionStr);
+                    if (selectCityId == undefined)
+                        selectCityId = -1;
+                    citySelectObj.find("option[value=" + selectCityId + "]").attr("selected", true);
+                }
+                else {
+                    alert("加载市列表时出错！")
+                }
+            })
+        }
+
+        $(function () {
+            //绑定省列表的改变事件
+            $("#provinceSelect").change(function () {
+                var selectedProvinceSelect = $(this);
+                var selectedProvinceId = selectedProvinceSelect.find('option:selected').val();
+                if (selectedProvinceId > 0) {
+                    selectedProvinceSelect.parent().find(".countySelect").html("<option value='0'>全部</option>")
+                    bindCityList(selectedProvinceId, selectedProvinceSelect.parent().find(".citySelect"));
+                }
+                else {
+                    selectedProvinceSelect.parent().find(".countySelect").html("<option value='0'>全部</option>")
+                }
+                $("#regionId").val(selectedProvinceId);
+            })
+
+            //绑定市列表的改变事件
+            $("#citySelect").change(function () {
+                var selectedCitySelect = $(this);
+                var selectedCityId = selectedCitySelect.find('option:selected').val();
+                if (selectedCityId > 0) {
+                    $("#regionId").val(selectedCityId);
+                }
+            })
+
+            //绑定省列表
+            bindProvinceList($("#provinceSelect"), provinceId);
+
+            if (cityId > 0) {
+                bindCityList(provinceId, $("#provinceSelect").parent().find(".citySelect"), cityId);
+            }
+        })
+    </script>*@
+}
+
+@section body{
+    <h1 class="rightH1">店铺管理 &gt;&gt; 添加配送费用
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        
+        <div class="addTable">
+            <table width="100%">
+                <tr>
+                    <td width="80px" align="right">选择区域：</td>
+                    <td>
+                        <div class="selectBt">
+                            <input type="button" value="选择区域" onclick="openRegionSelectLayer(this)" />
+                            <input type="hidden" class="RegionId" id="RegionId" name="RegionId" value="@Model.RegionId" />
+                            <input type="hidden" class="CityId" id="CityId" name="CityId" value="@Model.CityId" />
+                            <input type="hidden" class="RegionName" id="RegionName" name="RegionName" value="@Model.RegionName"/>
+                        </div>
+                        @Html.ValidationMessageFor(x => x.RegionId)
+                    </td>
+                    @*<td>
+           <select class="provinceSelect" id="provinceSelect">
+                <option selected="selected" value="0">全部</option>
+           </select>
+           <select class="citySelect" id="citySelect">
+                <option selected="selected" value="0">全部</option>
+           </select>
+    </td>*@
+                </tr>
+                @if (Model.Free == 3)
+                {
+                    <tr>
+                        <td align="right">运费类型：</td>
+                        <td>
+                            <p>
+                                <label>@Html.RadioButtonFor(x => x.ShipType, 0, new { @class = "checkbox" })包邮运费</label>
+                                <label>@Html.RadioButtonFor(x => x.ShipType, 1, new { @class = "checkbox" })不包邮运费</label>
+                                <br />
+                            </p>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Free == 4)
+                {
+                    <tr>
+                        <td align="right">运费类型：</td>
+                        <td>
+                            <p>
+                                <label>@Html.RadioButtonFor(x => x.ShipType, 0, new { @class = "checkbox" }) 小于特定件数快递运费</label>
+                                <label>@Html.RadioButtonFor(x => x.ShipType, 1, new { @class = "checkbox" }) 大于特定件数物流运费</label>
+                                <br />
+                            </p>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td align="right">@if (Model.Type == 0)
+                                      {<text>首件</text>}
+                                      else
+                                      {<text>首重</text>}：</td>
+                    <td>@Html.TextBoxFor(x => x.StartValue, new { @class = "input", size = "3" })@Html.ValidationMessageFor(x => x.StartValue)
+                        <span style="color: red;">(@if (Model.Type == 0)
+                                                   {<text>件数</text>}
+                                                   else
+                                                   {<text>千克</text>})
+
+                        </span></td>
+
+                </tr>
+                <tr>
+                    <td align="right">首费：</td>
+                    <td>@Html.TextBoxFor(x => x.StartFee, new { @class = "input", size = "3" })@Html.ValidationMessageFor(x => x.StartFee)</td>
+                </tr>
+                <tr>
+                    <td align="right">@if (Model.Type == 0)
+                                      {<text>续件</text>}
+                                      else
+                                      {<text>续重</text>}：</td>
+                    <td>@Html.TextBoxFor(x => x.AddValue, new { @class = "input", size = "3" })@Html.ValidationMessageFor(x => x.AddValue)
+                        <span style="color: red;">(@if (Model.Type == 0)
+                                                   {<text>件数</text>}
+                                                   else
+                                                   {<text>千克</text>})
+                        </span></td>
+                </tr>
+                <tr>
+                    <td align="right">续费：</td>
+                    <td>@Html.TextBoxFor(x => x.AddFee, new { @class = "input", size = "3" })@Html.ValidationMessageFor(x => x.AddFee)</td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

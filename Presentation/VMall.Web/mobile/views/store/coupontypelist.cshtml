@@ -1,0 +1,21 @@
+﻿@model VMall.Web.Mobile.Models.CouponTypeListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "优惠劵列表";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 7;
+}
+
+<div class="yhjBox yhjBox1">
+
+    @foreach (CouponTypeInfo info in Model.CouponTypeList)
+    {
+        <a href="javascript:getCoupon(@info.CouponTypeId);" class="yhj">
+            <div class="line"></div>
+            <p><span class="other">@info.Money</span><span>@info.Name</span><span>@info.SendStartTime.ToShortDateString() - @info.UseEndTime.ToShortDateString()</span></p>
+            <span class="useBt">领取</span>
+        </a>
+    }
+
+</div>
+

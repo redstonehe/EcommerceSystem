@@ -1,0 +1,154 @@
+﻿<div class="position">
+    <strong><a href="@Url.Action("userinfo")">个人中心</a> </strong><span>&gt;@ViewBag.PositionTitle</span>
+</div>
+<div id="memberL" style="padding: 0px; /*border: 1px solid #DDDDDD; */ margin-left: 2px;">
+
+    <h2>个人中心</h2>
+    <div id="menu">
+        <ul id="menuUl">
+            <li class="hot">
+                <h2 class="hot">账户中心</h2>
+                <a href="@Url.Action("userinfo")" >个人资料</a>
+                <a href="@Url.Action("safeinfo")">账户安全</a>
+                <a href="@Url.Action("shipaddresslist")">收货地址</a>
+            </li>
+            <li class="hot">
+                <h2>订单中心</h2>
+                <a href="@Url.Action("orderlist")">我的订单</a>
+                <a href="@Url.Action("productreviewlist")">商品评价</a>
+            </li>
+            <li class="hot">
+                <h2>我的收藏</h2>
+                <a href="@Url.Action("favoriteproductlist")">收藏商品</a>
+                <a href="@Url.Action("favoritestorelist")">收藏店铺</a>
+            </li>
+            <li class="hot">
+                <h2>资产中心</h2>
+                <a href="@Url.Action("accountinfo")">资产账户</a>
+                <a href="@Url.Action("couponlist")">优惠劵</a>
+                <a href="@Url.Action("excodelist")">兑换码</a>
+                <a href="@Url.Action("subrecommendlist")">分享会员</a>
+                @if (WorkContext.IsDirSaleUser)
+                { 
+                    <a href="@Url.Action("CashCouponList")">汇购卡</a>
+                }
+
+                @if (WorkContext.IsDirSaleUser)
+                { 
+                    <a href="@Url.Action("ChongXiaoQuery")">重消查询</a>
+                }
+                <a href="@Url.Action("DrawCash")">海米提现</a>
+                <a href="@Url.Action("Kf2SeverbApply")">尚睿淳余额转出</a>
+            </li>
+            <li class="hot">
+                <h2>代理中心</h2>
+                <a href="@Url.Action("MyAgent")">我的代理</a>
+                <a href="@Url.Action("getstock")">库存查询</a>
+                <a href="@Url.Action("incomewithdraw")">代理提现</a>
+                <a href="@Url.Action("CommissionWithDraw")">佣金提现</a>
+            </li>
+            @if (WorkContext.PartUserInfo.BusiCentType==1)
+            { 
+            <li class="hot">
+                <h2>商务中心</h2>
+                <a href="@Url.Action("dsorderapply")">1980代报单</a>
+                
+            </li>
+            }
+        </ul>
+    </div>
+    @*<div class="subTitle">
+        <div class="classTitle">
+
+           
+            <p class="icon_p">账户中心</p>
+        </div>
+        <ul>
+            <li><a href="@Url.Action("userinfo")" class="hot">个人资料</a></li>
+            <li><a href="@Url.Action("safeinfo")">账户安全</a></li>
+            <li><a href="@Url.Action("shipaddresslist")">收货地址</a></li>
+        </ul>
+    </div>
+    <div class="subTitle">
+        <div class="classTitle">
+            
+            <p class="icon_p">订单中心</p>
+        </div>
+        <ul>
+            <li><a href="@Url.Action("orderlist")">我的订单</a></li>
+            <li><a href="@Url.Action("productreviewlist")">商品评价</a></li>
+           
+        </ul>
+    </div>
+    <div class="subTitle">
+        <div class="classTitle">
+            
+            <p class="icon_p">我的收藏</p>
+        </div>
+        <ul>
+            <li><a href="@Url.Action("favoriteproductlist")">收藏商品</a></li>
+            <li><a href="@Url.Action("favoritestorelist")">收藏店铺</a></li>
+
+        </ul>
+    </div>
+    <div class="subTitle">
+        <div class="classTitle">
+            
+            <p class="icon_p">资产中心</p>
+        </div>
+        <ul>
+
+            <li><a href="@Url.Action("accountinfo")">资产账户</a></li>
+            <li><a href="@Url.Action("couponlist")">优惠劵</a></li>
+            <li><a href="@Url.Action("excodelist")">兑换码</a></li>
+            @if (WorkContext.IsDirSaleUser)
+            { 
+            <li><a href="@Url.Action("CashCouponList")">汇购卡</a></li>
+            }
+            <li><a href="@Url.Action("subrecommendlist")">分享会员</a></li>
+            @if (WorkContext.IsDirSaleUser)
+            { 
+                <li><a href="@Url.Action("ChongXiaoQuery")">重消查询</a></li>
+            }
+            <li><a href="@Url.Action("DrawCash")">海米提现</a></li>
+        </ul>
+    </div>*@
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var _nava = $('#memberL ul li a');
+        var _url = window.location.href;
+        $.each(_nava, function (i, n) {
+            if (_url.indexOf($(n).attr('href')) != -1) {
+                $(n).css("color", "#D02424").siblings().css("color", "#666");
+                ;
+            }
+        });
+
+        // $("#showcateory ul li a img")
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#menu h2").click(function () {
+            if ($(this).parent("li").hasClass("hot")) {
+                $(this).parent("li").removeClass("hot");
+            } else {
+                $("#menu h2").removeClass("hot");
+                $(this).addClass("hot").parent("li").addClass("hot");
+            }
+        })
+
+
+        $("#menu ul li a").click(function () {
+            $("#menu h2").removeClass("hot");
+            $("#menu a").removeClass("hot");
+            $(this).addClass("hot").parent("li").children("h2").addClass("hot")
+
+        })
+    })
+
+</script>

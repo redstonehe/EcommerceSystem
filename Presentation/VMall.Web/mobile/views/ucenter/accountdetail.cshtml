@@ -1,0 +1,214 @@
+﻿@model VMall.Web.Mobile.Models.AccountDetailModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.AccountName + "详情"; ;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<link rel="stylesheet" href="/mobile/static/dropload/dropload.css">
+<!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+@* <script src="/mobile/static/dropload/zepto.min.js"></script>*@
+<script src="/mobile/static/dropload/jquery.min.js"></script>
+
+<script src="/mobile/static/dropload/dropload.min.js"></script>
+
+<style>
+    /*table tr {
+        height: 35px;
+        line-height: 35px;
+    }*/
+
+    /*table th {
+        font-size: 14px;
+    }*/
+
+    /*table td {
+        border: 1px solid #808080;
+        padding: 5px;
+        vertical-align: middle;
+        font-size: 12px;
+    }*/
+
+    /*#order_table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }*/
+
+    .viewport {
+        width: 900px;
+        max-width: 1000px;
+        /*margin: 0 auto;*/
+    }
+</style>
+
+<div class="myAssetsCon am-scrollable-horizontal inner">
+
+    <table class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-compact">
+        <thead>
+            <tr>
+                <th width="12%">创建时间</th>
+                <th width="5%">类型</th>
+                <th width="5%">金额</th>
+                <th width="8%">当前余额</th>
+                <th align="left">说明</th>
+            </tr>
+        </thead>
+        <tbody id="order_table " class="lists">
+            
+            @Html.Partial("/mobile/views/ucenter/accountdetailajax.cshtml", Model)
+            
+            @*@foreach (var item in Model.AccountDetailList)
+            {
+                <tr>
+                    <td>@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @if (item.InAmount > 0)
+                        { 
+                            @:收入
+                                }
+                        @if (item.OutAmount > 0)
+                        {
+                            @:支出
+                                }
+
+                    </td>
+                    <td>
+                        @if (item.InAmount > 0)
+                        { 
+                            @("+" + item.InAmount.ToString("f2"))
+                        }
+                        @if (item.OutAmount > 0)
+                        {
+                            @("-" + item.OutAmount.ToString("f2"))
+                        }
+                    </td>
+                    <td>@item.CurBanlance.ToString("0.00")</td>
+                    <td align="left">@item.DetailDes</td>
+                </tr>
+            }*@
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+
+        var page = 1;
+
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea: window,
+            autoLoad: false,
+            domUp: {
+                domClass: 'dropload-up',
+                domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate: '<div class="dropload-update">↑释放更新</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>'
+            },
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">————我已经到底啦————</div>'
+            },
+            loadUpFn: function (me) {
+
+                $.ajax({
+                    type: 'GET',//int uid, int accountId, string accountName
+                    url: '/mob/ucenter/accountDetail?uid=@(WorkContext.Uid)&accountId=@(Model.AccountId)&accountName=@(Model.AccountName)&page=' + page,
+                    //dataType: 'json',
+                    success: function (data) {
+                        //alert(data);
+                        var result = '';
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            //$('.lists').html(result);
+                            window.location.href = window.location.href;
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                            // 解锁loadDownFn里锁定的情况
+                            me.unlock();
+                            me.noData(false);
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            },
+            loadDownFn: function (me) {
+                page++;
+                $.ajax({
+                    type: 'GET',
+                    url: '/mob/ucenter/accountDetail?uid=@(WorkContext.Uid)&accountId=@(Model.AccountId)&accountName=@(Model.AccountName)&page=' + page,
+                    // dataType: 'json',
+                    success: function (data) {
+
+                        if (data.indexOf("<tr>") <= -1) {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            $('.lists').append(data);
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            }
+        });
+    });
+        </script>
+
+@*<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getAccountDetailList(@WorkContext.Uid,@Model.AccountId,accountDetailNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<script>
+    //获得订单列表
+    var accountDetailNextPageNumber = 2;
+    var detailhasNextPage = false;
+    function getAccountDetailList(uid, accountid, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/accountDetail?uid=" + uid + "&accountId=" + accountid + "&page=" + page, false, function (data) {
+            getDetailListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getDetailListResponse(data) {
+        $("#order_table").append(data);
+        if (detailhasNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            accountDetailNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>*@

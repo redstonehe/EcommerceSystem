@@ -1,0 +1,90 @@
+﻿@model VMall.Web.MallAdmin.Models.AccountInfoListModel
+@section header{
+    <title>帐号列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 帐号列表
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回用户列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("accountlist", "user"))
+    {
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>帐号名称</th>
+                                        <th>用户</th>
+                                        @* <th>总收入</th>
+                        <th>总支出</th>*@
+
+                                        <th>可用余额</th>
+                                        <th>冻结余额</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in Model.AccountInfoList)
+                                    {
+                                        <tr>
+
+                                            <td>@row.AccountId</td>
+                                            <td>@row.AccountName</td>
+                                            <td>@Model.Username</td>
+                                            @* <td>@row.TotalIn</td>
+                            <td>@row.TotalOut</td>*@
+                                            <td>@row.Banlance.ToString("f2")</td>
+                                            <td>@row.LockBanlance.ToString("f2")</td>
+                                            <td>
+                                                @Html.ActionLink("[查看详情]", "accountdetail", new { uid = Model.Uid, accountId = row.AccountId, accountName = row.AccountName }, new { @class = "editOperate" })
+                                                @if (row.AccountId == (int)AccountType.积分账户)
+                                                {
+                                                    if (WorkContext.MallAGid == 2)
+                                                    {
+                                                        //if (WorkContext.OperateRights.Exists(x => x.Operate == "accountrecharge"))
+                                                        //{
+                                                    @Html.ActionLink("[充值此账户]", "accountrecharge", new { uid = Model.Uid, accountId = row.AccountId }, new { @class = "editOperate" })
+                                                        //}
+                                                    }
+                                                }
+                                                @if ((WorkContext.Uid == 1 && (row.AccountId == 30 || row.AccountId == 31)) || (WorkContext.Uid == 35469 && row.AccountId == 31))
+                                                { 
+                                                    @Html.ActionLink("[修改账户]", "accountmodify", new { uid = Model.Uid, accountId = row.AccountId }, new { @class = "editOperate" })}
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+    }
+}

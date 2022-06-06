@@ -1,0 +1,65 @@
+﻿@model VMall.Web.Mobile.Models.InformListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "我的消息";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .viewport {
+        /*width: 600px;*/
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+    .operate {
+        text-decoration: underline;
+        color: blue;
+    }
+
+    .myAssetsCon i.dot {
+        margin-right: 9px;
+        font-size: 12px;
+    }
+
+    .hasread {
+        color: #8d8d8d;
+    }
+
+    .notify_status {
+        float: right;
+        margin-right: 30px;
+    }
+</style>
+<script>
+    
+</script>
+
+<div class="myAssetsCon">
+    <ul class="am-list am-list-border">
+        @foreach (var item in Model.InformList.OrderByDescending(x=>x.addtime))
+        { 
+            <li>
+                <a href="@Url.Action("Informdetail", new { id = item.id })" class="am-text-truncate @(item.state == 1 ? "hasread" : "")">
+                    <i class="dot">●</i>
+                    <span>@item.title</span>
+                    <span class="notify_status">
+                        <span class="notify_time">@item.addtime.ToString("MM-dd")
+                        </span>
+                    </span>
+                </a>
+
+            </li>
+        }
+
+
+    </ul>
+
+</div>
+
+
+

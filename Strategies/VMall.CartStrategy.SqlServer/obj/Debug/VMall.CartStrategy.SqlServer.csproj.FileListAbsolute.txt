@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.CartStrategy.SqlServer.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.CartStrategy.SqlServer.pdb
+C:\develop\德鹿商城\Strategies\VMall.CartStrategy.SqlServer\obj\Debug\VMall.CartStrategy.SqlServer.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Strategies\VMall.CartStrategy.SqlServer\obj\Debug\VMall.CartStrategy.SqlServer.dll
+C:\develop\德鹿商城\Strategies\VMall.CartStrategy.SqlServer\obj\Debug\VMall.CartStrategy.SqlServer.pdb

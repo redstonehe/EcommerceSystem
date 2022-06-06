@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "申请代理-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+</style>
+<script>
+   
+</script>
+<div class="reg box" style="width:1000px">
+    <div style="margin-left: 94px; margin-bottom: 20px;">
+        <h2>申请代理</h2>
+    </div>
+    <form name="registerForm" action="@Url.Action("submitApply")" method="post">
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="SHtable" style="border: 0;">
+            <tr class="succ_on">
+                <th width="190"><em>*</em>代理级别：</th>
+                <td width="275">
+                    <select id="agentType" name="agentType" style="width: 100%;border: 1px solid #7abd54;height: 32px;">
+                        <option value="">选择代理级别</option>
+                        <option value="DIRECTOR">大区</option>
+                        <option value="GENERAL">VIP</option>
+                        <option value="SECOND">星级用户</option>
+                        <option value="FIRST">优惠用户</option>
+                    </select>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>上级代理手机号：</th>
+                <td width="275">
+                    <input type="text" id="parentPhone" name="parentPhone" value="" class="text" maxlength="11"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>姓名：</th>
+                <td width="275">
+                    <input type="text" id="name" name="name" value="" class="text" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>微信号：</th>
+                <td width="275">
+                    <input type="text" id="weixin" name="weixin" value="" class="text" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>手机号：</th>
+                <td width="275">
+                    <input type="text" id="userPhone" name="userPhone" value="" class="text" maxlength="11" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em></em>身份证：</th>
+                <td width="275">
+                    <input type="text" id="userCard" name="userCard" value="" class="text" maxlength="18" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th><em>*</em>所在地区：</th>
+                <td>
+                    <select id="provinceId" name="provinceId">
+                        <option selected="selected" value="-1">请选择</option>
+                    </select>
+                    <select id="cityId" name="cityId">
+                        <option selected="selected" value="-1">请选择</option>
+                    </select>
+                    <select id="regionId" name="regionId">
+                        <option selected="selected" value="-1">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="succ_on">
+                <th><em>*</em>详细地址：</th>
+                <td>
+                    <input type="text" id="address" name="address" value="" class="text" style="width: 480px" /></td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td><a href="javascript:void(0);" class="regBt redBT" onclick="apply();">提交申请</a></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td>（*一个手机微信号只能申请一次，禁止替他人申请，避免造成不必要的麻烦！）</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+<script>
+    function apply() {
+        if (checkInput()) {
+            $("form:first").submit();
+            return false;
+        }
+    }
+    //检查输入
+    function checkInput() {
+        if ($.trim($("#agentType").val()) == "") {
+            alert("请选择代理级别");
+            $("#agentType").focus();
+            return false;
+        }
+        if ($.trim($("#parentPhone").val()) == "") {
+            alert("上级代理手机号不能为空");
+            $("#parentPhone").focus();
+            return false;
+        }
+        var patrn = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!patrn.test($.trim($("#parentPhone").val()))) {
+            alert('对不起,上级代理手机号格式错误,请重新输入!');
+            $("#parentPhone").focus();
+            return false;
+        }
+        if ($.trim($("#name").val()) == "") {
+            alert("姓名不能为空");
+            $("#name").focus();
+            return false;
+        }
+        if ($.trim($("#weixin").val()) == "") {
+            alert("微信不能为空");
+            $("#weixin").focus();
+            return false;
+        }
+        
+        if ($.trim($("#userPhone").val()) == "") {
+            alert("手机号不能为空");
+            $("#userPhone").focus();
+            return false;
+        }
+        if (!patrn.test($.trim($("#userPhone").val()))) {
+            alert('对不起,您输入的手机号码格式错误,请重新输入!');
+            $("#userPhone").focus();
+            return false;
+        }
+        if ($.trim($("#userCard").val()) == "") {
+            alert("身份证号码不能为空");
+            $("#userCard").focus();
+            return false;
+        }
+        //var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        var reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+        if (reg.test($.trim($("#userCard").val())) === false) {
+            alert("身份证输入不合法,请重新输入");
+            $("#userCard").focus();
+            return false;
+        }
+        //if ($.trim($("#weixin").val()) == "") {
+        //    alert("微信不能为空");
+        //    $("#weixin").focus();
+        //    return false;
+        //}
+        if (parseInt($("#regionId").val()) < 1) {
+            alert("请选择区域");
+            return false;
+        }
+        if ($.trim($("#address").val()) == "") {
+            alert("请填写详细地址");
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
+
+
+

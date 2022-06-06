@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.ConfigStrategy.File.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.ConfigStrategy.File.pdb
+C:\develop\德鹿商城\Strategies\VMall.ConfigStrategy.File\obj\Debug\VMall.ConfigStrategy.File.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Strategies\VMall.ConfigStrategy.File\obj\Debug\VMall.ConfigStrategy.File.dll
+C:\develop\德鹿商城\Strategies\VMall.ConfigStrategy.File\obj\Debug\VMall.ConfigStrategy.File.pdb

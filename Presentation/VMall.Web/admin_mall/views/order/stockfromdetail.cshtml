@@ -1,0 +1,449 @@
+﻿@model VMall.Web.MallAdmin.Models.StockFromDetailModel
+@section header{
+    <title>订单拿货来源</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <style type="text/css">
+        .addTable table {
+            border-right: 1px solid #d1d1d1;
+            border-bottom: 1px solid #d1d1d1;
+            margin-top: 20px;
+            margin-left: 16px;
+        }
+
+            .addTable table th {
+                background: #dbeffa;
+                font-weight: normal;
+                height: 26px;
+                padding-left: 4px;
+            }
+
+                .addTable table th a {
+                    padding-left: 8px;
+                }
+
+            .addTable table td {
+                border-left: 1px solid #d1d1d1;
+                border-top: 1px solid #d1d1d1;
+                height: 26px;
+                padding-left: 10px;
+            }
+
+                .addTable table td.pImg {
+                    padding: 10px;
+                }
+
+        .admin tr td a, .btn_a {
+            display: inline-block;
+            color: #fff;
+            background-color: #428bca;
+            padding: 4px 12px;
+            margin: 20px 60px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            /*text-shadow: 0 1px 1px rgba(255,255,255,0.75);*/
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            .admin tr td a:hover {
+                background-color: #006dcc;
+            }
+
+        .admin tr td {
+            text-align: center;
+        }
+
+        .pro_link:hover {
+            color: blue;
+        }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">订单管理 &gt;&gt; 订单拿货来源
+        <div class="right">
+            <a href="@Url.Action("orderinfo", new { oid = Model.OrderInfo.Oid })" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    <div class="addTable">
+        <table width="97%">
+            <tr>
+                <th colspan="8" align="left">基本信息</th>
+            </tr>
+            <tr>
+                <td width="150px">订单序号：</td>
+                <td width="200px">@Model.OrderInfo.Oid</td>
+                <td width="150px">订单编号：</td>
+                <td width="200px">@Model.OrderInfo.OSN</td>
+                <td width="150px">订单状态：</td>
+                <td width="200px">
+                    @{string state = string.Empty;
+                      if (Model.OrderInfo.OrderState == (int)OrderState.Completed || Model.OrderInfo.OrderState == (int)OrderState.Returned)
+                      {
+                          if (Model.OrderInfo.OrderState == (int)OrderState.Completed)
+                          {
+                              state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState)) + "-" + Model.OrderInfo.ReturnType.ToString() + "-" + Model.OrderInfo.ChangeType.ToString();
+                          }
+                          else if (Model.OrderInfo.OrderState == (int)OrderState.Returned)
+                          {
+                              state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState)) + "-" + Model.OrderInfo.ReturnType.ToString();
+                          }
+                      }
+                      else
+                      {
+                          state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(Model.OrderInfo.OrderState));
+
+                      }
+                    }
+                    @switch (state)
+                    {
+                        case "WaitPaying":
+                        @:等待付款
+            break;
+                        case "Confirming":
+                        @:待确认
+            break;
+                        case "Confirmed":
+                        @:已确认
+            break;
+                        case "PreProducting":
+                        @:备货中
+            break;
+                        case "Sended":
+                        @:已发货
+            break;
+                        case "Completed-0-0":
+                        @:已完成
+            break;
+                        case "Completed-0-1":
+                        @:<span style="color:red;">换货审核中</span>
+            break;
+                        case "Completed-0-2":
+                        @:<span style="color:red;">换货审核通过</span>
+            break;
+                        case "Completed-0-3":
+                        @:<span style="color:red;">换货等待发货</span>
+            break;
+                        case "Completed-0-4":
+                        @:<span style="color:red;">换货确认收货</span>
+            break;
+                        case "Completed-0-5":
+                        @:<span>换货完成</span>
+            break;
+                        case "Completed-1-0":
+                        @:<span style="color:red;">退货审核中</span>
+            break;
+                        case "Settled":
+                        @:已结算
+                                    break;
+                        case "Cancelled":
+                        @:取消
+            break;
+                        case "Returned-2":
+                        @:<span style="color:red;">退货审核通过</span>
+            break;
+                        case "Returned-3":
+                        @:<span style="color:red;">退款审核中</span>
+            break;
+                        case "Returned-4":
+                        @:退款成功
+            break;
+                        case "Changed":
+                        @:换货
+            break;
+                        case "Locked":
+                        @:锁定
+            break;
+                        default:
+                        @:未知状态
+            break;
+                    }
+                </td>
+                <td width="150px">下单时间：</td>
+                <td width="200px">@Model.OrderInfo.AddTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        </table>
+
+        <table width="97%">
+            <tr>
+                <th colspan="8" align="left">用户信息</th>
+            </tr>
+            <tr>
+                <td width="150px">用户编号：</td>
+                <td width="200px">@Model.UserInfo.Uid</td>
+                <td width="150px">用户名：</td>
+                <td width="200px">@Model.UserInfo.UserName</td>
+                <td width="150px">邮箱号：</td>
+                <td width="200px">@Model.UserInfo.Email</td>
+                <td width="150px">手机号：</td>
+                <td width="200px">@Model.UserInfo.Mobile</td>
+            </tr>
+            <tr>
+                <td>真实姓名：</td>
+                <td>@Model.UserInfo.RealName</td>
+                <td>性别：</td>
+                <td>@{
+                    switch (Model.UserInfo.Gender)
+                    {
+                        case 0:
+                    @:未知
+            break;
+                        case 1:
+                    @:男
+            break;
+                        case 2:
+                    @:女
+            break;
+                        default:
+                    @:未知
+            break;
+                    }
+                }</td>
+                <td>用户昵称：</td>
+                <td>@Model.UserInfo.NickName</td>
+                @*<td>用户等级：</td>
+                    <td>@Model.UserRankInfo.Title</td>*@
+                <td>会员类型：</td>
+                <td>
+                    @if (Model.UserInfo.IsDirSaleUser)
+                    {
+                        @:直销会员
+                        }
+                    else
+                    {
+                        @:非直销会员
+                        }
+                </td>
+            </tr>
+        </table>
+
+        <table width="97%">
+            <tr>
+                <th colspan="10" align="left">订单商品</th>
+            </tr>
+            <tr>
+                <td align="center" width="60">商品图片</td>
+                <td>商品名称</td>
+                <td>商品详情</td>
+                <td width="140">货号</td>
+                <td width="80">价格</td>
+                <td width="50">数量</td>
+                <td width="80">小计</td>
+                <td width="80">PV</td>
+                <td width="80">海米</td>
+                <td width="80">操作</td>
+            </tr>
+            @{
+                OrderProductInfo info = Model.OrderProductInfo;
+                PartProductInfo pro = Products.GetPartProductById(info.Pid);
+            }
+            <tr>
+                <td align="center" class="pImg">
+                    <img width="60px" height="60px" src="/upload/store/@{@info.StoreId}/product/show/thumb230_230/@info.ShowImg" /></td>
+                <td>@if (info.Type == 3)
+                    { <span style="color: red;">[套装]</span>}<a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid }, { "area", "" } })" style="text-decoration:underline;color:blue;" class="pro_link" target="_blank"> @info.Name </a></td>
+                <td>
+                    @if (pro != null)
+                    { 
+                        @pro.SubTitle
+                    }
+                </td>
+                <td>@info.PSN</td>
+                <td>@info.DiscountPrice</td>
+                @if (info.Type == 1)
+                {
+                    <td>@info.RealCount</td>
+                }
+                else
+                {
+                    <td>@info.RealCount</td>
+                }
+                <td>@if (info.Type == 3)
+                    {
+                    @Html.Raw((info.DiscountPrice * info.RealCount).ToString())}
+                    else
+                    {
+                    @Html.Raw((info.DiscountPrice * info.BuyCount).ToString())
+                    }
+
+                </td>
+                <td>
+                    @if (Model.OrderInfo.CashDiscount > 0)
+                    {
+                        @: 0.00
+                             }
+                    else
+                    {
+                        @info.ProductPV
+                    }
+                </td>
+                <td>
+                    @if (Model.OrderInfo.CashDiscount > 0)
+                    {
+                        @: 0.00
+                            }
+                    else
+                    {
+                        @info.ProductHaiMi
+                    }
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <table width="97%">
+            <tr>
+                <th colspan="13" align="left">拿货详情</th>
+            </tr>
+            <tr>
+                <td align="center" width="60">事业伙伴</td>
+                <td width="80">数量</td>
+                <td width="80">金额</td>
+                <td width="140">星级经销商</td>
+                <td width="80">数量</td>
+                <td width="80">金额</td>
+                <td width="80">VIP</td>
+                <td width="80">数量</td>
+                <td width="80">金额</td>
+                <td width="80">大区</td>
+                <td width="80">数量</td>
+                <td width="80">金额</td>
+                <td width="80">公司</td>
+            </tr>
+            <tr>
+                <td>
+                    @if (Model.FromParentUser1 != null)
+                    {
+                        @("UID:" + Model.FromParentUser1.Uid)
+                        <br />
+                        @Model.FromParentUser1.UserName
+                        <br />
+                        @Model.FromParentUser1.Mobile
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Model.FromParentCount1
+                </td>
+                <td>
+                    @info.FromParentAmount1
+                </td>
+                <td>
+                    @if (Model.FromParentUser2 != null)
+                    {
+                        @("UID:" + Model.FromParentUser2.Uid)
+                        <br />
+                        @Model.FromParentUser2.UserName
+                        <br />
+                        @Model.FromParentUser2.Mobile
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Model.FromParentCount2
+                </td>
+                <td>
+                    @info.FromParentAmount2
+                </td>
+                <td>
+                    @if (Model.FromParentUser3 != null)
+                    {
+                        @("UID:" + Model.FromParentUser3.Uid)
+                        <br />
+                        @Model.FromParentUser3.UserName
+                        <br />
+                        @Model.FromParentUser3.Mobile
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Model.FromParentCount3
+                </td>
+                <td>
+                    @info.FromParentAmount3
+                </td>
+                <td>
+                    @if (Model.FromParentUser4 != null)
+                    {
+                        @("UID:" + Model.FromParentUser4.Uid)
+                        <br />
+                        @Model.FromParentUser4.UserName
+                        <br />
+                        @Model.FromParentUser4.Mobile
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Model.FromParentCount4
+                </td>
+                <td>
+                    @info.FromParentAmount4
+                </td>
+                <td>@info.FromCompanyAmount</td>
+
+            </tr>
+
+        </table>
+
+        <table width="97%">
+            <tr>
+                <th colspan="8">库存跟踪</th>
+            </tr>
+            <tr>
+                <td width="40" align="left">序号</td>
+                <td width="40" align="left">UID</td>
+                <td width="100" align="left">创建时间</td>
+                <td width="60" align="left">收入</td>
+                <td width="60" align="left">支出</td>
+                <td width="80" align="left">当前余额</td>
+                <td width="80" align="left">关联订单号</td>
+                <td width="200" align="left">详情描述</td>
+
+            </tr>
+            @{int k = 1;}
+            @foreach (var detailinfo in Model.deteilList)
+            {
+                <tr>
+
+
+                    <td>@k</td>
+                    <td>@detailinfo.Uid</td>
+                    <td>@detailinfo.CreationDate.ToString("yyyy-MM-dd HH:mm")</td>
+
+                    <td>@detailinfo.InAmount.ToString("0.00")</td>
+                    <td>@detailinfo.OutAmount.ToString("0.00")</td>
+                    <td>@detailinfo.CurrentBalance.ToString("0.00")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(detailinfo.OrderCode))
+                        {
+                            if (detailinfo.OrderCode.StartsWith("12") || detailinfo.OrderCode.StartsWith("11"))
+                            {
+                            <a href="@Url.Action("orderlist", "order", new { osn = detailinfo.OrderCode })" target="_blank" style="text-decoration: underline;color:blue;">@detailinfo.OrderCode </a>
+                            }
+                            else if (detailinfo.OrderCode.StartsWith("82"))
+                            {
+                            <a href="@Url.Action("SendOrderList", "AgentSendOrder", new { osn = detailinfo.OrderCode })" target="_blank" style="text-decoration: underline;color:blue;">@detailinfo.OrderCode </a>
+                            }
+                            else
+                            { 
+                            @detailinfo.OrderCode 
+                            }
+                        }
+                    </td>
+                    <td>@detailinfo.DetailDesc </td>
+                </tr>
+                        k++;
+            }
+        </table>
+
+        <br />
+    </div>
+
+}

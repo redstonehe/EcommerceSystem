@@ -1,0 +1,124 @@
+﻿@model VMall.Web.Mobile.Models.ReturnModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单 申请退货";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<script>
+
+    function applyReturn() {
+        var oid = $("#changeoid").val();
+        var ReturnDesc = $('input:radio[name="ReturnDesc"]:checked').val();
+        var ReturnDescOther = $("#ReturnDescOther").val();
+
+        if (!checkSubmit(ReturnDesc, ReturnDescOther)) {
+            return;
+        }
+        var desc = "";
+
+        if ($.trim(ReturnDesc) == "4") {
+            desc = $("#ReturnDescOther").val();
+        } else {
+            desc = $('input:radio[name="ReturnDesc"]:checked').next().html();
+        }
+        // alert(desc);
+        //防重复提交
+        $(".shrBT .redBT").val("正在提交...").removeAttr("onclick");
+        // said,int changeType,string changeDesc,int oid = -1
+        Ajax.post("/mob/ucenter/ReturnApply",
+                { 'oid': oid, 'returnDesc': desc },
+                false,
+                function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state != "success") {
+                        alert(result.content);
+                    }
+                    else {
+                        alert(result.content);
+                        window.location.href = "/mob/ucenter/orderlist";
+                    }
+                })
+    }
+
+    //验证提交
+    function checkSubmit(ReturnDesc, ReturnDescOther) {
+
+        if ($.trim(ReturnDesc) == "0") {
+            alert("请选择正确的退货原因");
+            return false;
+        }
+        if ($.trim(ReturnDesc) == "4" && $.trim(ReturnDescOther).length == 0) {
+            alert("请输入其他原因");
+            return false;
+        }
+        if ($.trim(ReturnDesc) == "4" && $.trim(ReturnDescOther).length > 125) {
+            alert("原因最多只能输入125个字");
+            return false;
+        }
+        return true;
+    }
+</script>
+<style>
+    .returnreason input, .returnreason textarea {
+        margin: 5px;
+    }
+</style>
+<div class="myAssetsCon">
+    <div>
+
+        @if (Model.State)
+        {
+            <h2 style="margin: 10px;">
+                <strong style="font-size: 24px;">订单信息：</strong>&nbsp; 
+                <div class="clear"></div>
+            </h2>
+            <div style="padding: 20px; border-bottom: 1px dashed #808080;">
+                @{OrderInfo mainOrder = null;
+                  if (Model.OrderInfo.MainOid > 0)
+                  {
+                      mainOrder = Orders.GetOrderByOid(Model.OrderInfo.MainOid);
+                  }
+                }
+                订单号：@Model.OrderInfo.OSN
+                <br />
+                订单金额：@Model.OrderInfo.OrderAmount
+                <br />
+                @if (mainOrder != null)
+                {
+                    <span style="color: red;">备注：(该订单存在关联代理订单：
+                                <a href="@Url.Action("product", "catalog")" style="text-decoration:underline;">@mainOrder.OSN</a>,订单金额：@mainOrder.OrderAmount,提交退货关联订单也会一并申请退货)</span>
+                }
+            </div>
+            <div>
+                <div style="margin: 20px; font-weight: bold;" class="returnreason">
+                    <h3>退货操作：</h3>
+                    <br />
+                    退货原因:<br />
+                    <input type="radio" name="ReturnDesc" value="1" checked="checked" /><span>外观颜色不合适</span>
+                    <br />
+                    <input type="radio" name="ReturnDesc" value="2" /><span>质量存在问题</span>
+                    <br />
+                    <input type="radio" name="ReturnDesc" value="3" /><span>物流慢</span>
+                    <br />
+                    <input type="radio" name="ReturnDesc" value="4" /><span>其他原因</span>
+                    <br />
+                    <textarea name="desc" cols="80" rows="5" style="width: 100%" id="ReturnDescOther"></textarea>
+                </div>
+                <div class="shrBT" style="margin: 10px auto; text-align: center; height: 35px; line-height: 35px;">
+                    <input type="hidden" name="changeoid" id="changeoid" value="@Model.OrderInfo.Oid" />
+                    <input type="button" onclick="applyReturn()" class="regBt redBT" value="提&nbsp;交 " style="height: 35px; width: 135px; font-size: 18px;" />
+                </div>
+            </div>
+                   
+        }
+        else
+        {
+            <div style="text-align: center; margin: 20px; font-size: 24px; font-weight: bold;">@Model.Message</div>
+        }
+    </div>
+
+
+</div>
+
+

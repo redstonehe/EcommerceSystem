@@ -1,0 +1,662 @@
+﻿@model VMall.Web.Mobile.Models.ProductModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = Model.ProductInfo.Name;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 3;
+}
+<link rel="stylesheet" type="text/css" href="/mobile/css/jquery.bxslider.css" />
+<style>
+    .flashsaletime .starttime b, .flashsaletime .endtime b {
+        background: url(/images/flashsale_time.jpg) no-repeat;
+        color: #fff;
+        text-align: center;
+        line-height: 28px;
+        width: 28px;
+        height: 28px;
+        text-decoration: none;
+        font-style: normal;
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .sellout {
+        background: #ddd;
+        font-size: 2rem;
+        color: #333;
+    }
+</style>
+@{
+    var mainProductImage = "";
+    if (Model.ProductImageList.Count > 0)
+    {
+        mainProductImage = (Model.ProductImageList.Count > 0 && Model.ProductImageList.Count(p => p.IsMain == 1) > 0 ? Model.ProductImageList.Find(a => a.IsMain == 1).ShowImg : Model.ProductImageList[0].ShowImg);
+    }
+    var showMainImg = string.IsNullOrEmpty(mainProductImage) ? "http://" + WorkContext.MallConfig.SiteUrl + "/images/350.jpg" : "http://" + WorkContext.MallConfig.SiteUrl + "/upload/store/" + Model.ProductInfo.StoreId + "/product/show/thumb800_800/" + mainProductImage;
+}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+@Html.Raw(new VMall.Web.Mobile.WeiXinShareScript().RegisterWeiXinShareScript(ViewBag.Title, WorkContext.MallConfig.SiteTitle, showMainImg,WorkContext.Uid,2))
+<script type="text/javascript" src="/mobile/scripts/jquery.bxslider.min.js"></script>
+
+<script>
+
+    (function ($) {
+        $.fn.countdown = function (endtimeString) {
+            var $this = $(this);
+            var sh = setInterval(function () {
+                var endtime = new Date(endtimeString);
+                var nowtime = new Date();
+                var leftsecond = parseInt((endtime.getTime() - nowtime.getTime()));
+                if (leftsecond < 0) {
+                    leftsecond = 0;
+                }
+                var d = Math.floor(leftsecond / 1000 / 3600 / 24);
+                var h = Math.floor((leftsecond / 1000 / 3600) % 24);
+                var m = Math.floor((leftsecond / 1000 / 60) % 60);
+                var s = Math.floor(leftsecond / 1000 % 60);
+                var ms = Math.floor(leftsecond / 100) % 10;
+                var tips = $this.children();
+                tips.eq(0).html(d);
+                tips.eq(1).html(h);
+                tips.eq(2).html(m);
+                tips.eq(3).html(s);
+                if (leftsecond <= 0) {
+                    clearInterval(sh);
+                }
+            }, 100);
+        };
+    })(jQuery)
+    @*$(function ($) {
+        $(".starttime").countdown("@Model.FlashSaleInfo.StartTime1");
+     });*@
+    
+</script>
+<div class="conHeader">
+    <div class="sliderBox">
+        <ul class="slider" id="pImgList">
+            @foreach (ProductImageInfo info in Model.ProductImageList)
+            {
+                <li>
+                    <img src="/upload/store/@info.StoreId/product/show/thumb800_800/@info.ShowImg" width="450"></li>
+            }
+        </ul>
+        @if (Model.StockNumber <= 0)
+        { 
+            <i id="sellout"></i>
+        }
+        @{
+            bool ZJDiscount = false;
+            bool ZKJDiscount = false;
+            SinglePromotionInfo singleInfo = Promotions.GetVailiSingleByPidAndendTime(Model.Pid, DateTime.Now);
+            if (singleInfo != null)
+            {
+                if (singleInfo.DiscountType == 1 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZJDiscount = true;
+                }
+                if (singleInfo.DiscountType == 0 && singleInfo.StartTime1 < DateTime.Now)
+                {
+                    ZKJDiscount = true;
+                }
+            }
+        }
+        @if (ZJDiscount)
+        { 
+            <i id="zhijiang"></i>
+        }
+       
+        @if (ZKJDiscount)
+        { 
+            <i id="zkjsale"></i>
+        }
+        @if (Model.FlashSaleInfo != null)
+        {
+            if (Model.FlashSaleInfo.EndTime1 >= DateTime.Now)
+            {
+                <i class="miaosha"></i>
+            }
+        }
+        @if (Model.ProductImageList.Count > 1)
+        {
+            <script type="text/javascript">
+                $(function () {
+
+                    $('#pImgList').bxSlider({
+                        auto: true,
+                        mode: 'horizontal',
+                        //speed:5000,
+                        autoHover: true,
+                        pause: 5000,
+                        controls: false,
+                        autoControls: false,
+                    });
+                });
+            </script>
+        }
+@*<div class="bannerBt" id="pImgTabList">
+            @for (int i = 0; i < Model.ProductImageList.Count; i++)
+            {
+                <span class="point @if (i == 0)
+                                   {<text>hot</text>}"></span> 
+            }
+        </div>*@
+    </div>
+    @*<script type="text/javascript">
+        //商品图片滚动
+        var liList = document.getElementById("pImgList").getElementsByTagName("li");
+        var spanList = document.getElementById("pImgTabList").getElementsByTagName("span");
+        var pImgIndex = 0;
+        var pImgCount = @Model.ProductImageList.Count;
+        if(pImgCount > 1) {
+            window.setInterval(function () {
+                if (pImgIndex == (pImgCount - 1)) {
+                    pImgIndex = 0;
+                }
+                else {
+                    pImgIndex += 1;
+                }
+                for (var i = 0; i < liList.length; i++) {
+                    liList[i].style.display = "none";
+                }
+                for (var i = 0; i < spanList.length; i++) {
+                    spanList[i].className = "point";
+                }
+                liList[pImgIndex].style.display = "block";
+                spanList[pImgIndex].className = "point hot";
+            }, 3000)
+        }
+    </script>*@
+
+
+</div>
+
+<div class="conBox">
+    <div class="info2">
+        <div class="p-name">@Model.ProductInfo.Name
+            @if (!string.IsNullOrEmpty(Model.ProductInfo.SubTitle))
+            {
+                <span class="p-name-sub">@Model.ProductInfo.SubTitle</span>
+            }
+        </div>
+    </div>
+
+    <div class="detail-price">
+        <span class="text g-shop-pirce" id="price" @(Model.FlashSaleInfo != null || ZJDiscount ? "style='color:#9C9A9C;'" : "")>市场价：¥@Model.ProductInfo.ShopPrice
+        </span>
+        @if (Model.ProductInfo.MarketPrice > Model.ProductInfo.ShopPrice)
+        { 
+            <span class="text g-market-pirce">
+                <del>¥@Model.ProductInfo.MarketPrice</del>
+            </span>
+        }
+        <br />
+        <span class="text g-shop-pirce" id="price_user" style="font-size:16px;" >会员价：¥@(Model.ProductInfo.ShopPrice-Model.ProductInfo.HongBaoCut)+@(Model.ProductInfo.HongBaoCut)积分
+        </span>
+        <br />
+        <span class="text g-shop-pirce" id="price_mallicon"   >@(MallKey.MallCoin)：¥@(Model.ProductInfo.HaiMi.ToString("f2"))
+        </span>
+        @if (Model.FlashSaleInfo != null)
+        {
+            <br />
+            <span class="text" id="price">秒杀价：¥@Model.FlashSaleInfo.DiscountValue.ToString("0.00")</span>
+            <br />
+                    
+            if (Model.FlashSaleInfo.QuotaLower > 0 || Model.FlashSaleInfo.QuotaUpper > 0 || Model.FlashSaleInfo.AllowBuyCount > 0)
+            {
+            <span>&nbsp;规&nbsp;&nbsp;则：</span>
+            <span class="">
+                @if (Model.FlashSaleInfo.QuotaLower > 0)
+                {<text>单次最少购买数：@Model.FlashSaleInfo.QuotaLower
+                    <br /></text> }
+                @if (Model.FlashSaleInfo.QuotaUpper > 0)
+                {<text>单次最多购买数：@Model.FlashSaleInfo.QuotaUpper
+                    <br /></text> }
+                @if (Model.FlashSaleInfo.AllowBuyCount > 0)
+                {<text>会员最大购买数：@Model.FlashSaleInfo.AllowBuyCount</text> }
+            </span>
+                    
+            }
+            if (Model.FlashSaleInfo.StartTime1 > DateTime.Now)
+            {
+            <span class="flashsaletime">
+                <script>
+                    $(function ($) {
+                        $(".starttime").countdown("@Model.FlashSaleInfo.StartTime1");
+                    });
+                </script>
+                距离开始：
+                        <span class="starttime"><b class="day">12</b> 天 <b class="hour">12</b> 时 <b class="minutes">12</b> 分 <b class="seconds"></b>秒</span>
+            </span>
+                       
+                        
+            }
+            if (Model.FlashSaleInfo.StartTime1 < DateTime.Now && Model.FlashSaleInfo.EndTime1 > DateTime.Now)
+            {
+            <span class="flashsaletime">
+                <script>
+                    $(function ($) {
+                        $(".endtime").countdown("@Model.FlashSaleInfo.EndTime1");
+                    });
+                </script>
+                距离结束：
+                        <span class="endtime"><b class="day">12</b> 天 <b class="hour">12</b> 时 <b class="minutes">12</b> 分 <b class="seconds"></b>秒</span>
+            </span>
+                
+            }
+        }
+        @if (ZJDiscount)
+        { 
+            <br />
+            <span class="text" id="price">直降价：¥@(Model.ProductInfo.ShopPrice - singleInfo.DiscountValue)
+            </span>
+        }
+        @if (!string.IsNullOrEmpty(Model.ProductInfo.Unit))
+        { 
+            <span class="g-unit" id="">商品规格：@Model.ProductInfo.Unit</span>
+        }
+    </div>
+</div>
+@*<div class="h15"></div>*@
+<script type="text/javascript">
+    function promotionDesSH() {
+        if (document.getElementById("promotionDes").style.display == "none") {
+            document.getElementById("promotionDes").style.display = "block"
+        }
+        else {
+            document.getElementById("promotionDes").style.display = "none"
+        }
+    }
+</script>
+@if (Model.SinglePromotionInfo != null || Model.BuySendPromotionList.Count() > 0 || Model.GiftPromotionInfo != null || Model.FullSendPromotionInfo != null || Model.FullCutPromotionInfo != null || Model.SuitProductList.Count() > 0)
+{
+    <div class="conBox">
+        <div class="info">
+            <a href="javascript:promotionDesSH()">
+                <span class="text">促销信息</span>
+                <span style="color: Red;">@Html.Raw(Model.PromotionMsg)</span>
+                @if (Model.SinglePromotionInfo != null)
+                {
+                    if (Model.SinglePromotionInfo.PayCredits > 0)
+                    { 
+                    <i class="icon-bg02">赠积分</i>
+                    }
+                    if (Model.SinglePromotionInfo.CouponTypeId > 0)
+                    { 
+                    <i class="icon-bg02">赠劵</i>
+                    }
+                }
+                @if (Model.BuySendPromotionList != null && Model.BuySendPromotionList.Count > 0)
+                { 
+                    <i class="icon-bg02">买送促销</i>
+                }
+                @if (Model.GiftPromotionInfo != null && Model.ExtGiftList.Count > 0)
+                { 
+                    <i class="icon-bg02">赠品</i>
+                }
+                @if (Model.FullSendPromotionInfo != null)
+                { 
+                    <i class="icon-bg02">加价购</i>
+                }
+                @if (Model.FullCutPromotionInfo != null)
+                { 
+                    <i class="icon-bg02">满减</i>
+                }
+                @if (Model.SuitProductList != null && Model.SuitProductList.Count > 0)
+                { 
+                    <i class="icon-bg02">套装</i>
+                }
+            </a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="info proCXBox" id="promotionDes" style="display: block;">
+            <ul class="proCX_list">
+                @if (Model.SinglePromotionInfo != null)
+                {
+                    if (Model.SinglePromotionInfo.PayCredits > 0)
+                    { 
+                    <li><span class="col02"><em class="icon-bg02">赠积分</em><span class="txt01">赠 @Model.SinglePromotionInfo.PayCredits 积分</span></span></li>
+                    }
+                    if (Model.SinglePromotionInfo.CouponTypeId > 0)
+                    { 
+                    <li><span class="col02"><em class="icon-bg02">赠劵</em><span class="txt01">赠送优惠劵劵</span></span></li>
+                    }
+                }
+                @if (Model.BuySendPromotionList != null && Model.BuySendPromotionList.Count > 0)
+                { 
+                    <li><span class="col02"><em class="icon-bg02">买送促销</em><span class="txt01">
+                        @foreach (BuySendPromotionInfo info in Model.BuySendPromotionList)
+                        {
+                            @:买 @info.BuyCount 送 @info.SendCount
+        }
+                    </span></span></li>
+                }
+                @if (Model.GiftPromotionInfo != null && Model.ExtGiftList.Count > 0)
+                {
+                    foreach (ExtGiftInfo info in Model.ExtGiftList)
+                    {
+                    <li><span class="col02"><em class="icon-bg02">赠品</em><span class="txt01">@info.Name X  @info.Number </span></span></li>
+                    }
+                }
+                @if (Model.FullSendPromotionInfo != null)
+                { 
+                    <li><span class="col02"><em class="icon-bg02">加价购</em><span class="txt01">满 @Model.FullSendPromotionInfo.LimitMoney 元，再加 @Model.FullSendPromotionInfo.AddMoney 元，获取赠品</span></span></li>
+                }
+                @if (Model.FullCutPromotionInfo != null)
+                { 
+                    <li><span class="col02"><em class="icon-bg02">满减</em><span class="txt01">
+                满 @Model.FullCutPromotionInfo.LimitMoney1 元减 @Model.FullCutPromotionInfo.CutMoney1
+                        @if (Model.FullCutPromotionInfo.LimitMoney2 > 0)
+                        {
+                            @:满 @Model.FullCutPromotionInfo.LimitMoney2 元减 @Model.FullCutPromotionInfo.CutMoney2
+            }
+                        @if (Model.FullCutPromotionInfo.LimitMoney3 > 0)
+                        {
+                            @:满 @Model.FullCutPromotionInfo.LimitMoney3 元减 @Model.FullCutPromotionInfo.CutMoney3
+            }
+                    </span></span></li>
+                }
+                @if (Model.SuitProductList != null && Model.SuitProductList.Count > 0)
+                { 
+                    <li><span class="col02"><em class="icon-bg02">优惠套装</em>
+                        @{
+                    decimal maxSuitDiscount = 0;
+                        }
+                        @foreach (KeyValuePair<SuitPromotionInfo, List<ExtSuitProductInfo>> pair in Model.SuitProductList)
+                        {
+                            decimal tempMaxSuitDiscount = 0;
+                            foreach (ExtSuitProductInfo info in pair.Value)
+                            {
+                                tempMaxSuitDiscount += info.Number * info.Discount;
+                            }
+                            if (tempMaxSuitDiscount > maxSuitDiscount)
+                            {
+                                maxSuitDiscount = tempMaxSuitDiscount;
+                            }
+                        }
+                        <span class="txt01">最高省 @maxSuitDiscount 元</span>
+                    </span>
+                        <span class="txt-amount"><a href="#">共 @Model.SuitProductList.Count 款</a></span></li>
+                }
+            </ul>
+            @if (Model.SuitProductList != null && Model.SuitProductList.Count > 0)
+            { 
+                <div class="suit-check-slide">
+                    <ul class="list-suit">
+                        @for (int i = 1; i <= Model.SuitProductList.Count; i++)
+                        {
+                            <li class="icon-suit"><a href="@Url.Action("productsuitlist", new RouteValueDictionary { { "pid", Model.Pid } })"><span class="val-mid">套装@{@i}</span></a></li>
+                            List<ExtSuitProductInfo> extSuitProductList = Model.SuitProductList[i - 1].Value;
+                            foreach (ExtSuitProductInfo info in extSuitProductList)
+                            {
+                            <li class="list-suit-item"><a href="@Url.Action("productsuitlist", new RouteValueDictionary { { "pid", Model.Pid } })" class="box-img-link">
+                                <div class="p-img">
+                                    <img width="70" height="70" src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg">
+                                </div>
+                            </a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
+@*<div class="h15"></div>*@
+<div class="conBox">
+    @*@foreach (ExtProductSKUItemInfo info in Model.ProductSKUList.FindAll(x => x.Pid == Model.Pid))
+    {
+        <div class="proInfo on">
+            <div class="itmeP">
+                <div class="dt">@info.AttrName：</div>
+                <div class="dd">
+                    @if (info.IsInput == 0)
+                    {@info.AttrValue}
+                    else
+                    {@info.InputValue}
+                </div>
+            </div>
+        </div>
+    }*@
+    <div class="infoSelect">
+
+        @if (Model.ProductSKUList != null && Model.ProductSKUList.Count > 0)
+        {
+            int attrLayer = 0;
+            List<ExtProductSKUItemInfo> currentProductSKUItemList = Model.ProductSKUList.FindAll(x => x.Pid == Model.Pid);
+            List<KeyValuePair<int, ExtProductSKUItemInfo>> skuProductList = new List<KeyValuePair<int, ExtProductSKUItemInfo>>();
+            foreach (IGrouping<int, ExtProductSKUItemInfo> info in Model.ProductSKUList.GroupBy(x => x.Pid, x => x))
+            {
+                int attrValueIdKey = 1;
+                foreach (var item in info)
+                {
+                    attrValueIdKey *= item.AttrValueId;
+                }
+                skuProductList.Add(new KeyValuePair<int, ExtProductSKUItemInfo>(attrValueIdKey, info.First<ExtProductSKUItemInfo>()));
+            }
+            List<ExtProductSKUItemInfo> attrList = new List<ExtProductSKUItemInfo>();
+            foreach (ExtProductSKUItemInfo info in Model.ProductSKUList)
+            {
+                if (attrList.Find(x => x.AttrId == info.AttrId) == null)
+                {
+                    attrList.Add(info);
+                }
+            }
+            foreach (ExtProductSKUItemInfo info in attrList)
+            {
+            @:<div class="itmeP"><div class="dt">@info.AttrName：</div><div class="dd">
+List<ExtProductSKUItemInfo> attrValueList = new List<ExtProductSKUItemInfo>();
+foreach (ExtProductSKUItemInfo attrValue in Model.ProductSKUList)
+{
+    if (attrValue.AttrId == info.AttrId && attrValueList.Find(x => x.AttrValueId == attrValue.AttrValueId) == null)
+    {
+        attrValueList.Add(attrValue);
+    }
+}
+
+foreach (ExtProductSKUItemInfo attrValue in attrValueList)
+{
+    int attrValueIdKey = 1;
+    for (int i = 0; i < currentProductSKUItemList.Count; i++)
+    {
+        if (attrLayer != i)
+        {
+            attrValueIdKey *= currentProductSKUItemList[i].AttrValueId;
+        }
+        else
+        {
+            attrValueIdKey *= attrValue.AttrValueId;
+        }
+    }
+    KeyValuePair<int, ExtProductSKUItemInfo> skuProduct = skuProductList.Find(x => x.Key == attrValueIdKey);
+    if (skuProduct.Value == null)
+    {
+                    <a href="#" class="gayBt">@if (attrValue.IsInput == 0)
+                                              { @attrValue.AttrValue }
+                                              else
+                                              { @attrValue.InputValue }</a>
+    }
+    else
+    {
+                     <a href="@Url.Action("product", new RouteValueDictionary { { "pid", skuProduct.Value.Pid } })" data-pid="@skuProduct.Value.Pid" class="@(skuProduct.Value.Pid == Model.Pid ? "redBtn" : "gayBtn")" style="@((attrValue.IsInput == 0 && attrValue.AttrValue.Length > 9 && attrValue.AttrValue.Length <= 12) || (attrValue.IsInput != 0 && attrValue.InputValue.Length > 9 && attrValue.InputValue.Length <= 12) ? "width:60%" : ((attrValue.IsInput == 0 && attrValue.AttrValue.Length > 12) || (attrValue.IsInput != 0 && attrValue.InputValue.Length > 12)) ? "width:70%" : "")">@(attrValue.IsInput == 0 ? attrValue.AttrValue : attrValue.InputValue)
+     </a>
+    }
+}
+            @:</div></div>
+                                                                                                    }
+        }
+        @if (Model.ProductInfo.MinBuyCount > 0)
+        {
+            <div class="itmeP">
+                <div class="dt">起购数量：</div>
+                <div class="dd" style="height: 20px; line-height: 20px; margin-top: 5px;width: 50%;">
+                    <span style="color: #f60004;" class="minbuycount">@Model.ProductInfo.MinBuyCount</span> 件
+                </div>
+            </div>
+        }
+        <div class="itmeP">
+            <input id="buypid" type="hidden" value="@Model.Pid" />
+            <div class="dt">数量：</div>
+            <div class="proadd fr dd">
+                        <a href="javascript:void(0);" class="fl cutbtn"  onclick="cutProductCount()">-</a>
+                        <input type="text" class="fl" id="buyCount" name="buyCount" value="@(Model.ProductInfo.MinBuyCount > 0 ? Model.ProductInfo.MinBuyCount : 1)"  maxlength="4"   >
+                        <a href="javascript:void(0);" class="fl addbtn" onclick="addProuctCount()">+</a>
+                        <div class="clear"></div>
+                    </div>
+        </div>
+
+    </div>
+</div>
+<div class="conBox servicePromise g-mall-service">
+    <div class="g-service-list" onclick="javascript:App.couponOpen('service-list-detail');">
+        <div class="g-service-item"><span>极速物流</span></div>
+        <div class="g-service-item"><span>无忧售后</span></div>
+        <div class="g-service-item"><span>正品行货</span></div>
+        <div class="g-service-item"><span>品质保障</span></div>
+    </div>
+</div>
+<div class="bg_div"></div>
+
+<div class="conBox" style="border: 0;">
+    <div class="info3">
+        <a href="javascript:void(0);" onclick="changeTag(1);" id="proDesp" class="oncheck"><span class="text">商品介绍</span></a>
+        <a href="javascript:void(0);" onclick="changeTag(2);" id="proParam"><span class="text"></span>商品参数<em></em></a>
+        <a href="javascript:void(0);" onclick="changeTag(3);" id="proReview"><span class="text"></span>商品评价(<span style="color: red;">@ViewData["reviewCount"]</span>)<em></em></a>
+    </div>
+    <style>
+    </style>
+    <script>
+        function changeTag(type) {
+            if (type == 1) {
+                $("#detailsCon1").show();
+                $("#detailsParam").hide();
+                $("#detailsReview").hide()
+                $("#proParam").removeClass("oncheck");
+                $("#proReview").removeClass("oncheck");
+                $("#proDesp").addClass("oncheck");
+            }
+            else if (type == 2) {
+                $("#detailsParam").show();
+                $("#detailsCon1").hide();
+                $("#detailsReview").hide();
+                $("#proReview").removeClass("oncheck");
+                $("#proDesp").removeClass("oncheck");
+                $("#proParam").addClass("oncheck");
+            }
+            else if (type == 3) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/mob/catalog/productreviewlist?pid=@Model.Pid&type=2",
+                    //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+
+                        $("#detailsParam").hide();
+                        $("#detailsCon1").hide()
+                        $("#detailsReview").show().html(data);
+                        $("#proParam").removeClass("oncheck");
+                        $("#proDesp").removeClass("oncheck");
+                        $("#proReview").addClass("oncheck");
+                    }
+                });
+
+            }
+}
+function changeReview(pid, type, reviewType, page) {
+    $.ajax({
+        type: "get",
+        url: "/mob/catalog/productreviewlist",
+        //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        data: { pid: pid, type: type, reviewType: reviewType, page: page },
+        success: function (data) {
+            // alert(data);
+
+            $("#detailsReview").show().html(data);
+        }
+    });
+}
+    </script>
+   
+</div>
+
+<div id="detailsCon1" class="proEdit">@Html.Raw(string.IsNullOrEmpty(Model.ProductInfo.MobileDescription) ?Model.ProductInfo.VideoUrl+ Model.ProductInfo.Description :Model.ProductInfo.VideoUrl+ Model.ProductInfo.MobileDescription)</div>
+<div id="detailsParam" class="proEdit" style="display: none;">@Html.Raw(Model.ProductInfo.ProductParam)</div>
+<div id="detailsReview" class="proEdit" style="display: none;">@Html.Raw(Model.ProductInfo.ProductParam)</div>
+<script>
+    $("#detailsParam table").attr("cellspacing", "0").attr("cellpadding", "1");
+    $("#detailsParam table tbody tr td,th").css("padding", "5px").css("border", "1px solid #CCC");
+
+    $("#detailsParam table tbody tr").each(function (i, n) {
+        $(n).find("td:first").css("width", "165px");
+        $(n).find("td:last").css("width", "600px");
+    });
+</script>
+
+<div id="addResult1" class="bg" style="display: none; position: absolute; left: 0px; top: 0px; background-color: rgb(13, 13, 13); filter: alpha(opacity=60); opacity: 0.6; width: 100%; height: 100%; z-index: 8888;"></div>
+<div id="addResult2" class="cartTip" style="display: none;">
+    <div class="ico-succ"><span class="att-succ">添加成功！</span><span class="cart-succ">商品已成功加入购物车</span></div>
+    <div class="cp-lnk"><a href="javascript:void(0);" onclick="document.getElementById('addResult1').style.display = 'none';document.getElementById('addResult2').style.display = 'none';">再逛逛</a><a href="@Url.Action("index", "cart")"><span class="bar"></span>去购物车</a></div>
+</div>
+
+@if (Model.RelateProductList.Count > 0)
+{
+    <div class="img-list">
+        <p>也许您还喜欢：</p>
+        <div class="img-sild">
+            <div>
+                <div class="tbl-type">
+                    @foreach (PartProductInfo info in Model.RelateProductList)
+                    {
+                        <a class="tbl-cell" href="@Url.Action("product", new RouteValueDictionary { { "pid", info.Pid } })">
+                            <div class="pro-img">
+                                <span class="img">
+                                    <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg" width="85" height="85" alt="img"></span><span class="pro-title">@info.Name</span><span class="pro-price">¥@info.ShopPrice</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="footerBar goods-bottom-bar">
+    @if (Model.StockNumber > 0)
+    {
+        <a class="goods-home-button" href="/mob"><span><i></i>首页</span></a>
+        <div class="goods-collect-button" onclick="addProductToFavorite(@Model.Pid);"><span @(Model.IsFav ? "class='active'" : "")><i></i>收藏</span></div>
+        <a class="goods-cart-button" href="/mob/cart"><span><i></i>购物车</span><div class="cart-num" id="cart_goods_number"></div>
+        </a>
+        if (Model.StoreInfo.StoreId != WebHelper.GetConfigSettingsInt("MCAgentStoreId")) { 
+            <div class="goods-cart-btn" onclick="addProductToCart(@Model.Pid, document.getElementById('buyCount').value, 1)"><span>加入购物车</span></div>
+            }
+        <div class="goods-buy-btn" onclick="directBuyProduct(@Model.Pid, document.getElementById('buyCount').value)"><span>立即购买</span></div>@*
+        <div><a href="javascript:void(0)" onclick="directBuyProduct(@Model.Pid, document.getElementById('buyCount').value)" class="buy"><span></span>立即购买</a> </div>
+        <div><a href="javascript:void(0)" onclick="addProductToCart(@Model.Pid, document.getElementById('buyCount').value, 1)" class="cart"><span></span>加入购物车</a> </div>*@
+        
+    }
+    else
+    {
+        <div class="sale-out">
+            <p href="javascript:void(0)" class="sellout">售&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;罄</p> 
+
+        </div>
+    
+    }
+</div>
+
+<script type="text/javascript">
+    //高度需要计算 .bg的高度 = 当前body的高度
+    document.getElementById("addResult1").style.height = document.body.scrollHeight + "px";
+    var w = $(".goods-home-button").width();
+    var iw = $(".goods-home-button span i").width();
+    var newWi = w / 2 - iw / 2;
+    $(".goods-home-button span i,.goods-collect-button span i,.goods-cart-button span i").css("left", newWi);
+    $(function () {
+        var mw = window.innerWidth;
+        $(".sliderBox").css("width", mw).css("height", mw);
+        $(".sliderBox ul li img").css("width", mw).css("height", mw);
+        });
+
+</script>
+

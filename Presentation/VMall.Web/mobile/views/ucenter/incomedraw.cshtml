@@ -1,0 +1,281 @@
+﻿@model VMall.Web.Mobile.Models.DrawCashModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "代理提现";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+   tr {
+    margin:5px;padding:5px;    height: 35px;
+    line-height: 35px;}
+    td {
+    margin:5px}
+    input {height:24px;line-height:24px;padding:2px;
+    }
+</style>
+<script>
+    function CheckInput() {
+        var Amount = $.trim($("#Amount").val());
+        if (isNaN(Amount)) {
+            alert("请输入数字");
+            $("#Amount").val(0);
+            $("#Amount").focus();
+            return false;
+        }
+        else if (Amount < 0) {
+            alert("不能输入负数");
+            $("#Amount").val(0);
+            $("#Amount").focus();
+            return false;
+        }
+        else if (Amount < 100) {
+            alert("提现余额不足");
+            $("#Amount").val(0);
+            $("#Amount").focus();
+        }
+        if (Amount == "") {
+            alert("提现金额不能为空");
+            $("#Amount").focus();
+            return false;
+        }
+        if ($.trim($("#BankName").val()) == "-1") {
+            alert("请选择银行名称");
+            $("#BankName").focus();
+            return false;
+        }
+
+        //if ($.trim($("#provinceId").val()) < 0) {
+        //    alert('对不起,请选择省,谢谢!');
+        //    $("#provinceId").focus();
+        //    return false;
+        //}
+        //if ($("#cityId")[0].length > 1 && $("#cityId").val() < 0) {
+        //    alert('对不起,请选择市,谢谢!');
+        //    $("#cityId").focus();
+        //    return false;
+        //}
+
+        //if ($.trim($("#BankAddress").val()) == "") {
+        //    alert("详细地址不能为空");
+        //    $("#BankAddress").focus();
+        //    return false;
+        //}
+        if ($.trim($("#BankCardCode").val()) == "") {
+            alert("请输入银行卡号");
+            $("#BankCardCode").focus();
+            return false;
+        }
+        if ($.trim($("#BankUserName").val()) == "") {
+            alert("开户人姓名不能为空");
+            $("#BankUserName").focus();
+            return false;
+        }
+        if ($.trim($("#PayPassWord").val()) == "") {
+            alert("请输入支付密码");
+            $("#PayPassWord").focus();
+            return false;
+        }
+        return true;
+    }
+    function applyNow($this) {
+        if (CheckInput()) {
+            var Amount = $.trim($("#Amount").val());
+            var BankName = $.trim($("#BankName").val());
+            //var regionId = parseInt($("#cityId").val());
+            //var BankAddress = $.trim($("#BankAddress").val());
+            var BankCardCode = $.trim($("#BankCardCode").val())
+            var BankUserName = $.trim($("#BankUserName").val())
+            var PayPassWord = $.trim($("#PayPassWord").val())
+
+            $($this).html("正在提交...").removeAttr("onclick");
+            $.ajax({
+                type: "POST",
+                url: "/ucenter/ApplyIncomeDarw?r=" + Math.random(),
+                //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data: { Amount: Amount, BankName: BankName,  BankCardCode: BankCardCode, BankUserName: BankUserName, PayPassWord: PayPassWord },
+                success: function (result) {
+                    if (result == "200") {
+                        alert("提现申请成功，请等待系统处理");
+                        window.location.href = window.location.href;
+                    }
+                    else if (result == "300") {
+                        alert("提现金额不足");
+                    }
+                    else if (result == "400") {
+                        alert("输入信息有误");
+                    }
+                    else if (result == "500") {
+                        alert("支付密码不正确");
+                    }
+                }
+            });
+
+        }
+    }
+    
+</script>
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/region.js" type="text/javascript"></script>
+<div class="myAssetsNav">
+    <a href="@Url.Action("myagent")" ><strong>我的代理</strong></a>
+    <a href="@Url.Action("getstock")" ><strong>库存查询</strong></a>
+    <a href="javascript:void(0);" class="hot"><strong>代理提现</strong></a>
+    <a href="@Url.Action("CommissionWithDraw")" ><strong>佣金提现</strong></a>
+</div>
+<div class="myAssetsCon">
+    <div class="userFormC" style="padding:10px;">
+        <div id="memberR" style="position: relative;">
+            <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+            @if (Model.State)
+            {
+                <a href="@Url.Action("DrawHistory", new { accountId=30})" style="font-size: 12px; color: red; cursor: pointer; float: right; margin-right: 20px;">提现历史记录</a>
+                <form name="userInfoForm" action="">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="memberTable">
+                        <tr>
+                            <th width="150" align="right">代理账户余额：</th>
+                            <td>
+                                @Model.AccountInfo.Banlance.ToString("0.00")
+                                @if(Model.AccountInfo.Banlance<100){
+                                <span class="tip red">金额小于100不能提现</span>
+                                }
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th width="100" align="right">本次提现金额：</th>
+                            <td>
+                                <input type="text" name="Amount" id="Amount" value="" class="text" maxlength="15" style="width: 200px" /><span class="tip red">提现金额必须大于100元</span> <em class="red">*</em> </td>
+                        </tr>
+
+                        <tr>
+                            <th width="100" align="right">提现方式：</th>
+                            <td>
+                                <input type="text" name="DrawType" id="DrawType" value="银行转账" class="text" maxlength="15" readonly="true" disabled="disabled" style="width: 200px" />@*<span class="tip">这里是提示信息</span>*@<em class="red">*</em></td>
+                        </tr>
+                        <tr>
+                            <th width="100" align="right">提现银行：</th>
+                            <td>
+                                @{string[] banklist = StringHelper.SplitString(BMAConfig.MallConfig.BankList);
+                                  //List<string>
+                                }
+                                <select id="BankName" name="BankName" style="width: 212px">
+                                    @if (banklist.Length == 0)
+                                    {
+                                        <option selected="selected" value="-1">请选择</option>
+                                    }
+                                    else
+                                    {
+                                        for (int i = 0; i < banklist.Length; i++)
+                                        {
+                                        <option  value="@banklist[i]" @if (i == 0)
+                                                                      {<text>selected = "selected"</text>} >@banklist[i]</option>
+                                        }
+                                    }
+                                </select>
+                                @* <input type="text" name="BankName" id="BankName" value="" class="text" style="width: 200px" />*@
+                                <em class="red">*</em>
+
+                            </td>
+                        </tr>
+
+                        @*<tr>
+                            <th width="100" align="right">开户行所在地：</th>
+                            <td>
+                                <select id="provinceId" name="provinceId">
+                                    <option selected="selected" value="-1">请选择</option>
+                                </select>
+                                <select id="cityId" name="cityId">
+                                    <option selected="selected" value="-1">请选择</option>
+                                </select>
+
+                                <br />
+                                <input type="text" name="BankAddress" id="BankAddress" value="" class="text" style="width: 285px" /><em class="red">*</em>
+                           
+                        </tr>*@
+                        <tr>
+                            <th width="100" align="right">银行卡号：</th>
+                            <td>
+                                <input type="text" name="BankCardCode" id="BankCardCode" value="" maxlength="22" class="text" style="width: 200px" />@*<span class="tip">这里是提示信息</span>*@<em class="red">*</em></td>
+                        </tr>
+                        <tr>
+                            <th width="100" align="right">开户人姓名：</th>
+                            <td>
+                                <input type="text" name="BankUserName" id="BankUserName" value="" class="text" maxlength="18" style="width: 200px" />@*<span class="tip">这里是提示信息</span>*@<em class="red">*</em></td>
+                        </tr>
+
+                        <tr>
+                            <th width="100" align="right">支付密码：</th>
+                            <td>
+                                <input type="password" name="PayPassWord" id="PayPassWord" value="" class="text" maxlength="18" style="width: 200px" />@*<span class="tip">这里是提示信息</span>*@<em class="red">*</em></td>
+                        </tr>
+
+                        @*<tr>
+                            <th width="100" align="right">备注：</th>
+                            <td>
+                                <textarea rows="5" cols="40" name="Remark" id="Remark" class="text" style="height: 100px;"></textarea></td>
+                        </tr>*@
+
+                        <tr>
+                            <th width="100" align="right">&nbsp;</th>
+                            
+                            <td>
+                                @if (Model.AccountInfo.Banlance >= 100){
+                                    <span class="submitBT" onclick="applyNow()">提&nbsp;&nbsp;&nbsp;&nbsp;交</span>
+                                }
+
+                            </td>
+                            
+                        </tr>
+                    </table>
+                    <div class="dcwarn  f26  p-t-25">
+                        <p class="text-666666 f24" style="">
+                            温馨提示：<br>
+                            1、提现前必须完善身份证信息以及支付密码。<br>
+                            2、和治友德会员帐号支付密码沿用和治友德系统的支付密码。<br/>
+                            3、提现到帐时间在提交提现申请后7个工作日内到帐。<br/>
+                            4、提现请确保提现银行、银行卡号、开户人姓名信息一致。
+                        </p>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div>@Model.Message <span class="submitBT" onclick="window.location.href='@Model.JumpUrl'">去设置</span></div>
+            }
+            <script type="text/javascript">
+                //绑定省列表的改变事件
+                Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+                    var selectedProvinceId = getSelectedOption(this).value;
+                    if (selectedProvinceId > 0) {
+                        //document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+                        bindCityList(selectedProvinceId, document.getElementById("cityId"));
+                    }
+                })
+
+                //绑定市列表的改变事件
+                //Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+                //    var selectedCityId = getSelectedOption(this).value;
+                //    if (selectedCityId > 0) {
+                //        bindCityList(selectedCityId, document.getElementById("regionId"));
+                //    }
+                //})
+
+                //绑定省列表
+                bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+                if (cityId > 0) {
+                    bindCityList(provinceId, document.getElementById("cityId"), cityId);
+                    //bindCountyList(cityId, document.getElementById("regionId"), countyId);
+                }
+            </script>
+        </div>
+    </div>
+
+
+</div>
+
+
+

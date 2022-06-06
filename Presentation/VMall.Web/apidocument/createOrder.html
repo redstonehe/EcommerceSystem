@@ -1,0 +1,241 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>trade.create - API 文档</title>
+<link rel="stylesheet" href="bootstrap3.min.css-_vr_=1394807541289.css">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <!--<p> <a href="doc.htm">&laquo;&nbsp;返回到API列表</a> <a class="pull-right" href="javascript:history.back();" >返回到上一页&nbsp;&raquo;</a> </p>-->
+        <h3>天鹰点击支付跳转到汇购网支付接口</h3>
+        <p> 外部系统通过本接口向本站创建订单。一般来说，只要把支付状态为在线支付的创建成功后的订单通过本API同步过来。<br />
+            请求URL:http:www.hhwtop.com/WebApi/tymall/Getorder<br />
+            支持请求方式：Post
+        </p>
+    </div>
+    <div>
+        <h4>输入参数</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="15%">名称</th>
+                    <th width="8%">类型</th>
+                    <th width="8%">是否必须</th>
+                    <th width="35%">示例值</th>
+                    <th width="11%">默认值</th>
+                    <th width="25%">描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>osn</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>20151118114200211787</td>
+                    <td></td>
+                    <td>外部系统订单编号，唯一性</td>
+                </tr>
+                <tr>
+                    <td>username</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>zhangsan</td>
+                    <td></td>
+                    <td>创建订单的用户名，必须存在汇购网会员系统中</td>
+                </tr>
+                <tr>
+                    <td>orderstate</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>70</td>
+                    <td>70</td>
+                    <td>订单状态</td>
+                </tr>
+                <tr>
+                    <td>productamount</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>100.00</td>
+                    <td></td>
+                    <td>商品合计</td>
+                </tr>
+                <tr>
+                    <td>orderamount</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>110.00</td>
+                    <td></td>
+                    <td>订单合计</td>
+                </tr>
+                <tr>
+                    <td>surplusmoney</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>110.00</td>
+                    <td></td>
+                    <td>支付金额</td>
+                </tr>
+                <tr>
+                    <td>paytype</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>1</td>
+                    <td></td>
+                    <td>在线支付方式。1 为拉卡拉 ，暂时只支持拉卡拉支付</td>
+                </tr>
+                <tr>
+                    <td>regionid</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td></td>
+                    <td></td>
+                    <td>区域id(待讨论，双方系统不统一)</td>
+                </tr>
+                <tr>
+                    <td>address</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>建设路一号</td>
+                    <td></td>
+                    <td>详细地址</td>
+                </tr>
+                <tr>
+                    <td>consignee</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>李四</td>
+                    <td></td>
+                    <td>收货人</td>
+                </tr>
+                <tr>
+                    <td>mobile</td>
+                    <td> String </td>
+                    <td>是</td>
+                    <td>1333333333</td>
+                    <td></td>
+                    <td>手机。<br /><!--<font color="#FF0000;">请先通过<a href="api-method=ships.all.get.htm">ships.all.get</a>接口获取可用的配送方式清单。</font>--></td>
+                </tr>
+				<tr>
+                    <td>phone</td>
+                    <td>string</td>
+                    <td>否</td>
+                    <td>0769-999999999</td>
+                    <td></td>
+                    <td>固定电话（不能与手机同时为空）</td>
+                </tr>
+				<tr>
+                    <td>email</td>
+                    <td> String </td>
+                    <td>否</td>
+                    <td>xx@qq.com</td>
+                    <td></td>
+                    <td> 邮箱</td>
+                </tr>
+                <tr>
+                    <td>buyerremark</td>
+                    <td> String </td>
+                    <td>否</td>
+                    <td>2000-01-01 00:00:00</td>
+                    <td></td>
+                    <td>买家留言</td>
+                </tr>
+                <tr>
+                    <td>orders</td>
+                    <td><a>json类型</a></td>
+                    <td>是</td>
+                    <td>
+                    <pre><!--Pid pname showimg buycount marketprice shopprice -->
+{"ordersproduct":[
+    {"pid":"123","pname":"山寨鞋子1","showimg":"3.jpg","buycount":"2","marketprice":"200.00","shopprice ":"199.00"},
+    {"pid":"456","pname":"山寨鞋子2","showimg":"4.jpg","buycount":"10","marketprice":"999.00","shopprice ":"888.00"}
+]}
+                    </pre>
+                    </td>
+                    <td></td>
+                    <td>子订单列表（也就是指一个订单中的商品列表）使用json格式。<br />
+                        pid:产品id。<br />
+                        pname:产品名称。<br />
+                        showimg:产品图片。<br />
+                        buycount:购买数量。<br />
+                        marketprice:市场价。<br />
+                        shopprice：销售价。<br />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>返回结果</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>是否必须</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>response</td>
+                    <td><a href="struct-name=Trade.htm">json类型</a></td>
+                    <td>是</td>
+                    <td>创建订单成功并请求支付接口后返回的交易信息，</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>返回结果示例</h4>
+        <pre>
+{
+        "result": "0",
+        "msg":"签名错误",
+        "data":"{}"
+    
+}       
+统一请求返回格式
+	{"result":"0","msg":"msg","info":data}  
+  result：0为操作成功 ,  -1为操作失败
+msg:返回的信息 (包括返回成功信息 ; 返回的具体错误信息如：接口参数不对，签名验证错误，账号或者密码错误等信息)
+data:为具体的返回业务逻辑数据。
+
+data:事例           
+data={"orderid":"20151118114200211787 ","transactionId":"xxxxxxxxxxxxxxxxxxx",”orderAmount”:”100.00”,”payAmout”:”100.00”,”payResult”:”0”,”dealTime”:”2015”,”orderFee”:”5.00”}  
+
+字段说明
+orderid：订单号，、
+ transactionId：支付流水号
+orderAmount：订单金额
+payAmout:支付金额
+payResult：支付状态 0：未支付 1 支付成功 2 支付失败
+dealTime：支付成功时间 数字串，一共14 位  格式为：年[4位]月[2位]日[2位]时[2位]分[2位]秒[2位] 
+orderFee：订单手续费
+
+		</pre>
+    </div>
+    <hr>
+    <div class="page-header">
+        <!--<p> <a href="doc.htm">&laquo;&nbsp;返回到API列表</a> <a class="pull-right" href="javascript:history.back();" >返回到上一页&nbsp;&raquo;</a> </p>-->
+        <h3>登陆状态：
+</h3>
+        <p> 点击综合商城需要将汇购网的登陆状态传递过去,并根据签名校验请求是否合法<br />
+            URL:www.tymall.net.cn?islogin=1&loginname=xxx&isok=sign值
+            sign值=md5(islogin的值+loginname的值+merkey的值)<br />
+参数说明：<br />
+islogin:是否登陆 0 为未登录 1为已登陆<br />
+loginname：登陆用户名，唯一性，islogin为0时，loginname为空值<br />
+isok:32位MD5加密字符串，格式：1zhangsanXXXXXXXXXXXX<br />
+merkey：双方系统接口请求的签名密钥，32位字符串，具有唯一性，仅系统内部通讯使用<br />
+
+        </p>
+    </div>
+</div>
+<footer>
+    <p class="text-muted text-center">© www.hhwtop.com</p>
+</footer>
+</body>
+</html>

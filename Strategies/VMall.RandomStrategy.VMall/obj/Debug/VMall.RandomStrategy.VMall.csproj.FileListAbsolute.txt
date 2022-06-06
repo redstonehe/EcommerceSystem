@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.RandomStrategy.VMall.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.RandomStrategy.VMall.pdb
+C:\develop\德鹿商城\Strategies\VMall.RandomStrategy.VMall\obj\Debug\VMall.RandomStrategy.VMall.dll
+C:\develop\德鹿商城\Strategies\VMall.RandomStrategy.VMall\obj\Debug\VMall.RandomStrategy.VMall.pdb
+C:\develop\德鹿商城\Strategies\VMall.RandomStrategy.VMall\obj\Debug\VMall.RandomStrategy.VMall.csprojResolveAssemblyReference.cache

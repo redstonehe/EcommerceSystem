@@ -1,0 +1,171 @@
+﻿@model VMall.Web.Models.ReturnModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "退货-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "退货申请";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+
+    #shipAddressBlock ul li {
+        height: 35px;
+        line-height: 35px;
+        margin-bottom: 5px;
+    }
+
+        #shipAddressBlock ul li input {
+            height: 30px;
+            line-height: 30px;
+        }
+
+    .areaS {
+        padding: 5px;
+        margin-right: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .closediv {
+        border: 1px solid #808080;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        font-size: 18px;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        cursor: pointer;
+    }
+
+    .areaS a:hover {
+        background-color: #E8E8E8;
+        color: #fff;
+    }
+</style>
+<script>
+
+    function applyReturn() {
+        var oid = $("#changeoid").val();
+        var ReturnDesc = $('input:radio[name="ReturnDesc"]:checked').val();
+        var ReturnDescOther = $("#ReturnDescOther").val();
+
+        if (!checkSubmit(ReturnDesc, ReturnDescOther)) {
+            return;
+        }
+        var desc = "";
+        
+        if ($.trim(ReturnDesc) == "4") {
+            desc = $("#ReturnDescOther").val();
+        } else {
+            desc= $('input:radio[name="ReturnDesc"]:checked').next().html();
+        }
+       // alert(desc);
+        //防重复提交
+        $(".shrBT .redBT").val("正在提交...").removeAttr("onclick");
+        // said,int changeType,string changeDesc,int oid = -1
+        Ajax.post("/ucenter/ReturnApply",
+                { 'oid': oid, 'returnDesc': desc },
+                false,
+                function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state != "success") {
+                        alert(result.content);
+                    }
+                    else {
+                        alert(result.content);
+                        window.location.href = "/ucenter/orderlist";
+                    }
+                })
+    }
+
+    //验证提交
+    function checkSubmit(ReturnDesc, ReturnDescOther) {
+
+        if ($.trim(ReturnDesc) == "0") {
+            alert("请选择正确的退货原因");
+            return false;
+        }
+        if ($.trim(ReturnDesc) == "4" && $.trim(ReturnDescOther).length ==0) {
+            alert("请输入其他原因");
+            return false;
+        }
+        if ($.trim(ReturnDesc) == "4" && $.trim(ReturnDescOther).length > 125) {
+            alert("原因最多只能输入125个字");
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px;">
+            <div style="margin: 10px 50px;">
+                <h2 id="memberRT">
+                    <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+                <div class="clear"></div>
+                </h2>
+                @if (Model.State)
+                {
+                    <div>
+                        <div style="margin-bottom: 20px; border-bottom: 1px dashed #808080;">
+                            @{OrderInfo mainOrder = null;
+                              if (Model.OrderInfo.MainOid>0) {
+                                  mainOrder = Orders.GetOrderByOid(Model.OrderInfo.MainOid);
+                              }
+                              }
+                            订单号：@Model.OrderInfo.OSN
+                            <br />
+                            订单金额：@Model.OrderInfo.OrderAmount
+                            <br />
+                            @if (mainOrder!=null){
+                            <span style="color:red;">备注：(该订单存在关联代理订单：
+                                <a href="@Url.Action("product","catalog")" style="text-decoration:underline;">@mainOrder.OSN</a>,订单金额：@mainOrder.OrderAmount,提交退货关联订单也会一并申请退货)</span>
+                            }
+                        </div>
+
+                        <div>
+                            <h3>退货操作：</h3>
+                            <br />
+
+                            退货原因:
+                        <br />
+                            <input type="radio" name="ReturnDesc" value="1" checked="checked" /><span>外观颜色不合适</span>
+                            <br />
+                            <input type="radio" name="ReturnDesc" value="2" /><span>质量存在问题</span>
+                            <br />
+                            <input type="radio" name="ReturnDesc" value="3" /><span>物流慢</span>
+                        <br />
+                            <input type="radio" name="ReturnDesc" value="4" /><span>其他原因</span>
+                        <br />
+                            <textarea name="desc" cols="100" rows="5" id="ReturnDescOther"></textarea>
+                        </div>
+                        <div class="shrBT" style="margin: 10px auto; text-align: center; height: 35px; line-height: 35px;">
+                            <input type="hidden" name="changeoid" id="changeoid" value="@Model.OrderInfo.Oid" />
+                            <input type="button" onclick="applyReturn()" class="regBt redBT" value="提&nbsp;交 " style="height: 35px; width: 135px; font-size: 18px;" />
+                        </div>
+                    </div>
+                   
+                }
+                else
+                {
+                    <div>@Model.Message</div>
+                }
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

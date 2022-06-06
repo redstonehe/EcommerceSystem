@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.Web.MallAdmin.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.Web.MallAdmin.pdb
+C:\develop\德鹿商城\Presentation\VMall.Web\admin_mall\obj\Debug\VMall.Web.MallAdmin.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\admin_mall\obj\Debug\VMall.Web.MallAdmin.pdb
+C:\develop\德鹿商城\Presentation\VMall.Web\admin_mall\obj\Debug\VMall.Web.MallAdmin.csprojResolveAssemblyReference.cache

@@ -1,0 +1,950 @@
+body {
+    line-height: 1.25em;
+    background: #FFF;
+}
+
+a {
+    text-decoration: none;
+}
+
+.tbl-type {
+    display: table;
+    width: 100%;
+}
+
+.tbl-cell {
+    display: table-cell;
+}
+
+#cartBody {
+    margin-bottom: 95px;
+}
+
+.cartItme {
+    /*border: 1px solid #e3e3e3;*/
+}
+
+    .cartItme .proInfo:last-child {
+        border-bottom: 0;
+    }
+
+.cartTitle {
+    /*background: #F0F0F0;*/
+    height: 45px;
+    line-height: 45px;
+    font-size: 14px;
+    color: #3d4245;
+    font-weight: bold;
+    padding-left: 5px;
+    padding: 5px;
+}
+
+    .cartTitle .cart-storename {
+        color: #333;
+        padding: 6px;
+        font-size: 16px;
+        font-weight: bolder;
+        width: 54px;
+        height: 18px;
+        overflow: hidden;
+    }
+
+.preInfo {
+    font-size: 12px;
+    color: #999;
+    border-bottom: 1px dotted #e3e3e3;
+    margin-left: 40px;
+    padding: 5px 0;
+}
+
+    .preInfo a {
+        padding: 0px 10px;
+        font-size: 12px;
+        background: #FB5433;
+        color: #fff;
+    }
+    .preInfo a[class='redBt'], .preInfo a[class='gayBt'], .preInfo1 a[class='redBt'] {
+        padding: 0 10px;
+        display: inline-block;
+        color: #fff;
+        background: #FB5433;
+    }
+
+    .preInfo a[class='gayBt'] {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+.preInfo1 {
+    font-size: 12px;
+    color: #999;
+    border-bottom: 1px dotted #e3e3e3;
+    margin-left: 40px;
+    padding: 5px 0;
+    position: relative;
+}
+
+    .preInfo1 input.checkbox {
+        position: absolute;
+        left: -30px;
+        top: 8px;
+    }
+
+    .preInfo1 a {
+        background: #e4393c;
+        padding: 0px 7px;
+        font-size: 12px;
+    }
+
+    .preInfo1 .price {
+        position: absolute;
+        left: 50px;
+        top: 5px;
+    }
+
+    .preInfo1 .gayBt {
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+        .preInfo1 .gayBt input {
+            border: 0;
+            background: none;
+            width: 30px;
+            text-align: center;
+        }
+
+    .preInfo1 .del {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        padding: 0;
+        background: url(/mobile/images/del.png) no-repeat 0 0;
+        background-size: 50px 50px;
+        width: 23px;
+        height: 23px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+.nosend {
+    color: #f48719;display:block;
+}
+
+.radio {
+    width: 18px;
+    height: 18px;
+    background-size: 20px;
+    border-radius: 2px;
+    background-image: url(/mobile/images/radio.png);
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: 0;
+    vertical-align: -6px;
+    background-size: 100%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+    .radio.checked, .radio:checked {
+        background-image: url(/mobile/images/radio1.png);
+    }
+
+.cartItme .invalid {
+    background: url(/images/cartitem_bg.png) no-repeat #fff left;
+    background-size: contain;
+}
+
+.proInfo {
+    padding: 10px 0;
+    margin-left: 40px;
+    position: relative; /*border-bottom:1px dotted #e3e3e3;*/
+}
+
+    .proInfo .nb {
+        position: absolute;
+        right: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .proInfo .del {
+        position: absolute;
+        right: 10px;
+        top: 55px;
+        background: url(/mobile/images/del.png) no-repeat 0 0;
+        background-size: 50px 50px;
+        width: 23px;
+        height: 23px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+
+    .proInfo:after, .proInfo2:after, .goToPay:after {
+        clear: both;
+        display: block;
+        width: 100%;
+        height: 1px;
+        overflow: hidden;
+        margin-top: -1px;
+        content: "";
+    }
+
+.proInfo1 {
+    position: absolute;
+    top: 30px;
+    left: -35px;
+    width: 35px;
+    text-align: center;
+}
+
+.proInfo2 .proImg {
+    position: relative;
+    float: left;
+    background: #fff;
+    border: #eee 1px solid;
+}
+
+.proInfo2.change .proImg:before {
+    content: '';
+    width: 59px;
+    height: 59px;
+    background: url(/mobile/images/change.png) no-repeat 0 0;
+    background-size: 59px 59px;
+    position: absolute;
+}
+
+.proInfo2 img { /*border:1px solid #e3e3e3;*/
+    padding: 5px;
+}
+
+.proInfo2 a {
+    font-size: 14px;
+    color: #333;
+    display: block;
+}
+
+.proInfo2 .text {
+    padding-left: 10px;
+    min-width: 118px;
+    width: 50%;
+    float: left;
+}
+.proInfo2 .text .price del {    color: #9C9A9C;
+    margin-left: 5px;
+}
+.proInfo2 .gayBt {
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+    .proInfo2 .gayBt input {
+        border: 0;
+        background: none;
+        width: 30px;
+        text-align: center;
+    }
+
+.ZP {
+    padding: 5px 0;
+    font-size: 12px;
+    border-top: 1px dotted #e3e3e3;
+}
+
+    .ZP a {
+        color: #999;
+        display: block;
+    }
+
+.proInfo2 .price {
+    margin: 10px 0;
+}
+
+.proInfo .proadd {
+    width: 101px;
+    border: #e5e5e5 1px solid;
+    height: 35px;
+    font-family: 'Arial';
+    /*margin: 2px 0 0;*/
+}
+
+    .proInfo .proadd a {
+        background: #f9f9f9;
+        color: #222;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .proInfo .proadd a, .proInfo .proadd input {
+        width: 33px;
+        height: 33px;
+        line-height: 33px;
+        text-align: center;
+    }
+
+
+    .proInfo .delect1 {
+    background: #dbdbdb;
+}
+    .proInfo .delect1, .prototal .action {
+    border-radius: 4px;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    margin: 2px 0;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+}
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.proInfo em {
+    background-position: -0.89rem 0;
+    width: 25px;
+    height: 25px;
+    margin: 2px 5px;
+
+    background: url(http://img.jianke.net/mobile/waporder/images/comen.png) no-repeat;
+    background-size: 300px 90px;
+    background-position: -45px 5px;
+}
+.proInfo .proadd input {
+    background: #fff;
+    padding: 0px;
+    border-bottom: 1px;
+    border-top: 1px;
+    border-left: #e5e5e5 1px solid;
+    border-right: #e5e5e5 1px solid;
+    font-size: 14px;
+    /*border-radius: 0;*/
+}
+
+input[type="text"], input[type="password"], textarea {
+    outline-style: none;
+    -webkit-appearance: none;
+    outline-style: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-appearance: none;
+}
+
+.clear {
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+}
+
+
+.goToPay {
+    width: 100%;
+    height: 90px;
+    overflow: hidden;
+    position: fixed;
+    background: #eaedf1;
+    bottom: 0;
+    left: 0px;
+    z-index: 10;
+}
+
+    .goToPay a {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 90px;
+        line-height: 90px;
+        color: #FFF;
+        background: #e4393c;
+        padding: 0 25px;
+        width: 30%;
+        text-align: center;
+        font-size: 28px;
+    }
+
+ .goToPay .sum-price{float:left;}
+ .goToPay .sum-price .allmount{color: #e4393c; font-size: 16px; margin: 5px 0 0 10px;}
+  .goToPay .sum-price .promount{color: #999; font-size: 16px; margin-left: 10px;}
+.allSelect {
+    padding: 15px 10px 0 10px;
+}
+
+.HGbox {
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+    background: #fff;
+    width: 100%;
+}
+
+    .HGbox .price {
+        top: 35px;
+    }
+
+.HGtitle {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #d3d3d3;
+    padding: 0 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+    .HGtitle div.left span {
+        color: #c33;
+    }
+
+    .HGtitle .redBt {
+        padding: 0px 15px;
+    }
+
+
+.title {
+    padding: 13px 10px 7px;
+    border-bottom: 1px solid #c8c7cc;
+    font-size: 14px;
+    color: #000;
+    background: #DDDDDD; /*color: #fff;background: #5d6b85;*/
+}
+
+.con {
+    position: relative;
+    border-bottom: 1px solid #f1f1f1;
+    padding: 5px 20px;
+}
+
+    .con a {
+        display: block;
+        padding: 13px 30px 12px 10px;
+        color: #333;
+    }
+
+    .con .tip {
+        padding-left: 20px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .cashamount {
+        color: #E4393C;
+        width: 60px;
+        display: inline-block;
+    }
+
+    #CashSumCon ul li {
+        border-bottom: 1px dashed #e4e4e4;
+        padding: 5px 10px;
+    }
+
+    .con input[type=text] {
+        padding: 5px;
+    }
+
+    .con input[type=password] {
+        padding: 5px;
+    }
+
+    .con .cartItme .proInfo .proInfo2 .text a {
+        padding: 5px 0;
+    }
+
+    .paytype-cash {
+        height: 24px;
+        width: 24px;
+    }
+
+    .ordersummaryT tr td {
+        width: 50%;
+    }
+
+    .subSum p {
+        text-align: right;
+        height: 24px;
+        line-height: 24px;
+        padding-right: 10px;
+    }
+
+    .subSum i {
+        color: #f00;
+    }
+
+    .proInfoItem {
+        display: block;
+        padding: 5px 30px 5px 10px;
+    }
+
+        .proInfoItem span {
+            color: #f00;
+        }
+
+    .preInfo a[class='redBt'], .preInfo a[class='gayBt'], .preInfo1 a[class='redBt'] {
+        padding: 0 10px;
+        display: inline-block;
+        color: #fff;
+        background: #FB5433;
+    }
+
+    .preInfo a[class='gayBt'] {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+    .preInfo {
+        margin: 10px;
+    }
+
+    .cashwarn {
+        color: red;
+        display: none;
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+.icon-arr {
+    position: absolute;
+    top: 40%;
+    right: 23px;
+    width: 10px;
+    height: 15px;
+    background: url(/mobile/images/icon_order.png) 0 0 no-repeat;
+    background-size: 100px 100px;
+}
+
+
+.orderInfo {
+    padding: 20px 0;
+    font-size: 14px;
+    background: url(/mobile/images/line2.png) repeat-x bottom;
+    background-size: 6px 1px;
+}
+
+.bg-border {
+    display: block;
+    position: relative;
+    height: 2px;
+    background: url(/mobile/images/line2.png) 0 0 repeat-x;
+    background-size: 6px 1px;
+}
+
+    .bg-border span {
+        position: absolute;
+        top: -8px;
+        right: 10px;
+        width: 30px;
+        height: 20px;
+        background: url(/mobile/images/icon_order.png) -17px 0 no-repeat;
+        background-size: 100px 100px;
+    }
+
+.allPrice {
+    color: #c00;
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.subOrder {
+    display: block;
+    /*padding: 5px 0;*/
+    text-align: center;
+    margin: 20px 10px;
+    /*height: 36px;
+    line-height: 36px;*/
+    font-size: 20px;
+}
+
+.ship-list{
+    border: 1px solid #f2f2f2;
+    margin-bottom: 10px;
+}
+.addAddress {
+    display: block;
+    height: 34px;
+    border: 1px solid #e4393c;
+    line-height: 34px;
+    color: #e4393c;
+    text-align: center;
+    margin: 20px 10px;
+}
+
+.bgBlock {
+    background: #f1f1f5;
+    height: 20px;
+    border-bottom: 1px solid #c8c7cc;
+}
+
+.adressI {
+    padding: 10px;
+    color: #333;
+    /*border-bottom: 1px solid #c8c7cc;*/
+    position: relative;
+}
+
+.ADedit {
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
+}
+
+    .ADedit a {
+        font-size: 14px;
+        color: #666;
+        padding-right: 10px;
+    }
+
+    .ADedit .gayBt, .ADedit .redBt {
+        padding: 1px 6px;
+    }
+
+.ADupdate span {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    background: url(/mobile/images/icon_order.png) -50px 0 no-repeat;
+    background-size: 100px 100px;
+    vertical-align: top;
+}
+
+.ADdel span {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    background: url(/mobile/images/icon_order.png) -76px 0 no-repeat;
+    background-size: 100px 100px;
+    vertical-align: top;
+}
+
+.adressI .f14 {
+    color: #666;
+}
+
+.chooseAD {
+    padding-top: 5px;
+    margin-top: 5px;
+    border-top: 1px dashed #e3e3e3;
+    color: #666;
+    font-size: 14px;
+}
+
+
+.ADcell {
+    font-size: 14px;
+    color: #999;
+    padding: 5px 10px 4px;
+    border-bottom: 1px solid #c8c7cc;
+    line-height: 30px;
+}
+
+    .ADcell .text {
+        height: 30px;
+        border: 0;
+        border-radius: 0;
+        background: #fff;
+        line-height: 24px;
+        font-weight: normal;
+        text-indent: 10px;
+        vertical-align: top;
+        -webkit-appearance: none;
+        width: 100%;
+    }
+
+.ADcellCon {
+    padding: 5px 0;
+    display: table;
+    width: 100%;
+}
+
+    .ADcellCon span {
+        width: 90px;
+    }
+
+    .ADcellCon span, .ADcellCon p {
+        display: table-cell;
+    }
+
+.ADcell .tip {
+    color: red;
+    padding: 5px 0 4px 0;
+    line-height: 20px;
+    border-top: 1px solid #c8c7cc;
+    display: none;
+}
+
+.allCell {
+    display: block;
+    padding: 10px 0 10px 15px;
+    /*border-bottom: 1px solid #e3e3e3;*/
+}
+
+/*结算页面优惠卷*/
+.sell {
+    display: block;
+    font-size: 12px;
+    border-bottom: 1px dotted #ddd;
+    padding: 5px 10px;
+}
+
+    .sell i {
+        display: inline;
+        padding: 0 3px;
+        background: red;
+        color: #FFF;
+    }
+
+#usesigningDiv {
+    width: 80%;
+}
+
+.protocol-button button {
+    margin: 5px auto;
+    display: block;
+    width: 80%;
+    height: 54px;
+    color: #fff;
+    background: #e22;
+    border: 0;
+    font-size: 16px;
+    font-family: "Microsoft YaHei","Hiragino Sans GB";
+}
+
+.protocol-con {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 400px;
+    min-width: 250px;
+    width: 95%;
+    height: 300px;
+    padding: 10px;
+    line-height: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 25px;
+}
+
+    .protocol-con p {
+        min-width: 250px;
+        max-width: 400px;
+    }
+
+
+.layer_1 {
+    text-align: center;
+    font-size: 16px;
+}
+
+.layer_2 {
+    padding: 5px;
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+    .layer_2 span {
+        float: left;
+        width: 43%;
+        height: 55px;
+        line-height: 55px;
+        border: 3px solid #ccc;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .layer_2 .span_left {
+        margin-right: 3%;
+    }
+
+    .layer_2 .span_right {
+        margin-left: 3%;
+    }
+
+    .layer_2 .hottest {
+        border: 3px solid #e4393c;
+        color: #d23335;
+        background: url(/images/actii.png) right bottom no-repeat;
+    }
+
+.layer_3 {
+    padding: 10px 20px;
+    text-align: center;
+}
+
+    .layer_3 a {
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+        line-height: 50px;
+        background: #E94820;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+.layer_4 {
+    padding-bottom: 20px;
+    text-align: center;
+    color: red;
+    display: none;
+}
+
+
+.layer_5 span {
+    display: block;
+    width: 90%;
+    height: 50px;
+    line-height: 50px;
+    border: 3px solid #ccc;
+    margin: 8px 2%;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 2%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layer_5 p {
+    position: relative;
+}
+
+    .layer_5 p a {
+        position: absolute;
+        top: 45px;
+        right: 30px;
+        text-decoration: underline;
+    }
+
+.layer_5 .hottest {
+    border: 3px solid #e4393c;
+    color: #d23335;
+    background: url(/images/actii.png) right bottom no-repeat;
+    padding: 0 2%;
+}
+
+.layer_5 i {
+    display: none;
+    margin-left: 2%;
+}
+
+.layer_6 {
+    padding: 5px;
+    text-align: center;
+    display: none;
+}
+
+/*发票信息*/
+#invoiceDiv{font-size:14px}
+.invoice-item {
+    position: relative;
+    z-index: 1;
+    float: left;
+    margin: 2px 4px 4px 2px;
+    /*padding: 5px;*/
+    height: 36px;
+    border: 1px solid #ebebeb;
+    text-align: center;
+    line-height: 36px;
+    cursor: pointer;
+    width: 29%;
+}
+
+.invoice-item-selected {
+    background: url(/images/actii.png) right bottom no-repeat;
+    border: 1px solid #e4393c;
+    /*padding: 5px;*/
+}
+
+.invoice-list {
+    margin: 5px 0px;
+}
+.ul-type,.ul-body{margin:0;padding:0;}
+.invoice-name { /*float: left;*/
+    height: 25px;
+    line-height: 24px;
+    padding-left: 6px;
+    width: 100%;
+    text-align: left;
+}
+/*.invoice-title{width: 800px; margin: 10px 85px;}*/
+.invoice-input {
+    /*width: 60%;*/
+    margin: 1%;
+}
+
+.invoice-detail {
+    height: 18px;
+    line-height: 18px;
+    padding-left: 6px;
+    width: 100%;
+    text-align: left;
+    display: block;
+    font-size: 13px;
+}
+
+.invoice_warn {
+    margin: 10px 5px;
+    color: #e4393c;
+}
+
+/*价格说明*/
+
+.pricewarn i {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background: url(/images/pricewarn.png) right bottom no-repeat;
+    line-height: 20px;
+    margin-right: 5px;
+    background-size: 100%;
+}
+
+.pricewarn a {
+    color: #515151;
+}
+
+.con .order_switch{margin:0px;}
+
+.con .order_switch  i, .con .order_switch .active {
+    width:50px;
+    height:25px;
+    border: #d4d4d4 1px solid;
+    border-radius: 15px;
+    position: relative;
+    margin: 15px 0 0 0;
+}
+.con .order_switch  i:after {
+    background: #d4d4d4;
+    left: 2px;
+}
+.con .order_switch span,.order_switch_info span{
+        padding: 13px 30px 12px 10px;
+    color: #333;display: inline-block;
+}
+.con .order_switch  i:after, .con .order_switch .active:after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius:10px;
+    position: absolute;
+    top: 50%;
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.con .order_switch .active:after {
+    background: #028bff;
+    left: 25px;
+}

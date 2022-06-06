@@ -1,0 +1,83 @@
+﻿@model VMall.Web.Mobile.Models.ComplainListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "投诉列表查询";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .viewport {
+        width: 600px;
+        max-width: 800px;
+        /* margin: 0 auto; */
+    }
+
+    table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+
+    table th {
+        font-size: 14px;
+    }
+
+    table td {
+        border: 1px solid #fff;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }
+
+    .sendlist {
+        margin: 20px 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .operate {
+        text-decoration: underline;
+        color: blue;
+    }
+</style>
+<script>
+    
+</script>
+
+<div class="myAssetsCon">
+    <div class="am-scrollable-horizontal">
+        <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+            <thead>
+                <tr>
+                    <th>创建时间</th>
+                    <th>投诉内容</th>
+                    <th>回复人</th>
+                    <th>回复内容</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.ComplainList)
+                {
+                    <tr>
+                        <td>@row.complaintime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@row.complainmsg</td>
+                        <td>@row.replynickname</td>
+                        <td>@row.replymsg</td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+

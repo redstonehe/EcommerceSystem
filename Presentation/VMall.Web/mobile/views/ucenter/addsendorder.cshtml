@@ -1,0 +1,233 @@
+﻿@model  VMall.Web.Mobile.Models.AgentSendOrderModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "填写要货单";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .gprolist li {
+        border: 1px solid #eee;
+        float: left;
+        width: 45%;
+        /*height: 248px;*/
+        margin-top: 12px;
+        margin-right: 2%;
+        margin-left: 2%;
+        cursor: pointer;
+        padding-bottom: 10px;
+    }
+
+    .gprolist .hot {
+        border: 1px solid #e4393c;
+        color: #d23335;
+        background: url(/images/actii.png) right bottom no-repeat;
+        /*padding: 10px 12px;*/
+    }
+
+    .gprolist li h4 {
+        font-weight: 400;
+        text-align: center;
+        color: #666;
+        padding: 5px;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .gprolist li .index_mod_iconprice {
+        color: #fe575f;
+        text-align: center;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .submitSelect {
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        background: #e94820;
+        color: #fff;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .reg {
+        text-align: center;
+        margin: 40px;
+    }
+
+        .reg th {
+            font-weight: normal;
+            font-size: 14px;
+            /*color: #999;
+    padding-right: 10px;*/
+            width: 190px;
+            text-align: right;
+            height: 30px;
+        }
+
+    html body .reg .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 170px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+        margin-left: 50px;
+    }
+
+    html body .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+        padding: 4px 15px;
+        border: 1px solid #e4393c;
+        border-radius: 3px;
+        background-color: #f5f4f4;
+        background: -webkit-gradient(linear,0 0,0 100%,from(#FC5C5F),to(#e4393c));
+        line-height: 29px;
+        font-size: 14px;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        padding: 3px 0;
+        margin: 10px 0;
+    }
+
+    th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 60px;
+    }
+
+    .userFormC .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+</style>
+<div class="userFormC">
+
+    <div style="text-align: center; color: red; font-size: 16px;"><span>可用库存余额：@Model.AgentStock.AgentAmount</span></div>
+    <h2>代理产品列表</h2>
+
+    <div class="hot-goods-box">
+        <div class="sgb-cont itemdiv" id="hot1">
+            <ul class="gprolist">
+                @foreach (var info in Model.ProductList)
+                {
+                    ProductStockInfo stock = Products.GetProductStockByPid(info.Pid);
+                    if (stock.Number > 0)
+                    {
+                    <li class="itempro" onclick="selectPro(this);" data-pid="@info.Pid">
+                        <a href="javascript:void(0);">
+                            <img src="/upload/store/@(info.StoreId)/product/show/thumb350_350/@(info.ShowImg)" alt="" width="100%" height="100%"></a>
+                        <h4>@info.Name</h4>
+                        @{decimal agentprice = new AgentStock().SingleAgentPriceFor70(WorkContext.PartUserInfo, info.Pid);}
+                        <p class="index_mod_iconprice">代理价：¥@(agentprice)</p>
+                    </li>
+                    }
+                }
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="submitSelect" onclick="confirmPro();"><span>确定</span></div>
+
+</div>
+<script>
+    function selectPro(ele) {
+        $(".gprolist li").removeClass("hot");
+        $(ele).addClass("hot");
+    }
+    function confirmPro() {
+        var pid = parseInt($(".gprolist li[class='itempro hot']").attr("data-pid"));
+        //alert(pid );
+        if (pid > 0) {
+            var id = '@(Model.AgentStock.Asid)';
+            window.location.href = '/mob/ucenter/ConfirmSendOrder?pid=' + pid + '&asid=' + id;
+        } else {
+            alert("请选择正确的产品");
+        }
+
+
+    }
+
+    function join($this) {
+        if (checkInput()) {
+            $("form").submit();
+        }
+    }
+    //检查输入
+    function checkInput() {
+        if ($.trim($("#pid").val()) == "") {
+            alert("产品不能为空");
+            return false;
+        }
+
+        var count = parseInt($("#count").val());
+        var maxcount = parseInt($("#count").attr("data-max"));
+        if (count == "") {
+            alert('请填入数量');
+            $("#count").focus();
+            return false;
+        }
+        if (isNaN(count)) {
+            alert('请填入数字');
+            $("#count").focus();
+            return false;
+        }
+        if (count < 0) {
+            alert('数量不能为小于0!');
+            $("#count").focus();
+            return false;
+        }
+        if (count > maxcount) {
+            alert('数量不能为大于最大数量!');
+            $("#count").focus();
+            return false;
+        }
+        if ($("#addressid").val() == "") {
+            alert("请选择地址");
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+

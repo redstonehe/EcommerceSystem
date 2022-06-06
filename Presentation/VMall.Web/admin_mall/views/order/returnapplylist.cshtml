@@ -1,0 +1,206 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderListModel
+
+@section header{
+<title>订单列表</title>
+<link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css"/>
+<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+<script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+<link rel="stylesheet" type="text/css"  href="/admin_mall/content/jbox/Skins/Default/jbox.css"/>
+<script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="/admin_mall/scripts/selectlist.js?ddd"></script>
+<script type="text/javascript" src="/admin_mall/scripts/date.js"></script>
+<script type="text/javascript">
+    $(function () {
+        if ($("#IsOutPut")) {
+            $("#IsOutPut").val("0");
+        }
+    });
+
+    function output() {
+        $("#IsOutPut").val("1");
+        $("form").submit();
+    }
+    function search() {
+        $("#IsOutPut").val("0");
+        $("form").submit();
+    }
+ </script>  
+}
+
+@section body{
+<h1 class="rightH1">
+订单管理 &gt;&gt; 退货待审核列表
+<div class="right">
+    <a href="@Url.Action("returnlist")" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回退货列表</a>
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</h1>
+@using (Html.BeginForm("ReturnApplyList", "order"))
+{ 
+    <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+    <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+    <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />
+<div class="dataListSearch">
+<table height="32">
+        <tbody>
+        <tr>
+        <td width="35"><img id="searchImg" src="/admin_mall/content/images/search1.gif"/></td>
+        <td>商品店铺：</td>
+        <td width="100">
+        <div class="selectBt">
+            <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)"  style="height:22px; line-height:22px;background:url(/admin_mall/content/images/selectbgico.gif) no-repeat 6px center; padding-left:22px; padding-right:10px;"/>
+            <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+            <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+        </div>
+        </td>
+        <td>订单编号：</td>
+         <td width="130">@Html.TextBox("OSN", Model.OSN, new { height = "18" })</td>
+        @*<td>&nbsp;&nbsp;&nbsp;账号名称：</td>
+        <td width="130">@Html.TextBox("AccountName", Model.AccountName, new { height = "18" })</td>*@
+        <td>&nbsp;&nbsp;&nbsp;开始时间：</td>
+        <td width="90">@Html.TextBox("StartDate", Model.StartDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+        <td>&nbsp;&nbsp;&nbsp;结束时间：</td>
+        <td width="90">@Html.TextBox("EndDate", Model.EndDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+        <td>&nbsp;&nbsp;&nbsp;收货人：</td>
+        <td width="130">@Html.TextBox("Consignee", Model.Consignee, new { height = "18" })</td>
+        <td>&nbsp;&nbsp;&nbsp;订单状态：</td>
+       
+       <td>
+       <input id="SearchOrder" name="SearchOrder" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" onclick="search();" />
+      
+        @*<a href="/malladmin/order/DownloadOrderList" style="margin-left:12px;width:63px;height:24px;vertical-align:middle;border:2px solid rgb(227, 227, 227);padding:3px 14px;font-weight:700;">导出</a>*@
+       </td>
+      </tr>
+     </tbody></table>
+</div>
+
+<div class="dataList">
+<table width="100%">
+<thead>
+  <tr>
+    <th width="40" align="center"><input type="checkbox" id="allSelect"/></th>
+    <th width="160" align="left">订单编号</th>
+    <th width="100" align="left">店铺</th>
+    <th width="120" align="left">下单会员</th>
+    <th width="120" align="left">下单时间</th>
+    <th width="80" align="left" name="sortTitle" column="orderamount" direction="ASC">订单金额</th>  
+    <th width="80" align="left" name="sortTitle" column="surplusmoney" direction="ASC">应付金额</th>  
+    <th width="80" align="left">支付方式</th>  
+    <th width="80" align="left">订单状态</th>  
+    <th width="200" align="left">备注</th>  
+    <th width="104" align="left">管理操作</th>
+    </tr>
+</thead>
+  <tbody>
+  @foreach (DataRow row in Model.OrderList.Rows)
+  {
+      string state = string.Empty;
+      if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+      {
+          if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed)
+          {
+              state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString() + "-" + row["changetype"].ToString();
+          }
+          else if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+          {
+              state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString();
+          }
+      }
+      else
+      {
+          state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"]));
+
+      }
+  <tr>
+    <td align="center"><input type="checkbox" value="@row["oid"]" selectItem="true" name="oid" /></td>
+    <td>@row["osn"] </td>
+    <td>@row["storename"] </td>
+    <td><div>@(string.IsNullOrEmpty(row["username"].ToString().Trim()) ? (string.IsNullOrEmpty(row["usermobile"].ToString().Trim()) ? (string.IsNullOrEmpty(row["useremail"].ToString().Trim()) ? "" : row["useremail"].ToString().Trim()) : row["usermobile"].ToString().Trim()) : row["username"].ToString().Trim())</div></td>
+    <td><div>@(TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm:ss"))</div></td>
+    <td>@row["orderamount"]</td>
+    <td>@row["surplusmoney"]</td>
+    <td>@row["payfriendname"]</td>
+    <td>
+          @switch (state)
+                                {
+                                    case "WaitPaying":
+                                    @:等待付款
+            break;
+                                    case "Confirming":
+                                    @:待确认
+            break;
+                                    case "Confirmed":
+                                    @:已确认
+            break;
+                                    case "PreProducting":
+                                    @:备货中
+            break;
+                                    case "Sended":
+                                    @:已发货
+            break;
+                                    case "Completed-0-0":
+                                    @:已完成
+            break;
+                                    case "Completed-0-1":
+                                    @:<span style="color:red;">换货审核中</span>
+            break;
+                                    case "Completed-0-2":
+                                    @:<span style="color:red;">换货审核通过</span>
+            break;
+                                    case "Completed-0-3":
+                                    @:<span style="color:red;">换货等待发货</span>
+            break;
+                                    case "Completed-0-4":
+                                    @:<span style="color:red;">换货确认收货</span>
+            break;
+                                    case "Completed-0-5":
+                                    @:<span>换货完成</span>
+            break;
+                                    case "Completed-1-0":
+                                    @:<span style="color:red;">退货审核中</span>
+            break;
+                                    case "Settled":
+                                    @:已结算
+                                    break;
+                                    case "Cancelled":
+                                    @:取消
+            break;
+                                    case "Returned-2":
+                                    @:<span style="color:red;">退货审核通过</span>
+            break;
+                                    case "Returned-3":
+                                    @:<span style="color:red;">退款审核中</span>
+            break;
+                                    case "Returned-4":
+                                    @:退款成功
+            break;
+                                    case "Changed":
+                                    @:换货
+            break;
+                                    case "Locked":
+                                    @:锁定
+            break;
+                                    default:
+                                    @:未知状态
+            break;
+                                }
+    </td>
+    <td>@row["buyerremark"]</td>
+    <td>
+        @Html.ActionLink("[详细信息]", "orderinfo", new { oid = row["oid"] }, new { @class = "editOperate" })
+        @Html.ActionLink("[打印]", "printorder", new { oid = row["oid"] }, new { @class = "editOperate", target = "_blank" })
+    </td>
+    </tr>
+  }
+</tbody>
+</table>
+</div>
+<div class="dataListEdit">
+<div class="page">
+    @Html.MallAdminPager(Model.PageModel)
+</div>
+</div>
+}
+}

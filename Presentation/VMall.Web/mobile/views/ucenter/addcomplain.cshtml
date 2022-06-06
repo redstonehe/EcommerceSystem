@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "投诉反馈";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .am-form .am-form-div {
+        position:relative;
+    }
+        .am-form .am-form-div .am-form-rightlink {
+            position:absolute;
+            right:0;
+            top:-15px;
+        }
+</style>
+<div class="userFormC">
+    <form class="am-form" name="rForm" action="@Url.Action("CreateComplain")" method="post">
+        <fieldset>
+            @*<legend>表单标题</legend>*@
+            <div class="am-form-group am-form-div " >
+                <label for="doc-ta-1">投诉反馈：</label>
+                <a class="am-btn am-btn-link am-form-rightlink" href="@Url.Action("ComplainList")">查看我的投记录</a>
+                <textarea id="complainMsg" name="complainMsg" class="" rows="10" id="doc-ta-1"></textarea>
+            </div>
+
+            <p>
+                <button type="submit" class="am-btn am-btn-danger am-btn-block" onclick=" return join(this)">提交</button>
+            </p>
+        </fieldset>
+    </form>
+</div>
+<script>
+    function join($this) {
+        if (checkInput()) {
+            $("form").submit();
+        }
+    }
+    //检查输入
+    function checkInput() {
+        var msg = $.trim($("#complainMsg").val());
+        if (msg == "") {
+            alert("内容不能为空");
+            $("#complainMsg").focus();
+            return false;
+        }
+        if (msg.length > 200) {
+            alert("内容长度不能超过200字");
+            $("#complainMsg").focus();
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+

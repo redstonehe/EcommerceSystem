@@ -1,0 +1,231 @@
+﻿@model VMall.Web.MallAdmin.Models.Kf2SeverbApplyListModel
+@section header{
+    <title>尚睿淳申请列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <style>
+        .createoid a:hover {
+            color: red;
+        }
+        .dataBatchEdit {
+            border: 1px solid #cccccc;
+            background-color: #e6e6e6;
+            margin-left: 15px;
+            margin-top: 20px;
+        }
+            .dataBatchEdit .success, .dataBatchEdit .fail {
+                margin: 5px;
+                border-bottom: 1px solid #cccccc;
+            }
+        .BatchEdit {
+            display: inline-block;
+            border: 1px solid #333;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function output() {
+            var ApplySN = $.trim($("#ApplySN").val());
+            var CardUserName = $.trim($("#CardUserName").val());
+            var CardMobile =  $.trim($("#CardMobile").val());
+            var State = $("#State").val();
+            window.open("/malladmin/Kf2Severb/OutPutList?ApplySN=" + ApplySN + "&CardUserName=" + CardUserName + "&CardMobile=" + CardMobile + "&State=" + State);
+        }
+        function search() {
+            $("form").submit();
+        }
+        function auditopreation(ele,type) {
+            var id = $(ele).attr("data-id");
+          
+            var html = "";
+            if (type == 2) {
+                html = "<div style='padding:10px;'> <p>输入审核备注：</p>";
+            }
+            else {
+                html = "<div style='padding:10px;'> <p>输入失败原因：</p>";
+            }
+            html += "<textarea type='text' id='failmark' rows='15' cols=45' name='failmark' ></textarea>";
+            html += "<p style='color:red;'>(填写审核信息，如个人信息是否无误，金额是否正确等)</p></div>";
+            var submit = function (v, h, f) {
+                
+                //window.location.href = "/malladmin/Kf2Severb/UpdateState?Id=" + id + "&state=0&remark=" + f.failmark;
+                $.ajax({
+                    type: "POST",
+                    url: "/malladmin/Kf2Severb/UpdateState?r=" + Math.random(),
+                    data: { Id: id, state: type, remark: f.failmark },
+                    success: function (result) {
+                        if (result == "2") {
+                            $.jBox.tip("审核通过");
+                            window.location.href = window.location.href;
+                        }
+                        else if (result == "0") {
+                            $.jBox.tip("审核不通过");
+                            window.location.href = window.location.href;
+                        }
+                        else {
+                            $.jBox.tip("记录不存在");
+                            window.location.href = window.location.href;
+                        }
+                    }
+                });
+                return true;
+            };
+
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+
+        function dealSuccess(ele) {
+            var id = $(ele).attr("data-id");
+            $.jBox.confirm("您确认要进行此操作吗？", "提示", function (v, h, f) {
+                if (v == 'ok') {
+                    $.jBox.tip("正在设置...", 'loading');
+                    $.get("/malladmin/Kf2Severb/UpdateState?r=" + Math.random(), { Id: id, state: 3, remark: "已处理成功"}, function (data, textStatus) {
+
+                        if (data == "2") {
+                            $.jBox.tip('设置成功！', 'success');
+                            window.location.href = window.location.href;
+                        } else {
+                            $.jBox.error('设置失败，请联系管理员！', '设置失败');
+                            window.location.href = window.location.href;
+                        }
+                    });
+                }
+                else if (v == 'cancel') {
+                    // 取消
+                }
+
+                return true; //close
+            });
+        }
+        $(function () {
+            $("tr").click(function () {
+                $(this).find("td").eq(0).find("input").attr("checked", "true");
+            });
+        });
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 尚睿淳转出申请列表
+        <div class="right">
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("Kf2SeverbApplyList", "Kf2Severb"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="35">
+                            <img id="searchImg" src="/admin_mall/content/images/search1.gif" /></td>
+                        <td>&nbsp;单号：</td>
+                        <td>@Html.TextBox("ApplySN", Model.ApplySN, new { height = "28", size = "15" })</td>
+                        <td>&nbsp;申请姓名：</td>
+                        <td>@Html.TextBox("CardUserName", Model.CardUserName, new { height = "28", size = "15" })</td>
+                        <td>&nbsp;申请手机：
+                        </td>
+                        <td width="130">
+                            @Html.TextBox("CardMobile", Model.CardMobile, new { height = "18" })
+                        </td>
+                        <td>&nbsp;&nbsp;&nbsp;状态：</td>
+                        <td>
+                            @Html.DropDownListFor(x => x.State, ViewData["StateList"] as List<SelectListItem>)
+                        </td>
+
+                        <td>
+                            <input id="SearchCash" name="SearchCash" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                            <input id="ExportOrder" name="ExportOrder" type="button" style="width: 63px; height: 24px;" class="searchBut submit" value="导出" onclick="output();" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="40" align="center">
+                            <input type="checkbox" id="allSelect" /></th>
+                        <th width="180" align="left">申请单号</th>
+                        <th width="150" align="left">用户(用户名/手机)</th>
+                        <th width="120" align="left">用户姓名</th>
+                        <th width="120" align="left">创建时间</th>
+                        <th width="80" align="left">申请卡号</th>
+                        <th width="80" align="left">卡关联信息</th>
+                        <th width="80" align="left">金额</th>
+                        <th width="80" align="left">备注</th>
+                        <th width="120" align="left">状态</th>
+                        <th width="150" align="left">处理结果</th>
+                        <th width="130" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.Kf2SeverbApplyList.Rows)
+                    {
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" value="@row["Id"]" selectItem="true" name="idList" /></td>
+                            <td>@row["ApplySN"]</td>
+                            <td>@row["username"]
+                                <br />
+                                @row["mobile"] </td>
+                            <td>@row["realname"]</td>
+                            <td>@TypeHelper.ObjectToDateTime(row["CreateTime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                             <td>@row["CardNumber"]</td>
+                            <td>持卡人：@row["CardUserName"]
+                                <br />
+                                持卡人手机：<br />@row["CardMobile"]
+                            </td>
+                            <td>@row["Amount"]</td>
+                             <td>@row["Remark"]</td>
+                            <td class="stateTd">
+                                @if (TypeHelper.ObjectToInt(row["State"]) == 0)
+                                {
+                                    @:<span style="color:#808080;">审核不通过，已撤销</span>
+      }
+                                else if (TypeHelper.ObjectToInt(row["State"]) == 1)
+                                {
+                                    @:<span style="color:red;">等待审核</span>
+      }
+                                else if (TypeHelper.ObjectToInt(row["State"]) == 2)
+                                {
+                                    @:<span style="color:#00B050">审核通过，等待处理</span>
+      }
+                                else if (TypeHelper.ObjectToInt(row["State"]) == 3)
+                                {
+                                    @:<span style="color:#00B050">处理成功</span>
+      }
+                            </td>
+                            <td>@row["HandleResult"]</td>
+                            <td>
+                                @if (TypeHelper.ObjectToInt(row["State"]) == 1)
+                                {
+                                    @*Html.ActionLink("[审核]", "UpdateState", new { Id = row["Id"], State = 2,remark="信息核对正确，审核通过。" }, new { @class = "editOperate" }) *@
+                                    <a href="javascript:void(0);" class="editOperate" data-id="@row["Id"]" onclick="auditopreation(this,2);">[审核通过]</a>
+                                    <span>|</span>
+                               
+                                    <a href="javascript:void(0);" class="editOperate" data-id="@row["Id"]" onclick="auditopreation(this,0);">[审核不通过]</a>
+                                }
+                                 @if (TypeHelper.ObjectToInt(row["State"]) == 2)
+                                {
+                                    @*Html.ActionLink("[处理完成]", "UpdateState", new { Id = row["Id"], State = 3 }, new { @class = "editOperate" }) *@
+                                    <a href="javascript:void(0);" class="editOperate" data-id="@row["Id"]" onclick="dealSuccess(this);">[处理完成]</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

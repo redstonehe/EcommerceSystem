@@ -1,0 +1,288 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderApplyModel
+@section header{
+    <title>订单信息</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <style type="text/css">
+        .addTable table {
+            border-right: 1px solid #d1d1d1;
+            border-bottom: 1px solid #d1d1d1;
+            margin-top: 20px;
+            margin-left: 16px;
+        }
+
+            .addTable table th {
+                background: #dbeffa;
+                font-weight: normal;
+                height: 26px;
+                padding-left: 4px;
+            }
+
+                .addTable table th a {
+                    padding-left: 8px;
+                }
+
+            .addTable table td {
+                border-left: 1px solid #d1d1d1;
+                border-top: 1px solid #d1d1d1;
+                height: 26px;
+                padding-left: 10px;
+            }
+
+                .addTable table td.pImg {
+                    padding: 10px;
+                }
+
+        .admin tr td a, .btn_a {
+            display: inline-block;
+            color: #fff;
+            background-color: #428bca;
+            padding: 4px 12px;
+            margin: 20px 60px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            /*text-shadow: 0 1px 1px rgba(255,255,255,0.75);*/
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            .admin tr td a:hover {
+                background-color: #006dcc;
+            }
+
+        .admin tr td {
+            text-align: center;
+        }
+
+        .pro_link:hover {
+            color: blue;
+        }
+    </style>
+    <script>
+        function opreationmark(ele) {
+            var oid = $(ele).attr("data-oid");
+            //alert(id);
+            var html = "<div style='padding:10px;'> <p>输入操作备注：</p>";
+            html += "<textarea type='text' id='remark'rows='5' cols='45' name='remark' ></textarea></div>";
+            var submit = function (v, h, f) {
+                //window.location.href = "/malladmin/HaimiDrawCash/UpdateState?Id=" + id + "&state=0&remark=" + f.failmark;
+                $.ajax({
+                    type: "POST",
+                    url: "/malladmin/Order/AddAdminRemark?r=" + Math.random(),
+                    data: { oid: oid, remark: f.remark },
+                    success: function (result) {
+                        if (result == "1") {
+                            $.jBox.tip("修改成功");
+                            window.location.href = window.location.href;
+                        }
+                        else if (result == "0") {
+                            $.jBox.tip("修改失败");
+                            //alert("批量撤销失败");
+                            window.location.href = window.location.href;
+                        }
+                    }
+                });
+                return true;
+            };
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+        function showBigImg(ele) {
+            var id = $(ele).attr("data-id");
+            var html = "<div style='padding:10px;'>";
+            html += "<img src='/upload/order/payimg/@(DateTime.Now.Year + "-" + DateTime.Now.Month)/@(Model.OrderApply.payimg)' id='img' name='img' width='500px height='500px''/></div>";
+            $.jBox(html, { title: "大图", width: 530});
+        }
+
+        function cancelApply(ele) {
+            var id = $(ele).attr("data-id");
+            var html = "<div style='padding:10px;'> <p>输入失败原因：</p>";
+            html += "<textarea type='text' id='failmark'rows='5' cols='45' name='failmark' ></textarea></div>";
+            var submit = function (v, h, f) {
+                window.location.href = "/malladmin/dsorder/CancelApply?id=" + id + "&detaildesc=" + f.failmark;
+                return true;
+            };
+
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">订单管理 &gt;&gt; 订单信息
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="97%">
+                <tr>
+                    <th colspan="4" align="left">代办人信息</th>
+                </tr>
+                <tr>
+                    <td width="150px">用户编号：</td>
+                    <td width="320px">@Model.UserInfo.Uid</td>
+                    <td width="150px">用户名：</td>
+                    <td>@Model.UserInfo.UserName</td>
+                </tr>
+                <tr>
+                    <td>真实姓名：</td>
+                    <td>@Model.UserInfo.RealName</td>
+                    <td>用户昵称：</td>
+                    <td>@Model.UserInfo.NickName</td>
+                </tr>
+                <tr>
+                    <td>手机号：</td>
+                    <td>@Model.UserInfo.Mobile</td>
+                    <td>会员类型：</td>
+                    <td>
+                        @if (Model.UserInfo.IsDirSaleUser)
+                        {
+                            @:直销会员
+                        }
+                        else
+                        {
+                            @:非直销会员
+                        }
+                    </td>
+                </tr>
+            </table>
+
+            <table width="97%">
+                <tr>
+                    <th colspan="4" align="left">报单信息</th>
+                </tr>
+                <tr>
+                    <td width="150px">用户编号：</td>
+                    <td width="320px">@Model.OrderApply.usercode</td>
+                    <td width="150px">姓名：</td>
+                    <td>@Model.OrderApply.realname</td>
+                </tr>
+                <tr>
+                    <td width="150px">身份证：</td>
+                    <td width="320px">@Model.OrderApply.idcard</td>
+                    <td width="150px">推荐人编号：</td>
+                    <td>@Model.OrderApply.parentcode</td>
+                </tr>
+                <tr>
+                    <td width="150px">安置人编号：</td>
+                    <td>@Model.OrderApply.managercode</td>
+                    <td width="150px">安置分区：</td>
+                    <td>
+                        @if (Model.OrderApply.placeside == 1)
+                        {
+                            @:A区
+                        }
+                        else
+                        {  
+                            @:B区
+                            }
+                    </td>
+                </tr>
+
+            </table>
+            <table width="97%">
+                <tr>
+                    <th colspan="9" align="left">报单商品</th>
+                </tr>
+                <tr>
+                    <td align="center" width="60">商品图片</td>
+                    <td>商品名称</td>
+                    <td width="140">货号</td>
+                    <td width="80">价格</td>
+                    <td width="50">数量</td>
+
+                    <td width="80">PV</td>
+                    <td width="80">海米</td>
+                    <td width="80">红包减免</td>
+                </tr>
+                @{PartProductInfo info = Model.OrderProduct;}
+                <tr>
+                    <td align="center" class="pImg">
+                        <img width="60px" height="60px" src="/upload/store/@{@info.StoreId}/product/show/thumb@{@ViewData["size"]}/@info.ShowImg" /></td>
+                    <td>
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid }, { "area", "" } })" style="text-decoration:underline;color:blue;" class="pro_link" target="_blank">@info.Name </a></td>
+                    <td>@info.PSN</td>
+                    <td>@info.ShopPrice</td>
+                    <td>1</td>
+                    <td>
+                        @info.PV
+                    </td>
+                    <td>
+                        @info.HaiMi
+                    </td>
+                    <td>
+                        @info.HongBaoCut
+                    </td>
+                </tr>
+            </table>
+            <table width="97%">
+                <tr>
+                    <th colspan="4" align="left">收货信息</th>
+                </tr>
+                <tr>
+                    <td width="150px">收货人：</td>
+                    <td width="320px">@Model.OrderApply.consignee</td>
+                    <td width="150px">手机号：</td>
+                    <td>@Model.OrderApply.consignmobile</td>
+                </tr>
+                <tr>
+                    <td>配送地址：</td>
+                    <td colspan="3">
+                        @if (Model.RegionInfo != null)
+                        {
+                            @Model.RegionInfo.ProvinceName @Model.RegionInfo.CityName @Model.RegionInfo.Name @Model.OrderApply.address
+                        }
+                        else
+                        {
+                            @Model.OrderApply.address
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>支付凭证：</td>
+                    <td colspan="3">
+                        <img src="/upload/order/payimg/@(DateTime.Now.Year + "-" + DateTime.Now.Month)/@(Model.OrderApply.payimg)" alt="" width="200px" height="200px" style="margin:10px;cursor:pointer;"  onclick="showBigImg()"/></td>
+                </tr>
+            </table>
+            
+            <table width="97%" id="adminoperate" class="admin">
+                <tr>
+                    <th colspan="4" align="left">说明</th>
+                </tr>
+                <tr>
+                    <td width="100px" align="left" style="text-align: left;">
+                        @Model.OrderApply.detaildesc
+                    </td>
+                </tr>
+                @*<tr>
+                    <td width="100px">
+                        <a href="javascript:void(0);"  data-oid="" onclick="opreationmark(this);">添加新备注</a>
+                    </td>
+                </tr>*@
+                <tr>
+                    <th colspan="4" align="left">管理操作</th>
+                </tr>
+                <tr>
+                    <td width="100px">
+                        @if (Model.OrderApply.state==1)
+                                {
+                                     <a href="@Url.Action("ConfirmApply", new { id = Model.OrderApply.id })">审核通过</a>
+                         <a href="javascript:;" data-id="@Model.OrderApply.id" onclick="cancelApply(this);">审核不通过</a>
+                                }
+                       
+                    </td>
+                </tr>
+            </table>
+            <br />
+        </div>    
+    }
+}

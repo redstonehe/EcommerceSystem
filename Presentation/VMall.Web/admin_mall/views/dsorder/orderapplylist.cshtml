@@ -1,0 +1,156 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderApplyListModel
+@section header{
+    <title>报单申请列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js?v=201610"></script>
+    <link rel="stylesheet" type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js?ddd"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/date.js"></script>
+    <style>
+        .dataListSearch table td {
+            width: 100px;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dataListSearch table tr {
+            border-left: 1px solid #ddd;
+            /*border-bottom:1px solid #ddd;*/
+            margin: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            if ($("#IsOutPut")) {
+                $("#IsOutPut").val("0");
+            }
+        });
+
+        function output() {
+            $("#IsOutPut").val("1");
+            $("form").submit();
+        }
+        function search() {
+            $("#IsOutPut").val("0");
+            $("form").submit();
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">订单管理 &gt;&gt; 订单列表
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("OrderApplyList", "DSOrder"))
+    { 
+        <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+       
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="80">报单代办人：</td>
+                        <td width="180">@Html.TextBox("OperUserName", Model.OperUserName, new { height = "18", size = "30" })</td>
+
+                        <td width="80">报单会员：</td>
+                        <td width="50">@Html.TextBox("UserCode", Model.UserCode, new { height = "28", size = "30" })</td>
+                        <td width="80">会员姓名：</td>
+                        <td width="180">@Html.TextBox("RealName", Model.RealName, new { height = "28", size = "30" })</td>
+                       
+                        <td width="50">&nbsp;&nbsp;&nbsp;状态：</td>
+                        <td width="100">@Html.DropDownListFor(x => x.State, ViewData["StateList"] as List<SelectListItem>)</td>
+
+                        <td rowspan="3" style="width: 200px; border-left: 1px solid #ddd;">
+                            <input id="SearchOrder" name="SearchOrder" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" onclick="search();" />
+                            @*<input id="ExportOrder" name="ExportOrder" type="button" style="width: 63px; height: 24px;" class="searchBut submit" value="导出订单" onclick="output();" />*@
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="40" align="center">
+                            <input type="checkbox" id="allSelect" /></th>
+                        <th width="160" align="left">报单代办人</th>
+                        <th width="" align="left">产品</th>
+                         <th width="150" align="left">申请时间</th>
+                        <th width="120" align="left">报单会员</th>
+                        <th width="120" align="left">会员姓名</th>
+                        <th width="240" align="left">收货信息</th>
+                        <th width="80" align="left">状态</th>
+                        <th width="200" align="left">备注</th>
+                        <th width="104" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.OrderApplyList.Rows)
+                    {
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" value="@row["id"]" selectItem="true" name="oid" /></td>
+                            <td>
+                                <div>@(string.IsNullOrEmpty(row["username"].ToString().Trim()) ? (string.IsNullOrEmpty(row["usermobile"].ToString().Trim()) ? (string.IsNullOrEmpty(row["useremail"].ToString().Trim()) ? "" : row["useremail"].ToString().Trim()) : row["usermobile"].ToString().Trim()) : row["username"].ToString().Trim())</div>
+                            </td>
+                            <td>@row["name"] </td>
+                            <td>
+                                <div>@(TypeHelper.ObjectToDateTime(row["creationdate"]).ToString("yyyy-MM-dd HH:mm:ss"))</div>
+                            </td>
+                            <td>@row["usercode"]</td>
+                            <td>@row["realname"]</td>
+                            <td>
+                                @{  RegionInfo region = Regions.GetRegionById(TypeHelper.ObjectToInt(row["regionid"]));}
+                                @row["consignee"] &nbsp;&nbsp;@row["consignmobile"]
+                                <br />
+                                @if (region != null)
+                                {
+                                    @region.ProvinceName @region.CityName @region.Name @row["address"]
+                                }
+                                else
+                                {
+                                    @row["address"]
+                                }
+                            </td>
+                            <td>
+                                @if (row["state"].ToString() == "0")
+                                { 
+                                    @:审核不通过
+}
+                                else if (row["state"].ToString() == "1")
+                                {
+                                    @:未审核
+                                }
+                                else if (row["state"].ToString() == "2")
+                                {
+                                    @:审核成功
+                                }
+                            </td>
+                             <td>@row["detaildesc"]</td>
+                            <td>
+                                @Html.ActionLink("[查看]", "applydetail", new { id = row["id"] }, new { @class = "editOperate" })
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+
+            <div class="page">
+
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

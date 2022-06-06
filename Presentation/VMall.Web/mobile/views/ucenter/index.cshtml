@@ -1,0 +1,346 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "个人中心";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<style>
+    .memberinfo a {
+        /*border:1px solid red;*/
+    }
+
+    .operatelist {
+        height: auto;
+        padding: 1px 0;
+        background-color: #F8F8F8;
+    }
+
+        .operatelist .memberNavBox {
+            border: none;
+            margin: 0;
+        }
+
+            .operatelist .memberNavBox .memberNav li {
+                width: 32%;
+                padding: 10px;
+                height: 100px;
+                margin: 2px;
+            }
+</style>
+<script>
+    $(function () {
+        $(".unbindWeChat").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/mob/ucenter/WeiXinUnBind",
+                data: {},
+                success: function (result) {
+                    if (result == "1") {
+                        alert("解绑成功");
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+<div class="memberbg"></div>
+<div class="memberwrapper">
+    <div class="div-user">
+        <div class="user">
+
+            <a href="@Url.Action("changeheadpic")">
+                <img src="@(string.IsNullOrEmpty(WorkContext.PartUserInfo.Avatar) ? "/mobile/images/userdefault.png" : (WorkContext.PartUserInfo.Avatar.Contains("http://thirdwx.qlogo.cn/mmopen")? WorkContext.PartUserInfo.Avatar:string.Format("http://{0}/upload/userheadpic/" + WorkContext.PartUserInfo.Avatar, BMAConfig.MallConfig.SiteUrl)))" onerror="src='/mobile/images/userdefault.png'" class="memberavatar" />
+            </a>
+
+            <div class="memberinfo">
+                <span class="membername">@WorkContext.NickName</span>
+                <span class="membername">
+                    <i class="am-btn am-btn-warning am-round">
+                        @Enum.GetName(typeof(AgentTypeEnum), WorkContext.PartUserInfo.AgentType)
+                    </i>
+
+                </span>
+                <span>
+                    <a href="@Url.Action("userinfo")" class="editInfo">编辑资料</a>
+                    @*@if (string.IsNullOrEmpty(WorkContext.PartUserInfo.OtherLoginId))
+                    {
+                        
+                        <a href="@Url.Action("getcode")" class="bindWeChat">绑定微信</a>
+                    }*@
+                </span>
+
+
+            </div>
+            <div class="clear"></div>
+
+        </div>
+    </div>
+</div>
+
+
+@*<div class="myorder " style="width: 100%; height: 50px; line-height: 50px; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
+    <i class="icon_dd"></i>
+    <label>我的订单</label>
+    <a href="@Url.Action("orderlist")" style="cursor:pointer;">
+        <label style="float: right; cursor: pointer;">
+            查看全部订单
+            <span class="moredetail">&gt;</span>
+
+        </label>
+    </a>
+</div>
+<div class="memberNavBox">
+    <ul class="memberNav">
+        @{
+            int payOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.WaitPaying);
+            int confirmingOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Confirming);
+            int confirmedOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.PreProducting);
+            int sendOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Sended);
+            int completeOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Completed);
+        }
+        <li><a class="link link1" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.WaitPaying } })">待付款<span class="tip_num">@payOrderCount</span></a></li>
+        <li><a class="link link2" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Confirming } })">待确认<span class="tip_num">@confirmingOrderCount</span></a></li>
+        <li><a class="link link3" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.PreProducting } })">待发货<span class="tip_num">@confirmedOrderCount</span></a></li>
+        <li><a class="link link5" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Sended } })">待收货<span class="tip_num">@sendOrderCount</span></a></li>
+        <li><a class="link link6" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Completed } })">待评价<span class="tip_num">@completeOrderCount</span></a></li>
+    </ul>
+</div>*@
+
+<div class="myorder " style="width: 100%; height: 50px; line-height: 50px; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
+    <i class="icon_dd"></i>
+    <label>我的订单</label>
+    <a href="@Url.Action("orderlist")" style="cursor:pointer;">
+        <label style="float: right; cursor: pointer;margin-right: 20px;">
+            查看全部
+            <i class="am-icon-angle-right"></i>
+
+        </label>
+    </a>
+</div>
+<div class="memberNavBox">
+    <ul class="memberNav">
+        @{
+            int payOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.WaitPaying);
+            int confirmingOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Confirming);
+            int confirmedOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.PreProducting);
+            int sendOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Sended);
+            int completeOrderCount = Orders.GetUserOrderCount(WorkContext.Uid, "", "", (int)OrderState.Completed);
+            int informCount = new Inform().GetCount(string.Format(" state=0 and uid={0} ", WorkContext.Uid));
+        }
+        <li><a class="link link1" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.WaitPaying } })">待付款<span class="tip_num am-badge am-badge-danger am-round">@payOrderCount</span></a></li>
+        @*<li><a class="link link2" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Confirming } })">待确认<span class="am-badge am-badge-danger am-round">@confirmingOrderCount</span></a></li>*@
+        <li><a class="link link3" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.PreProducting } })">待发货<span class="tip_num am-badge am-badge-danger am-round">@confirmedOrderCount</span></a></li>
+        <li><a class="link link5" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Sended } })">待收货<span class="tip_num am-badge am-badge-danger am-round">@sendOrderCount</span></a></li>
+        <li><a class="link link6" href="@Url.Action("orderlist", new RouteValueDictionary { { "orderState", (int)OrderState.Completed } })">待评价<span class="tip_num am-badge am-badge-danger am-round">@completeOrderCount</span></a></li>
+        <li class="clear"></li>
+    </ul>
+</div>
+
+<div class="operatelist">
+    @*<div class="myorder " style="width: 100%; height: 50px; line-height: 50px; margin-left: 10px;">
+        <label>佣金管理</label>
+    </div>*@
+    <div class="memberNavBox" style="height: 200px;">
+        <ul class="memberNav" style="margin-left: 4px; padding: 0;">
+
+           @* @if (WorkContext.PartUserInfo.AgentType > 0)
+            { 
+                *@<li><a class="link link1_9" href="@Url.Action("subrecommendlist")">我的团队</a></li>
+@*<li><a class="link link1_3" href="@Url.Action("subrecommendlist", "ucenter")">好友</a></li>*@
+                
+                <li><a class="link link1_2" href="@Url.Action("accountinfo")">我的账户</a></li>
+                <li><a class="link link1_8" href="@Url.Action("rewarddraw", new { uid = WorkContext.Uid, accountId = (int)AccountType.佣金账户, accountName = AccountType.佣金账户 })">账户提现</a></li>
+                <li><a class="link link1_4" href="@Url.Action("sharecode")">二维码</a></li>
+          @*  //}*@
+            @*@{int giftCount = new OrderGift().GetCount(string.Format("uid={0}", WorkContext.Uid));}
+            @if (giftCount > 0)
+            {
+            <li><a class="link link1_13" href="@Url.Action("ordergiftdetail")">引流赠品</a></li>
+            }*@
+            <li><a class="link link1_5" href="@Url.Action("FavoriteProductList")">我的收藏</a></li>
+            <li><a class="link link1_12" href="@Url.Action("shipaddresslist")">收货地址</a></li>
+            <li><a class="link link1_6" href="@Url.Action("account")">账号设置</a></li>
+            <li><a class="link link1_7" href="@Url.Action("help")">客服热线</a></li>
+
+            <li>
+                <a class="link link1_10" href="@Url.Action("informlist")" style="position:relative;">
+                    我的消息
+                <span class="am-badge am-badge-danger am-round" >@informCount</span>
+                </a>
+            </li>
+
+            <li><a class="link link1_11" href="@Url.Action("addcomplain")">投诉建议</a></li>
+            <li><a class="link link3_2" href="/mob/account/logout">退出登录</a></li>
+        </ul>
+    </div>
+
+    @*<div class="myorder " style="width: 100%; height: 50px; line-height: 50px; margin-left: 10px;">
+        <label>业务信息</label>
+    </div>*@
+    @*<div class="memberNavBox" style="height: 110px">
+        <ul class="memberNav">
+            <li><a class="link link2_1" href="@Url.Action("subrecommendlist", "ucenter")">我的好友</a></li>
+            <li><a class="link link2_4" href="javascript:;">我的优惠券</a></li>
+            <li><a class="link link2_5" href="@Url.Action("sharecode", "ucenter")">我的二维码</a></li>
+           
+
+        </ul>
+    </div>*@
+    @*<div class="myorder " style="width: 100%; height: 50px; line-height: 50px; margin-left: 10px;">
+        <label>帐号管理</label>
+
+    </div>*@
+    @* <div class="memberNavBox" style="height: 210px">
+        <ul class="memberNav">
+            <li><a class="link link3_1" href="@Url.Action("safeverify", new RouteValueDictionary { { "act", "updatePassword" } })">修改密码</a></li>
+            <li><a class="link link3_3" href="@Url.Action("shipaddresslist")">收货地址</a></li>
+            <li><a class="link link3_4" href="@Url.Action("shipaddresslist")">支付密码</a></li>
+            <li><a class="link link3_2" href="/YX/account/logout">退出登录</a></li>
+
+        </ul>
+    </div>*@
+    <div class="clear"></div>
+
+</div>
+@*<a href="@Url.Action("logout", "account")" class="logout-a">
+
+    <input class="am-btn am-btn-danger am-btn-block" type="button" value="退出">
+</a>*@
+@*<ul class="tab">
+    <li><a class="item hot" id="tab1" onclick="changeTab(1)">我的关注</a></li>
+    <li><a class="item" id="tab2" onclick="changeTab(2)">店铺收藏</a></li>
+    <li><a class="item" id="tab3" onclick="changeTab(3)">浏览记录</a></li>
+</ul>*@
+<div class="clear"></div>
+
+@*<div class="myaccount frist" onclick="window.location.href='@Url.Action("index", "cart")'" >
+    <i class="icon_gwc"></i>
+    <a href="@Url.Action("index", "cart")" >
+        <label>购物车</label></a>
+    <a href="@Url.Action("index", "cart")" >
+        <label class="rightLabel">
+            <span class="cartCount">@WorkContext.CartProductCount</span>
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>*@
+@*<div class="myaccount">
+    <i class="icon_fav"></i>
+    <a href="javascript:void(0);">
+        <label>我的收藏</label></a>
+    <a href="javascript:void(0);">
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("sharecode")'">
+    <i class="i_code"></i>
+    <a href="@Url.Action("sharecode")" >
+        <label>二维码</label></a>
+    <a href="@Url.Action("sharecode")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>
+<div class="myaccount" onclick="window.location.href='@Url.Action("subrecommendlist")'">
+    <i class="i_share"></i>
+    <a href="@Url.Action("subrecommendlist")" >
+        <label>好友</label></a>
+    <a href="@Url.Action("subrecommendlist")" >
+        <label class="rightLabel">
+            
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("subrecommendlist")'">
+    <i class="i_work"></i>
+    <a href="@Url.Action("subrecommendlist")" >
+        <label>我的业绩</label></a>
+    <a href="@Url.Action("subrecommendlist")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("reward")'">
+    <i class="i_money"></i>
+    <a href="@Url.Action("reward")" >
+        <label>我的佣金报表</label></a>
+    <a href="@Url.Action("reward")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>*@
+@*<div class="myaccount" onclick="alert('即将开放')">
+    <i class="i_drawcash"></i>
+    <a href="javascript:void(0);">
+        <label>我要提现</label></a>
+    <a href="javascript:alert('即将开放')">
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span>
+        </label>
+    </a>
+</div>*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("accountinfo")'">
+    <i class="i_zichan"></i>
+    <a href="@Url.Action("accountinfo")" >
+        <label>媚蜜佣金账户</label></a>
+    <a href="@Url.Action("accountinfo")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("Integral")'">
+    <i class="i_integral"></i>
+    <a href="@Url.Action("Integral")" >
+        <label>我的积分</label></a>
+    <a href="@Url.Action("Integral")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>
+<div class="myaccount" onclick="window.location.href='@Url.Action("CardBag")'">
+    <i class="i_cardbag"></i>
+    <a href="@Url.Action("CardBag")" >
+        <label>我的卡包</label></a>
+    <a href="@Url.Action("CardBag")" >
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>*@
+@*@if (WorkContext.PartUserInfo.IsBusinessCentre)
+{ 
+    <div class="myaccount" onclick="window.location.href='@Url.Action("queryintegralcode")'">
+        <i class="i_busicenter"></i>
+        <a href="@Url.Action("queryintegralcode")" >
+            <label>商务中心</label>
+            <label class="rightLabel">
+                <span class="moredetail">&gt;</span></label></a>
+    </div>
+}*@
+@*<div class="myaccount" onclick="window.location.href='@Url.Action("account")'">
+    <i class="icon_safe"></i>
+    <a href="@Url.Action("account")" >
+        <label>安全中心</label>
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>*@
+@*<div class="myaccount " onclick="window.location.href='@Url.Action("index", "help")'">
+    <i class="i_help"></i>
+    <a href="@Url.Action("index", "help")">
+        <label>帮助和反馈</label>
+        <label class="rightLabel">
+            <span class="moredetail">&gt;</span></label></a>
+</div>*@
+@*<div class="myaccount last" onclick="window.location.href='javascript:void(0);'">
+    <i class="i_kefu"></i>
+    <a href="javascript:void(0);">
+        <label>客服热线</label>
+        <label class="rightLabel">
+            <span class="" style="font-size: 18px; margin-right: 20px; font-weight: bolder;">400-9965-808</span>
+</div>*@
+
+
+

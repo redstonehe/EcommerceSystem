@@ -1,0 +1,197 @@
+﻿@model VMall.Web.Models.FlashSaleModel
+@using VMall.Web
+@{
+    ViewBag.Title = "秒杀专区-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 1;
+}
+<style>
+    .info2 a:hover {
+        background-color: #089E9C;
+    }
+
+    .fstitle {
+        margin: 10px 0;
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .item-tips b {
+        margin-left: 2px;
+    }
+
+    .actover {
+        color: #928f8f;
+    }
+
+    .actprev {
+        color: #1317dc;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        var channelid = 8;
+        $("#channel_" + channelid).addClass('clickactive').siblings(".channeltitle").removeClass('clickactive');
+
+
+        var sh = setInterval(function () {
+            $(".item-tips").each(function (i) {
+                var endtime = new Date($(this).attr("data-time"));
+                var nowtime = new Date();
+                var leftsecond = parseInt((endtime.getTime() - nowtime.getTime()));
+                if (leftsecond < 0) {
+                    leftsecond = 0;
+                }
+                var d = Math.floor(leftsecond / 1000 / 3600 / 24);
+                var h = Math.floor((leftsecond / 1000 / 3600) % 24);
+                var m = Math.floor((leftsecond / 1000 / 60) % 60);
+                var s = Math.floor(leftsecond / 1000 % 60);
+                var ms = Math.floor(leftsecond / 100) % 10;
+                var tips = $(this).children();
+                tips.eq(0).html(d);
+                tips.eq(1).html(h);
+                tips.eq(2).html(m);
+                tips.eq(3).html(s);
+                //if (leftsecond <= 0) {
+                //    clearInterval(sh);
+                //}
+            });
+        }, 100);
+    });
+</script>
+<div class="breadcrumb box1210">
+    <strong><span>
+        <a href="/">首页</a>
+        &nbsp; &gt; &nbsp;
+    </span></strong>
+    <strong style="font-size: 18px; font-weight: 700;"><a>秒杀专区</a></strong>
+
+</div>
+
+<div class="box1210">
+
+
+
+    <div id="listR">
+
+        <div class="orderList">
+            <dl>
+                <dt>排序:</dt>
+                <dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 0 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 0)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 0)
+                                                                                                                                                                                                                      { <text>down</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 0)
+                                                                                                                                                                                                                      { <text>up</text>}">销量</a></dd>
+                <dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 1)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                                                                                                                                                                                                                      { <text>down</text>}">价格</a></dd>
+                <dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 2)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                                                                                                                                                                                                                      { <text>down</text>}">评价</a></dd>
+                <dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 4 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 4)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 4)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 4)
+                                                                                                                                                                                                                      { <text>down</text>}">人气</a></dd>
+                <div class="clear"></div>
+            </dl>
+
+
+            <div class="orderPage">
+                <span class="ProNB">共 @Model.PageModel.TotalCount 个商品</span>
+                <span class="orderPageNB"><b>@if (Model.PageModel.TotalPages > 0)
+                                             {@Model.PageModel.PageNumber}
+                                             else
+                                             {<text>0</text>}</b>/@Model.PageModel.TotalPages</span>
+                @if (Model.PageModel.HasPrePage)
+                { 
+                    <a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.PrePageNumber } })">&lt;</a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="disabled">&lt;</a>
+                }
+                @if (Model.PageModel.HasNextPage)
+                {
+                    <a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.NextPageNumber } })">&gt;</a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="disabled">&gt;</a>
+                }
+                <div class="clear"></div>
+            </div>
+
+        </div>
+
+        <div class="proList">
+            @{int k = 1;}
+            <ul>
+                @foreach (DataRow info in Model.ProductList.Rows)
+                {
+                    <li @(k % 4 == 0 ? "style='padding-right:0;'" : "")>
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info["pid"] } })" target="_blank" style="position:relative;">
+                            <img src="/upload/store/@info["storeid"]/product/show/thumb230_230/@info["showimg"]" onerror="src='/images/230.jpg'" width="222" height="222" alt="@info["name"]" />
+                            @if (TypeHelper.ObjectToInt(info["pid"]) == 3082 || TypeHelper.ObjectToInt(info["pid"]) == 3546 || TypeHelper.ObjectToInt(info["pid"]) == 3529 || TypeHelper.ObjectToInt(info["pid"]) == 3547 || TypeHelper.ObjectToInt(info["pid"]) == 2413 || TypeHelper.ObjectToInt(info["pid"]) == 2474)
+                            {
+                                <i class="miaosha_sr"></i>
+                            }
+                            else if (TypeHelper.ObjectToInt(info["pid"]) == 3370 || TypeHelper.ObjectToInt(info["pid"]) == 3353 || TypeHelper.ObjectToInt(info["pid"]) == 3078)
+                            {
+                                <i class="miaosha_tg"></i>
+                            }
+                            else
+                            {
+                                <i class="miaosha"></i>
+                            }
+                            <em>@info["pname"]（@info["name"]） </em></a>
+                        <b>¥@info["discountvalue"]</b><b><del class="markprice f12">¥@info["shopprice"]</del></b>
+                        <div class="info">
+                            @if ((TypeHelper.ObjectToDateTime(info["endtime1"]) < DateTime.Now))
+                            {
+                                <p class="fstitle actover">已结束</p>
+                            }
+                            @if ((TypeHelper.ObjectToDateTime(info["starttime1"]) <= DateTime.Now) && (TypeHelper.ObjectToDateTime(info["endtime1"]) >= DateTime.Now))
+                            {
+                                <p class="fstitle acting">
+                                    正在进行中<br />
+                                    距离活动结束还剩：
+                                </p>
+                                <div class="item-tips" data-time="@(info["endtime1"])"><b class="day"></b>天<b class="hour"></b>时<b class="minutes"></b>分<b class="seconds"></b>秒   </div>
+                            }
+                            @if ((TypeHelper.ObjectToDateTime(info["starttime1"]) > DateTime.Now))
+                            {
+                                <p class="fstitle actprev">
+                                    即将开始<br />
+                                    距离活动开始还剩
+                                </p>
+                                <div class="item-tips" data-time="@(info["starttime1"])"><b class="day"></b>天<b class="hour"></b>时<b class="minutes"></b>分<b class="seconds"></b>秒   </div>
+                            }
+                        </div>
+                        <div class="info2">
+                            @*<span onclick="addProductToFavorite(@info["pid"])">加入收藏</span>*@
+
+                            @*<a href="javascript:addProductToCart(@info["pid"],  @(info.MinBuyCount>0?info.MinBuyCount:1))" class="addShopping">加入购物车</a>*@
+
+                        </div>
+                    </li>
+                            k++;
+
+                }
+                <div class="clear"></div>
+            </ul>
+
+            @Html.WebPager(Model.PageModel)
+
+        </div>
+
+    </div>
+    <div class="clear"></div>
+</div>
+

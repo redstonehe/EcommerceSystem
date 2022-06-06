@@ -1,0 +1,364 @@
+﻿@{
+    ViewBag.Title = WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 1;
+}
+
+<!-- banner start -->
+<div id="banner" class="banner">
+    <div class="slider">
+        @{
+            BannerInfo[] bannerList = Banners.GetHomeBannerList(0);
+        }
+        <ul class="bxslider">
+            @foreach (BannerInfo info in bannerList)
+            {
+                <li style="background: @info.ExtField1"><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"  alt="" style="width: 100%;height: 100%;"/></a></li>
+            }
+        </ul>
+        @if (bannerList.Length > 1)
+        {
+            <script type="text/javascript">
+                $(function () {
+                    $('.bxslider').bxSlider({
+                        auto: true,
+                        mode: 'fade',
+                        //speed:5000,
+                        autoHover: true,
+                        pause: 5000,
+                        controls: false,
+                        autoControls: false,
+                    });
+                });
+                </script>
+        }
+    </div>
+</div>
+<!-- banner end -->
+
+<!-- main start -->
+<div id="content" class="main box1000">
+    <!-- 第一个商品图片列表 热销产品-->
+    @{
+                List<AdvertInfo> hotAdvertList1 = Adverts.GetAdvertList(62).OrderBy(x => x.DisplayOrder).ToList();
+    }
+    @{
+                List<AdvertInfo> hotAdvertList2 = Adverts.GetAdvertList(63).OrderBy(x => x.DisplayOrder).ToList();
+    }
+    @{
+                List<AdvertInfo> hotAdvertList3 = Adverts.GetAdvertList(64).OrderBy(x => x.DisplayOrder).ToList();
+    }
+    <div class="hot-goods-box">
+        <div class="sgb-cont itemdiv" id="hot1">
+            <ul class="hotlist">
+                @foreach (var item in hotAdvertList1.OrderBy(x=>x.AdId).Take(1)) {
+                     <li class="hotitem"><a href="@item.Url"><img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+               @foreach (var item in hotAdvertList2.OrderBy(x => x.AdId).Take(1))
+               {
+                    <li class="hotitem"><a href="@item.Url"><img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+                
+                @foreach (var item in hotAdvertList3.OrderBy(x => x.AdId).Take(1))
+                {
+                     <li class=""><a href="@item.Url"><img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+                @foreach (var item in hotAdvertList1.OrderByDescending(x=>x.AdId).Take(1)) {
+                  <li class="hotitem"><a href="@item.Url">
+                        <img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+                @foreach (var item in hotAdvertList2.OrderByDescending(x => x.AdId).Take(1))
+                {
+                    <li class="hotitem"><a href="@item.Url"> <img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+                @foreach (var item in hotAdvertList3.OrderByDescending(x => x.AdId).Take(1))
+                {
+                    <li class=""><a href="@item.Url"><img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+                
+            </ul>
+            <div class="clear"></div>
+        </div>
+        @* <div class="sgb-cont itemdiv" id="hot2" style="display: none;">
+            <ul class="hotlist">
+                <li class="hotitem"><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+                <li class="hotitem"><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+                <li class=""><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+                <li class="hotitem"><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+                <li class="hotitem"><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+                <li class=""><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", 88 } })">
+                    <img src="/images/hot2.jpg" alt="" /></a></li>
+            </ul>
+            <div class="clear"></div>
+        </div>*@
+        @*<div class="hotchange">
+            <div class="hotindex hotactive"></div>
+            <div class="hotindex hotindexbg"></div>
+        </div>*@
+    </div>
+
+    <!-- 第二个商品列表 和治友德旗舰店-->
+    <div class="b-goods-box">
+        <div class="bgb-title">
+            <!-- 左一 -->
+            @{
+                List<AdvertInfo> floor2AdvertList = Adverts.GetAdvertList(54).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="btl-left">
+                <div class="floorbrand">
+                    @foreach (var item in floor2AdvertList.Take(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    }
+                </div>
+                <div class="floorbrand">
+                    <a href="/channel/1.html">
+                        <img src="/images/hzydqjd.jpg" alt="和治友德旗舰店" class="midbarnd" /></a>
+                </div>
+                <div class="floorbrand">
+                    @foreach (var item in floor2AdvertList.Skip(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="bgb-cont">
+            <!-- 左（一） -->
+            @{
+                List<AdvertInfo> floor2AdvertList1 = Adverts.GetAdvertList(78).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="bc-left Fleft">
+               @foreach (var item in floor2AdvertList1)
+                {
+                    <a href="@item.Url">
+                        <img src="/upload/advert/@item.Body" width="345" height="408" alt="" />
+                    </a>
+                }
+            </div>
+            <!-- 右边 -->
+            @{
+                List<AdvertInfo> floor2AdvertList2 = Adverts.GetAdvertList(80).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="bc-right Fright">
+                <!-- 右上（二） -->
+                <div class="shop-cont floormid">
+                    <div class="shop-list ">
+                        @foreach (var item in floor2AdvertList2.FindAll(x => x.AdId == 161))
+                        {
+                         <a href="@item.Url">
+                                <img src="/upload/advert/@item.Body" alt="" />
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="shop-cont floormidbom">
+                    @{
+                List<AdvertInfo> floor2AdvertList3 = Adverts.GetAdvertList(79).OrderBy(x => x.DisplayOrder).ToList();
+            }
+                    <!-- 中下（三） -->
+                    <div class="shop-list floorrighttop Fleft">
+                        @foreach (var item in floor2AdvertList3)
+                        {
+                         <a href="@item.Url">
+                                <img src="/upload/advert/@item.Body" alt="" />
+                            </a>
+                        }
+                    </div>
+                    <!-- 右下下（四） -->
+                    @{
+                List<AdvertInfo> floor2AdvertList4 = Adverts.GetAdvertList(80).OrderBy(x => x.DisplayOrder).ToList();
+            }
+                    <div class="shop-list floorrightbom Fright">
+                         @foreach (var item in floor2AdvertList4.FindAll(x => x.AdId > 161))
+                        {
+                            <a href="@item.Url" class="Fleft">
+                                <img src="/upload/advert/@item.Body" alt="" width="202" height="135"/>
+                            </a>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- 第三个商品列表 汇购优选-->
+    <div class="b-goods-box" style="height:340px;">
+        <div class="bgb-title">
+            <div class="btl-left ">
+                <div class="floorbrand"> </div>
+                <div class="floorbrand">
+                    <a href="/channel/subindex?chId=2">
+                        <img src="/images/hongbaoqu.jpg" alt="汇购优选" class="midbarnd" /></a>
+                </div>
+                <div class="floorbrand">  </div>
+            </div>
+        </div>
+        <div class="bgb-cont">
+            @{
+                List<AdvertInfo> floor8AdvertList0 = Adverts.GetAdvertList(84).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <ul class="hotlist">
+                @foreach (var item in floor8AdvertList0)
+                {
+                <li class="hotitem" style="margin-right:3px;"><a href="@item.Url"><img src="/upload/advert/@item.Body" alt="" /></a></li>
+                }
+               
+                </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- 第三个商品列表 优选商家-->
+    <div class="b-goods-box">
+        <div class="bgb-title">
+            @{
+                List<AdvertInfo> floor3AdvertList = Adverts.GetAdvertList(55).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="btl-left ">
+                <div class="floorbrand">
+                    @foreach (var item in floor3AdvertList.Take(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    }
+                </div>
+                <div class="floorbrand">
+                    <a href="/channel/subindex?chId=9">
+                        <img src="/images/yxsj.jpg" alt="优选商家" class="midbarnd" /></a>
+                </div>
+                <div class="floorbrand">
+                    @foreach (var item in floor3AdvertList.Skip(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="bgb-cont">
+            <!-- 左（一）-->
+            @{
+                List<AdvertInfo> floor3AdvertList1 = Adverts.GetAdvertList(57).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="bc-left Fleft">
+                @foreach (var item in floor3AdvertList1)
+                {
+                    <a href="@item.Url">
+                        <img src="/upload/advert/@item.Body" width="345" height="408" alt="" />
+                    </a>
+                }
+            </div>
+            <!-- 右边 -->
+            @{
+                List<AdvertInfo> floor3AdvertList2 = Adverts.GetAdvertList(59).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="bc-right Fright">
+                <!-- 右上（二） -->
+                <div class="shop-cont floormid">
+                    <div class="shop-list ">
+                        @foreach (var item in floor3AdvertList2.FindAll(x => x.AdId == 121))
+                        {
+                            <a href="@item.Url">
+                                <img src="/upload/advert/@item.Body" alt="" />
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="shop-cont floormidbom">
+                    <!-- 中下（三） -->
+                    <div class="shop-list floorrighttop Fleft">
+                        @foreach (var item in floor3AdvertList2.FindAll(x => x.AdId == 122))
+                        {
+                            <a href="@item.Url" class="Fleft">
+                                <img src="/upload/advert/@item.Body" alt="" /></a>
+                        }
+                    </div>
+                    <!-- 右下下（四） -->
+                    <div class="shop-list floorrightbom Fright">
+                        @foreach (var item in floor3AdvertList2.FindAll(x=>x.AdId>122))
+                        {
+                            <a href="@item.Url" class="Fleft">
+                                <img src="/upload/advert/@item.Body" alt="" width="202" height="135"/>
+                            </a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- 第四个商品列表 -->
+    <div class="s-goods-box">
+        <div class="qqg-title">
+            @{
+                List<AdvertInfo> floor4AdvertList0 = Adverts.GetAdvertList(56).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="stl-left ">
+                <div class="floorbrand">
+                    @foreach (var item in floor4AdvertList0.Take(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    }
+                </div>
+                <div class="floorbrand">
+                    <a href="/channel/4.html">
+                        <img src="/images/quanqigou.jpg" alt="" class="midbarnd" /></a>
+                </div>
+                <div class="floorbrand">
+                    @foreach (var item in floor4AdvertList0.Skip(2))
+                    {
+                        <a href="@item.Url">@item.Body</a><span>|</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="sgb-cont">
+            <!-- 左一 -->
+            @{
+                List<AdvertInfo> floor4AdvertList = Adverts.GetAdvertList(47).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="sc-left Fleft">
+                @foreach (var item in floor4AdvertList)
+                {
+                    <a href="@item.Url">
+                        <img src="/upload/advert/@item.Body" alt="" /></a>
+                }
+            </div>
+            <!-- 中二 -->
+            @{
+                List<AdvertInfo> floor4AdvertList2 = Adverts.GetAdvertList(48).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="sc-mid Fleft">
+                @foreach (var item in floor4AdvertList2)
+                {
+                    <a href="@item.Url" class="Fleft">
+                        <img src="/upload/advert/@item.Body" alt="" /></a>
+                }
+
+            </div>
+            <!-- 右三 -->
+            @{
+                List<AdvertInfo> floor4AdvertList3 = Adverts.GetAdvertList(49).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="sc-right Fleft">
+                @foreach (var item in floor4AdvertList3)
+                {
+                    <a href="@item.Url" class="Fleft">
+                        <img src="/upload/advert/@item.Body" alt="" /></a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- main end -->
+
+
+
+
+

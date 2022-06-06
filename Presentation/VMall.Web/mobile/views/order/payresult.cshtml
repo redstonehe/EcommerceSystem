@@ -1,0 +1,43 @@
+﻿@model VMall.Web.Mobile.Models.PayResultModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "支付结果";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+</style>
+<div style="padding: 40px; font-size: 20px; text-align: center;border: 1px solid #e6e6e6;">
+    @if (Model.State == 1)
+    {
+        <a href="javasrcipt:;" class="am-icon-btn am-success  am-icon-check"></a>
+        @:恭喜您已支付成功! 
+    }
+    else
+    {
+        <a href="javasrcipt:;" class="am-icon-btn am-danger  am-icon-close"></a>
+        @:非常抱歉，您的订单支付遇到问题，请联系客服获取帮助。 
+    }
+</div>
+
+<div class="return" style="margin-top: 30px;">
+    @*<p style="text-align: center; color: black; font-size: 24px; margin: 10px;"><span id="timer" style="color: red;">5</span> 秒后自动跳转至信息填写页面。</p>*@
+    <a href="/mob" class="am-btn am-btn-default am-btn-block" style="font-size: 16px;/* color: orange;*/">返回首页</a>
+</div>
+
+
+
+

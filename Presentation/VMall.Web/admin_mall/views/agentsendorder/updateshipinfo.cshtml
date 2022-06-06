@@ -1,0 +1,72 @@
+﻿@model VMall.Web.MallAdmin.Models.UpdateShipInfoModel
+@section header{
+    <title>发货</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">订单管理&gt;&gt;代理要货单 &gt;&gt;修改快递信息 
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                <tr>
+                    <td width="100px" align="right">原快递公司：</td>
+                    <td>@Html.TextBoxFor(x => x.OldShipCoName, new { @class = "input", size = "20",disabled="disabled" })@Html.ValidationMessageFor(x => x.OldShipCoName)</td>
+                </tr>
+                <tr>
+                    <td width="100px" align="right">原快递单号：</td>
+                    <td>@Html.TextBoxFor(x => x.OldShipSN, new { @class = "input", size = "20",disabled="disabled" })@Html.ValidationMessageFor(x => x.OldShipSN)</td>
+                </tr>
+                <tr>
+                    <td align="right">选择快递公司：</td>
+                    <td>
+                        <div class="selectBt">
+                            <input type="button" value="@Model.ShipCoName" onclick="openShipCompanySelectLayer(this)" />
+                            <input type="hidden" class="ShipCoId" id="ShipCoId" name="ShipCoId" value="@Model.ShipCoId" />
+                            <input type="hidden" class="ShipCoName" id="ShipCoName" name="ShipCoName" value="@Model.ShipCoName"/>
+                        </div>
+                        @Html.ValidationMessageFor(x => x.ShipCoId)
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100px" align="right">修改发货单号：</td>
+                    <td>@Html.TextBoxFor(x => x.ShipSN, new { @class = "input", size = "20" })@Html.ValidationMessageFor(x => x.ShipSN)</td>
+                </tr>
+                
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

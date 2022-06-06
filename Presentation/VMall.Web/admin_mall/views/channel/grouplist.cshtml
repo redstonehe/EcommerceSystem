@@ -1,0 +1,67 @@
+﻿@model VMall.Web.MallAdmin.Models.GroupListModel
+@section header{
+    <title>分区系列列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">分区管理 &gt;&gt; 分组列表
+        <div class="right">
+            <a href="@Url.Action("addGroupproduct", new { chid=Model.ChannelId})" class="menuBT">
+                <img src="/admin_mall/content/images/add.jpg" />添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("grouplist", "channel"))
+    {
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="40" align="center">
+                            <input type="checkbox" id="allSelect" /></th>
+                        <th width="100" align="left">编号</th>
+                        <th align="left">名称</th>
+                        <th width="180" align="left">开始时间</th>
+                        <th width="180" align="left">结束时间</th>
+                        <th width="80" align="left">排序</th>
+                        <th width="80" align="left">状态</th>
+                        <th width="176" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.GroupList)
+                    {
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" value="@row.Groupid" selectItem="true" name="brandId" /></td>
+                            <td>@row.Groupid</td>
+                            <td>@row.GroupTitle</td>
+                            <td>@row.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@row.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@row.DisplayOrder</td>
+                            <td>@if (row.State == 1)
+                                { 
+                                @:启动
+                                    }
+                                else
+                                { 
+                                @:暂停
+                                    }
+                            </td>
+                            <td>
+                                @Html.ActionLink("[商品列表]", "GroupProductList", new { groupid = row.Groupid,channelid=Model.ChannelId }, new { @class = "editOperate" })
+                                @Html.ActionLink("[编辑]", "EditGroupProduct", new { groupid = row.Groupid }, new { @class = "editOperate" })
+                                @Html.ActionLink("[删除]", "delGroupProduct", new { groupid = row.Groupid }, new { @class = "deleteOperate" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+}

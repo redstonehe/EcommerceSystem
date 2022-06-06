@@ -1,0 +1,60 @@
+﻿@model VMall.Web.Models.AccountInfoModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "资产账户-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "资产账户";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; height: auto;">
+            <h2 id="memberRT">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+    
+    <div class="clear"></div>
+            </h2>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+               
+                <tbody>
+                    <tr>
+                        <th>账户名称</th>
+                        <th>可用余额</th>
+                        <th>冻结余额</th>
+                        <th>操作</th>
+                    </tr>
+                    @{List<AccountInfo> infoList = WorkContext.PartUserInfo.IsDirSaleUser ? Model.AccountInfoList : Model.AccountInfoList.FindAll(x => x.AccountId == (int)AccountType.现金账户 || x.AccountId == (int)AccountType.红包账户 || x.AccountId == (int)AccountType.海米账户 || x.AccountId == (int)AccountType.预结算海米账户);}
+                    @foreach (AccountInfo info in infoList)
+                    {
+                        <tr>
+                            <td>@info.AccountName</td>
+                            <td>@info.Banlance.ToString("f2")</td>
+                            <td>@info.LockBanlance.ToString("f2")</td>
+                            <td><a href="@Url.Action("accountdetail", new RouteValueDictionary { { "uid", WorkContext.Uid },{"accountId",info.AccountId},{"accountName",info.AccountName}})">查看明细</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p style="color:#808080">*预结算海米帐号只作为收益的预算，可能存在一定的误差，具体请以海米账户为准</p>
+            
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

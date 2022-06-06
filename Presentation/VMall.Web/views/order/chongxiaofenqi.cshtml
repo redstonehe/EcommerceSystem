@@ -1,0 +1,41 @@
+﻿@model VMall.Web.Models.FenQiResultModel
+@using VMall.Web;
+@{
+    Layout = "~/views/shared/_layout_order.cshtml";
+    ViewBag.Title = "分期结果-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="box">
+    <div style="text-align: center; margin: 10px auto; width: 100%; font-size: 20px; color: #D02424; height: 150px; line-height: 40px;">
+        @if (!string.IsNullOrEmpty(Model.SuccessOidList) )
+        {
+            <p>分期成功</p> 
+            <p>成功订单ID:@Model.SuccessOidList</p> 
+        }
+        else if (!string.IsNullOrEmpty(Model.FailOidList))
+        {
+            <p>存在分期失败订单</p>
+            <p>失败订单ID:@Model.FailOidList</p> 
+            <p>失败可能存在原因:订单已设置分期，或订单分期异常</p> 
+    }
+    </div>
+</div>
+
+
+

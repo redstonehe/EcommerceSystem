@@ -1,0 +1,341 @@
+﻿@{
+    //Layout = null;
+    ViewBag.Title = WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 1;
+    ViewBag.IsBox1210 = 1;
+}
+
+<style>
+    /*#demo1 ul li {
+        margin:0 2px;
+    }*/
+    #bannerDiv,#bannerBox, #bannerContentID,#bannerContentID li,#bannerContentID li img {
+        height:240px;
+        width:690px;
+    }
+</style>
+<script>
+    function showBG(ele) {
+        $(ele).css("background-color", "#0D9F9F");
+
+    }
+    function removeBG(ele) {
+        $(ele).css("background-color", "#BEBEBE");
+    }
+</script>
+<div id="index1" class="box1210">
+    <div class="indexPic left">
+        @{
+            BannerInfo[] bannerList = Banners.GetHomeBannerList(0);
+        }
+        <div style="overflow: hidden; width: 690px; height: 240px; position: relative;" id="bannerDiv">
+            <div id="bannerBox">
+                <ul id="bannerContentID">
+                    @foreach (BannerInfo info in bannerList)
+                    {
+                        <li><a href="@info.Url">
+                            <img src="/upload/banner/@info.Img" width="690" height="240"/></a></li>
+                    }
+                </ul>
+            </div>
+            <ul id="bannerNumID">
+                @for (int i = 1; i <= bannerList.Length; i++)
+                {
+                    <li class="">@*@i*@</li>
+                }
+            </ul>
+        </div>
+        @if (bannerList.Length > 1)
+        {
+            <script type="text/javascript">
+                new Marquee(
+                            {
+                                MSClassID: "bannerBox",
+                                ContentID: "bannerContentID",
+                                TabID: "bannerNumID",
+                                Direction: 2,
+                                Step: 0.5,
+                                Width: 690,
+                                Height: 240,
+                                Timer: 20,
+                                DelayTime: 3000,
+                                WaitTime: 0,
+                                ScrollStep: 690,
+                                SwitchType: 0,
+                                AutoStart: 1
+                            })
+            </script>
+        }
+    </div>
+    <div class="gonggao right">
+        <h2>最新动态<a href="@Url.Action("list", "news")" class="more">更多>></a></h2>
+        <ul class="textList">
+            @{
+                DataTable homeNewsList = News.GetHomeNewsList(0, 7);
+            }
+            @foreach (DataRow row in homeNewsList.Rows)
+            {
+                <li><a href="@Url.Action("details", "news", new RouteValueDictionary { { "newsId", row["newsid"] } })">@row["title"]</a></li>
+            }
+
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+<!--banner下广告图位置-->
+<div id="index2" class="box1210">
+    <div style="width: 202px; height: 160px; float: left; background-color: white; color: #0D9F9F; text-align: center; font-size: 48px; border: 1px solid #0D9F9F">
+        <a href="/list/76.html">
+            <img src="/images/tuijian.jpg" alt="美妆个护推荐" />
+        </a>
+
+    </div>
+    <div class="scroll left">
+        <div id="demo" style="width: 936px; overflow: hidden; margin-left: 33px; position: relative; height: 176px;">
+            <div class="inScroll" id="demo1">
+                <ul>
+                    @{
+                        List<AdvertInfo> bannerBottomAdvertList = Adverts.GetAdvertList(8);
+                        List<AdvertInfo> newsBottomAdvertList = Adverts.GetAdvertList(9);
+                    }
+                    @foreach (AdvertInfo info in bannerBottomAdvertList)
+                    {
+                        <li><a href="@info.Url">
+                            <img src="/upload/advert/@info.Body" width="230" height="160" /></a></li>
+                    }
+                    <li><a href="@newsBottomAdvertList[0].Url">
+                        <img src="/upload/advert/@newsBottomAdvertList[0].Body" width="230" height="160" style="border-left:1px solid gray;border-right:1px solid gray;"/></a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="javascript:void(0)" onclick="moveL()" onmouseover="showBG(this)" onmouseout="removeBG(this)" class="bt btL abtn aleft" style="width: 22px; height: 64px; line-height: 64px; background-color: #BEBEBE; color: #fff; text-align: center; font-size: 22px; font-weight: 400; font-family: simsun;"><</a>
+        <a href="javascript:void(0)" onclick="moveR()" onmouseover="showBG(this)" onmouseout="removeBG(this)" class="bt btR abtn aright" style="width: 22px; height: 64px; line-height: 64px; background-color: #BEBEBE; color: #fff; text-align: center; font-size: 22px; font-weight: 400; font-family: simsun;">></a>
+    </div>
+    <script type="text/javascript">
+        var canRoll = false;
+        var inBox = document.getElementById("demo1");
+        var liList = inBox.getElementsByTagName("li");
+        if (liList.length > 4) {
+            canRoll = true;
+        }
+        var boxWidth = 230;
+        var step = 0;
+        var maxStep = liList.length - 3;
+        function moveL() {
+            if (!canRoll) {
+                return;
+            }
+            if (step < maxStep) {
+                step = step + 1;
+                inBox.style.marginLeft = (-1 * (step * boxWidth)) + "px"
+            }
+        }
+        function moveR() {
+            if (!canRoll) {
+                return;
+            }
+            if (step > 0) {
+                step = step - 1;
+                inBox.style.marginLeft = (-1 * (step * boxWidth)) + "px"
+            }
+        }
+    </script>
+
+    @*<div class="indexAd right">
+    @{
+        List<AdvertInfo> newsBottomAdvertList = Adverts.GetAdvertList(9);
+     }
+    <a href="@newsBottomAdvertList[0].Url"><img src="/upload/advert/@newsBottomAdvertList[0].Body" width="302" height="160" /></a>
+</div>*@
+
+</div>
+
+<!-- 1楼 -->
+<div class="floor box1210">
+    <h2 class="floorT">
+        <b>1F</b>溯然本色
+        <ul>
+            <li><a href="/list/76.html">美妆个护系列</a></li>
+            <li><a href="/list/78.html">鳄鱼油系列</a></li>
+            @*<li><a href="javascript:void(0)">数码影音</a></li>
+    <li><a href="javascript:void(0)">摄影摄像</a></li>
+    <li><a href="javascript:void(0)">DIV攒机</a></li>*@
+            <div class="clear"></div>
+        </ul>
+        @*<div class="floorBt"><a href="#">DIY装机大师</a><a href="#">游戏社区</a></div>*@
+        <div class="clear"></div>
+    </h2>
+    <div class="floorL left">
+        <ul>
+            @{
+                List<AdvertInfo> floor1AdvertList3tmp = Adverts.GetAdvertList(12);
+            }
+            @foreach (AdvertInfo info in floor1AdvertList3tmp)
+            { 
+                <li style="width: 150px;"><a href="@info.Url" class="hot">@info.ExtField1</a></li>
+            }
+            <div class="clear"></div>
+        </ul>
+        @{
+            List<AdvertInfo> floor1AdvertList2 = Adverts.GetAdvertList(11);
+        }
+        @if (floor1AdvertList2.Count > 0)
+        { 
+            <a href="@floor1AdvertList2[0].Url" class="floorAD">
+                <img src="/upload/advert/@floor1AdvertList2[0].Body" width="202" height="155" /></a> 
+        }
+    </div>
+    <div class="floorR right">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor1AdvertList3 = Adverts.GetAdvertList(12);
+                }
+                @foreach (AdvertInfo info in floor1AdvertList3)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1<br/>@info.ExtField4@info.ExtField5</em><b>¥@info.ExtField2<s>@(!string.IsNullOrEmpty(info.ExtField3) ? "¥" + info.ExtField3 : "")</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor1AdvertList4 = Adverts.GetAdvertList(13);
+                }
+                @foreach (AdvertInfo info in floor1AdvertList4)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor1AdvertList5 = Adverts.GetAdvertList(14);
+                }
+                @foreach (AdvertInfo info in floor1AdvertList5)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor1AdvertList6 = Adverts.GetAdvertList(15);
+                }
+                @foreach (AdvertInfo info in floor1AdvertList6)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<!-- 2楼 -->
+<div class="floor box1210">
+    <h2 class="floorT">
+        <b>2F</b>源创生活
+        <ul>
+            <li><a href="/list/75.html">保健食品系列</a></li>
+            <li><a href="/list/79.html">皇家生态锅</a></li>
+            <li><a href="/list/80.html">磁化净水系列</a></li>
+            <li><a href="/list/77.html">特效能量</a></li>
+            @*<li><a href="javascript:void(0)">生活电器</a></li>*@
+            <div class="clear"></div>
+        </ul>
+        @*<div class="floorBt"><a href="#">合约计划说明</a><a href="#">大家电配送</a></div>*@
+        <div class="clear"></div>
+    </h2>
+    <div class="floorL left">
+        <ul>
+            @{
+                List<AdvertInfo> floor2AdvertList3tmp = Adverts.GetAdvertList(18);
+            }
+            @foreach (AdvertInfo info in floor2AdvertList3tmp)
+            { 
+                <li style="width: 150px;"><a href="@info.Url" class="hot">@info.ExtField1</a></li>
+            }
+            <div class="clear"></div>
+        </ul>
+        @{
+            List<AdvertInfo> floor2AdvertList2 = Adverts.GetAdvertList(17);
+        }
+        @if (floor2AdvertList2.Count > 0)
+        { 
+            <a href="@floor2AdvertList2[0].Url" class="floorAD">
+                <img src="/upload/advert/@floor2AdvertList2[0].Body" width="202" height="155" /></a> 
+        }
+    </div>
+    <div class="floorR right">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor2AdvertList3 = Adverts.GetAdvertList(18);
+                }
+                @foreach (AdvertInfo info in floor2AdvertList3)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1<br/>@info.ExtField4@info.ExtField5</em><b>¥@info.ExtField2<s>@(!string.IsNullOrEmpty(info.ExtField3) ? "¥" + info.ExtField3 : "")</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor2AdvertList4 = Adverts.GetAdvertList(19);
+                }
+                @foreach (AdvertInfo info in floor2AdvertList4)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor2AdvertList5 = Adverts.GetAdvertList(20);
+                }
+                @foreach (AdvertInfo info in floor2AdvertList5)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="floorR right hide">
+        <div class="floorCon">
+            <ul>
+                @{
+                    List<AdvertInfo> floor2AdvertList6 = Adverts.GetAdvertList(21);
+                }
+                @foreach (AdvertInfo info in floor2AdvertList6)
+                {
+                    <li><a href="@info.Url">
+                        <img src="/upload/advert/@info.Body" width="236" height="236" alt="@info.ExtField1" /><em>@info.ExtField1</em><b>¥@info.ExtField2<s>¥@info.ExtField3</s></b></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+

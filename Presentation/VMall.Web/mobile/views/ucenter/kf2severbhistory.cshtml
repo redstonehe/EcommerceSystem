@@ -1,0 +1,120 @@
+﻿@model VMall.Web.Mobile.Models.Kf2SeverbHistoryModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "申请历史记录"; ;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+
+<style>
+    /*table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+
+    table td {
+        border: 1px solid #808080;
+        padding: 5px;
+        vertical-align: middle;
+    }
+
+    #order_table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }*/
+
+    .viewport {
+        width: 900px;
+        max-width: 1000px;
+        /*margin: 0 auto;*/
+    }
+
+    .grid1 {
+        width: 20%;
+    }
+
+    .grid2 {
+        width: 10%;
+    }
+
+    .grid3 {
+        width: 10%;
+    }
+
+    .grid4 {
+        width: 60%;
+    }
+
+    .news-more {
+        width: 95%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        background: #e4e4e4;
+        color: #333;
+    }
+</style>
+
+
+<div class="myAssetsCon">
+    <table style="text-align: center; margin: 0 auto; /*margin-bottom: 5%*/" width="100%" border="1" cellspacing="1" cellpadding="1">
+        <tbody id="order_table">
+            <tr style="background: #DCDCDC;">
+                <th>申请单号</th>
+                <th>申请时间</th>
+                <th>申请金额</th>
+                <th>卡号</th>
+                <th>卡关联信息</th>
+                <th>备注</th>
+                <th>状态</th>
+                <th>处理结果 </th>
+            </tr>
+
+            @foreach (var row in Model.HistoryList)
+            {
+                <tr>
+                    <td>@row.ApplySN </td>
+                    <td>
+                        <div>@(row.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</div>
+                    </td>
+                    <td>@row.Amount</td>
+                    <td>@row.CardNumber
+
+                    </td>
+
+                    <td>@row.CardUserName
+                        <br />
+                        @row.CardMobile
+                    </td>
+                    <td>@row.Remark
+
+                    </td>
+
+                    <td>
+                        @if (row.State.ToString() == "0")
+                        { 
+                            @:审核不通过
+}
+                        else if (row.State.ToString() == "1")
+                        {
+                            @:未审核
+                                }
+                        else if (row.State.ToString() == "2")
+                        {
+                            @:审核成功
+                                }
+                    </td>
+                    <td>@row.HandleResult</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+

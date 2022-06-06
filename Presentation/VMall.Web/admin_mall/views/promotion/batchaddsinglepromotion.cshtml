@@ -1,0 +1,401 @@
+﻿@model VMall.Web.MallAdmin.Models.SinglePromotionModel
+@section header{
+    <title>添加单品促销</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlistforsingle.js?v=10"></script>
+    <script type="text/javascript">
+        var discountType = @Model.DiscountType;
+        var isStock = @Model.IsStock;
+        $(function () {
+            if (discountType == 0||discountType==4) {
+                $("#discountunit").html("折");
+            }
+            else {
+                $("#discountunit").html("元");
+            }
+
+            if (isStock == 0) {
+                $("#stockTr").hide();
+            }
+            else {
+                $("#stockTr").show();
+            }
+
+            $("#DiscountType").click(function () {
+                if ($(this).val() == 0||$(this).val() == 4) {
+                    $("#discountunit").html("折");
+                }
+                else {
+                    $("#discountunit").html("元");
+                }
+                if($(this).val() == 3){
+                    $(".isshow").show();
+                }else{ 
+                    $(".isshow").hide();
+                }
+            })
+
+            $("input[name=IsStock]").click(function () {
+                if ($(this).val() == 0) {
+                    $("#stockTr").hide();
+                }
+                else {
+                    $("#stockTr").show();
+                }
+            })
+        })
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">单品促销 &gt;&gt; 批量添加促销
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                @*<tr>
+                    <td width="130px" align="right">商品编号：</td>
+                    <td>
+                        <div class="selectBt">
+                                <input type="button" value="选择商品" onclick="openProductSelectLayer(this,0)"/>
+                                <input type="hidden" class="Pid" id="Pid" name="Pid" value="0" />
+                                <input type="hidden" class="ProductName" id="ProductName" name="ProductName" value="选择商品" />
+                            </div>
+                        @Html.TextBoxFor(x => x.Pid, new { @class = "input", size = "30" })@Html.ValidationMessageFor(x => x.Pid)
+
+                    </td>
+                </tr>*@
+                  <input type="hidden" class="Pid" id="Pid" name="Pid" value="1" />
+                <tr>
+                    <td  width="130px" align="right">活动名称：</td>
+                    <td>@Html.TextBoxFor(x => x.PromotionName, new { @class = "input", size = "70" })@Html.ValidationMessageFor(x => x.PromotionName)</td>
+                </tr>
+                <tr>
+                    <td align="right">活动标语：</td>
+                    <td>@Html.TextBoxFor(x => x.Slogan, new { @class = "input", size = "70" })@Html.ValidationMessageFor(x => x.Slogan)</td>
+                </tr>
+
+
+                <tr>
+                    <td align="right">活动时间1：</td>
+                    <td>
+
+                        @Html.TextBoxFor(x => x.StartTime1, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'StartTime1'})" })
+                        至
+        @Html.TextBoxFor(x => x.EndTime1, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'EndTime1'})" })
+                        @Html.ValidationMessageFor(x => x.StartTime1)
+                        @Html.ValidationMessageFor(x => x.EndTime1)
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">活动时间2：</td>
+                    <td>
+
+                        @Html.TextBoxFor(x => x.StartTime2, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'StartTime2'})" })
+                        至
+        @Html.TextBoxFor(x => x.EndTime2, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'EndTime2'})" })
+                        @Html.ValidationMessageFor(x => x.StartTime2)
+                        @Html.ValidationMessageFor(x => x.EndTime2)
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">活动时间3：</td>
+                    <td>
+
+                        @Html.TextBoxFor(x => x.StartTime3, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'StartTime3'})" })
+                        至
+        @Html.TextBoxFor(x => x.EndTime3, new { @class = "input", size = "18", onfocus = "WdatePicker({el:'EndTime3'})" })
+                        @Html.ValidationMessageFor(x => x.StartTime3)
+                        @Html.ValidationMessageFor(x => x.EndTime3)
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">促销方式：</td>
+                    <td>
+
+                        @Html.DropDownListFor(x => x.DiscountType, ViewData["discountTypeList"] as List<SelectListItem>)
+                        &nbsp;&nbsp;&nbsp;
+        @Html.TextBoxFor(x => x.DiscountValue, new { @class = "input", size = "18" })<span id="discountunit">折</span>
+                        @Html.ValidationMessageFor(x => x.DiscountType)
+                        @Html.ValidationMessageFor(x => x.DiscountValue)
+                       <span style="color:red;">* 批量添加仅适用折扣类型促销，包括商场价折扣和市场价折扣</span>
+                    </td>
+                </tr>
+                <tr >
+                    <td align="right">最低用户等级：</td>
+                    <td>@Html.DropDownListFor(x => x.UserRankLower, ViewData["userRankList"] as List<SelectListItem>) @Html.ValidationMessageFor(x => x.UserRankLower)</td>
+                </tr>
+
+                <tr class="hide">
+                    <td align="right">赠送优惠劵：</td>
+                    <td>
+                        <div class="selectBt">
+                                <input type="button" value="选择优惠券" onclick="openCouponSelectLayer(this)"/>
+                                <input type="hidden" class="CouponTypeId" id="CouponTypeId" name="CouponTypeId" value="0" />
+                                <input type="hidden" class="CouponTypeName" id="CouponTypeName" name="CouponTypeName" value="选择优惠券" />
+                            </div>
+                       @* @Html.TextBoxFor(x => x.CouponTypeId)
+                        @Html.ValidationMessageFor(x => x.CouponTypeId)*@
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">是否限购：
+                    </td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.IsStock, 1, new { @class = "checkbox" }) 是</label>
+                            <label>@Html.RadioButtonFor(x => x.IsStock, 0, new { @class = "checkbox" }) 否</label>
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                <tr id="stockTr">
+                    <td align="right">限购库存：</td>
+                    <td>@Html.TextBoxFor(x => x.Stock, new { @class = "input", size = "8" })@Html.ValidationMessageFor(x => x.Stock)</td>
+                </tr>
+                <tr>
+                    <td align="right">单笔订单最小购买：</td>
+                    <td>@Html.TextBoxFor(x => x.QuotaLower, new { @class = "input", size = "8" })@Html.ValidationMessageFor(x => x.QuotaLower)</td>
+                </tr>
+                <tr>
+                    <td align="right">单笔订单最大购买：</td>
+                    <td>@Html.TextBoxFor(x => x.QuotaUpper, new { @class = "input", size = "8" })@Html.ValidationMessageFor(x => x.QuotaUpper)</td>
+                </tr>
+                @*<tr>
+                    <td align="right">赠送积分：</td>
+                    <td>@Html.TextBoxFor(x => x.PayCredits, new { @class = "input", size = "8" })@Html.ValidationMessageFor(x => x.PayCredits)</td>
+                </tr>*@
+
+                <tr>
+                    <td align="right">会员最大购买数(累计)：
+                    </td>
+                    <td>@Html.TextBoxFor(x => x.AllowBuyCount, new { @class = "input", size = "8" })@Html.ValidationMessageFor(x => x.AllowBuyCount)</td>
+                </tr>
+                <tr>
+                    <td align="right">活动状态：
+                    </td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.State, 1, new { @class = "checkbox" })启动</label>
+                            <label>@Html.RadioButtonFor(x => x.State, 0, new { @class = "checkbox" })暂停</label>
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                
+                <tr class="isshow" style="display:none;">
+                    <td align="right">是否在秒杀列表显示：
+                    </td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.IsShow, 1, new { @class = "checkbox" })是</label>
+                            <label>@Html.RadioButtonFor(x => x.IsShow, 0, new { @class = "checkbox" }) 否 </label>
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="40" align="center">
+                            <input type="checkbox" id="allSelect" />
+                        </th>
+                        <th width="80" align="left">商品编号
+                        </th>
+                        <th align="left">商品名称
+                        </th>
+                        <th width="100" align="left">商品价格
+                        </th>
+                                               
+                        <th width="72" align="left">管理操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            <br />
+        </div>
+        
+        <div>
+        
+            <div class="addTable" style="margin-left: 15px; margin-bottom: 10px; padding-top: 10px; border: 2px solid #dbeffa">
+                <table width="100%">
+                    <tbody>
+                        <tr>
+                            <td width="90px" align="right">商品：
+                            </td>
+                            <td>
+                                <div class="selectBt">
+                                    <input type="button" class="proBtm" value="选择商品" onclick="openProductSelectLayer(this,0)"/>
+                                    <input type="hidden" class="addPid" id="addPid" name="addPid" value="0" />
+                                    <input type="hidden" class="ShopPrice" id="addShopPrice" name="ShopPrice" value="0" />
+                                    <input type="hidden" class="ProductName" id="addProductName" name="ProductName" value="选择商品" />
+                                    <input type="hidden" class="PidGroups" id="PidGroups" name="PidGroups" value="" />
+                                   <input type="hidden" class="PriceInfo" id="PriceInfo" name="PriceInfo" value="" /> 
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>  
+                            <td width="90px" align="right">商品价格：</td>
+                            <td> <input type="text" disabled="disabled" class="ShopPriceShow" id="ShopPriceShow" name="ShopPriceShow" value="0"/></td>
+                        </tr>
+                        
+                        <tr>
+                            <td align="right"></td>
+                            <td>
+                                <input type="button" id="addProduct" style="margin: 0px; padding: 5px 10px;" value="添加" />
+                                <script type="text/javascript">
+                                    function batchdel(){
+                                        $("input[name='recordIdList']:checked").parent().parent().remove();
+                                        var newPids="";
+                                        var piditemList = $(".piditem");
+                                        for (var i = 0; i < piditemList.length; i++) {
+                                            newPids += $.trim(piditemList[i].innerHTML) + ",";
+                                        }
+                                        if (newPids.length > 0)
+                                            newPids = newPids.substring(0, newPids.length - 1)
+                                        $(".PidGroups").val(newPids);
+                                    }
+                                    function delitem(ele){
+                                        $(ele).parent().parent().remove();
+                                        var newPids="";
+                                        
+                                        var piditemList = $(".piditem");
+                                        for (var i = 0; i < piditemList.length; i++) {
+                                            newPids += $.trim(piditemList[i].innerHTML) + ",";
+                                        }
+                                        if (newPids.length > 0)
+                                            newPids = newPids.substring(0, newPids.length - 1)
+                                        $(".PidGroups").val(newPids);
+
+                                        var newPriceInfo="";
+                                        var priceitemList =$(".dataList table tbody tr")   
+                                        for (var i = 0; i < priceitemList.length; i++) {
+                                            var t1=$.trim($(priceitemList[i]).find("td").eq(1).html());
+                                            var t2=$.trim($(priceitemList[i]).find("td").eq(4).html());
+                                            var t3=$.trim($(priceitemList[i]).find("td").eq(5).html());
+                                            var t4=$.trim($(priceitemList[i]).find("td").eq(6).html());
+                                            newPriceInfo +=t1+"-"+t2+"-"+t3+"-"+t4+ ",";
+                                        }
+                                        if (newPriceInfo.length > 0)
+                                            newPriceInfo = newPriceInfo.substring(0, newPriceInfo.length - 1)
+                                        $(".PriceInfo").val(newPriceInfo);
+                                    }
+                                    $("#addProduct").click(function () {
+                                        if (parseInt($("#addPid").val()) < 1) {
+                                            alert("请选择商品");
+                                            return false;
+                                        }
+                                        else {
+                                            var addPid=$("#addPid").val();
+                                            //var addState=$("#addState").val();
+                                            //var stateName=addState==0?"上架":"下架";
+                                            var addShopPrice=$("#addShopPrice").val();
+                                            
+                                            var addProductName=$("#addProductName").val();
+
+                                            var oldPids=$(".PidGroups").val();
+
+                                            if(checkRepeat(addPid,oldPids)){
+                                                alert("商品已经存在");
+                                                $(".addPid").val(0);
+                                                $(".ShopPriceShow").val(0);
+                                                $(".proBtm").val("选择商品");
+                                                return false;
+                                            }
+                                            var  htmlStr="";
+                                            htmlStr+="<tr>";
+                                            htmlStr+="<td align=\'center\'>";
+                                            htmlStr+="<input type=\'checkbox\' value=\'"+addPid+"\' selectitem=\'true\' name=\'recordIdList\'></td>";
+                                            htmlStr+="<td class=\"piditem\">"+addPid+"</td>";
+                                            htmlStr+="<td>"+addProductName+"</td>";
+                                            htmlStr+="<td>"+addShopPrice+"</td>";
+                                            htmlStr+="<td><a href=\'javascript:void(0);\' onclick=\'delitem(this);\'  class=\'\'>[删除]</a></td></tr>";
+                                            $(".dataList table tbody").append(htmlStr);
+                                           
+                                            var newPids=oldPids+(oldPids.length>0?",":"")+addPid;
+                                            $(".PidGroups").val(newPids);
+                                            
+                                            $(".addPid").val(0);
+                                            $(".ShopPriceShow").val(0);
+                                            $(".CXhaimi").val(0);
+                                            $(".CXpv").val(0);
+                                            $(".CXHBcut").val(0);
+                                            $(".proBtm").val("选择商品");
+
+                                            var oldPriceInfo=$(".PriceInfo").val();//pid-haimi-pv-hbcut
+                                            var newPriceInfo=oldPriceInfo+(oldPriceInfo.length>0?",":"")+(addPid+"-"+addCXHaiMi+"-"+addCXPV+"-"+addCXHBcut);
+                                            $(".PriceInfo").val(newPriceInfo);
+                                        }
+                                    });
+                                    function checkRepeat(strSou,strTag){
+                                        var sourceStr=","+strSou+",";
+                                        var tagretStr=","+strTag+",";
+                                        if(tagretStr.indexOf(sourceStr)>-1)
+                                            return true;
+                                        return false;
+                                    }
+                                </script>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+      
+    </div>
+        
+        <div class="addTable">
+            <table width="100%">
+               <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    if($.trim($("#PriceInfo").val())!=""){
+                                        $("form:first").submit();
+                                        return false;
+                                    }else{
+                                        alert("请选择商品");
+                                        return false;
+                                    }
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                    </table>
+        </div>
+    }
+}

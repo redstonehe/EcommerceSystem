@@ -1,0 +1,97 @@
+﻿@model VMall.Web.MallAdmin.Models.IncomeAccountModel
+@section header{
+    <title>佣金列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 佣金列表
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("useraccountlist", "haimidrawcash"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td>账号名：
+                        </td>
+                        <td width="300">
+                            @Html.TextBox("UserName", Model.UserName, new { height = "18" })
+                            <span style="color: red;">(用户名/手机号/邮箱任一)</span>
+                        </td>
+                         <td>&nbsp;&nbsp;&nbsp;账户类型：</td>
+                        <td>
+                            @Html.DropDownListFor(x => x.AccountId, ViewData["accountitemList"] as List<SelectListItem>)
+                        </td>
+                       <td>&nbsp;&nbsp;&nbsp;状态：</td>
+                        <td>
+                            @Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>)
+                        </td>
+                        <td>&nbsp;&nbsp;&nbsp;姓名：
+                        </td>
+                        <td width="130">
+                            @Html.TextBox("RealName", Model.RealName, new { height = "18" })
+                        </td>
+                        
+                        <td>
+                            <input id="SearchUser" name="SearchUser" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                           @* <input id="ExportOrder" name="ExportOrder" type="button" style="width: 120px; height: 24px;" class="searchBut" value="一键批量提现申请" onclick="window.location.href = '/haimidrawcash/BatchIncomeDraw'" />*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="40" align="center">
+                            <input type="checkbox" id="allSelect" /></th>
+                         <th width="140" align="left">账户类型</th>
+                        <th width="140" align="left">用户名</th>
+                        <th width="150" align="left">手机</th>
+                        @*<th width="100" align="left">邮箱</th>*@
+                        <th width="100" align="left">昵称</th>
+                        <th width="100" align="left">姓名</th>
+                        <th width="100" align="left">余额</th>
+                        <th width="100" align="left">冻结余额</th>
+                        <th width="76" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.IncomeAccountList.Rows)
+                    {
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" value="" selectItem="true" name="uidList" /></td>
+                            <td>@row["AccountName"]</td>
+                            <td>@row["username"]</td>
+                            <td>@row["mobile"]</td>
+                            @*<td>@row["email"]</td>*@
+                            <td>@row["nickname"]</td>
+                            <td>@row["realname"]</td>
+                            <td>@row["Banlance"]</td>
+                            <td>@row["LockBanlance"]</td>
+                            <td>
+                                @Html.ActionLink("[查看详情]", "accountdetail","user", new { uid = row["UserId"], accountId = row["AccountId"],accountName=row["AccountName"]  }, new { @class = "editOperate" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+            @*<a href="#" delUrl="@Url.Action("del")" class="batch batchDel">批量删除</a>*@
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

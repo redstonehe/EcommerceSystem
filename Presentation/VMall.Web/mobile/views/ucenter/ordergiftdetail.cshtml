@@ -1,0 +1,59 @@
+﻿@model VMall.Core.OrderGiftInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "引流赠品";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .viewport {
+        width: 600px;
+        max-width: 800px;
+        /* margin: 0 auto; */
+    }
+
+    .operate {
+        text-decoration: underline;
+        color: blue;
+    }
+
+    .myAssetsCon i.dot {
+        margin-right: 9px;
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="myAssetsCon" style="padding: 15px;">
+    @{PartProductInfo pro = Products.GetPartProductById(WebHelper.GetConfigSettingsInt("GiftPid"));}
+    <div class="am-panel am-panel-default">
+        <div class="am-panel-bd">
+            <div>
+                赠送产品：  
+                <div style="">
+                    <img width="80px" height="80px" src="/upload/store/@{@pro.StoreId}/product/show/thumb350_350/@pro.ShowImg" />
+                    <i style="display: block">@pro.Name    </i>
+                </div>
+
+            </div>
+            <p>赠送数量：@Model.GiftCount</p>
+            <p>领用数量：@Model.UseCount</p>
+            <p>剩余数量：@(Model.GiftCount - Model.UseCount)</p>
+            <p>开始时间：@Model.StartTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+            <p>结束时间：@Model.EndTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
+            <p>最后领用时间：@Model.LastModify.ToString("yyyy-MM-dd HH:mm:ss")</p>
+            @if (Model.GiftCount - Model.UseCount >= 0 && Model.StartTime <= DateTime.Now && Model.EndTime >= DateTime.Now && Model.LastModify.ToString("yyyy-MM") != DateTime.Now.ToString("yyyy-MM"))
+            {
+                <a type="button" class="am-btn am-btn-default am-btn-block" href="/mob/ucenter/ConfirmOrderGift?pid=@pro.Pid&id=@Model.ID">领用</a>
+            }
+            <p></p>
+        </div>
+    </div>
+</div>
+
+
+

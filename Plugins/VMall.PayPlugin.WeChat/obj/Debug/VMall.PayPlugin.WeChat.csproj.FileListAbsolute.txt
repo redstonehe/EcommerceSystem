@@ -1,0 +1,10 @@
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.WeChat\obj\Debug\VMall.PayPlugin.WeChat.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\db.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\plugin.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\views\adminwechat\config.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\views\wechat\pay.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\views\adminwechat\config2.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\VMall.PayPlugin.WeChat.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.WeChat\VMall.PayPlugin.WeChat.pdb
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.WeChat\obj\Debug\VMall.PayPlugin.WeChat.dll
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.WeChat\obj\Debug\VMall.PayPlugin.WeChat.pdb

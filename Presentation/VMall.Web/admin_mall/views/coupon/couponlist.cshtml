@@ -1,0 +1,147 @@
+﻿@model VMall.Web.MallAdmin.Models.CouponListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>优惠券列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">促销活动</a></li>
+            <li class="active">优惠券列表</li>
+        </ol>
+
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-reply fa-lg"></i>返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm())
+    {
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>编号：</label>
+                                @Html.TextBox("SN", Model.SN, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>账户名：</label>
+                                @Html.TextBox("AccountName", Model.AccountName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchCoupon" name="SearchCoupon" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="40" align="center">
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th align="left">劵号</th>
+                                        <th width="120" align="left">绑定用户</th>
+                                        <th width="120" align="left">创建用户</th>
+                                        <th width="150" align="left">创建时间</th>
+                                        <th width="150" align="left">激活时间</th>
+                                        <th width="150" align="left">使用时间</th>
+                                        <th width="70" align="left">管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.CouponList.Rows)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@row["couponid"]" selectItem="true" name="couponIdList"/></td>
+                                            <td>@row["couponsn"]</td>
+                                            <td>
+                                                @if (Convert.ToInt32(row["uid"]) > 0)
+                                                {
+                                                    @row["husername"]
+                                                }
+                                                else
+                                                {
+                                                    @:未绑定
+      }
+                                            </td>
+                                            <td>@row["cusername"]</td>
+                                            <td>@TypeHelper.ObjectToDateTime(row["createtime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>
+                                                @if (Convert.ToInt32(row["uid"]) < 1)
+                                                {
+                                                    @:未激活 
+       }
+                                                else
+                                                { 
+                                                    @TypeHelper.ObjectToDateTime(row["activatetime"]).ToString("yyyy-MM-dd HH:mm")
+                                                }
+
+                                            </td>
+                                            <td>
+                                                @if (Convert.ToInt32(row["oid"]) < 1)
+                                                {
+                                                    @:未使用 
+        }
+                                                else
+                                                { 
+                                                    @TypeHelper.ObjectToDateTime(row["usetime"]).ToString("yyyy-MM-dd HH:mm")
+                                                }
+                                            </td>
+                                            <td>
+                                                @*@Html.ActionLink("[删除]", "delcoupon", new { couponIdList = row["couponid"] }, new { @class = "deleteOperate" })*@
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+
+        <div class="dataListEdit">
+            <a href="#" delUrl="@Url.Action("delcoupon")" class="batch batchDel">批量删除</a>
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

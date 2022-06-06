@@ -1,0 +1,104 @@
+﻿@model VMall.Web.Mobile.Models.CashDetailModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle =  "汇购卡详情";;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+
+<style>
+    table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+
+    table td {
+        border: 1px solid #808080;
+        padding:5px;
+        vertical-align:middle;
+        text-align:left;
+    }
+     .return_list {
+        width: 100%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        background: #e4e4e4;
+        color: #333;
+    }
+</style>
+
+
+<div class="myAssetsCon">
+    <table style="text-align: center; margin: 0 auto; /*margin-bottom: 5%*/" width="100%" border="1" cellspacing="1" cellpadding="1">
+        <tbody id="order_table">
+            <tr style="background: #DCDCDC;">
+                <th>创建时间</th>
+                <th>收入</th>
+                <th>支出</th>
+                <th>说明</th>
+            </tr>
+
+            @foreach (var item in Model.CashDetailList)
+            {
+                <tr>
+                    <td>@item.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.InAmount.ToString("0.00")</td>
+                    <td>@item.OutAmount.ToString("0.00")</td>
+                    <td>@item.DetailDes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getCashDetailList(@Model.CashDetailList[0].CashId,cashDetailNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<div >
+    <p><a href="@Url.Action("CashCouponList")" class="return_list">返回汇购卡列表</a></p>
+</div>
+<script>
+    //获得订单列表
+    var cashDetailNextPageNumber = 2;
+    var cashdetailhasNextPage = false;
+    function getCashDetailList(cashid, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/cashDetail?CashId=" + cashid + "&page=" + page, false, function (data) {
+            getcashDetailListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getcashDetailListResponse(data) {
+        $("#order_table").append(data);
+        if (cashdetailhasNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            cashDetailNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>

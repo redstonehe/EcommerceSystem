@@ -1,0 +1,71 @@
+﻿<style>
+    .footImg {
+        border:1px solid #DDDCDC;
+        border-radius:5px;
+    }
+</style>
+<div id="footer" class="bigBox">
+  <div class="@(ViewBag.IsBox1210==1?"box1210":"box")">
+
+    @{
+        int flag = 1;
+        foreach (HelpInfo info in WorkContext.HelpList)
+        {
+            if (info.Pid != 0)
+            {
+                if (info.Url.Length == 0)
+                {
+            <a href="@Url.Action("question", "help", new RouteValueDictionary { { "id", info.Id } })">@info.Title</a>
+                }
+                else
+                {
+            <a href="@info.Url">@info.Title</a>
+                }
+            }
+            else
+            {
+                if (flag != 1)
+                {
+                @:</div>
+            }
+            @:<div class="footerBox"><h3>@info.Title</h3>
+            flag++;
+            }
+        }
+        if (WorkContext.HelpList.Count > 0)
+        {
+        @:</div>
+    }
+    }
+
+  <div class="clear"></div>
+  </div>
+  <div class="bigBox footerB">
+    <div id="footerB">
+      <div class="links">
+        @foreach (FriendLinkInfo info in WorkContext.FriendLinkList)
+        {
+        <a href="@info.Url" target="@info.Target" title="@info.Title">@info.Name</a> @:|
+        }
+      </div>
+      @*<div>青岛市公安局平度市分局备案编号031143485246&nbsp;&nbsp;|&nbsp;&nbsp;鲁ICP证047722号&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" target="_blank">互联网药品信息服务资格证编号(鲁)-经营性-2015-0005</a>&nbsp;&nbsp;|&nbsp;&nbsp;新出发鲁零&nbsp;字第大145218号<br />@WorkContext.MallConfig.SiteAuthor 程序版本 @WorkContext.MallVersion 版权所有 @WorkContext.MallCopyright</div>*@
+        <div>
+            
+           网络ICP备案号：鲁ICP备16014833号-1 &nbsp;&nbsp;@WorkContext.MallConfig.SiteAuthor  版权所有 @(WorkContext.MallCopyright) All rights reserved</div>
+      <div><a href="http://www.cyberpolice.cn/" target="_blank"><img width="108" height="40" src="/images/foot3.png" class="footImg"></a> 
+          @*<a href="javascript:void(0);" target="_blank"><img width="108" height="40" src="/images/foot2.png" class="footImg"></a>
+          <a href="javascript:void(0);" target="_blank"><img width="108" height="40" src="/images/foot4.png" class="footImg"></a>*@
+          <a href="http://www.12377.cn/" target="_blank"><img width="108" height="40" src="/images/foot1.png" class="footImg"></a>
+          @*<a href="http://www.miitbeian.gov.cn/" target="_blank"><img width="108" height="40" src="/images/foot8.png"  class="footImg"></a> *@
+          @*<a href="http://kexin.knet.cn/" target="_blank"><img width="108" height="40" src="/images/foot9.png"  class="footImg"></a>*@ 
+          @*<a href="http://www.szfw.org/" target="_blank"><img width="112" height="40" src="/images/foot10.png"  class="footImg"></a>*@
+
+      </div>
+    </div>
+  </div>
+@if(ViewBag.Mark==3){
+    <script type="text/javascript">
+        getProductReviewList(@Model.Pid, 0, 1);
+        @*getProductConsultList(@Model.Pid, 0, "", 1);*@
+    </script>
+}

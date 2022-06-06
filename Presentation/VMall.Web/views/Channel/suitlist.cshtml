@@ -1,0 +1,192 @@
+﻿@model VMall.Web.Models.SuitListModel
+@using VMall.Web
+@{
+    ViewBag.Title = "套餐促销-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 1;
+}
+<style>
+    .info2 a:hover {
+        background-color: #089E9C;
+    }
+
+    .fstitle {
+        margin: 10px 0;
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .item-tips b {
+        margin-left: 2px;
+    }
+
+    .actover {
+        color: #928f8f;
+    }
+
+    .actprev {
+        color: #1317dc;
+    }
+
+    #listSuit .proList li {
+        float: left;
+        width: 222px;
+        height: 222px;
+        padding-right: 37px;
+        margin-bottom: 40px;
+        position: relative;
+        background: url(/images/jia.png) no-repeat right center;
+        background-position: 218px 160px;
+    }
+
+    .taocanitem ul {
+        float: left;
+        /*height: 190px;*/
+        overflow: hidden;
+    }
+
+    .taocanRBt a {
+        padding: 4px 15px;
+        color: #FFF;
+        background: #e4393c;
+        font-weight: bold;
+        width: 240px;
+        display: inline-block;
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        vertical-align: middle;
+    }
+
+    .suititemcount {
+        position: absolute;
+        background: url(/images/suititemcount.jpg) no-repeat;
+        /* background-position: -185px -127px; */
+        width: 35px;
+        height: 35px;
+        display: block;
+        top: -150px;
+        left: 200px;
+        text-align: center;
+        font-family: microsoft yahei;
+        color: #fff;
+        font-size: 14px;
+        line-height: 35px;
+    }
+</style>
+
+
+<div class="breadcrumb box1210">
+    <strong><span>
+        <a href="/">首页</a>
+        &nbsp; &gt; &nbsp;
+    </span></strong>
+    <strong style="/*font-size: 18px; font-weight: 700; */"><a>套餐促销</a></strong>
+
+</div>
+
+<div class="box1210">
+
+    <div id="listSuit">
+        <div class="orderList">
+            <dl>
+                <dt>排序:</dt>
+                <dd><a href="@Url.Action("suitlist", "channel", new RouteValueDictionary { { "sortColumn", 0 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@(Model.SortColumn == 0 ? "current" : "")                                                               @(Model.SortColumn == 0 ? (Model.SortDirection == 1 ? "down" : "up") : "") ">开始时间</a></dd>
+                @*<dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 1)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                                                                                                                                                                                                                      { <text>down</text>}">价格</a></dd>*@
+                @* <dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 2)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                                                                                                                                                                                                                      { <text>down</text>}">评价</a></dd>*@
+                @*<dd><a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", 4 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="@if (Model.SortColumn == 4)
+                                                                                                                                                                                              { <text>current</text>} @if (Model.SortDirection == 1 && Model.SortColumn == 4)
+                                                                                                                                                                                                                      { <text>up</text>}
+                                                                                                                                                                                                                      else if (Model.SortDirection == 0 && Model.SortColumn == 4)
+                                                                                                                                                                                                                      { <text>down</text>}">人气</a></dd>*@
+                <div class="clear"></div>
+            </dl>
+
+
+            <div class="orderPage">
+                <span class="ProNB">共 @Model.PageModel.TotalCount 个套餐</span>
+                <span class="orderPageNB"><b>@(Model.PageModel.TotalPages > 0 ? Model.PageModel.PageNumber : 0)</b>/@Model.PageModel.TotalPages</span>
+                @if (Model.PageModel.HasPrePage)
+                { 
+                    <a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.PrePageNumber } })">&lt;</a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="disabled">&lt;</a>
+                }
+                @if (Model.PageModel.HasNextPage)
+                {
+                    <a href="@Url.Action("fslist", "channel", new RouteValueDictionary { { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.NextPageNumber } })">&gt;</a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="disabled">&gt;</a>
+                }
+                <div class="clear"></div>
+            </div>
+
+        </div>
+
+        <div class="proList">
+
+            @foreach (var suitinfo in Model.ProductList)
+            {
+                decimal suitAmount = 0M;
+                decimal suitDiscount = 0M;
+                KeyValuePair<SuitPromotionInfo, List<ExtSuitProductInfo>> pair = Model.SuitProductList.Find(x => x.Key.PmId == suitinfo.PmId);
+                   
+                    
+                <div class="taocanitem " style="width: 100%; /*overflow-x: auto;*/ margin: 20px 0; padding: 20px 0px;border-bottom: 1px solid #d6d6d6;    height: 240px;">
+                    <ul style="width: 600px">
+                        @{var list = pair.Value;
+                          var k = 1;}
+                        @foreach (ExtSuitProductInfo info in pair.Value)
+                        {
+                            suitAmount += info.Number * (info.ShopPrice - info.Discount);
+                            suitDiscount += info.Number * info.Discount;
+                            <li @(k == pair.Value.Count ? "style='background:none'" : "")>
+                                <a href="@Url.Action("product","catalog", new RouteValueDictionary { { "pid", info.Pid } })" style="position:relative;">
+                                    <img src="/upload/store/@info.StoreId/product/show/thumb190_190/@info.ShowImg" width="" alt="@info.Name" />
+                                    
+                                    <span class="suititemcount">x @info.Number</span>
+                                </a>
+                                <em style="height: 1.5em; ">
+                                        @if (info.Discount == info.ShopPrice)
+                                        {<span style="color: red;">[赠品]</span> }@info.Name
+                                    </em>
+                                <b>
+                                    <label>@*<input type="checkbox" />*@¥ @info.ShopPrice</label></b>
+                            </li>
+                                        k++;
+                        }
+                    </ul>
+                    <div class="right taocanR" style="width: 400px; text-align: center; height: 190px;">
+                        <p>套  餐  价：<i>¥@list.Sum(x => x.Number * (x.ShopPrice - x.Discount))</i></p>
+                        <p>商  城  价：<s>¥@*@Html.Raw((suitAmount + suitDiscount).ToString())*@ @(list.Sum(x => x.Number * (x.ShopPrice - x.Discount)) + list.Sum(x => x.Number * x.Discount))</s></p>
+                        @*<p>可用红包减免：<s>-¥@pair.Key.SuitHongBaoCut</s></p>*@
+                        <p>节&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;省：<s>¥@(list.Sum(x => x.Number * x.Discount))</s></p>
+                        <p class="taocanRBt" style="margin-top: 60px;"><a href="@Url.Action("suit","catalog", new RouteValueDictionary { { "pmId", pair.Key.PmId } })">去购买</a></p>
+                    </div>
+                </div>
+                
+            }
+            <div class="clear"></div>
+
+
+            @Html.WebPager(Model.PageModel)
+
+        </div>
+
+    </div>
+    <div class="clear"></div>
+</div>
+

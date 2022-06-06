@@ -1,0 +1,50 @@
+﻿@model VMall.Core.InformInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "消息";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .viewport {
+        width: 600px;
+        max-width: 800px;
+        /* margin: 0 auto; */
+    }
+
+    .operate {
+        text-decoration: underline;
+        color: blue;
+    }
+
+    .myAssetsCon i.dot {
+        margin-right: 9px;
+        font-size: 12px;
+    }
+</style>
+<script>
+    
+</script>
+
+<div class="myAssetsCon" style="padding: 15px;">
+    <article class="am-article">
+        <div class="am-article-hd">
+            <h1 class="am-article-title">@Model.title</h1>
+            <p class="am-article-meta">@Model.addtime.ToString("yyyy-MM-dd HH:mm")</p>
+        </div>
+        <hr class="am-article-divider"></hr>
+        <div class="am-article-bd">
+
+            <p>@Model.content</p>
+
+
+        </div>
+    </article>
+</div>
+
+
+

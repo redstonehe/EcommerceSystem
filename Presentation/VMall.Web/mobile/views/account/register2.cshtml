@@ -1,0 +1,166 @@
+﻿@model VMall.Web.Mobile.Models.RegisterModel
+@{
+    Layout = "~/mobile/views/shared/_layout_account.cshtml";
+    ViewBag.SubTitle = "用户注册";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+<script>
+    function sendMsg() {
+        var mobile = $(".userName").val();
+        if ($.trim(mobile) == "") {
+            alert("请输入手机号码");
+            $(".userName").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            alert('请输入正确的手机号码!!!');
+            $(".userName").focus();
+            return;
+        }
+        var Vcode = '@ViewData["VerifyCodeForRegister"]';
+        $.ajax({
+            type: "POST",
+            url: "/account/SendMoblieVerify?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { mobile: mobile, Vcode: Vcode },
+            success: function (data) {
+                var result = eval("(" + data + ")");
+                //console.log("===" + data);
+                if (result.state == "success") {
+                    $("#sendSuccess").show();
+                    $("#sendBtn").attr("href", "javascript:void(0);").css("color", "red");
+                    timeCheck(120, $("#sendBtn"));
+                }
+                else if (result.state == "error") {
+                    alert(result.content);
+                }
+            }
+        });
+    }
+
+    function timeCheck(n, o) {
+        var t = n;
+        if (n == 0) {
+            //console.log("timeout");
+            //o.disabled = false;
+            $(o).attr("href", "javascript:sendMsg();");
+            $(o).css("color", "black").html('发送验证码');
+            window.location.href = window.location.href;
+            n = t;
+        } else {
+            n--;
+            //o.disabled = true;
+            $(o).html(n + ' S');
+            setTimeout(function () {
+                timeCheck(n, o);
+            }, 1000);
+        }
+    }
+    function confirmVoiceCode() {
+        var mobile = $(".userName").val();
+        if ($.trim(mobile) == "") {
+            alert("请输入手机号码");
+            $(".userName").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            alert('请输入正确的手机号码!!!');
+            $(".userName").focus();
+            return;
+        }
+        var VcodeCall = '@ViewData["VerifyCodeForRegisterCall"]';
+        $.ajax({
+            type: "POST",
+            url: "/account/SendCallMoblieVerify?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { mobile: mobile, VcodeCall: VcodeCall },
+            success: function (data) {
+                var result = eval("(" + data + ")");
+                //console.log("===" + data);
+                if (result.state == "success") {
+                    $("#sendSuccess").show();
+                    $(".voice-code").attr("onclick", "javascript:void(0);").find("a").css("color", "gray");
+                    timeCheckVoice(120, $(".voice-code"));
+                }
+                else if (result.state == "error") {
+                    alert(result.content);
+                }
+            }
+        });
+    }
+
+    function timeCheckVoice(n, o) {
+        var t = n;
+        if (n == 0) {
+            //console.log("timeout");
+            //o.disabled = false;
+            $(o).attr("onclick", "confirm" + "VoiceCode();");
+            $(o).find("a").css("color", "#008cff");
+            window.location.href = window.location.href;
+            n = t;
+        } else {
+            n--;
+            //o.disabled = true;
+            $(o).find("span").html('&nbsp;' + n+'&nbsp; S');
+            setTimeout(function () {
+                timeCheckVoice(n, o);
+            }, 1000);
+        }
+    }
+    function test() {
+        $("#sendSuccess").show();
+        $("#sendBtn").attr("href", "javascript:void(0);").css("color", "red");
+        timeCheck(120, $("#sendBtn"));
+    }
+</script>
+<div class="loginTable">
+    <form name="registerForm" action="">
+        <div class="itmeC">
+            <input type="text" class="text userName" name="@Model.ShadowName" maxlength="11" placeholder="手机号码" />
+        </div>
+        @*<div class="itmeC">
+            <input type="password" class="text passWord" name="password" placeholder="请设置密码" />
+        </div>
+        <div class="itmeC">
+            <input type="password" class="text confirmPwd" name="confirmPwd" placeholder="请确认密码" />
+        </div>*@
+        <div class="itme phoneVerifyCode">
+            <div class="itmeC">
+                <input type="text" class="text YZM" name="verifyCode" style="width: 60%; float: left;" placeholder="输入手机验证码" maxlength="6" />
+                <a href="javascript:sendMsg();" @*onclick="sendMsg();"*@ id="sendBtn" class="left" style="text-align:center;margin:0 auto;line-height: 60px; background-color: #F2F2F2; display: inline-block; height: 60px; margin-left: 5px; padding: 0 10px; text-decoration: none; width: 30%;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;">发送验证码</a>
+                @*<img id="verifyImage" src="/mob/tool/verifyimage" onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" style="width: 100px; margin: 0 10px; float: left; height: 60px;" />
+                <a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/mob/tool/verifyimage?time=' + new Date()" class="left" style="line-height: 60px;">换一张</a>*@
+            </div>
+        </div>
+        @*<p style="margin: 10px 10px 20px; color: gray;" class="voice-code" onclick="confirmVoiceCode();">
+            短信验证码收不到？试试<a href="javascript:;" style="color: #008cff; text-decoration: none;">语音验证码</a>
+            <span style="color: red;"></span>
+        </p>*@
+        <p style="margin: 10px; color: gray; display: none;" id="sendSuccess">发送成功，验证码5分钟内有效</p>
+        <div class="itmeC">
+            @{string showname = ViewData["showname"] as string; }
+            <input type="text" class="text pname" id="pname" name="pname" value="@(ViewData["pname"])" onblur="checkName(this);"  placeholder="输入推荐人" style="width:70%;"/><span id="showname" style="color: red; font-size: 12px;">
+                @if (!string.IsNullOrEmpty(showname))
+                {
+                    @:(姓名:@showname)
+                }
+            </span>
+        </div>
+
+        @*@if (Model.IsVerifyCode)
+        {
+            <div class="itme">
+                <div class="itmeC">
+                    <input type="text" class="text YZM" name="verifyCode" style="width: 150px; float: left;" placeholder="请输入验证码" maxlength="4" />
+                    <img id="verifyImage" src="/mob/tool/verifyimage" onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" style="width: 100px; margin: 0 10px; float: left; height: 60px;" />
+                    <a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/mob/tool/verifyimage?time=' + new Date()" class="left" style="line-height: 60px;">换一张</a>
+                </div>
+            </div>
+        }*@
+        <div class="itmeC"><a href="javascript:registerNew();" class="redBt" style="display: block; padding: 0; height: 38px; width: 99%; text-align: center; line-height: 38px;">注册</a></div>
+    </form>
+</div>
+

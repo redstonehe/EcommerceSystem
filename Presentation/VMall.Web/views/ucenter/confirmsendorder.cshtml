@@ -1,0 +1,222 @@
+﻿@model  VMall.Web.Models.AgentSendOrderModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "填写要货单-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "填写要货单";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+<script type="text/javascript" src="@{@WorkContext.ScriptCDN}/scripts/region.js"></script>
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .info th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 60px;
+    }
+
+    .info .succ_on .text {
+        border: 1px solid #C0C0C0;
+    }
+
+    .info .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+        .info .text:focus {
+            border: 1px solid #3879d9;
+        }
+
+    .info .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 270px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+    }
+
+    .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .select {
+        width: 270px;
+        text-align: center;
+        margin: 0 auto;
+        height: 38px;
+        border: 1px solid #C0C0C0;
+    }
+
+    .glay {
+        color: #DDDDDD;
+    }
+</style>
+<div class="bigBox" id="member">
+    <div class="box info">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="position: relative;">
+            @*<h2 id="memberRT">@ViewBag.PositionTitle</h2>*@
+            @{PartProductInfo info = Model.Product;}
+            <form name="rForm" action="@Url.Action("CreatSendOrder")" method="post">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <input type="hidden" name="pid" id="pid" value="@info.Pid" />
+                    <input type="hidden" name="asid" id="asid" value="@Model.ASid" />
+                    <tr class="succ_on">
+                        <th width="190">产品名称：</th>
+                        <td width="275">
+                            @info.Name</td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="succ_on" id="managerCodeTr">
+                        <th width="190"><em></em>图片：</th>
+                        <td width="275">
+                            <img src="/upload/store/@info.StoreId/product/show/thumb190_190/@info.ShowImg" width="100" height="100" />
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr class="succ_on" id="managerCodeTr">
+                        <th width="190"><em></em>代理价：</th>
+                        <td width="275">
+                            @{decimal agentprice = new AgentStock().SingleAgentPriceFor70(WorkContext.PartUserInfo, info.Pid);
+                              int change = (int)Math.Floor(Model.AgentStock.AgentAmount / agentprice);}
+                            @agentprice
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">数量：</th>
+                        <td width="275">
+                            @{}
+                            <input type="text" id="count" name="count" value="" data-max="@change" class="text" /></td>
+                        <td>
+                            <p class="">(可用库存 @Model.AgentStock.AgentAmount,当前产品可用最大数量 @change)</p>
+                        </td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">收货人：</th>
+                        <td width="275" colspan="2">
+                            @if (Model.ShipAddress.Count > 0)
+                            {
+                                <div id="addreddList">
+                                    <ul>
+                                        @foreach (var item in Model.ShipAddress)
+                                        {
+                                            <li>
+                                                <input type="radio" name="addressid" id="addressid" value="@item.SAId" @(item.IsDefault == 1 ? "checked='checked'" : "") data-isdef="@item.IsDefault"  />
+                                                <span>@item.Consignee @item.Mobile @item.ProvinceName - @item.CityName - @item.CountyName @item.Address</span>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <text><p>
+                                    您还没有配送地址，请先添加。<a href="@Url.Action("shipaddresslist")">点击添加</a>
+                                <p>
+                                    </text>
+                            }
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td align="right">&nbsp;</td>
+                        <td><a href="javascript:void(0);" class="regBt redBT" onclick=" return join(this)">确定申请</a></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+    function join($this) {
+        if (checkInput()) {
+            $("form").submit();
+        }
+    }
+    //检查输入
+    function checkInput() {
+        if ($.trim($("#pid").val()) == "") {
+            alert("产品不能为空");
+            return false;
+        }
+
+        var count = parseInt($("#count").val());
+        var maxcount = parseInt($("#count").attr("data-max"));
+        if (count == "") {
+            alert('请填入数量');
+            $("#count").focus();
+            return false;
+        }
+        if (isNaN(count)) {
+            alert('请填入数字');
+            $("#count").focus();
+            return false;
+        }
+        if (count < 0) {
+            alert('数量不能为小于0!');
+            $("#count").focus();
+            return false;
+        }
+        if (count > maxcount) {
+            alert('数量不能为大于最大数量!');
+            $("#count").focus();
+            return false;
+        }
+        if ($("#addressid").length == 0) {
+            alert("地址为空，请先添加地址");
+            return false;
+        }
+        if ($("#addressid").val() == "") {
+            alert("请选择地址");
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+
+
+

@@ -1,0 +1,222 @@
+﻿@model VMall.Web.MallAdmin.Models.ProductReviewListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>商品评价列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+        /*状态*/
+        $(function () {
+            $(".jbox-button-panel").eq(1).css("height", "auto");
+
+            $(".changeState").click(function () {
+                var obj = $(this);
+                var state = obj.attr("state");
+                var message = "";
+                var url = "";
+                if (state == "1") {
+                    message = "您确认要屏蔽此评价吗？";
+                    url = obj.attr("url") + "&state=1" + "&t=" + new Date();
+                }
+                else {
+                    message = "您确认要显示此评价吗？";
+                    url = obj.attr("url") + "&state=0" + "&t=" + new Date();
+                }
+                $.jBox.confirm(message, "提示", function (v, h, f) {
+                    if (v == 'ok') {
+                        $.jBox.tip("正在设置...", 'loading');
+                        $.get(url, function (data, textStatus) {
+                            if (data != "0") {
+                                if (state == "1") {
+                                    obj.attr("state", 0);
+                                    obj.html("[显示]");
+                                    obj.parents("tr").find(".stateTd").html("屏蔽");
+                                }
+                                else {
+                                    obj.attr("state", 1);
+                                    obj.html("[屏蔽]");
+                                    obj.parents("tr").find(".stateTd").html("显示");
+                                }
+                                $.jBox.tip('设置成功！', 'success');
+                            } else {
+                                $.jBox.error('设置失败，请联系管理员！', '设置失败');
+                            }
+                        });
+                    }
+                    else if (v == 'cancel') {
+                        // 取消
+                    }
+                    return true; //close
+                }
+                //,
+                //{
+                //    loaded: function (h) {
+                //        $(".jbox-button-panel").eq(1).css("height", "auto");
+                //    }
+                //}
+                );
+                return false;
+            });
+        })
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">商品评价</a></li>
+            <li class="active">商品评价列表</li>
+        </ol>
+
+        <div class="right">
+            <a href="@Url.Action("addproductreview")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>增加评价
+            </a>
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("productreviewlist", "productreview"))
+    {
+        <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+        <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />
+        
+       <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group hide">
+                                <label>商品ID：</label>
+                                @Html.TextBox("Pid", Model.Pid, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                               <label>店铺：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)" class="form-control selectBtn-ipt" />
+                                    <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                    <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>商品名称：</label>
+                                @Html.TextBox("PName", Model.PName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>评价内容：</label>
+                                @Html.TextBox("Message", Model.Message, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>评价等级：</label>
+                                @Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>开始时间：</label>
+                                @Html.TextBox("StartTime", Model.StartTime, new { @class = "form-control", onclick = "WdatePicker({el:'StartTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <label>结束时间：</label>
+                                @Html.TextBox("EndTime", Model.EndTime, new { @class = "form-control", onclick = "WdatePicker({el:'EndTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchProductReview" name="SearchProductReview" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>店铺名称</th>
+                                        <th>商品编码</th>
+                                        <th>商品名称</th>
+                                        <th>内容</th>
+                                        <th name="sortTitle" column="star" direction="DESC">评分</th>
+                                        <th name="sortTitle" column="state" direction="DESC">状态</th>
+                                        <th name="sortTitle" column="reviewtime" direction="DESC">评价时间</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.ProductReviewList.Rows)
+                                    {
+                                        <tr>
+                                           
+                                            <td>@row["sname"]</td>
+                                            <td>@row["pid"]</td>
+                                            <td>@row["pname"]</td>
+                                            <td>@row["message"]</td>
+                                            <td>@row["star"]星</td>
+                                            <td class="stateTd">
+                                                @if (row["state"].ToString() == "0")
+                                                {
+                                                    @:显示
+      }
+                                                else
+                                                {
+                                                    @:屏蔽
+      }
+                                            </td>
+                                            <td>@(TypeHelper.ObjectToDateTime(row["reviewtime"]).ToString("f"))</td>
+                                            <td>
+                                                @*<a href="@Url.Action("productreviewreplylist", new { reviewId = row["reviewid"] })" class="editOperate">[回复列表]</a>*@
+
+                                                @if (row["state"].ToString() == "0")
+                                                {
+                                                    <a href="#" url="@Url.Action("changeproductreviewstate", new { reviewId = row["reviewid"] })" state="1" class="editOperate changeState">[屏蔽]</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="#" url="@Url.Action("changeproductreviewstate", new { reviewId = row["reviewid"] })" state="0" class="editOperate changeState">[显示]</a>
+                                                }
+                                                @Html.ActionLink("[删除]", "delproductreview", new { reviewId = row["reviewid"] }, new { @class = "deleteOperate" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

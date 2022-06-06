@@ -1,0 +1,134 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderGiftListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>订单赠品</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+
+}
+@section body{
+    <h1 class="rightH1 text-light-blue">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">订单管理</a></li>
+            <li class="active">订单赠品列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <div class="table_top">
+    </div>
+    @using (Html.BeginForm("ordergiftlist", "ordergift"))
+    {
+        <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+        <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>UID：</label>
+                                @Html.TextBox("Uid", Model.Uid, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>开始时间：</label>
+                                @Html.TextBox("StartTime", Model.StartTime, new { @class = "form-control", onclick = "WdatePicker({el:'StartTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <label>结束时间：</label>
+                                @Html.TextBox("EndTime", Model.EndTime, new { @class = "form-control", onclick = "WdatePicker({el:'EndTime'})" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchProductConsult" name="SearchProductConsult" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                                @* <input id="SearchProductConsult" name="SearchProductConsult" type="image" class="searchBut submit"
+                                    src="/admin_mall/content/images/s.jpg" />*@
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+                
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>序号</th>
+                                        <th>创建时间</th>
+                                        <th>会员</th>
+                                        <th>赠品数量</th>
+                                        <th>领用数量</th>
+                                        <th>剩余数量</th>
+                                        <th name="sortTitle" column="consulttime" direction="DESC">开始时间</th>
+                                        <th name="sortTitle" column="consulttime" direction="DESC">结束时间</th>
+                                        <th>最后领用时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.OrderGiftList.Rows)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" value="@row["id"]" selectItem="true" name="consultIdList" /></td>
+                                            <td>@row["id"]</td>
+                                            <td>
+                                                @TypeHelper.ObjectToDateTime(row["CreationDate"]).ToString("yyyy-MM-dd HH:mm")
+                                            </td>
+                                            <td>@row["Uid"]</td>
+                                            <td>@row["GiftCount"]</td>
+                                            <td>@row["UseCount"]</td>
+                                            <td>@(TypeHelper.ObjectToInt(row["GiftCount"]) - TypeHelper.ObjectToInt(row["UseCount"]))</td>
+
+                                            <td>
+                                                @TypeHelper.ObjectToDateTime(row["StartTime"]).ToString("yyyy-MM-dd HH:mm")
+                                            </td>
+                                            <td>@TypeHelper.ObjectToDateTime(row["EndTime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>@TypeHelper.ObjectToDateTime(row["LastModify"]).ToString("yyyy-MM-dd HH:mm")</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

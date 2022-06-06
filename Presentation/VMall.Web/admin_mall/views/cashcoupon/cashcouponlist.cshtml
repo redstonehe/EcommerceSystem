@@ -1,0 +1,158 @@
+﻿@model VMall.Web.MallAdmin.Models.CashCouponListModel
+@section header{
+    <title>汇购卡列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <style>
+        .createoid a:hover {
+            color: red;
+        }
+    </style>
+    <script>
+        function output() {
+            var csn = $.trim($("#csn").val());
+            var Type = $("#Type").val();
+            var userName = $("#userName").val();
+            window.open("/malladmin/cashcoupon/OutPutList?csn=" + csn + "&userName=" + userName + "&type=" + Type);
+        }
+        function search() {
+            $("form").submit();
+        }
+        function showorderopreation(ele) {
+            var id = $(ele).attr("data-id");
+            var todate = $(ele).attr("data-todate");
+            var html = "<div style='padding:10px;'> <p>确定延期至：</p>";
+            html += "<label ></label>" + todate + "</div>";
+            var submit = function (v, h, f) {
+                $.get("/malladmin/CashCoupon/CashExtend?CashId=" + id, function (data, textStatus) {
+
+                    if (data == "200") {
+                        $.jBox.tip('设置成功！', 'success', {
+                            closed: function () {
+                                window.location.href = window.location.href;
+                            }
+                        });
+                        //window.href.location = window.href.location;
+                    }
+                    else if(data == "300") {
+                        $.jBox.tip('未失效，暂不能延期', 'success');
+                        
+                    }
+                    else {
+                        $.jBox.error('设置失败', '设置失败');
+                    }
+                });
+                return true;
+            };
+            $.jBox(html, { title: "确认信息", submit: submit });
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 汇购卡列表
+        <div class="right">
+            <a href="@Url.Action("addcashcoupon")" class="menuBT">
+                <img src="/admin_mall/content/images/add.jpg" />增加卡券
+            </a>
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("cashcouponlist", "cashcoupon"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="35">
+                            <img id="searchImg" src="/admin_mall/content/images/search1.gif" /></td>
+                        <td>&nbsp;卡号：</td>
+                        <td>@Html.TextBox("csn", Model.CSN, new { height = "28", size = "15" })</td>
+                        <td>&nbsp;&nbsp;&nbsp;状态：</td>
+                        <td>
+                            <td width="50">@Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>)</td>
+                        </td>
+                        <td>&nbsp;用户：</td>
+                        <td>@Html.TextBox("userName", Model.UserName, new { height = "28", size = "15" })</td>
+                        <td>
+                            <input id="SearchCash" name="SearchCash" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                            <input id="ExportOrder" name="ExportOrder" type="button" style="width: 63px; height: 24px;" class="searchBut submit" value="导出" onclick="output();" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="10"></th>
+                        <th width="200" align="left">编号</th>
+                        <th width="200" align="left">用户(用户名/手机)</th>
+                        <th width="180" align="left">创建时间</th>
+                        <th width="180" align="left">购买汇购卡订单</th>
+                        <th width="100" align="left">面值</th>
+                        <th width="100" align="left">可用余额</th>
+                        <th width="180" align="left">有效期</th>
+                        <th width="50" align="left">状态</th>
+                        <th width="146" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.CashCouponList.Rows)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>@row["CashCouponSN"]</td>
+                            <td>@row["username"]
+                                <br />
+                                @row["mobile"]  </td>
+                            <td>@TypeHelper.ObjectToDateTime(row["CreationDate"]).ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="createoid"><a href="@Url.Action("orderinfo", "order", new { oid = row["CreateOid"] })" style="color:blue;text-decoration:underline">@row["CreateOSN"]</a></td>
+                            <td>@row["CashAmount"]</td>
+                            <td>@row["Banlance"]</td>
+
+                            <td>@TypeHelper.ObjectToDateTime(row["ValidTime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="stateTd">
+                                @if (TypeHelper.ObjectToDateTime(row["ValidTime"]) >= DateTime.Now)
+                                {
+                                    @:有效
+      }
+                                else
+                                {
+                                    @:<span style="color:red;">无效</span>
+      }
+                            </td>
+                            <td>
+
+                                @Html.ActionLink("[查看消费详情]", "CashDetailList", new { CashId = row["CashId"] }, new { @class = "editOperate" }) |
+                                @*@Html.ActionLink("[禁用]", "banCash", new { CashId = row["CashId"] }, new { @class = "editOperate" })*@
+                                @Html.ActionLink("[申请退款]", "ApplyCashRefund", new { CashId = row["CashId"] }, new { @class = "editOperate" })
+
+                                @if (WorkContext.MallAGid == 2&&TypeHelper.ObjectToDateTime(row["ValidTime"])<DateTime.Now)
+                                { 
+                                    
+                                   @:<br /><a href="javascript:void(0);" class="editOperate" data-id="@row["CashId"]" data-todate="@(TypeHelper.ObjectToDateTime(row["ValidTime"]).AddYears(1).ToString("yyyy-MM-dd HH:mm:ss"))" onclick="showorderopreation(this);">[延期一年]</a>
+                                    
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

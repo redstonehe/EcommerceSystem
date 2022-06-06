@@ -1,0 +1,41 @@
+﻿@model VMall.Web.Mobile.Models.ShipAddressListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "收货地址列表";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 9;
+}
+
+<div class="allCon">
+
+    <a href="@Url.Action("addshipaddress")" class="addAddress">+添加收货地址</a>
+
+    @foreach (FullShipAddressInfo info in Model.ShipAddressList)
+    {
+        <div id="shipAddress@{@info.SAId}" class="ship-list" >
+            @* <div class="bgBlock"></div>*@
+            <div class="adressI">
+                <p>@info.Consignee  @info.Mobile</p>
+                <p class="f14">@info.ProvinceName @info.CityName @info.CountyName @info.Address</p>
+                <div class="chooseAD">
+                    @if (info.IsDefault == 0)
+                    {
+                        @:<input type="checkbox" class="radio" onclick="setDefaultShipAddress(@info.SAId,this)" id="" />默认地址
+        }
+                    else
+                    {
+                        @:<input type="checkbox" class="radio" onclick="setDefaultShipAddress(@info.SAId,this)" id="defaultShipAddress" checked="checked" />默认地址
+        }
+                </div>
+                <div class="ADedit">
+                    <a href="@Url.Action("editshipaddress", new RouteValueDictionary { { "saId", info.SAId } })" class="ADupdate">
+                        <i class="am-icon-edit am-icon-sm"></i>@* <span></span>*@修改</a>
+                    <a href="javascript:void(0)" onclick="delShipAddress(@info.SAId)" class="ADdel">
+                        <i class="am-icon-trash am-icon-sm"></i>
+                        @*<span></span>*@删除</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

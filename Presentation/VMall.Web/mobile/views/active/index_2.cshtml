@@ -1,0 +1,249 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "汇生鲜上线";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+
+
+
+
+<style type="text/css">
+    .clickactive {
+        background: #cccccc;
+    }
+
+    img {
+        vertical-align: top;
+    }
+
+    div {
+        vertical-align: top;
+    }
+
+   
+
+    .juesai_8_1_content {
+        width: 90%;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .juesai_item {
+        margin: 0 auto;
+        padding: 0 0 55px;
+        display: inline-block;
+    }
+</style>
+<style>
+    .title_more {
+        text-decoration: none;
+        float: right;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        color: #D60008;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+        .title_more:hover {
+            color: blue;
+        }
+
+    .floorCon1 {
+        display: box;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        width: 100%;
+        z-index: 100;
+    }
+
+        .floorCon1 .fc-list {
+            width: 23%;
+            display: -webkit-box;
+            display: box;
+            -webkit-box-pack: justify;
+            -webkit-box-orient: vertical;
+        }
+
+        .floorCon1 .fc-list2 {
+            width: 52%;
+            display: -webkit-box;
+            display: box;
+            -webkit-box-pack: justify;
+            -webkit-box-orient: vertical;
+        }
+
+            .floorCon1 .fc-list2 a {
+                display: block;
+                width: 100%;
+            }
+
+    .floorCon .fc-list2 a img {
+        max-width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .floorCon1 .fc-list a {
+        display: block;
+        width: 100%;
+    }
+
+    .floorCon .fc-list a img {
+        max-width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .news-more {
+        width: 95%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        background: #e4e4e4;
+        color: #333;
+    }
+    .bifen {position: absolute; top: 62%; /*left: 46%;*/    width: 100%;
+    }
+    .middleCountry {position: relative; color: #fff; font-size: 18px; font-weight: bolder;
+    }
+    .itemfloor {background:url(/mobile/images/a5/bg2.jpg) repeat left top
+    }
+</style>
+<script>
+
+    $(function () {
+        var clientWidth = document.body.clientWidth;
+        // alert(clientWidth);
+        var x1 = clientWidth * 0.4;
+        $("#area1").attr("coords", "" + x1 + ",10,50");
+        var x2 = clientWidth * 0.6;
+        $("#area2").attr("coords", "" + x2 + ",10,50");
+        var x3 = clientWidth * 0.1;
+        $("#area3").attr("coords", "" + x3 + ",120,50");
+        var x4 = clientWidth * 0.4;
+        $("#area4").attr("coords", "" + x4 + ",120,50");
+        var x5 = clientWidth * 0.6;
+        $("#area5").attr("coords", "" + x5 + ",120,50");
+        var x6 = clientWidth * 0.3;
+        $("#area6").attr("coords", "" + x6 + ",20,50");
+        var x7 = clientWidth * 0.6;
+        $("#area7").attr("coords", "" + x7 + ",20,50");
+        var x8 = clientWidth * 0.6;
+        $("#area8").attr("coords", "" + x8 + ",100,50");
+        //var x2 = clientWidth * 0.6;
+        //$("#area2").attr("coords", "" + x2 + ",10,50");
+    })
+</script>
+
+<div style="font-size: 20px; text-align: center; overflow: hidden;">
+
+    <div class="floorI floor">
+        <div class="floorCon floorCon1">
+            <div class="fc-list" style="width: 100%">
+                <a href="javascript:void;">
+                    <img src="/mobile/images/a5/bg1.png" border="0" />
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="floorI floor itemfloor">
+        <div class="floorCon floorCon1">
+            <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2497.html">
+                    <img src="/mobile/images/a5/item1.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2542.html">
+                    <img src="/mobile/images/a5/item2.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 12%">
+                <a href="/mob/channel/6.html">
+                    <img src="/mobile/images/a5/itembg1.jpg" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2548.html">
+                    <img src="/mobile/images/a5/item3.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2547.html">
+                    <img src="/mobile/images/a5/item4.png" border="0" />
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="floorI floor">
+        <div class="floorCon floorCon1">
+            <div class="fc-list" style="width: 100%">
+                <a href="javascript:void;">
+                    <img src="/mobile/images/a5/bg3.png" border="0" />
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="floorI floor itemfloor">
+        <div class="floorCon floorCon1">
+            <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2538.html">
+                    <img src="/mobile/images/a5/item5.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2536.html">
+                    <img src="/mobile/images/a5/item6.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 12%">
+                <a href="/mob/channel/6-0-194-0-0-0-0-1-1.html">
+                    <img src="/mobile/images/a5/itembg2.jpg" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2537.html">
+                    <img src="/mobile/images/a5/item7.png" border="0" />
+                </a>
+            </div>
+             <div class="fc-list" style="width: 18%">
+                <a href="/mob/product/2543.html">
+                    <img src="/mobile/images/a5/item8.png" border="0" />
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+ 
+
+
+</div>
+
+
+
+
+
+
+
+
+<div style="position: relative;">
+    <div class="footerTop">
+        <div class="clear"></div>
+    </div>
+    <a href="/mob" class="news-more">返回首页</a>
+
+</div>
+
+

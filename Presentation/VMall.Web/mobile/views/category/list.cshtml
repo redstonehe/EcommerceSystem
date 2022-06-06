@@ -1,0 +1,159 @@
+﻿@model VMall.Web.Mobile.Models.CategoryListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "分类列表";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+<style>
+    .channeltitle {
+        height: 41px;
+        line-height: 41px;
+        text-align: center;
+        cursor: pointer;
+        border-bottom: 1px solid #E5E5E5;
+        border-right: none;
+        border-left: none;
+        white-space:nowrap; 
+        display:block;overflow:hidden; text-overflow:ellipsis;
+    }
+
+        .channeltitle a {
+            color: #333;
+            text-decoration: none;
+        }
+
+    .clickactive {
+        background: #F2F2F2;
+    }
+    .channel-list {float: left; width: 35%; background: #fff; height: 100%; /*border: 1px solid #DED6C9;*/border-right: none;border-bottom: none;margin-right: 2%;
+    }
+    .chan-cateory-list {float: left; width: 62%;
+    }
+    .viewport {
+    min-width: 300px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: #F2F2F2;
+}
+     .clickactive :before {
+content: "";
+    display: block;
+    width: 5px;
+    height: 41px;
+    float: left;
+    background: #d8505c;
+    margin: 1px 7px 0 0;}
+</style>
+<script>
+    $(function () {
+        var channelid=@Model.ChId;
+        $("#channel_"+channelid).addClass('clickactive').siblings(".channeltitle").removeClass('clickactive');
+    });
+</script>
+<div class="searchBox">
+    <div class="newSearch">
+        <input type="text" id="keyword" name="keyword" class="new-srch-input" value="" style="color: #999999;">
+        <a href="javascript:$('#keyword').val('');" target="_self" class="new-s-close"></a>
+        <a href="javascript:mallSearch(document.getElementById('keyword').value);" target="_self" class="new-s-srch"><span></span></a>
+    </div>
+</div>
+<div class="new-category" >
+    <div class="channel-list">
+        @foreach (var item in Model.ChannelList.OrderByDescending(x=>x.DisplayOrder))
+        {
+            <div class="channeltitle" id="channel_@(item.ChId)">
+                @if (item.LinkType == 0) { 
+                         <a href="javascript:;"  >@item.Name</a>
+                    }
+                    else if (item.LinkType == 1)
+                    {
+                         <a href="@Url.Action("list", new { chId = item.ChId })" >@item.Name</a>
+                    }
+                    else if (item.LinkType == 2)
+                    {
+                        <a href="@Url.Action("subindex","channel", new { chId = 2 })" >@item.Name</a>
+                    }
+                    else if (item.LinkType == 3)
+                    {
+                        <a href="@item.LinkUrl" >@item.Name</a>
+                    }
+                    else if (item.LinkType == 4)
+                    {
+                        <a href="/mob@(item.LinkUrl)" class="1">@item.Name</a>
+                    }
+                    else
+                    { 
+                        <a href="javascript:;" >@item.Name</a>
+                    }
+               @* @if(item.ChId==2){
+                    <a href="@Url.Action("subindex","channel", new { chId = 2 })">@item.Name</a>
+                }
+                else if (item.ChId == 9 )
+                {
+                    <a href="@Url.Action("subindex","channel", new { chId = 9 })">@item.Name</a>
+                }
+                else if(item.ChId==3){
+                    <a href="/home/DaMeiLink">@item.Name</a>
+                }
+                else{
+                <a href="@Url.Action("list", new { chId = item.ChId })">@item.Name</a>
+                }*@
+            </div>
+        }
+    </div>
+    @if (Model.CategoryList.Count > 0)
+    {
+        <ul class="new-category-lst chan-cateory-list">
+            @foreach (CategoryInfo info in Model.CategoryList.FindAll(x => StringHelper.StrContainsForNum(x.ChannelId, Model.ChId.ToString())))
+            {
+                <li class="parentLi">
+                    <a href="@Url.Action("index","channel", new RouteValueDictionary {{ "chId", Model.ChId },  { "gid", 0 },{ "cateId", info.CateId },{ "brandId", 0 }, { "filterPrice", 0 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 1 }, { "page", 1 } })"  class="new-category-a ">
+                        @*<span class="icon">  </span>*@
+                        @info.Name</a>
+                    <ul class="son">
+                        @{
+                List<CategoryInfo> itemList = Categories.GetChildCategoryList(info.CateId, 1, Model.AllCateory).FindAll(x => StringHelper.StrContainsForNum(x.ChannelId, Model.ChId.ToString()));}
+                       @for (int i = 0; i < itemList.Count; i++)
+                       {
+                            <li class="sonLi">
+                                
+                                <a href="@Url.Action("index","channel", new RouteValueDictionary {{ "chId", Model.ChId },  { "gid", 0 },{ "cateId",itemList[i].CateId },{ "brandId", 0 }, { "filterPrice", 0 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 1 }, { "page", 1 } })" class="new-category2-a"><span class="new-bar"></span>@itemList[i].Name</a>
+
+                            </li>
+                           
+                       }
+                        <li class="clear"></li>
+                      @* @{
+                       var liCount = itemList.Count % 3 == 0 ? (itemList.Count / 3) : (itemList.Count / 3 + 1);
+                        }
+                      @for (int i = 0; i < liCount; i++)
+                       {
+                            <li class="sonLi">
+                                @if (itemList.Count > i * 3)
+                                {
+                                <a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", itemList[i * 3].CateId } })" class="new-category2-a"><span class="new-bar"></span>@itemList[i * 3].Name</a>
+                                }
+                                @if (itemList.Count > i * 3 + 1)
+                                {
+                                <a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", itemList[i * 3 + 1].CateId } })" class="new-category2-a"><span class="new-bar"></span>@itemList[i * 3 + 1].Name</a>}
+                                @if (itemList.Count > i * 3 + 2)
+                                {
+                                <a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", itemList[i * 3 + 2].CateId } })" class="new-category2-a"><span class="new-bar"></span>@itemList[i * 3 + 2].Name</a>}
+
+                            </li>
+                       }*@
+                       
+                        
+                    </ul>
+                </li>
+            }
+        </ul>
+    }
+    <div class="clear"></div>
+</div>
+
+
+
+
+

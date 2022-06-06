@@ -1,0 +1,182 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@(ViewBag.Title)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="keywords" content="@WorkContext.MallConfig.SEOKeyword" />
+    <meta name="description" content="@WorkContext.MallConfig.SEODescription" />
+    <link href="@{@WorkContext.CSSCDN}/mobile/css/base.css?v=1812" rel="stylesheet" type="text/css">
+    <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/jquery.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/common.js?v=201612" type="text/javascript"></script>
+    <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/utils.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.CSSCDN}/scripts/layer/mobile/layer.js" type="text/javascript"></script>
+    <script src="@{@WorkContext.CSSCDN}/scripts/layer/mobile/layer.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="/mobile/static/AmazeUI/css/amazeui.min.css">
+  
+    <script src="/mobile/static/AmazeUI/js/amazeui.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        uid = @WorkContext.Uid;
+        isGuestSC = @WorkContext.MallConfig.IsGuestSC;
+    </script>
+    @if (ViewBag.Mark == 1)
+    {
+        //首页
+
+    }
+    @if (ViewBag.Mark == 2)
+    {
+        //列表页
+        
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/list.css?v=20170416" rel="stylesheet" type="text/css" />
+        <script>
+
+            window.onload = function () {
+                var $input = $('#keyword'), $wordList = $('#word-list2');
+                $input.on('input', function () {
+                    var $val = $(this).val();
+
+                    if ($.trim($val).length <= 0)
+                        return;
+                    setTimeout(function () {
+                        $.ajax({
+                            type: 'get',
+                            cache: false,
+                            url: '/home/SearchWordTips',
+                            dataType: 'json',
+                            data: { word: $val },
+                            success: function (data) {
+                                $wordList.html('');
+                                //alert(data);
+                                if (data.length > 0) {
+                                    var showLent = data.length;
+                                    console.log(showLent);
+                                    for (var i = 0 ; i < showLent; i++) {
+                                        console.log(data[i].Keyword);
+                                        var oList = document.createElement('li');
+                                        var htmlText = '<a target="_blank" href="/mob/catalog/search?keyword=' + data[i].Keyword + '">' + data[i].Keyword + '</a>';
+                                        oList.innerHTML = htmlText;
+                                        $wordList[0].appendChild(oList);
+                                    }
+                                    $wordList.show();
+                                } else {
+                                    $wordList.hide();
+                                }
+                            }
+                        })
+                    }, 1000);
+                });
+                //$input.on('blur', function () {
+                //    $wordList.hide();
+                //});
+                //$input.on('focus', function () {
+                //    $wordList.show();
+                //});
+                //$wordList.on('mouseover', function () {
+                //    $wordList.show();
+                //});
+            }
+
+        </script>
+    }
+    @if (ViewBag.Mark == 3)
+    {
+        //产品详情页
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/content.css?20190219" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/product.js?v=201706" type="text/javascript"></script>
+         
+        <script type="text/javascript">
+            pid = @Model.Pid;
+        </script>
+    }
+
+    @if (ViewBag.Mark == 4)
+    {
+        //产品详情辅助页
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/content.css?20190219" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/product.js" type="text/javascript"></script>
+    }
+    @if (ViewBag.Mark == 5)
+    {
+        //购物车相关页
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/buy.css?20161211" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/cart.js?20170707" type="text/javascript"></script>
+    }
+    @if (ViewBag.Mark == 6)
+    {
+        //订单页面
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/buy.css?v=20161211" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="@{@WorkContext.ScriptCDN}/mobile/scripts/order.js?v=201712_v1"></script>
+        <script type="text/javascript" src="@{@WorkContext.ScriptCDN}/mobile/scripts/region.js"></script>
+    }
+    @if (ViewBag.Mark == 7)
+    {
+        //店铺页面
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/store.css?ddd" rel="stylesheet" type="text/css" />
+    }
+    @if (ViewBag.Mark == 8)
+    {
+        //会员中心
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css?20160715" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ucenter.user.js" type="text/javascript"></script>
+    }
+    @if (ViewBag.Mark == 9)
+    {
+        //会员中心--订单地址
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/buy.css" rel="stylesheet" type="text/css" />
+        <link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css?ded" rel="stylesheet" type="text/css" />
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/region.js" type="text/javascript"></script>
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ucenter.user.js" type="text/javascript"></script>
+        <script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ucenter.order.js" type="text/javascript"></script>
+    }
+
+    @if (ViewBag.Mark == 11)
+    {
+        //帮助和新闻页面
+
+    }
+    @if (ViewBag.Mark == 10)
+    {
+        //404、错误、提示页面
+
+    }
+    @*<script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?df8b9c541d5f301f3c82f7ce002084e8";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+</script>*@
+
+
+</head>
+
+<body>
+    
+    <div class="viewport">
+        @Html.Partial("/mobile/views/publicpage/header.cshtml")
+
+        @RenderBody()
+
+        @if (ViewBag.Mark == 5 || ViewBag.Mark == 3)
+        {
+            if (ViewBag.Mark == 3)
+            {
+            @Html.Partial("/mobile/views/publicpage/footernobar.cshtml")
+            }
+        }
+        else
+        {
+            @Html.Partial("/mobile/views/publicpage/footer2017.cshtml")
+        }
+    </div>
+</body>
+</html>

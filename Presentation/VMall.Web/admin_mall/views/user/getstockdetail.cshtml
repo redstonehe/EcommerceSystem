@@ -1,0 +1,138 @@
+﻿@model VMall.Web.MallAdmin.Models.AgentStockDetailModel
+@section header{
+    <title>库存操作详情</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+     <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script>
+        function show(type, code) {
+
+            var url = "";
+            if (type == 1) {
+                url = "/malladmin/order/orderlist?osn=" + code;
+            }
+            else if (type == 2) {
+                //Url.Action("SendOrderList", "AgentSendOrder", new { osn = row.OrderCode })
+                url = "/malladmin/AgentSendOrder/SendOrderList?osn=" + code;
+            }
+            else {
+                return false;
+            }
+            // 用iframe显示http://www.baidu.com的内容，并设置了标题、宽与高、按钮
+            $.jBox("iframe:" + url, {
+                title: "详情",
+                width: 1500,
+                height: 600,
+                buttons: { '关闭': true }
+            });
+            
+        }
+</script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 库存操作详情
+        <div class="right">
+            <a href="@Url.Action("getstock", new { uid = Model.Uid })" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("getstockdetail", "user"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        @Html.Hidden("uid", Model.Uid, new { height = "18" })
+                        @Html.Hidden("pid", Model.Pid, new { height = "18" })
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="10" align="center">
+
+                        <th width="10" align="left">序号</th>
+                        <th width="100" align="left">创建时间</th>
+                        @* <th width="180" align="left">产品</th>*@
+                        <th width="50" align="left">类型</th>
+                        <th width="50" align="left">金额</th>
+                        <th width="80" align="left">当前余额</th>
+                        <th width="80" align="left">关联订单号</th>
+                        <th width="150" align="left">详情描述</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int k = 1;}
+                    @foreach (var info in Model.DetailList)
+                    {
+                        <tr>
+                            <td align="center">
+
+                            <td>@k</td>
+                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            @* <td>@info.Uid</td>*@
+                            <td>
+                                @if (info.InAmount > 0)
+                                { 
+                                    @:收入
+                                }
+                                @if (info.OutAmount > 0)
+                                {
+                                    @:支出
+                                }
+                            </td>
+                            <td>
+                                 @if (info.InAmount > 0)
+                                { 
+                                    @("+" + info.InAmount.ToString("f2"))
+                                }
+                                @if (info.OutAmount > 0)
+                                {
+                                    @("-" + info.OutAmount.ToString("f2"))
+                                }
+                            </td>
+                            <td>@info.CurrentBalance.ToString("f2")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(info.OrderCode))
+                                {
+                                    if (info.OrderCode.StartsWith("12") || info.OrderCode.StartsWith("11") || info.OrderCode.StartsWith("72") || info.OrderCode.StartsWith("71"))
+                                    {
+                                   @* <a href="@Url.Action("orderlist", "order", new { osn = info.OrderCode })" target="_blank" style="text-decoration: underline;color:blue;">@info.OrderCode </a>*@
+                                     <a href="javascript:show(1,'@info.OrderCode');"  style="text-decoration: underline;color:blue;">@info.OrderCode </a>
+                                    }
+                                    else if (info.OrderCode.StartsWith("82"))
+                                    {
+                                     @*<a href="@Url.Action("SendOrderList", "AgentSendOrder", new { osn = info.OrderCode })" target="_blank" style="text-decoration: underline;color:blue;">@info.OrderCode </a>*@
+                                    <a href="javascript:show(2,'@info.OrderCode');"  style="text-decoration: underline;color:blue;">@info.OrderCode </a>
+                                    }
+                                    else { 
+                                        @info.OrderCode 
+                                    }
+                                }
+                            </td>
+                            <td>@info.DetailDesc </td>
+                        </tr>
+                                k++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

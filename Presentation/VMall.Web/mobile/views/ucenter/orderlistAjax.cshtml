@@ -1,0 +1,176 @@
+﻿@model VMall.Web.Mobile.Models.OrderListModel
+@{
+    Layout = null;
+}
+@*<script>
+    hasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>*@
+
+@foreach (DataRow row in Model.OrderList.Rows)
+{
+    OrderState orderStates = new OrderState();
+    string state = string.Empty;
+    if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+    {
+        if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed)
+        {
+            state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString() + "-" + row["changetype"].ToString();
+        }
+        else if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+        {
+            state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString();
+        }
+    }
+    else
+    {
+        state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"]));
+
+    }
+    OrderState orderState = (OrderState)TypeHelper.ObjectToInt(row["orderstate"]);
+    List<OrderProductInfo> orderProductList = Orders.GetOrderProductList(TypeHelper.ObjectToInt(row["oid"]), Model.OrderProductList);
+    <div class="proItme">
+        <div class="proTitle">
+            <span class="storeName">@row["storename"]</span> <i class="am-icon-angle-right"></i>
+            <span class="proState">@switch (state)
+                                   {
+                                       case "WaitPaying":
+                @:等待付款
+            break;
+                                       case "Confirming":
+                @:待确认
+            break;
+                                       case "Confirmed":
+                @:已确认
+            break;
+                                       case "PreProducting":
+                @:备货中
+            break;
+                                       case "Sended":
+                @:已发货
+            break;
+                                       case "Completed-0-0":
+                @:已完成
+            break;
+                                       case "Completed-0-1":
+                @:<span class="font-color-red">换货审核中</span>
+            break;
+                                       case "Completed-0-2":
+                @:<span class="font-color-red">换货审核通过</span>
+            break;
+                                       case "Completed-0-3":
+                @:<span class="font-color-red">换货等待发货</span>
+            break;
+                                       case "Completed-0-4":
+                @:<span class="font-color-red">换货确认收货</span>
+            break;
+                                       case "Completed-0-5":
+                @:<span>换货完成</span>
+            break;
+                                       case "Completed-1-0":
+                @:<span class="font-color-red">退货审核中</span>
+            break;
+                                       case "Settled":
+                @:已结算
+                                    break;
+                                       case "Cancelled":
+                @:取消
+            break;
+                                       case "Returned-2":
+                @:<span class="font-color-red">退货审核通过</span>
+            break;
+                                       case "Returned-3":
+                @:<span class="font-color-red">退款审核中</span>
+            break;
+                                       case "Returned-4":
+                @:退款成功，退货完成
+            break;
+                                       case "Changed":
+                @:换货
+            break;
+                                       case "Locked":
+                @:锁定
+            break;
+                                       default:
+                @:未知状态
+            break;
+                                   }</span>
+        </div>
+        @foreach (var info in orderProductList)
+        {
+            <a href="@Url.Action("orderinfo", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">
+                <div class="proItme-goods">
+                    <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg">
+                    <div class="order-msg">
+                        <p class="nametitle">@info.Name</p>
+                        <p>
+                            <span class="price">¥@(info.DiscountPrice) </span>
+                            <span class="order-data">x 
+                                    @(info.Type == 3 ? info.RealCount : info.BuyCount)
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </a>
+        }
+        <div class="proCount">
+            <span>共<label>@Carts.SumOrderProductCount(orderProductList)</label>件商品，实付款<label>¥@row["surplusmoney"]</label>(含运费¥@row["shipfee"])
+            </span>
+        </div>
+        <div class="proBt">
+            <a class="" href="@Url.Action("orderactionlist", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" id="orderActionList@{@row["oid"]}">订单跟踪</a>
+            @if (orderState == OrderState.WaitPaying && TypeHelper.ObjectToInt(row["paymode"]) == 1)
+            {
+                <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">在线支付</a>
+            }
+            else if ((orderState == OrderState.WaitPaying && TypeHelper.ObjectToInt(row["paymode"]) == 2))
+            {
+                if (row["paysystemname"].ToString().Trim() == "custompay")
+                {
+                <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">微信收款码付款</a>
+                }
+                else
+                { 
+                <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">银行汇款</a>
+                }
+            }
+            @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["isreview"]) == 0)
+            {
+                <a class="" href="@Url.Action("revieworder", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">订单评价</a>
+            }
+            @if (orderState == OrderState.Sended)
+            {
+                if (TypeHelper.ObjectToInt(row["isextendreceive"]) != 1)
+                {
+                <a class="" href="javascript:extentreceive(@row["oid"]);">延长收货</a>
+                }
+                <a class="confirmReceip" href="javascript:confirmReceip(@row["oid"]);">确认收货</a>
+            }
+            @if (orderState == OrderState.WaitPaying || (orderState <= OrderState.Confirmed && TypeHelper.ObjectToInt(row["paymode"]) == 1 && DateTime.Now < TypeHelper.ObjectToDateTime(row["paytime"]).AddHours(12)))
+            {
+                if (TypeHelper.StringToInt(row["extorderid"].ToString()) == 0)
+                { 
+                <a class="" href="javascript:cancelOrder(@row["oid"], 0)" id="cancelOrderBut@{@row["oid"]}">取消订单</a>
+                }
+            }
+            @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(7) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+            { 
+@*<a class="" href="javascript:returnApply(@row["oid"]);">申请退货</a>*@
+                <a class="" href="@Url.Action("returnapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" >申请退货</a>
+            }
+            @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(15) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+            { 
+                <a class="" href="@Url.Action("changeapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">申请换货</a>
+            }
+            @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 4)
+            { 
+                <a class="" href="javascript:changeReceive(@row["oid"])">换货确认收货</a>
+            }
+            @if (orderState == OrderState.Cancelled)
+            { 
+                <a class="" href="javascript:void(0);" onclick="deleteOrder(@row["oid"]);">删除订单</a>
+            }
+        </div>
+    </div>
+}
+

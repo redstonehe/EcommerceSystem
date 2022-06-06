@@ -1,0 +1,81 @@
+﻿@model  VMall.Web.Models.AgentStockDetailModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "库存操作详情-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "库存操作详情";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; height: auto;">
+            <h2 id="memberRT">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+                <div class="clear"></div>
+            </h2>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+
+                <tbody>
+                    <tr>
+                        <th>序号</th>
+                        <th>创建时间</th>
+                       @* <th>产品</th>*@
+                        <th>类型</th>
+                        <th>金额</th>
+                        <th>当前余额</th>
+                        <th>订单编号 </th>
+                        <th width="200">详情描述</th>
+                    </tr>
+                    @{int k = 1;}
+                    @foreach (var info in Model.DetailList)
+                    {
+                        <tr>
+                            <td>@k</td>
+                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            @*<td>@info.Uid</td>*@
+                            <td> 
+                                @if (info.InAmount > 0) { 
+                                    @:收入
+                                }
+                                @if (info.OutAmount>0) {
+                                    @:支出
+                                }
+
+                            </td>
+                            <td>@if (info.InAmount > 0) { 
+                                    @("+"+info.InAmount.ToString("f2"))
+                                }
+                                @if (info.OutAmount>0) {
+                                    @("-"+info.OutAmount.ToString("f2"))
+                                }</td>
+                            <td>@info.CurrentBalance</td>
+                            <td>@info.OrderCode </td>
+                            <td>@info.DetailDesc </td>
+                            
+                        </tr>
+                        k++;
+                    }
+                </tbody>
+            </table>
+            @Html.WebPager(Model.PageModel)
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

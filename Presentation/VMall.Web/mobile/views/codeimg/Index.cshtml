@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "我的二维码";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 8;
+}
+<link href="/mobile/css/main.css" rel="stylesheet" type="text/css">
+@*<script type="text/javascript" src="/mobile/scripts/ZeroClipboard.js"></script>*@
+@*<script type="text/javascript" src="/mobile/scripts/clipboard.min.js"></script>*@
+@*<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script language="javascript" type="text/javascript">
+
+    
+
+</script>*@
+<style>
+    .sharelink {
+        border: 1px solid #ddd;
+        margin: 10px 20px 20px;
+        padding: 10px 20px 20px;
+    }
+
+    .linkbtn {
+        display: inline-block;
+        width: 150px;
+        height: 30px;
+        background: #E4393C;
+        line-height: 30px;
+        color: #fff;
+    }
+</style>
+
+
+<div class="myAssetsCon">
+     <div class="norecommend">
+        @*<p>
+            <h3 style="margin: 50px 0; font-size: 18px; font-weight: bolder;">邀请好友</h3>
+        </p>*@
+        <div class="">
+        </div>
+        @*@if (WorkContext.PartUserInfo.AgentType > 0 || WorkContext.Uid == 1)
+        { 
+            *@
+         <p>
+                <div style="/*width: 35%;*/ margin: 0 auto; padding: 2%; text-align: center; /*border: 1px solid #808080*/">
+                    <img src="@(ViewData["codeImg"])?t=@(DateTime.Now.ToString())" alt="" onerror="this.style.display='none'" width="96%" />
+
+                </div>
+
+            </p>
+            @*
+        }
+        else
+        { 
+            <p>
+                您还不是代理会员，暂时不能分享二维码
+            </p>
+        }*@
+
+    </div>
+</div>
+
+
+

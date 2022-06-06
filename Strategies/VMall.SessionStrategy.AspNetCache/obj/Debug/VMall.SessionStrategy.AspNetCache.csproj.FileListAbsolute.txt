@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.SessionStrategy.AspNetCache.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.SessionStrategy.AspNetCache.pdb
+C:\develop\德鹿商城\Strategies\VMall.SessionStrategy.AspNetCache\obj\Debug\VMall.SessionStrategy.AspNetCache.dll
+C:\develop\德鹿商城\Strategies\VMall.SessionStrategy.AspNetCache\obj\Debug\VMall.SessionStrategy.AspNetCache.pdb
+C:\develop\德鹿商城\Strategies\VMall.SessionStrategy.AspNetCache\obj\Debug\VMall.SessionStrategy.AspNetCache.csprojResolveAssemblyReference.cache

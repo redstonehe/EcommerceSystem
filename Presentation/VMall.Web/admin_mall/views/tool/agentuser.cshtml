@@ -1,0 +1,133 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>页面-@WorkContext.MallConfig.SiteTitle</title>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script src="/scripts/region.js" type="text/javascript"></script>
+    <style type="text/css">
+       
+    </style>
+    <script>
+        function gosubmit() {
+            $("form").submit();
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("AddAgentAndOrder", "Tool"))
+    {
+        <div>
+            <table width="50%">
+                <thead>
+                    <tr>
+                        <th align="left" colspan="4">商城工具</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="left" width="10px">手机：</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="mobile" class="mobile" id="mobile" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">姓名：</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="realname" class="realname" id="realname" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">身份证：</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="idcard" class="idcard" id="idcard" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">代理等级：</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="rank" class="rank" id="rank" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">推荐人编号：</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="pname" class="pname" id="pname" value="" />
+                        </td>
+                        <tr>
+                            <td align="left" width="10px">产品ID：</td>
+                            <td align="left" width="100px">
+                                <input type="text" name="pid" class="pid" id="pid" value="" />
+                            </td>
+                        </tr>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">产品金额:</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="amount" class="amount" id="amount" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><em>*</em>所在地区：</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="provinceId" name="provinceId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="cityId" name="cityId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="regionId" name="regionId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="10px">地址:</td>
+                        <td align="left" width="100px">
+                            <input type="text" name="address" class="address" id="address" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" name="name" class="submit" id="submit" value="提交" onclick="gosubmit();" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</body>
+
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+</html>

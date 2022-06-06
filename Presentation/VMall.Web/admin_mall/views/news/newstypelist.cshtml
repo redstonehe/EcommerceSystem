@@ -1,0 +1,73 @@
+﻿@model List<NewsTypeInfo>
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>新闻类型列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">新闻管理</a></li>
+            <li class="active">新闻类型</li>
+        </ol>
+
+        <div class="right">
+            <a href="@Url.Action("addnewstype")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加类型</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    <!-- Main content -->
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>排序</th>
+                                    <th>管理操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (NewsTypeInfo info in Model)
+                                {
+                                    <tr>
+                                        <td>@info.Name</td>
+                                        <td>@info.DisplayOrder</td>
+                                        <td>
+                                            @Html.ActionLink("[编辑]", "editnewstype", new { newsTypeId = info.NewsTypeId }, new { @class = "editOperate" })
+                                            @Html.ActionLink("[删除]", "delnewstype", new { newsTypeId = info.NewsTypeId }, new { @class = "deleteOperate" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+    <!-- /.content -->
+
+    <div class="table_bottom"></div>
+}

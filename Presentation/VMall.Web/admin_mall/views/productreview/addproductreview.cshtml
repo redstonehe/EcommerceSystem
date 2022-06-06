@@ -1,0 +1,101 @@
+﻿@model VMall.Web.MallAdmin.Models.AddProductReviewModel
+@section header{
+    <title>添加商品评价</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">商品评价 &gt;&gt; 添加商品评价
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                <tr>
+                    <td width="76px" align="right">选择商品：</td>
+                    <td>
+                        <div class="selectBt">
+                                <input type="button" value="选择商品" onclick="openProductSelectLayer(this,0)"/>
+                                <input type="hidden" class="Pid" id="Pid" name="Pid" value="0" />
+                                <input type="hidden" class="ProductName" id="ProductName" name="ProductName" value="选择商品" />
+                            </div>
+                       @* @Html.TextBoxFor(x => x.PSN, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.PSN)*@
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">评&nbsp;&nbsp;分&nbsp;&nbsp;：</td>
+                    <td> 
+                        <label>@Html.RadioButtonFor(x => x.Star, 5, new { @class = "checkbox" })5分</label>
+                        <label>@Html.RadioButtonFor(x => x.Star, 4, new { @class = "checkbox" })4分</label>
+                        <label>@Html.RadioButtonFor(x => x.Star, 3, new { @class = "checkbox" })3分</label>
+                        <label>@Html.RadioButtonFor(x => x.Star, 2, new { @class = "checkbox" })2分</label>
+                        <label>@Html.RadioButtonFor(x => x.Star, 1, new { @class = "checkbox" })1分</label>
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="right">评价内容：</td>
+                    <td>@Html.TextAreaFor(x => x.Message, new {cols = "40", rows = "6" })@Html.ValidationMessageFor(x => x.Message)
+                        <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                </tr>
+                 <tr>
+                     
+                    <td align="right">购买时间：</td>
+                    <td>@Html.TextBoxFor(x => x.BuyTime, new { @class = "input", size = "35", onfocus = "WdatePicker({el:'BuyTime'})" })@Html.ValidationMessageFor(x => x.BuyTime)
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="right">评价时间：</td>
+                    <td>@Html.TextBoxFor(x => x.ReviewTime, new { @class = "input", size = "35", onfocus = "WdatePicker({el:'ReviewTime'})" })@Html.ValidationMessageFor(x => x.ReviewTime)
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                
+                </tr>
+                <tr>
+                    <td align="right">购买会员：</td>
+                    <td>@Html.TextBoxFor(x => x.ShowNickName, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.ShowNickName)
+                         <span style="color:red;margin-left:10px;"> *</span>
+                    </td>
+                
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

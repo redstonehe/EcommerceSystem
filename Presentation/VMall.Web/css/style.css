@@ -1,0 +1,191 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-family: "微软雅黑";
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+body{
+	width: 980px;
+	margin: 0 auto; 
+}
+
+section{
+	display: block;
+}
+
+section.top{
+	width: 100%;
+	height: 80px;
+	padding-top: 5px;
+	overflow: hidden;  
+}
+
+section.top h1{ 
+	height: 80px;
+	line-height:80px;
+	padding-top: 5px;
+	overflow: hidden;
+	color:#222;	
+}
+
+section.top a img{
+	height: 70px;
+	width: auto;
+}
+
+section.fund{
+	width: 100%;
+	height: 50px;  
+	line-height: 50px;
+	background: -webkit-linear-gradient(top, #ffffff , #EFF3F7); /* Safari 5.1 - 6.0 */
+ 	background: -o-linear-gradient(top, #ffffff , #EFF3F7); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(top, #ffffff , #EFF3F7); /* Firefox 3.6 - 15 */
+	background: linear-gradient(top, #ffffff , #EFF3F7); /* 标准的语法 */
+	border:1px solid #C5DCFD;
+	overflow: hidden;
+}
+
+section.fund label,section.fund .fund_money{
+	float: left;
+	
+}
+section.fund label,section.fund .fund_name{
+	float: left;
+	
+}
+
+section.fund .fund_money input{
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 10px;
+	width: 100px;
+}
+section.fund .fund_name input{
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 10px;
+	width: 100px;
+}
+
+section.paypal{
+	width: 100%;
+	height: auto;	
+}
+
+.paypal_header{
+	height: 35px;
+	line-height: 35px;
+	margin-top: 10px;
+	background: -webkit-linear-gradient(top, #ffffff , #EBF5FC); /* Safari 5.1 - 6.0 */
+ 	background: -o-linear-gradient(top, #ffffff , #EBF5FC); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(top, #ffffff , #EBF5FC); /* Firefox 3.6 - 15 */
+	background: linear-gradient(top, #ffffff , #EBF5FC); /* 标准的语法 */
+	border: 1px solid #D6E6FF;
+}
+
+.paypal_header label,.paypal_header div{
+	float: left;
+}
+
+.paypal_header label{
+	color:#888;
+	width: 200px;
+	text-align: center;
+}
+
+.paypal_header div{
+	padding: 0 30px;
+	color:#3B6AD4;
+	font-weight: 600;
+}
+
+.paypal_header div.active{
+	line-height: 37px;
+	margin-top: -4px;
+	color:#222;
+	border-top:1px solid #D6E6FF;
+	border-left:1px solid #D6E6FF;
+	border-right:1px solid #D6E6FF;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background: -webkit-linear-gradient(top, #F8FAFE , #FDFDFE); /* Safari 5.1 - 6.0 */
+ 	background: -o-linear-gradient(top, #F8FAFE , #FDFDFE); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(top, #F8FAFE , #FDFDFE); /* Firefox 3.6 - 15 */
+	background: linear-gradient(top, #F8FAFE , #FDFDFE); /* 标准的语法 */
+}
+
+.bankList{
+	border-left:1px solid #D6E6FF;
+	border-right:1px solid #D6E6FF;
+	border-bottom:1px solid #D6E6FF;
+	overflow: hidden;
+	padding: 30px; 
+	
+}
+
+.bankList label span{
+	font-size: 14px;
+	color: #888;
+	margin-left: 10px;
+}
+
+.bankList ul li{
+	list-style: none;
+	float: left;
+	width:25%;
+	margin-top: 20px;
+}
+
+.bankList ul li a{
+	text-decoration: none;
+	display: block;
+	margin: 0 auto; 
+}
+
+.bankList ul li input[type="radio"]{
+	 
+}
+
+.bankList ul li img{
+	border:1px solid #EDEDED;
+        width: 160px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	vertical-align:middle ;
+}
+.submit_button{
+	display:block;
+	margin:10px auto;
+	height: 40px;   
+	background: #FF0021;
+	border:1px solid #F73B50;
+	padding:0 20px;
+	overflow: hidden; 
+	color:#ffffff;
+	border-radius:5px
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

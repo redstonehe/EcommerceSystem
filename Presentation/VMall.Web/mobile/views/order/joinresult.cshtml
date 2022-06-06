@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "升级成功";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<div class="result box">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2>恭喜您，您已经成功升级为蓝钻会员！！！</h2>
+    </div>
+    <div style="text-align: center; font-size: 16px;">
+        <p style="">推荐人：<span>@ViewData["parentCode"]</span></p>
+        <p>安置人：<span>@ViewData["managerCode"]</span></p>
+    </div>
+    <div class="return" style="margin-top: 30px;">
+        @*  <span id="timer" style="color:red;">5</span> 秒后自动返回*@
+        <a href="/" style="font-size: 18px; color: orange;">返回首页</a>
+    </div>
+</div>
+<style>
+    .result {
+        background: #FFF;
+        width: auto;
+        height: 150px;
+        padding: 30px 0;
+        border: 1px solid #DDD;
+        font-family: arial,"宋体";
+    }
+
+    .box div {
+        text-align: center;
+    }
+
+        .box div p {
+            width: 200px;
+            margin: 20px auto;
+        }
+
+            .box div p span {
+                color: red;
+            }
+
+    .return {
+        height: 40px;
+    }
+
+        .return a:hover {
+            color: #D02424;
+        }
+</style>
+
+
+

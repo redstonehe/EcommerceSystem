@@ -1,0 +1,57 @@
+﻿@model VMall.Web.Mobile.Models.ReviewOrderModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "评价商品";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 9;
+}
+
+<div class="pj">
+
+    @foreach (OrderProductInfo info in Model.OrderProductList)
+    {
+        <div class="proItme">
+            <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg">
+            <div class="order-msg" style="float: none;">
+                <p class="title" style="background:none;border:none;">@info.Name</p>
+                <p class="price">¥ @info.DiscountPrice</p>
+                @if (info.IsReview == 1)
+                {
+                    <p><a href="javascript:void(0)" class="gayBt" style="color: #999;">您已评价</a></p>
+                }
+                else
+                {
+                    <p><a href="javascript:void(0)" onclick="openReviewProductBlock(@info.RecordId)" class="redBt" id="reviewOperate@{@info.RecordId}">立即评价</a></p>
+                }
+            </div>
+            <divs style="clear:both;"></divs>
+        </div>
+    }
+
+    <div id="reviewProductBlock" style="display: none;">
+        <form name="reviewProductFrom" action="">
+            <input type="hidden" name="oid" value="@Model.OrderInfo.Oid" />
+            <input type="hidden" name="recordId" value="" />
+            <input type="hidden" name="star" value="5" />
+            <p id="productStarBlock">商品满意度<span class="on" onclick="selectProductStar(1)"></span><span class="on" onclick="selectProductStar(2)"></span><span class="on" onclick="selectProductStar(3)"></span><span class="on" onclick="selectProductStar(4)"></span><span class="on" onclick="selectProductStar(5)"></span></p>
+            <textarea name="message" style="width: 100%; min-height: 100px;"></textarea>
+            <a href="javascript:void(0)" onclick="reviewProduct()" class="redBt" style="display: block; margin: 12px 14px; text-align: center;">提交</a>
+        </form>
+    </div>
+
+    @*<h2 onclick="openReviewStoreBlock()">店铺评价</h2>
+<div id="reviewStoreBlock" style=" display:none;">
+<form name="reviewStoreFrom" action="">
+<input type="hidden" name="oid" value="@Model.OrderInfo.Oid" />
+<input type="hidden" name="descriptionStar" value="" />
+<input type="hidden" name="serviceStar" value="" />
+<input type="hidden" name="shipStar" value="" />
+<p id="descriptionBlock">商品描述满意度<span class="on" onclick="selectDescriptionStar(1)"></span><span class="on" onclick="selectDescriptionStar(2)"></span><span class="on" onclick="selectDescriptionStar(3)"></span><span class="on" onclick="selectDescriptionStar(4)"></span><span class="on" onclick="selectDescriptionStar(5)"></span></p>
+<p id="serviceBlock">商家服务满意度<span class="on" onclick="selectServiceStar(1)"></span><span class="on" onclick="selectServiceStar(2)"></span><span class="on" onclick="selectServiceStar(3)"></span><span class="on" onclick="selectServiceStar(4)"></span><span class="on" onclick="selectServiceStar(5)"></span></p>
+<p id="shipBlock">商品配送满意度<span class="on" onclick="selectShipStar(1)"></span><span class="on" onclick="selectShipStar(2)"></span><span class="on" onclick="selectShipStar(3)"></span><span class="on" onclick="selectShipStar(4)"></span><span class="on" onclick="selectShipStar(5)"></span></p>
+<a href="javascript:void(0)" id="reviewStoreBut" onclick="reviewStore()" class="redBt" style="display:block;margin: 12px 14px; text-align:center;">提交</a>
+</form>
+</div>*@
+
+</div>
+

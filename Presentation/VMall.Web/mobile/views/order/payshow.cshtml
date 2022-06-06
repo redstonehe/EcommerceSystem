@@ -1,0 +1,288 @@
+﻿@model VMall.Web.Mobile.Models.PayShowModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "支付信息";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+
+<style type="text/css">
+    .order-tip {
+        width: 85%;
+        padding: 10px;
+        margin: 20px auto;
+        background: #fffdf7;
+        border: 1px solid #cdc2b0;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+      word-break:break-all;
+    }
+        .order-tip h3 {
+            color: #db2929;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+    .pay-tip {
+        width: 85%;
+        margin: 15px auto;
+        padding: 10px;
+        background: #f0ead4;
+        border: 1px solid #a4a4a4;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+    }
+
+        .pay-tip strong {
+            color: #db2929;
+            font-weight: normal;
+        }
+        .or_check {
+        border: 1px solid #ddd;
+        /*border-top: 0;*/
+        padding: 18px 24px 0;
+        background: #fff;
+        overflow: hidden;
+        display: block;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .or_yhhkt {
+        margin-top: 3px;
+    }
+
+    .jkn_ark_grey {
+        color: #3c3c3c;
+    }
+
+    .or_yhhkm {
+        height: 28px;
+        line-height: 28px;
+        background: #f2f2f2;
+        text-align: center;
+        margin: 13px 0 18px;
+    }
+
+    .or_yhhkmul {
+        padding-bottom: 19px;
+        border-bottom: 1px dashed #e7e7e7;
+        margin-bottom: 22px;
+    }
+
+        .or_yhhkmul li {
+            height: 62px;
+            background: #fff;
+            line-height: 32px;
+            text-align: center;
+        }
+
+    #or_yhhkjsyh {
+        /*background-position: 0 -289px;*/
+    }
+
+    .or_yhhkm2 {
+        width: 40%;
+    }
+
+    .or_yhhkm3 {
+        width:40%;
+    }
+
+    .or_yhhkm4 {
+        width: 33%;
+        float: right;
+        border: 1px solid #dcdcdc;
+        height: 32px;
+        margin-top: 17px;
+        display: none;
+    }
+
+    .or_yhhkm1, .or_yhhkm2, .or_yhhkm3 {
+        float: left;
+        _display: inline;
+    }
+
+    .or_yhhkts {
+        width: 209px;
+        height: 43px;
+        background: url(../images/or15.png) no-repeat;
+        position: absolute;
+        right: 49px;
+        bottom: -34px;
+        line-height: 46px;
+        display: none;
+    }
+
+    .or_yhhkmul .or_yhhkm1 {
+        height: 40px;
+        width: 20%;
+        margin-top: 11px;
+        cursor: pointer;
+    }
+
+    #or_zxyh {
+        background: url(/images/zxyhlogo.jpg) no-repeat;
+            background-position: 25% 10%;
+        background-size: 70px;
+    }
+
+    #or_qdyh {
+        background: url(/images/qdyhlogo.jpg) no-repeat;
+            background-position: 25% 0;
+        background-size: 65px;
+    }
+    #or_zsyh {
+        background: url(/images/zsyh.png) 12px 0 no-repeat;
+        background-size: 70px;
+    }
+    .pay-tip {
+        text-align:center;
+        color:#7ABD54;
+        width: 85%;
+        margin: 20px auto;
+            padding: 20px 10px;
+        /*background: #f0ead4;*/
+        font-weight:bolder;
+        border: 1px solid #a4a4a4;
+        /*border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;*/
+    }
+
+        .pay-tip strong {
+            color: #db2929;
+            font-weight: normal;
+        }
+</style>
+<div class="order-tip">
+    <p>订单号：@string.Join(",", Model.OrderList.Select(x => x.OSN).ToArray())</p>
+    <p>支付方式：@Model.PayPlugin.FriendlyName</p>
+    <p>支付金额：<font style="color: #cc0000; font-weight: bold;">@Model.AllSurplusMoney 元</font></p>
+</div>
+@if (Model.PayPlugin.SystemName == "custompay")
+{ 
+    <div class="pay-tip">
+    <p>请在3分钟内付款哦~
+        <br>
+    </p>
+        <p id="codewarn" style="margin-top:10px;"><span style="color:red;">180</span>秒后为您跳转页面</p>
+</div>
+}
+else { 
+    <div class="pay-tip">
+    <p>请在30分钟内付款哦~
+        <br>
+    </p>
+</div>
+}
+
+@if (((IPayPlugin)Model.PayPlugin.Instance).PayMode == 1)
+{
+    <a  onclick="window.location.href = '@Url.Action(((IPayPlugin)Model.PayPlugin.Instance).PayAction, ((IPayPlugin)Model.PayPlugin.Instance).PayController, new RouteValueDictionary { { "area", "" }, { "oidList", Model.OidList } })'" autocomplete="off" class="gayBt" style="margin:0 auto;width:82%; display:block;margin:10px auto;text-align:center;">去支付</a>
+}
+else
+{
+      if (Model.PayPlugin.SystemName == "emsremit")
+            {       
+    <div style="width: auto; height: auto;text-align:center;margin:10px;">
+        订单号：@string.Join(",", Model.OrderList.Select(x => x.OSN).ToArray())
+    </div>
+    <div style="color: #666; font-size: 14px;text-align:center;margin:10px;">
+        <p>您汇款成功后请联系我们的客服确认，我们会及时发货配送，预计在3-5个工作日内送达！</p>
+    </div>
+    <div class="or_check clearfix">
+        <p class="jk_yahei jkn_ark_grey or_yhhkt">您可以在任一家银行向以下银行账户汇款，汇款时请尽量在汇款单的用途栏内注明订单号或者您的姓名！</p>
+        <div class="or_yhhkm jkn_light_grey">
+            <p class="or_yhhkm1" style="width: 20%;">开户银行</p>
+            <p class="or_yhhkm2">账号</p>
+            <p class="or_yhhkm3">账户名</p>
+            
+        </div>
+        <ul class="jkn_light_grey or_yhhkmul">
+
+            <li class="">
+                <p class="or_yhhkm1" id="or_zxyh"></p>
+                <p class="or_yhhkm2">xxxxxxxxxxxxxxxxxxxxxx</p>
+                <p class="or_yhhkm3">xxxxxxxxxxxx有限公司</p>
+                
+            </li>
+
+            <li class="">
+                <p class="or_yhhkm1" id="or_qdyh">
+                </p>
+                <p class="or_yhhkm2">xxxxxxxxxxxxxxxxxxxxxxx</p>
+                <p class="or_yhhkm3">xxxxxxxxx有限公司</p>
+                
+            </li>
+            <li class="">
+                <p class="or_yhhkm1" id="or_zsyh">
+                </p>
+                <p class="or_yhhkm2">xxxxxxxxxxxxxxxxxxxxxx</p>
+                <p class="or_yhhkm3">xxxxxxxxxx有限公司</p>
+                
+            </li>
+
+        </ul>
+
+
+    </div>
+}
+ else { 
+       <div style="width: auto; height: auto; text-align: center;">
+                
+            </div>
+            <div style="color: #666; font-size: 14px; text-align: center;">
+               
+            </div>
+            <div class="or_check clearfix" style="margin: 20px auto;padding: 18px 24px 0;width: 80%;">
+                <p class="jk_yahei jkn_ark_grey or_yhhkt" style="color: #666; font-size: 14px; text-align: center;padding:5px">长按图片识别图中二维码以完成支付</p>
+                <p style="color: #666; font-size: 14px; text-align: center;"><span style="font-size:16px;color:red;padding:5px">支付时请在添加备注内注明收货人手机号（非常重要）！</span></p>
+                 <p style="color: #666; font-size: 14px; text-align: center;padding:5px">支付成功后请联系我们的客服确认，我们会及时处理订单信息！</p>
+                
+                <div class="or_yhhkm jkn_light_grey" style="background:none;">
+                    <p class="or_yhhkm1" >
+
+                        <img src="/imagesscrt/custompaycode.png" alt="" width="60%" />
+                    </p>
+                    
+                   <script type="text/javascript">
+                    function timeCheckVoice(n, o) {
+        var t = n;
+        if (n == 0) {
+            //console.log("timeout");
+            //o.disabled = false;
+            $(o).find("a").css("color", "#008cff");
+            window.location.href = "/mob/ucenter/orderlist";
+            n = t;
+        } else {
+            n--;
+            //o.disabled = true;
+            $(o).find("span").html('&nbsp;' + n + '&nbsp; ');
+            setTimeout(function () {
+                timeCheckVoice(n, o);
+            }, 1000);
+        }
+    }
+                       $(function(){
+                       timeCheckVoice(180,$("#codewarn"));
+                       });
+                </script>
+                </div>
+                
+            </div>
+   
+      }
+}
+
+
+@*<a href="@Url.Action("testpay", "order", new RouteValueDictionary { { "oids", Model.OidList }, { "paystatus", "1" } })" target="_self" style="margin:0 auto;width:90%; display:block;margin:15px auto;    text-align: center;
+    display: block;
+    height: 50px;
+    width: 200px;
+    /*border: 1px solid red;*/
+    line-height: 50px;
+    background: #E73839;
+    border-radius: 10px;color:#fff;">点击支付(测试)</a>*@

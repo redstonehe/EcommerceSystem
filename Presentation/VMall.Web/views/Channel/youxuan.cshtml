@@ -1,0 +1,401 @@
+﻿@model VMall.Web.Models.ChannelIndexModel
+@using VMall.Web
+@{
+    ViewBag.Title = Model.ChannelInfo.Name + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 4;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 1;
+}
+<style>
+    img:hover {
+        opacity: .7;
+    }
+
+    .info2 a:hover {
+        background-color: #089E9C;
+    }
+
+    .gprolist li {
+        border: 1px solid #eee;
+        float: left;
+        width: 198px;
+        height: 248px;
+        margin-top: 12px;
+        cursor: pointer;
+        padding-bottom: 10px;
+    }
+
+    .floor .floortitle h2 {
+        float: left;
+        /*margin: 10px 0 0;*/
+        height: 70px;
+        line-height: 78px;
+    }
+
+    .floortitle {
+        border-bottom: 1px solid #ddd;
+        height: 80px;
+        position: relative;
+    }
+
+    .floor .floortitle p {
+        float: left;
+        height: 70px;
+        overflow: hidden;
+        margin: 10px 0 0 20px;
+        line-height: 78px;
+        color: #999;
+        font-size: 14px;
+    }
+
+    .floortitle .more {
+        position: absolute;
+        top: 40px;
+        right: 20px;
+        font-size: 18px;
+        color: #D02424;
+    }
+
+        .floortitle .more a {
+            color: #D02424;
+        }
+
+    .gprolist li h4 {
+        font-weight: 400;
+        text-align: center;
+        color: #666;
+        padding: 5px;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .gprolist li .index_mod_iconprice {
+        color: #fe575f;
+        text-align: center;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #yx_banner {
+        margin: 0 auto;
+        width: 1000px;
+        height: auto;
+        position: relative;
+        background: #fff;
+    }
+
+    .banner_img {
+        height: 100px;
+        margin-bottom: 20px;
+        /*background:#f5f5f5;*/
+        background: url(/images/yx_bg.jpg) no-repeat 0 center;
+    }
+
+        .banner_img div {
+            float: left;
+            /*text-align: center;*/
+        }
+
+    .banner_left {
+        border: 1px solid #e1e1e1;
+        width: 132px;
+        height: 100px;
+        /*background: blue;*/
+        /*border-bottom: 1px solid red;*/
+        /*text-align:left;*/
+    }
+
+    .banner_mid {
+        width: 665px;
+        /*height: 200px;*/
+        /*background: #000;*/
+    }
+
+    .banner_mid_top {
+        width: 665px;
+        height: 100px;
+        border-bottom: 1px solid #e1e1e1;
+        border-top: 1px solid #e1e1e1;
+    }
+
+    .banner_mid_bottom {
+        width: 665px;
+        height: 70px;
+        border-bottom: 1px solid #e1e1e1;
+        /*background: yellow;*/
+    }
+
+    .banner_right {
+        width: 200px;
+        height: 200px;
+        /*background: green;*/
+    }
+
+    .banner_bottom {
+        width: 1000px;
+        height: 200px;
+        background: yellow;
+        margin-bottom: 20px;
+    }
+
+    .banner_left p {
+        width: 135px;
+        /*line-height:50px;*/
+        /*height:50px;*/
+        text-align: center;
+    }
+
+    .pooltitle {
+        height: 70px;
+        line-height: 70px;
+        font-size: 14px;
+        font-weight: bolder;
+    }
+
+    .poolcount {
+        color: red;
+        /*font-size: 14px;*/
+    }
+
+    .banner_mid_top ul li {
+        width: 220px;
+        text-align: center;
+        float: left;
+        /*padding: 20px 10px;*/
+        height: 100px;
+        line-height: 100px;
+        font-size: 15px;
+    }
+
+    .banner_mid_bottom ul li {
+        text-align: center;
+        padding: 20px 10px;
+        width: 146px;
+        float: left;
+    }
+    /*公告*/
+    .gonggao {
+        width: 198px;
+        height: 100px;
+        border: 1px solid #e1e1e1;
+    }
+
+        .gonggao h2 {
+            font-size: 12px;
+            position: relative;
+            height: 35px;
+            line-height: 35px;
+            padding-left: 30px;
+            background: url(/images/hot_news.jpg) no-repeat 5px 5px;
+            margin-top: 5px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+            .gonggao h2 .more {
+                position: absolute;
+                display: block;
+                width: 80px;
+                text-align: center;
+                color: #666666; /*background:#d1caca;*/
+                font-weight: normal;
+                height: 20px;
+                line-height: 20px;
+                right: -10px;
+                top: 6px;
+                font-size: 12px;
+            }
+
+                .gonggao h2 .more:hover { /*background:#0D9F9F;*/
+                    color: #FF3700;
+                }
+
+        .gonggao .textList {
+            padding: 10px;
+            padding-left: 35px;
+        }
+
+            .gonggao .textList li {
+                list-style: initial;
+            }
+</style>
+<script type="text/javascript">
+    $(function () {
+        var channelid = '@Model.ChId';
+        $("#channel_" + channelid).addClass('clickactive').siblings(".channeltitle").removeClass('clickactive');
+    });
+</script>
+
+<div id="yx_banner" class="yx_banner">
+    <div class="banner_img">
+        <div>
+            @{decimal poolAmout = Orders.GetAgentSuitSum();}
+            <div class="banner_left">
+                <p class="pooltitle">消费积分</p>
+                <p class="poolcount">@poolAmout</p>
+
+            </div>
+        </div>
+
+        <div class="banner_mid" style="">
+            <div class="banner_mid_top">
+                <ul>
+                    @if (WorkContext.Uid >= 1)
+                    { 
+                        <li class="user_info">会员名：@(string.IsNullOrEmpty(WorkContext.UserName) ? WorkContext.UserMobile : WorkContext.UserName) </li>
+                        <li class="user_info">代理级别：
+                            @if (WorkContext.PartUserInfo.AgentType == 1)
+                            {
+                                @:事业伙伴
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 2)
+                            {
+                                @:星级经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 3)
+                            {
+                                @:VIP经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 4)
+                            {
+                                @:大区经销商
+                            }
+                            else
+                            {
+                                @:*****
+                            }
+                        </li>
+                        decimal teamCount = Users.GetAgentUserCount(WorkContext.PartUserInfo);
+                        <li class="user_info">分享会员：@(teamCount>0?teamCount.ToString():"*****")</li>
+                    }
+                    else
+                    {
+                        <li class="user_info">会员名：*****</li>
+                        <li class="user_info">代理级别：*****</li>
+                        <li class="user_info">分享会员：*****</li>
+                    }
+                    @* <li class="user_info">账户余额：*****</li>
+                    <li class="user_info">佣金：*****</li>
+                    <li class="user_info">分红池：*****</li>*@
+
+                </ul>
+
+
+            </div>
+            @*<div class="banner_mid_bottom">
+
+                <ul>
+                    <li class="agent_info">大区经销商：xxx</li>
+                    <li class="agent_info">VIP经销商：xxx</li>
+                    <li class="agent_info">星级经销商：xxx</li>
+                    <li class="agent_info">事业伙伴：xxx</li>
+
+                </ul>
+            </div>*@
+        </div>
+        <div class="banner_right gonggao">
+            <h2>最新新闻
+                <a href="@Url.Action("list", "news")" class="more">更多>></a>
+
+            </h2>
+            <ul class="textList">
+
+                <li><a href="#">汇购优选，诚意上线！</a></li>
+
+                <li><a href="#">汇购优选产品-安肌可。</a></li>
+
+                @*<li><a href="#">33333333333333</a></li>*@
+
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    @*<div class="banner_bottom">
+        会员相关
+    </div>*@
+
+</div>
+<!-- banner start -->
+<!-- banner start -->
+<div id="banner" class="banner">
+    <div class="slider">
+        @{
+            BannerInfo[] bannerList = Banners.GetHomeBannerList(0);
+        }
+        <ul class="bxslider">
+            @*@foreach (BannerInfo info in bannerList)
+            {
+                <li style="background: @info.ExtField1"><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"  alt=""/></a></li>
+            }*@
+            <li style="background: #fff"><a href="#" style="position:absolute;left:50%;margin-left:-500px">
+                <img src="/images/yx_banner1.jpg" alt="" /></a></li>
+        </ul>
+        @if (bannerList.Length > 1)
+        {
+            <script type="text/javascript">
+                $(function () {
+                    $('.bxslider').bxSlider({
+                        auto: true,
+                        mode: 'fade',
+                        //speed:5000,
+                        autoHover: true,
+                        pause: 5000,
+                        controls: false,
+                        autoControls: false,
+                    });
+                });
+            </script>
+        }
+    </div>
+</div>
+<!-- banner end -->
+
+<!-- banner end -->
+
+<div class="box1210">
+    <div>
+        @foreach (var item in Model.GroupProductList)
+        {
+            List<PartProductInfo> proList = Products.GetPartProductList(item.Products).Take(5).ToList();
+            <div class="floor">
+                <div class="floortitle">
+                    <h2>
+                        <img src="/upload/groupproductimage/@item.GroupLogo" alt="@item.GroupTitle" height="70"/>
+                    </h2>
+                    @*<p>/ @item.ExtField1 /</p>*@
+                    <span class="more"><a href="@Url.Action("index", "channel", new RouteValueDictionary { { "chId", item.ChannelId }, { "gid", item.Groupid }, { "cateId", 0 }, { "brandId", 0 }, { "filterPrice", 0 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 1 }, { "page", 1 } })">更多&gt;&gt;</a></span>
+                    <div class="clear"></div>
+                </div>
+                <div class="hot-goods-box">
+                    <div class="sgb-cont itemdiv" id="hot1">
+                        <ul class="gprolist">
+                            @foreach (var proitem in proList)
+                            {
+                                <li class="">
+                                    <a href="@(Url.Action("Product", "catalog", new { pid = proitem.Pid }))">
+                                        <img src="/upload/store/@proitem.StoreId/product/show/thumb230_230/@proitem.ShowImg" alt="" width="198" height="200" /></a>
+                                    <h4>@proitem.Name</h4>
+                                    <p class="index_mod_iconprice">¥@proitem.ShopPrice</p>
+                                </li>
+                            }
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="clear"></div>
+</div>
+
+@if (Model.ChId == 2)
+{
+    @Html.Partial("/views/publicpage/hgyxservice.cshtml")
+
+}

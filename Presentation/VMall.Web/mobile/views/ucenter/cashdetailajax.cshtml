@@ -1,0 +1,15 @@
+﻿@model VMall.Web.Mobile.Models.CashDetailModel
+@foreach (var item in Model.CashDetailList)
+{
+    <tr>
+        <td>@item.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+        <td>@item.InAmount.ToString("0.00")</td>
+        <td>@item.OutAmount.ToString("0.00")</td>
+        <td>@item.DetailDes</td>
+    </tr>
+}
+<script>
+    cashdetailhasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>
+
+

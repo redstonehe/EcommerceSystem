@@ -1,0 +1,277 @@
+.title_more {
+    text-decoration: none;
+    float: right;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    color: #D60008;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+    .title_more:hover {
+        color: blue;
+    }
+
+.floorCon .fc-list a img {
+    max-width: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.topsearch {
+    position: relative;
+}
+
+    .topsearch ul {
+        display: none;
+        width: 97%;
+        position: absolute;
+        top: 53px;
+        left: 9px;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+        /*width: 400px;*/
+        border: 1px solid #C0C0C0;
+        border-top: none;
+        z-index: 9999999;
+        background: #fff;
+    }
+
+        .topsearch ul li {
+            padding: 0px;
+            margin: 0px;
+        }
+
+            .topsearch ul li:hover {
+                background: #f1f1f1;
+            }
+
+            .topsearch ul li a {
+                padding: 0 10px;
+                text-decoration: none;
+                color: #333;
+                height: 24px;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 100%;
+                line-height: 24px;
+            }
+
+.floor .title {
+    width: 100%;
+}
+
+.floor {
+    margin-bottom: 20px;
+}
+
+    .floor .floortitle h2 {
+        float: left;
+        /*margin: 10px 0 0;*/
+        height: 30px;
+        line-height: 40px;
+    }
+
+        .floor .floortitle h2:before {
+            content: "";
+            display: block;
+            width: 3px;
+            height: 30px;
+            float: left;
+            background: #d8505c;
+            margin: 15px 0px 0 0;
+        }
+
+.floortitle {
+    border-bottom: 1px solid #ddd;
+    height: 50px;
+    position: relative;
+}
+
+.floor .floortitle p {
+    float: left;
+    height: 70px;
+    overflow: hidden;
+    margin: 10px 0 0 20px;
+    line-height: 78px;
+    color: #999;
+    font-size: 14px;
+}
+
+.floortitle .more {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    font-size: 18px;
+    color: #D02424;
+}
+
+    .floortitle .more a {
+        color: #D02424;
+    }
+
+img:hover {
+    opacity: .7;
+}
+
+.info2 a:hover {
+    background-color: #089E9C;
+}
+
+.gprolist li {
+    margin: 1%;
+    /*border: 1px solid #eee;*/
+    float: left;
+    width: 31%;
+    /*height: 13em;*/
+    margin-top: 2px;
+    cursor: pointer;
+    padding-bottom: 10px;
+    background: #fff;
+}
+
+    .gprolist li h4 {
+        font-weight: 400;
+        text-align: center;
+        color: #666;
+        padding: 5px;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .gprolist li .index_mod_iconprice {
+        color: #fe575f;
+        text-align: center;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 12px;
+    }
+
+.itemdiv {
+    background-color: #eee;
+    padding-top: 1%;
+}
+
+.headerBar {
+    background: #eee;
+}
+
+.search-textfile {
+    background: #fff;
+    display: inline-block;
+    width: 97%;
+    float: left;
+    margin: 0 1%;
+}
+
+.searchText {
+    background: #fff;
+}
+
+.cate-icon {
+    background: url(/mobile/images/cate-icons.png) 50% 50% no-repeat;
+    background-size: 95%;
+    width: 10%;
+    height: 42px;
+    line-height: 66px;
+    display: inline-block;
+    float: left;
+}
+
+    .cate-icon a {
+        width: 100%;
+        display: block;
+        height: 42px;
+    }
+
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.price {
+    color: #f23030;
+}
+
+.swiper-slide p {
+    font-size: 12px;
+    margin-top: 0;
+    line-height: 18px;
+    text-align: justify;
+    margin-bottom: 0;
+    padding: 5px 0 8px;
+    color: #151516;
+    white-space: normal;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    -webkit-line-clamp: 2;
+    -moz-line-clamp: 2;
+    line-clamp: 2;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.swiper-slide a {
+    text-decoration: none;
+}
+
+
+.info_item .info_title {
+    white-space: normal;
+    font-size: 0.25rem;
+    height: 0.75rem;
+    line-height: .375rem;
+    margin-top: 0.16rem;
+    word-break: break-all;
+    padding: 0 .2rem;
+    overflow: hidden;
+    position: relative;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.info_item .info_price {
+    color: #e4393c;
+    padding: 0 .15rem .1rem;
+    font-size: 0.28rem;
+    margin-right: 0.1rem;
+    font-weight: 700;
+}

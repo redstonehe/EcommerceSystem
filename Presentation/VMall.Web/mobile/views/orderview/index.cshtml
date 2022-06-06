@@ -1,0 +1,50 @@
+﻿@model VMall.Core.UserInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单查询";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link href="/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<div class="loginTable" style="padding:10px">
+    <form name="registerForm" action="@Url.Action("OrderViewList","OrderView")" method="post">
+        <div class="itmeC">
+           <input type="text" class="text oinfo" name="oinfo" placeholder="请输入收货手机号" value="" maxlength="11"/>
+        </div>
+        <div class="itmeC">
+            <input type="text" class="text viewCode" name="viewCode" placeholder="验证码" value="" style="width:40%" maxlength="5"/><img id="verifyImage" src="/agent/tool/verifyimage2" onclick="this.src='/agent/tool/verifyimage2?time=' + new Date()" style="width: 40%; margin: 0 10px 10px ;vertical-align: top; height: 60px;" />
+            <br />
+            <a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/agent/tool/verifyimage2?time=' + new Date()" class="" style="line-height: 60px;">换一张</a>
+        </div>
+        <div class="itmeC">
+           
+        </div>
+        <div class="itmeC"><a href="javascript:viewquery()" class="redBt" style="display: block; padding: 0; height: 38px; width: 99%; text-align: center; line-height: 38px;">查询</a></div>
+    </form>
+</div>
+
+<script>
+    function viewquery() {
+        var oinfo = $.trim($(".oinfo").val());
+        var viewCode = $.trim($(".viewCode").val());
+        if (oinfo == "") {
+            alert("请输入收货手机号码");
+            $(".oinfo").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test(oinfo)) {
+            alert('请输入正确的手机号码!!!');
+            $(".oinfo").focus();
+            return;
+        }
+        if (viewCode == "") {
+            alert("请输入验证码");
+            $(".viewCode").focus();
+            return;
+        }
+        $("form:first").submit();
+        return false;
+    }
+
+</script>

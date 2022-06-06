@@ -1,0 +1,20 @@
+﻿@model VMall.Web.Mobile.Models.FavoriteProductListModel
+@foreach (DataRow row in Model.ProductList.Rows)
+{
+    <tr>
+        <td>
+            <div class="favProList">
+                <img src="/upload/store/@(row["storeid"])/product/show/thumb300_300/@row["showimg"]" width="50" height="50"><a href="/product/@(row["pid"]).html">@row["name"]<br>
+                    <span class="red">@row["shopprice"]</span>
+                </a>
+
+                <div class="clear"></div>
+            </div>
+        </td>
+
+        <td><a href="javascript:delFavoriteProduct(@(row["pid"]));" class="am-btn am-btn-warning">删除</a></td>
+    </tr>
+}
+@*<script>
+    favNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>*@

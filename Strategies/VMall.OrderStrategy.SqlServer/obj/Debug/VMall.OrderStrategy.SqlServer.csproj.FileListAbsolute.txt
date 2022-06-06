@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.OrderStrategy.SqlServer.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.OrderStrategy.SqlServer.pdb
+C:\develop\德鹿商城\Strategies\VMall.OrderStrategy.SqlServer\obj\Debug\VMall.OrderStrategy.SqlServer.dll
+C:\develop\德鹿商城\Strategies\VMall.OrderStrategy.SqlServer\obj\Debug\VMall.OrderStrategy.SqlServer.pdb
+C:\develop\德鹿商城\Strategies\VMall.OrderStrategy.SqlServer\obj\Debug\VMall.OrderStrategy.SqlServer.csprojResolveAssemblyReference.cache

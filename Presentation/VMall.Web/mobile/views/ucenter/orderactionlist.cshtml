@@ -1,0 +1,92 @@
+﻿@model VMall.Web.Mobile.Models.OrderActionListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单跟踪";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+@*@{var osn = Model.OrderInfo.OSN.Trim();
+  var osnT = osn.Substring(0, osn.Length - 1) + "<i style='font-size: 22px;vertical-align: middle;padding-top: -6px;display: inline-block;height: 15px;font-weight: bolder;'>*</i>";}*@
+<div class="gz">
+    <div class="gzTitle">
+        <p>
+            订单编号：@Model.OrderInfo.OSN
+            @*@if ((int)Model.OrderInfo.OrderState < 90)
+            {                  
+                @osnT
+            }
+            else
+            {
+                @osn
+            }*@
+        </p>
+        <p>
+            @*状态：*@
+            @{
+                OrderState orderState = (OrderState)Model.OrderInfo.OrderState;
+            }
+            @*@switch (orderState)
+            {
+                case OrderState.WaitPaying:
+                @:等待付款
+            break;
+                case OrderState.Confirming:
+                @:待确认
+            break;
+                case OrderState.Confirmed:
+                @:已确认
+            break;
+                case OrderState.PreProducting:
+                @:备货中
+            break;
+                case OrderState.Sended:
+                @:已发货
+            break;
+                case OrderState.Completed:
+                @:已完成
+            break;
+                case OrderState.Cancelled:
+                @:取消
+            break;
+                case OrderState.Returned:
+                @:退货
+            break;
+                case OrderState.Locked:
+                @:锁定
+            break;
+                default:
+                @:未知状态
+            break;
+            }*@
+        </p>
+    </div>
+
+    <div class="gzCon">
+        <span class="gzSJ"></span>
+        <ul>
+            @foreach (OrderActionInfo info in Model.OrderActionList)
+            {
+                <li><span class="icon on"></span><span>
+                    @if (info.ActionType == 4)
+                    { 
+                        @:您的订单已经发货,发货方式为:@Model.OrderInfo.ShipCoName,物流单号：@Model.OrderInfo.ShipSN
+                     }
+                    else
+                    {
+                        @info.ActionDes
+                    }
+                    &nbsp;&nbsp;
+                    @if (info.ActionType == 2 || info.ActionType == 3 || info.ActionType == 4)
+                    { 
+                        @:系统
+                    }
+                    else
+                    { 
+                        @info.RealName
+                    }
+                </span><span>@info.ActionTime.ToString("g")</span></li>
+            }
+        </ul>
+    </div>
+</div>
+

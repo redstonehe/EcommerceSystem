@@ -1,0 +1,24 @@
+﻿@model VMall.Web.Models.NewsListModel
+@{
+    Layout = "~/views/shared/_layout_help.cshtml";
+    ViewBag.Title = "新闻列表-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 1;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 0;
+}
+
+<div class="box">
+<div id="news" class="box">
+<h1 class="newsListT">新闻中心</h1>
+<ul class="newsList">
+@{
+    foreach(DataRow row in Model.NewsList.Rows)
+    {
+        <li><a href="@Url.Action("details", new RouteValueDictionary { { "newsId", row["newsid"] } })">@row["title"]</a><span>@row["addtime"]</span></li>
+    }
+    }
+</ul>
+@Html.WebPager(Model.PageModel)
+</div>
+
+</div>
+

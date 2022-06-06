@@ -1,0 +1,195 @@
+﻿@model VMall.Web.Mobile.Models.SubRecommendListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "团队成员";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link rel="stylesheet" href="/mobile/static/dropload/dropload.css">
+<!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+@* <script src="/mobile/static/dropload/zepto.min.js"></script>*@
+<script src="/mobile/static/dropload/jquery.min.js"></script>
+
+<script src="/mobile/static/dropload/dropload.min.js"></script>
+<style>
+    .viewport {
+        /*width: 900px;
+        max-width: 1000px;*/
+        /* margin: 0 auto; */
+    }
+</style>
+
+<ul class="am-nav am-nav-tabs am-nav-justify ">
+    <li class="am-active"><a href="#">团队成员</a></li>
+    <li><a href="@Url.Action("accountinfo")">我的账户</a></li>
+    <li><a href="@Url.Action("rewarddraw", "ucenter", new { uid = WorkContext.Uid, accountId = (int)AccountType.商城奖金账户, accountName = AccountType.商城奖金账户 })">提现</a></li>
+</ul>
+
+<div class="myAssetsCon inner" style="margin: 10px 0;">
+    @if (Model.UserList.Count > 0)
+    {
+        <div class="am-scrollable-horizontal">
+            <table class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-compact">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>会员手机</th>
+                        <th>会员姓名</th>
+                        <th>会员等级</th>
+                        <th>加入时间</th>
+                    </tr>
+                </thead>
+                <tbody class="lists">
+                    @Html.Partial("/mobile/views/ucenter/subrecommendlistajax.cshtml", Model)
+                    
+                    @*@{int k = 1;}
+                    @foreach (var item in Model.UserList.OrderBy(x => x.Uid).ToList().FindAll(x => x.ParentLevel == 1))
+                    {
+                        string showName = string.IsNullOrEmpty(item.UserName) ? (string.IsNullOrEmpty(item.Email) ? (string.IsNullOrEmpty(item.Mobile) ? item.NickName : item.Mobile) : item.Email) : item.UserName;
+                        <tr>
+                            <td>@k</td>
+                            <td>@showName</td>
+                            <td>@item.RealName</td>
+                            <td>@Enum.GetName(typeof(AgentTypeEnum), item.AgentType)</td>
+                            <td>@item.RegisterTime.ToString("yyyy-MM-dd")</td>
+
+                        </tr>
+                        k++;
+                    }*@
+                </tbody>
+            </table>
+        </div>
+       
+    }
+    else
+    {
+        <div class="norecommend">
+            <p>
+                <h3>您暂时还没有相关成员信息。 </h3>
+            </p>
+        </div>
+    }
+
+</div>
+<script>
+    $(function () {
+
+        var page = 1;
+
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea: window,
+            autoLoad: false,
+            domUp: {
+                domClass: 'dropload-up',
+                domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate: '<div class="dropload-update">↑释放更新</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>'
+            },
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">————我已经到底啦————</div>'
+            },
+            loadUpFn: function (me) {
+
+                $.ajax({
+                    type: 'GET',//int uid, int accountId, string accountName
+                    url: '/mob/ucenter/subrecommendlist?page=' + page,
+                    //dataType: 'json',
+                    success: function (data) {
+                        //alert(data);
+                        var result = '';
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            //$('.lists').html(result);
+                            window.location.href = window.location.href;
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                            // 解锁loadDownFn里锁定的情况
+                            me.unlock();
+                            me.noData(false);
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            },
+            loadDownFn: function (me) {
+                page++;
+                $.ajax({
+                    type: 'GET',
+                    url: '/mob/ucenter/subrecommendlist?page=' + page,
+                    // dataType: 'json',
+                    success: function (data) {
+
+                        if (data.indexOf("<tr>") <= -1) {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            $('.lists').append(data);
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            }
+        });
+    });
+        </script>
+
+@*<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getSubUserList(@Model.Uid,'@Model.StartAddTime','@Model.EndAddTime',@Model.OrderState,subuserListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<script>
+    //获得订单列表
+    var subuserListNextPageNumber = 2;
+    var subhasUserNextPage = false;
+    function getSubUserList(uid, startAddTime, endAddTime, orderState, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/SubRecommendList?startAddTime=" + startAddTime + "&endAddTime=" + endAddTime + "&page=" + page, false, function (data) {
+            getUserListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getUserListResponse(data) {
+        $("#order_table").append(data);
+        if (subhasUserNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            subuserListNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>*@

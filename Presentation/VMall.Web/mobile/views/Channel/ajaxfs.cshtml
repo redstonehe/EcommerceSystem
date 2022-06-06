@@ -1,0 +1,121 @@
+﻿@model VMall.Web.Mobile.Models.FlashSaleModel
+@{
+    Layout = null;
+}
+<style>
+    .info2 a:hover {
+        background-color: #089E9C;
+    }
+
+    .fstitle {
+        /*margin: 10px 0;*/
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .actover {
+        color: #928f8f;
+    }
+
+    .actprev {
+        color: #1317dc;
+    }
+
+    .item-tips {
+        margin-left: 110px;
+        color: black;
+    }
+
+        .item-tips b {
+            margin: 10px 0;
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+        }
+</style>
+<script>
+    hasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        
+        var sh = setInterval(function () {
+            $(".item-tips").each(function (i) {
+                var endtime = new Date($(this).attr("data-time"));
+                var nowtime = new Date();
+                var leftsecond = parseInt((endtime.getTime() - nowtime.getTime()));
+                if (leftsecond < 0) {
+                    leftsecond = 0;
+                }
+                var d = Math.floor(leftsecond / 1000 / 3600 / 24);
+                var h = Math.floor((leftsecond / 1000 / 3600) % 24);
+                var m = Math.floor((leftsecond / 1000 / 60) % 60);
+                var s = Math.floor(leftsecond / 1000 % 60);
+                var ms = Math.floor(leftsecond / 100) % 10;
+                var tips = $(this).children();
+                tips.eq(0).html(d);
+                tips.eq(1).html(h);
+                tips.eq(2).html(m);
+                tips.eq(3).html(s);
+                //if (leftsecond <= 0) {
+                //    clearInterval(sh);
+                //}
+            });
+        }, 100);
+    });
+</script>
+@foreach (DataRow info in Model.ProductList.Rows)
+{
+    
+    <div class="proItme">
+        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info["pid"] } })">
+            <img src="/upload/store/@info["storeid"]/product/show/thumb350_350/@info["showimg"]" width="100" height="100" class="img" />
+            @if (TypeHelper.ObjectToInt(info["pid"]) == 3082 || TypeHelper.ObjectToInt(info["pid"]) == 3546 || TypeHelper.ObjectToInt(info["pid"]) == 3529 || TypeHelper.ObjectToInt(info["pid"]) == 3547 || TypeHelper.ObjectToInt(info["pid"]) == 2413 || TypeHelper.ObjectToInt(info["pid"]) == 2474)
+            {
+                <i class="miaosha_sr"></i>
+            }
+            else if (TypeHelper.ObjectToInt(info["pid"]) == 3370 || TypeHelper.ObjectToInt(info["pid"]) == 3353 || TypeHelper.ObjectToInt(info["pid"]) == 3078)
+            {
+                <i class="miaosha_tg"></i>
+            }
+            else
+            {
+                <i class="miaosha"></i>
+            }
+            <span class="proDt">
+                <strong class="proDD DD1">@info["pname"]</strong>
+                <b class="proDD DD3" style="margin: 0;">¥@info["discountvalue"]</b>
+                <del class="markprice f12" style="color: #9C9A9C; font-size: 14px; font-weight: bold;">商城价¥@info["shopprice"]</del>
+                @if ((TypeHelper.ObjectToDateTime(info["endtime1"]) < DateTime.Now))
+                {
+                    <p class="fstitle actover">已结束</p>
+                }
+                @if ((TypeHelper.ObjectToDateTime(info["starttime1"]) <= DateTime.Now) && (TypeHelper.ObjectToDateTime(info["endtime1"]) >= DateTime.Now))
+                {
+                    <p class="fstitle acting">
+                        正在进行中<br />
+                        距离活动结束还剩
+                    </p>
+                    <div class="item-tips" data-time="@(info["endtime1"])"><b class="day"></b>天<b class="hour"></b>时<b class="minutes"></b>分<b class="seconds"></b>秒   </div>
+                }
+                @if ((TypeHelper.ObjectToDateTime(info["starttime1"]) > DateTime.Now))
+                {
+                    <p class="fstitle actprev">
+                        即将开始<br />
+                        距离活动开始还剩
+                    </p>
+                    <div class="item-tips" data-time="@(info["starttime1"])"><b class="day"></b>天<b class="hour"></b>时<b class="minutes"></b>分<b class="seconds"></b>秒   </div>
+                }
+            </span>
+        </a>
+
+    </div>
+    
+}
+
+
+
+
+

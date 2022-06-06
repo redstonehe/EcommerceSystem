@@ -1,0 +1,202 @@
+﻿@model VMall.Web.Models.ProductReviewListModel
+@{
+    ViewBag.Title = Model.ProductInfo.Name + "-评价列表-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 1;
+}
+
+<link href="@{@WorkContext.CSSCDN}/css/content.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    pid = @Model.ProductInfo.Pid;
+</script>
+
+@{
+    List<CategoryInfo> categoryList = Categories.GetCategoryList();
+    CategoryInfo categoryInfo2 = new CategoryInfo();
+    if (Model.CategoryInfo.ParentId > 0)
+    {
+        categoryInfo2 = Categories.GetCategoryById(Model.CategoryInfo.ParentId, categoryList);
+    }
+
+    CategoryInfo categoryInfo1 = new CategoryInfo();
+    if (categoryInfo2.ParentId > 0)
+    {
+        categoryInfo1 = Categories.GetCategoryById(categoryInfo2.ParentId, categoryList);
+    }
+    else
+    {
+
+    }
+}
+
+<div class="breadcrumb box1210">
+    <strong><a href="#">@categoryInfo1.Name</a></strong>
+    <span>
+        @if (!string.IsNullOrEmpty(categoryInfo1.Name))
+        {
+            @Html.Raw("&nbsp; &gt; &nbsp;")
+        }
+
+        <a href="#">
+            @categoryInfo2.Name</a>
+        @if (!string.IsNullOrEmpty(categoryInfo2.Name))
+        {
+            @Html.Raw("&nbsp; &gt; &nbsp;")
+        }
+        <a href="@Url.Action("category", new RouteValueDictionary { { "cateId", Model.CategoryInfo.CateId } })">@Model.CategoryInfo.Name</a></span>
+</div>
+
+
+<div id="ConInfo" class="box1210">
+    <div id="infoL">
+        <div class="itme">
+            <h2>商品信息</h2>
+            <div class="proList proList3">
+                <ul>
+                    <li>
+                        <a href="@Url.Action("product", new RouteValueDictionary { { "pid", Model.ProductInfo.Pid } })">
+                            <img src="/upload/store/@Model.ProductInfo.StoreId/product/show/thumb190_190/@Model.ProductInfo.ShowImg" width="100%" />
+                            <em>@Model.ProductInfo.Name</em></a>
+                        <div class="i">
+                            <p>商城价:</p>
+                            <b>¥@Model.ProductInfo.ShopPrice</b></div>
+                        <div class="i">
+                            <p>商品评分:</p>
+                            <b>
+                                <div class="star">
+                                    <span class="star_yellow" style=" width:@Html.Raw((Model.ProductInfo.GetStarLevel() * 20).ToString())%;">&nbsp;</span>
+                                </div>
+                            </b>
+                        </div>
+                        <div class="i">
+                            <p>评价数:</p>
+                            <span>@Model.ProductInfo.ReviewCount 条</span></div>
+                        <div class="i"><a href="javascript:void(0)" onclick="addProductToCart(@Model.ProductInfo.Pid, 1)" class="redBT">加入购物车</a></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div id="infoR">
+        <div class="infoRCon" id="PJ">
+
+            <div class="PJinfo">
+                <h2>商品评价</h2>
+                @{
+                    int reviewLayer1 = 0;
+                    int reviewLayer2 = 0;
+                    int reviewLayer3 = 0;
+
+                    int goodStars = Model.ProductInfo.Star1 + Model.ProductInfo.Star2 + Model.ProductInfo.Star3;
+                    int allStars = goodStars + Model.ProductInfo.Star4 + Model.ProductInfo.Star5;
+
+                    if (allStars != 0)
+                    {
+                        reviewLayer1 = (int)Math.Floor((double)(goodStars / allStars * 100));
+                        reviewLayer2 = (int)Math.Floor((double)(Model.ProductInfo.Star4 / allStars * 100));
+                        reviewLayer3 = 100 - reviewLayer1 - reviewLayer2;
+                    }
+                }
+                <div class="rate">
+                    <strong>@reviewLayer1<span>%</span></strong>
+                    <br>
+                    <span>好评度</span>
+                </div>
+
+                <div class="percent">
+                    <dl>
+                        <dt>好评<span>(@reviewLayer1%)</span></dt>
+                        <dd>
+                            <div style="width: @reviewLayer1%;"></div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>中评<span>(@reviewLayer2%)</span></dt>
+                        <dd class="d1">
+                            <div style="width: @reviewLayer2%;"></div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>差评<span>(@reviewLayer3%)</span></dt>
+                        <dd class="d1">
+                            <div style="width: @reviewLayer3%;"></div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="btns">
+                    <div>您可对已购商品进行评价</div>
+                    <a href="@Url.Action("orderlist", "ucenter")" class="btn-comment" target="_blank">发表评论</a>
+                    <div></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <h2 class="infoRT infoBT2">
+                <ul>
+                    <li @if (Model.ReviewType == 0)
+                        {<text>class="hot"</text>}><a href="@Url.Action("productreviewlist", new RouteValueDictionary { { "pid", Model.ProductInfo.Pid }, { "reviewType", 0 } })">全部评价</a></li>
+                    <li @if (Model.ReviewType == 1)
+                        {<text>class="hot"</text>}><a href="@Url.Action("productreviewlist", new RouteValueDictionary { { "pid", Model.ProductInfo.Pid }, { "reviewType", 1 } })">好评</a></li>
+                    <li @if (Model.ReviewType == 2)
+                        {<text>class="hot"</text>}><a href="@Url.Action("productreviewlist", new RouteValueDictionary { { "pid", Model.ProductInfo.Pid }, { "reviewType", 2 } })">中评</a></li>
+                    <li @if (Model.ReviewType == 3)
+                        {<text>class="hot"</text>}><a href="@Url.Action("productreviewlist", new RouteValueDictionary { { "pid", Model.ProductInfo.Pid }, { "reviewType", 3 } })">差评</a></li>
+                    <div class="clear"></div>
+                </ul>
+            </h2>
+
+            @foreach (DataRow row in Model.ProductReviewList.Rows)
+            {
+                <div class="itme">
+                    <div class="user">
+                        @{
+                string avatar = row["avatar"].ToString();
+                if (string.IsNullOrWhiteSpace(avatar))
+                {
+                            <img src="/images/user-avatar.gif" width="50" height="50" /> 
+                }
+                else
+                {
+                            <img src="/upload/user/thumb50_50/@row["avatar"]" width="50" height="50" /> 
+                }
+                        }
+                        <div class="userName">@row["nickname"]</div>
+                        <div class="userLV">@*@row["title"]*@会员</div>
+                    </div>
+                    <div class="user_i">
+                        <div class="itmeSJ"></div>
+                        <div class="user_i_t">
+                            <div class="star"><span class="star_yellow" style=" width:@Html.Raw((TypeHelper.ObjectToInt(row["star"]) * 20).ToString())%;">&nbsp;</span></div>
+                            <i>@row["reviewtime"]</i></div>
+                        <dl>
+                            <dt>心得：</dt>
+                            <dd>@row["message"]</dd>
+                            <div class="clear"></div>
+                        </dl>
+                        <dl>
+                            <dt>购买时间：</dt>
+                            <dd>@row["buytime"]</dd>
+                            <div class="clear"></div>
+                        </dl>
+                        @*
+    <dl>
+  <dt>型号：</dt>
+  <dd>联通3G双卡版-630</dd>
+  <div class="clear"></div>
+    </dl>
+    *@
+                    </div>
+                </div>
+            }
+
+            @Html.WebPager(Model.PageModel)
+
+        </div>
+
+
+    </div>
+    <div class="clear"></div>
+</div>
+

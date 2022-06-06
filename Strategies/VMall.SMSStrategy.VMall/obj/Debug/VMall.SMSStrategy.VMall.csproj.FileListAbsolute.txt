@@ -1,0 +1,5 @@
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.SMSStrategy.VMall.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\bin\VMall.SMSStrategy.VMall.pdb
+C:\develop\德鹿商城\Strategies\VMall.SMSStrategy.VMall\obj\Debug\VMall.SMSStrategy.VMall.dll
+C:\develop\德鹿商城\Strategies\VMall.SMSStrategy.VMall\obj\Debug\VMall.SMSStrategy.VMall.pdb
+C:\develop\德鹿商城\Strategies\VMall.SMSStrategy.VMall\obj\Debug\VMall.SMSStrategy.VMall.csprojResolveAssemblyReference.cache

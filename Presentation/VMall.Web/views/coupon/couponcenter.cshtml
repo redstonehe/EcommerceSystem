@@ -1,0 +1,158 @@
+﻿@model List<VMall.Core.CouponTypeInfo>
+@{
+    ViewBag.Title = "领券中心-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;//产品页为3  其他用2
+    ViewBag.IsBox1210 = 1;
+}
+<style type="text/css">
+    h1 {
+        text-align: center;
+        margin: 50px;
+    font-size: 36px;
+    }
+
+    .cpcenter {
+        /*border: 1px solid #ddd;*/
+        width: 1000px;
+        height:800px;
+        margin: 0 auto;
+        text-align: center;
+        display: block;
+    }
+
+    .couponitem {
+        width: 450px;
+        border: 1px solid #ddd;
+        float: left;
+        height: 170px;
+        margin-bottom:28px;
+        margin-right:48px;
+    }
+
+    .q-type {
+        width: 270px;
+        float: left;
+        padding: 30px 0 20px 30px;
+        height: 120px;
+    }
+
+    .q-opbtns {
+        color:#fff;
+        width: 148px;
+        float: left;
+        height: 120px;
+        padding: 30px 0 20px;
+        background: #74d2d4;
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+        border-left:2px dotted #fff;
+        /*-webkit-border-radius: 0 5px 5px 0;
+        -moz-border-radius: 0 5px 5px 0;
+        border-radius: 0 5px 5px 0;*/
+    }
+        .q-opbtns a { color:#fff;font-size:24px;margin-top: 42px;
+    display: block;
+        }
+            .q-opbtns a span {
+                padding:5px;border:1px solid #ddd;
+            }
+    .q-price em {    color: #74d2d4;
+        float: left;
+        margin: 5px 0 0;
+        font-family: verdana;
+        font-size: 24px;
+    }
+
+    .q-price strong {    color: #74d2d4;
+        float: left;
+        line-height: 50px;
+        margin: 0 10px 0 5px;
+        font-size: 60px;
+        font-family: arial;
+        _display: inline;
+    }
+   .q-price .txt {
+    float: left;
+    line-height: 22px;
+}
+</style>
+<script>
+    function GetCoupon(ele) {
+        $(ele).html("正在领取...").removeAttr("onclick");
+        var couponTypeId = $(ele).attr("data-tid");
+        $.ajax({
+            type: "Get",
+            url: "/Coupon/GetCoupon?r=" + Math.random(),
+            data: { couponTypeId: couponTypeId },
+            success: function (result) {
+                var result = eval("(" + result + ")");
+                if (result.state == "success") {
+                    alert("领取成功");
+                    window.location.href = window.location.href;
+                }
+                else if (result.state == "login") {
+                    alert(result.content);
+                    window.location.href = "/account/login?returnUrl=" + window.location.href;
+                }
+                else  {
+                    alert(result.content);
+                }
+            }
+        });
+    }
+</script>
+
+<div class="box">
+    <div style="position:relative;">
+        <h1>领券中心
+        </h1>
+         <span style="position:absolute;right:50px;top:10px;color:red;"><a href="@Url.Action("couponlist","ucenter")" style="text-decoration:underline;color:red;"> 查看我的优惠券</a></span>
+    </div>
+</div>
+<div class="cpcenter">
+
+    @foreach (var item in Model)
+    { 
+        <div class="couponitem">
+            <div class="q-type">
+                <div class="q-price">
+                    <em>￥</em>
+                    <strong class="num">@item.Money</strong>
+                    <div class="txt">
+                        <div class="typ-txt">
+                           优惠券
+                        </div>
+                        <div class="limit">
+                    <span class="ftx-06">
+                        满@(item.OrderAmountLower)元可用
+                    </span>
+                </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                @*<div class="limit">
+                    <span class="quota">消费满100元可用</span>
+                    <span class="ftx-01"><i class="rank-icon"></i>会员专用</span>
+                </div>*@
+                <div class="q-range">
+                    @*<div class="range-item">
+                        <p title="全品类(特例商品除外)">全品类(特例商品除外)</p>
+                    </div>*@
+                    <div class="range-item">
+                        @{var storeName=Stores.GetStoreById(item.StoreId).Name;}
+                        @(storeName)可用
+                    </div>
+                    <div class="range-item">
+                @item.UseStartTime.ToString("yyyy.MM.dd")--@item.UseEndTime.ToString("yyyy.MM.dd")
+            </div>
+                </div>
+            </div>
+            <div class="q-opbtns">
+                <a href="javascript:void(0);" class="q-btn q-btn-02"  >
+                    <span class="txt" onclick="GetCoupon(this);" data-tid="@item.CouponTypeId">立即领取</span><b></b></a>
+            </div>
+        </div>
+    }
+    <div class="clean"></div>
+</div>

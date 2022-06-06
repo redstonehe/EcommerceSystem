@@ -1,0 +1,134 @@
+﻿@model VMall.Web.Mobile.Models.AgentStockDetailModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "库存操作详情";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/ac0count.js?dddd" type="text/javascript"></script>
+<style>
+    table tr {
+        height: 35px;
+        line-height: 35px;
+    }
+    table th { font-size:14px;
+    }
+    table td {
+        border: 1px solid #fff;
+       text-align:center;
+       font-size:12px;
+    }
+
+    table tr:nth-child(odd) {
+        background: #F1F1F5;
+    }
+    .viewport {
+        width: 900px;
+        max-width: 1000px;
+        /*margin: 0 auto;*/
+    }
+    .sendlist {
+        margin: 20px 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+<div class="myAssetsNav">
+    <a href="@Url.Action("myagent")" ><strong>我的代理</strong></a>
+    <a href="@Url.Action("getstock")" ><strong>库存查询</strong></a>
+    <a href="@Url.Action("incomewithdraw")"><strong>代理提现</strong></a>
+    <a href="@Url.Action("CommissionWithDraw")" ><strong>佣金提现</strong></a>
+</div>
+<div class="myAssetsCon">
+    <table width="100%" border="0" cellspacing="0" class="dingdan">
+        <tbody id="order_table">
+            <tr>
+                <th width="4%">序号</th>
+                <th width="12%">创建时间</th>
+                @* <th>产品</th>*@
+                <th width="8%">类型</th>
+                <th width="8%">金额</th>
+                <th width="10%">当前余额</th>
+               @* <th>订单编号 </th>*@
+                <th width="60%" align="left">详情描述</th>
+            </tr>
+             @{int k = 1;}
+                    @foreach (var info in Model.DetailList)
+                    {
+                        <tr>
+                            <td>@k</td>
+                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            @*<td>@info.Uid</td>*@
+                            <td> 
+                                @if (info.InAmount > 0) { 
+                                    @:收入
+                                }
+                                @if (info.OutAmount>0) {
+                                    @:支出
+                                }
+
+                            </td>
+                            <td>@if (info.InAmount > 0) { 
+                                    @("+"+info.InAmount.ToString("f2"))
+                                }
+                                @if (info.OutAmount>0) {
+                                    @("-"+info.OutAmount.ToString("f2"))
+                                }</td>
+                            <td>@info.CurrentBalance</td>
+                           @* <td>@info.OrderCode </td>*@
+                            <td align="left">@info.DetailDesc </td>
+                            
+                        </tr>
+                        k++;
+                    }
+        </tbody>
+    </table>
+
+</div>
+<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getstockDetailList(@Model.Pid,stockDetailNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>
+<script>
+    //获得订单列表
+    var stockDetailNextPageNumber = 2;
+    var detailhasNextPage = false;
+    function getstockDetailList(pid,page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/ucenter/GetStockDetail?pid=" + pid + "&page=" + page, false, function (data) {
+            getDetailListResponse(data);
+        })
+    }
+
+    //处理获得订单列表的反馈信息
+    function getDetailListResponse(data) {
+        $("#order_table").append(data);
+        if (detailhasNextPage) {
+            $("#loadBut").css("display", "block");
+            $("#loadPrompt").css("display", "none");
+            stockDetailNextPageNumber += 1;
+        }
+        else {
+            $("#loadBut").css("display", "none");
+            $("#loadPrompt").css("display", "none");
+            $("#lastPagePrompt").css("display", "block");
+        }
+    }
+</script>
+
+
+

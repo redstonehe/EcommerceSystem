@@ -1,0 +1,95 @@
+﻿@model VMall.Web.MallAdmin.Models.ChannelModel
+@section header{
+    <title>修改频道</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <link href="/admin_mall/content/css/uploadify.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+       
+    
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">商品管理 &gt;&gt; 修改频道
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                <tr>
+                    <td width="76px" align="right">名称：</td>
+                    <td>@Html.TextBoxFor(x => x.Name, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.Name)</td>
+                </tr>
+                <tr>
+                    <td align="right">排序：</td>
+                    <td>@Html.TextBoxFor(x => x.DisplayOrder, new { @class = "input", size = "3" })@Html.ValidationMessageFor(x => x.DisplayOrder)</td>
+                </tr>
+                <tr>
+                    <td align="right">状态：</td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.State, 1, new { @class = "checkbox" }) 启用</label>
+                            <label>@Html.RadioButtonFor(x => x.State, 0, new { @class = "checkbox" }) 停用</label>
+                            @Html.ValidationMessageFor(x => x.State)
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">描述：</td>
+                    <td>@Html.TextAreaFor(x => x.Description, new { cols = "40", rows = "6" })@Html.ValidationMessageFor(x => x.Description)</td>
+                </tr>
+                <tr>
+                    <td align="right">链接类型：</td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.LinkType, 0, new { @class = "checkbox" }) 无链接</label>
+                            <label>@Html.RadioButtonFor(x => x.LinkType, 1, new { @class = "checkbox" }) 频道默认链接</label>
+                            @*<label>@Html.RadioButtonFor(x => x.LinkType, 2, new { @class = "checkbox" }) 二级主页</label>*@
+                            <label>@Html.RadioButtonFor(x => x.LinkType, 3, new { @class = "checkbox" }) 其他外部链接</label>
+                            @*<label>@Html.RadioButtonFor(x => x.LinkType, 4, new { @class = "checkbox" }) 单独专区链接</label>*@
+                            @Html.ValidationMessageFor(x => x.LinkType)
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">链接地址：</td>
+                    <td>@Html.TextBoxFor(x => x.LinkUrl, new { @class = "input", size = "60" })@Html.ValidationMessageFor(x => x.LinkUrl)
+                         <span style="color:red;">*链接类型为“其他外部链接”时填写</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

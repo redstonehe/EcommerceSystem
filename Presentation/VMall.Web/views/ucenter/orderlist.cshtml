@@ -1,0 +1,388 @@
+﻿@model VMall.Web.Models.OrderListModel
+@using VMall.Core;
+@using VMall.Services;
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "我的订单-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "我的订单";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<script src="@{@WorkContext.ScriptCDN}/scripts/ucenter.order.js" type="text/javascript"></script>
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js" type="text/javascript"></script>
+<style>
+    .sep-row {
+        height: 20px;
+    }
+
+    table tbody:hover {
+        /*border:1px solid red;*/
+    }
+
+    .orderproname {
+        height: 24px;
+        vertical-align: middle;
+        line-height: 24px; /*padding:10px;*/
+        display: inline-block;
+        height: 48px;
+        width: 180px;
+    }
+
+    .dingdan a:hover {
+        color: red;
+    }
+
+    .td-orderActions a {
+        display: block;
+    }
+
+    .td-left {
+        border-right: none;
+    }
+
+    .td-middle {
+        border-right: none;
+        border-left: none;
+    }
+
+    .td-right {
+        border-left: none;
+    }
+</style>
+<script type="text/javascript">
+    function extentreceive(oid) {
+        if (confirm("延长收货期的期限为5天，确定要延长收货吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/UCenter/ExtendReceive",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+    function deleteOrder(oid) {
+        if (confirm("删除订单后将不能对订单进行操作，确定要删除订单吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/UCenter/DeleteOrder",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+    function changeReceive(oid) {
+        if (confirm("确定要确认换货收货吗？？")) {
+            $.ajax({
+                type: "GET",
+                url: "/UCenter/ChangReceive",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+
+    //捕手申请
+    function BSfundOrder(oid, cancelReason) {
+        if (confirm("确定要申请退款该订单吗？")) {
+            Ajax.post("/ucenter/BSApplyOrderRdFund", { 'oid': oid, 'cancelReason': cancelReason }, false, BSfundOrderResponse);
+        }
+    }
+    function BSfundOrderResponse(data) {
+        var result = eval("(" + data + ")");
+        if (result.state == "success") {
+            window.location.href = window.location.href;
+            alert("申请退款成功，请等待系统处理！");
+        }
+        else {
+            alert(result.content);
+        }
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        var orderstate='@Model.OrderState';
+        $(".s_" + orderstate).addClass('hot').siblings(".orderstate").removeClass('hot');
+    });
+</script>
+<div class="bigBox" id="member">
+    <div class="box">
+
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px;">
+            <h2 id="memberRT">@ViewBag.PositionTitle
+
+            </h2>
+            <div class="searchList">
+                <ul>
+
+                    <li class="orderstate hot"><a href="@Url.Action("orderlist")">全部订单</a></li>
+                    <li class="orderstate s_30"><a href="@Url.Action("orderlist", new {orderState=30 })">待付款</a></li>
+                    <li class="orderstate s_90"><a href="@Url.Action("orderlist", new {orderState=90 })">待发货</a></li>
+                    <li class="orderstate s_110"><a href="@Url.Action("orderlist", new {orderState=110 })">待收货</a></li>
+                    <li class="orderstate s_140"><a href="@Url.Action("orderlist", new {orderState=140 })">待评价</a></li>
+                </ul>
+                @*<input type="text" class="text" value="商品名称、商品编号、订单编号" /><a href="javascript:;" class="whiteBT">搜索</a>*@
+                <div class="clear"></div>
+            </div>
+            <script type="text/javascript">
+
+            </script>
+            <table width="100%" border="0" cellspacing="0" class="dingdan">
+                <thead>
+                    <tr>
+                        <th>订单商品</th>
+                        <th>单价*数量</th>
+                        @* <th>数量</th>*@
+                        <th>商品操作</th>
+                        <th>收货人</th>
+                        <th>支付金额</th>
+                        @*<th>时间</th>*@
+                        @* <th>支付方式</th>*@
+                        <th>订单状态</th>
+                        <th>订单操作</th>
+                    </tr>
+                </thead>
+
+                @foreach (DataRow row in Model.OrderList.Rows)
+                {
+                    OrderState orderState = new OrderState();
+                    string state = string.Empty;
+                    if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+                    {
+                        if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed)
+                        {
+                            state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString() + "-" + row["changetype"].ToString();
+                        }
+                        else if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+                        {
+                            state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString();
+                        }
+                    }
+                    else
+                    {
+                        state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"]));
+
+                    }
+                    orderState = (OrderState)TypeHelper.ObjectToInt(row["orderstate"]);
+                    <tbody>
+                        <tr class="sep-row">
+                            <td colspan="8" style="border: none;"></td>
+                        </tr>
+                        <tr class="dingdanTH">
+                            <td colspan="8">
+                                <a href="@Url.Action("index", "store", new RouteValueDictionary { { "storeId", TypeHelper.ObjectToInt(row["storeid"]) } })" class="storeTitle" style="color:#fff;">@row["storename"]</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                订单号: <a target="_blank" href="@Url.Action("orderinfo", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" class="osn">
+                                    <strong>@row["osn"]</strong>
+
+                                </a>
+                                <span style="margin-left: 20px;">下单时间：<strong>@Html.Raw(TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm:ss"))</strong></span>
+                            </td>
+                        </tr>
+                        @{int k = 1;
+
+                          var orderProductList = Orders.GetOrderProductList(TypeHelper.ObjectToInt(row["oid"]), Model.OrderProductList);}
+                        @foreach (OrderProductInfo info in orderProductList)
+                        {
+                            <tr>
+                                <td id="orderProductList" style="border-right: none">
+                                    <div class="proList">
+                                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">
+                                            <img src="/upload/store/@info.StoreId/product/show/thumb60_60/@info.ShowImg" width="50" height="50" />
+                                            <div class="orderproname">
+                                                @if(info.Type==3){
+                                                //var suitInfo=Promotions.getsu
+                                                <span style="color:red;">[套装]</span>
+                                                }
+                                                @info.Name</div>
+                                        </a>
+
+                                        <div class="clear"></div>
+                                    </div>
+                                </td>
+                                <td style="border-right: none; border-left: none;">@info.DiscountPrice
+                                    <br />
+                                    x @if (info.Type == 3)
+                                      {@info.RealCount}
+                                      else
+                                      {
+                        @info.BuyCount}
+                                </td>
+                                <td style="border-left: none" class="td-orderActions">
+                                    <a href="@Url.Action("product", "catalog", new { pid = info.Pid })">查看商品</a>
+
+                                </td>
+                                @if (k == 1)
+                                {
+                                    <td rowspan="@orderProductList.Count">@row["consignee"]</td>
+                                    <td rowspan="@orderProductList.Count">¥@row["surplusmoney"]<br />
+                                        （含运费:@row["shipfee"]）
+                                        <p style="border-top: 1px #E5E5E5 solid;">@row["payfriendname"]</p>
+                                    </td>
+
+                                    <td rowspan="@orderProductList.Count" id="orderState@{@row["oid"]}">
+                                        @switch (state)
+                                        {
+                                            case "WaitPaying":
+                                            @:等待付款
+            break;
+                                            case "Confirming":
+                                            @:待确认
+            break;
+                                            case "Confirmed":
+                                            @:已确认
+            break;
+                                            case "PreProducting":
+                                            @:备货中
+            break;
+                                            case "Sended":
+                                            @:已发货
+            break;
+                                            case "Completed-0-0":
+                                            @:已完成
+            break;
+                                            case "Completed-0-1":
+                                            @:<span style="color:red;">换货审核中</span>
+            break;
+                                            case "Completed-0-2":
+                                            @:<span style="color:red;">换货审核通过</span>
+            break;
+                                            case "Completed-0-3":
+                                            @:<span style="color:red;">换货等待发货</span>
+            break;
+                                            case "Completed-0-4":
+                                            @:<span style="color:red;">换货确认收货</span>
+            break;
+                                            case "Completed-0-5":
+                                            @:<span >换货完成</span>
+            break;
+                                            case "Completed-1-0":
+                                            @:<span style="color:red;">退货审核中</span>
+            break;
+                                            case "Settled":
+                                            @:已结算
+                                    break;
+                                            case "Cancelled":
+                                            @:取消
+            break;
+                                            case "Returned-2":
+                                            @:<span style="color:red;">退货审核通过</span>
+            break;
+                                            case "Returned-3":
+                                            @:<span style="color:red;">退款审核中</span>
+            break;
+                                            case "Returned-4":
+                                            @:退款成功
+            break;
+                                            case "Changed":
+                                            @:换货
+            break;
+                                            case "Locked":
+                                            @:锁定
+            break;
+                                            default:
+                                            @:未知状态
+            break;
+                                        }
+                                    </td>
+                                    <td rowspan="@orderProductList.Count" class="td-orderActions">
+                                        <a href="@Url.Action("orderinfo", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" id="orderInfo@{@row["oid"]}">查看 </a>
+                                        @if (orderState == OrderState.WaitPaying)
+                                        {
+                                            <a href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">付款</a>
+                                        }
+
+                                        @if (orderState == OrderState.Sended)
+                                        {
+                                            if (TypeHelper.ObjectToInt(row["isextendreceive"]) != 1)
+                                            {   
+                                            <a href="javascript:extentreceive(@row["oid"]);">延长收货</a>
+                                            }
+                                            <a href="javascript:confirmReceip(@row["oid"]);">确认收货</a>
+                                        }
+                                        @if (orderState == OrderState.Completed && StringHelper.StrContainsForNum(WebHelper.GetConfigSettings("HQBSRefundOid"), row["oid"].ToString()))
+                                        {
+                                            <a href="javascript:BSfundOrder(@row["oid"], 0)">申请退款</a>
+                                        }
+                                        @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["isreview"]) == 0)
+                                        {
+                                            <a href="@Url.Action("revieworder", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">评价</a>
+                                        }
+                                        @if (orderState == OrderState.WaitPaying || (orderState <= OrderState.Confirmed && TypeHelper.ObjectToInt(row["paymode"]) == 1))
+                                        {
+                                            <a href="javascript:cancelOrder(@row["oid"], 0)" id="cancelOrderBut@{@row["oid"]}">取消订单</a>
+                                        }
+                                        @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(7) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+                                        {
+                                            if (TypeHelper.ObjectToInt(row["suboid"])<=0)
+                                            {
+                                            <a href="@Url.Action("returnapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" >申请退货</a>
+                                            }
+                                        }
+                                        @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(15) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+                                        { 
+                                            <a href="@Url.Action("changeapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">申请换货</a>
+                                        }
+                                        @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 4)
+                                        { 
+                                            <a href="javascript:changeReceive(@row["oid"])">换货确认收货</a>
+                                        }
+                                        @if (orderState == OrderState.Cancelled)
+                                        { 
+                                            <a href="javascript:void(0);" onclick="deleteOrder(@row["oid"]);">删除</a>
+                                        }
+                                        <br />
+                                    </td>
+                                }
+                            </tr>
+                                k++;
+                        }
+                    </tbody>
+                }
+
+            </table>
+            @Html.WebPager(Model.PageModel).ShowSummary(false).ShowGoPage(false)
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+

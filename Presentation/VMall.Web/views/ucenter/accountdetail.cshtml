@@ -1,0 +1,80 @@
+﻿@model  VMall.Web.Models.AccountDetailModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = Model.AccountName+"详情-"+ WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle =  Model.AccountName + "详情";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; height: auto;">
+            <h2 id="memberRT">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+    
+    <div class="clear"></div>
+            </h2>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+                @*<thead>
+    <tr >
+      <th colspan="3">账户详情</th>
+    </tr>
+  </thead>*@
+                <tbody>
+                    <tr>
+                        <th>创建时间</th>
+                        <th width="50px">类型</th>
+                        <th width="50px">金额</th>
+                        <th width="100px">当前余额</th>
+                        <th>说明</th>
+                    </tr>
+                    
+                    @foreach (AccountDetailInfo info in Model.AccountDetailList)
+                    {
+                        <tr>
+                            <td>@info.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>
+                                @if (info.InAmount > 0) { 
+                                    @:收入
+                                }
+                                @if (info.OutAmount>0) {
+                                    @:支出
+                                }
+                            </td>
+                            <td> @if (info.InAmount > 0) { 
+                                    @("+"+info.InAmount.ToString("f2"))
+                                }
+                                @if (info.OutAmount>0) {
+                                    @("-"+info.OutAmount.ToString("f2"))
+                                }</td>
+                            <td>@info.CurBanlance.ToString("0.00")</td>
+                            <td>
+                                @info.DetailDes
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.WebPager(Model.PageModel).ShowSummary(false)
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

@@ -1,0 +1,51 @@
+﻿@model VMall.Web.MallAdmin.Models.MallRunInfoModel
+@section header{
+    <title>SEEDM1管理中心</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+     <link href="/admin_mall/content/themes/base/jquery-ui.css" rel="stylesheet" />
+    @*<script src="~/Scripts/jquery-1.8.3.min.js"></script>*@
+    <script src="/admin_mall/scripts/jquery-ui.js"></script>
+    <script src="/admin_mall/scripts/jquery.cleverTabs.js?20180514"></script>
+    <script src="/admin_mall/scripts/jquery.contextMenu.js"></script>
+     <script type="text/javascript">
+        var tabs;
+        $(function () {
+            var h = $(document).height() - 35;
+            $("#tabs").height(h); //关于这里我要说明一下，如果不设置高度的话，它默认并不是发100%占满屏幕的，所以我这里使用了计算的方式，初始化界面高度
+            tabs = $('#tabs').cleverTabs();
+            $(window).bind('resize', function () {
+                tabs.resizePanelContainer();
+            });
+
+            tabs.add({
+                url: '/malladmin/home/MallRunInfo',
+                label: '后台首页',
+                //开启Tab后是否锁定(不允许关闭，默认: false)
+                lock: true
+            });
+            var tab = tabs.getTabByUrl('/malladmin/home/MallRunInfo');
+            tab.setLock(true);
+            $('input[type="button"]').button();
+
+        });
+        function addTab(url, name) {
+            tabs.add({
+                url: url,
+                label: name
+            });
+        }
+
+     </script>
+   
+}
+
+@section body{
+     <div class="sidebar fleft"><div class="btn" id="divFolding"></div></div>
+    <div id="tabs" style="overflow-x:hidden; padding-top:0px; height:100%;">
+        <ul>
+        </ul>
+    </div>
+    
+   
+}

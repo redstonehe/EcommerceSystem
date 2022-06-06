@@ -1,0 +1,94 @@
+﻿@model VMall.Services.DSDetailInfo
+@section header{
+    <title>直销用户详情</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/region.js"></script>
+    <script type="text/javascript">
+
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 直销用户详情
+        
+        <div class="clear"></div>
+    </h1>
+
+
+
+    <div class="addTable">
+        <table width="100%">
+            <tr>
+                <td width="86px" align="right">会员编号：</td>
+                <td>@Model.UserCode</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">姓名：</td>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">昵称：</td>
+                <td>@Model.NickName</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">身份证号：</td>
+                <td>@Model.UserCard</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">手机号码：</td>
+                <td>@Model.UserPhone</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">级别：</td>
+                <td>
+                    @if (Model.Rank == 1)
+                    {
+                        @:铜卡会员
+                    }
+                    else if (Model.Rank == 2)
+                    {
+                        @:银卡会员
+                    }
+                    else if (Model.Rank == 3)
+                    {
+                        @:金卡会员
+                    }
+                    else if (Model.Rank == 4)
+                    {
+                        @:白金卡会员
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">推荐人编号。：</td>
+                <td>@Model.ParentCode</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">安置人编号：</td>
+                <td>@Model.ManagerCode</td>
+            </tr>
+            <tr>
+                <td width="86px" align="right">注册时间：</td>
+                <td>@Model.RegisterDate</td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td>
+                    <div class="rightH1" style="border-bottom:none;">
+                        <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                            <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+}

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = WorkContext.PayCreditName;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<div class="myAssetsNav">
+<a href="#" class="hot"><strong>@WorkContext.PayCreditName</strong></a>
+<a href="@Url.Action("couponlist")"><strong>优惠卷</strong></a>
+</div>
+
+
+<div class="myAssetsCon">
+<p class="jf"><strong>@WorkContext.PayCreditCount</strong>积分</p>
+</div>
+
+

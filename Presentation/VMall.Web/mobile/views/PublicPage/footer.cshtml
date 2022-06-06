@@ -1,0 +1,144 @@
+﻿
+<footer style="position: relative;">
+    <div class="footerTop">
+        @if (WorkContext.Uid < 1)
+        {
+            <div class="left"><a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", WorkContext.Url } })">登录</a> | <a href="@Url.Action("register", "account")">注册</a></div>
+        }
+        else
+        {
+            <div class="left"><a href="@Url.Action("index", "ucenter")">@WorkContext.NickName</a> | <a href="@Url.Action("logout", "account")">退出</a></div>   
+        }
+        <div class="right"><a href="#top">回到顶部 </a></div>
+        <div class="clear"></div>
+    </div>
+    @*<div class="footerCon"><a href="@Url.Action("index", "home")" class="hot"></a><a href="/">电脑版</a></div>*@
+    <div class="copyright" align="center">
+        <p>Copyright © 2016-2018 </p>
+
+        <p style="margin-top: 10px;">@WorkContext.MallConfig.SiteTitle @WorkContext.MallConfig.SiteUrl 版权所有</p>
+
+    </div>
+    <div id="returnTop" style="position: fixed; bottom: 20%; right: 20px; width: 35px; height: 35px; display: none;" onclick="$('body,html').animate({scrollTop:0},700);">
+        <img src="/images/returntop.png" alt="" width="50" height="50" />
+
+    </div>
+</footer>
+
+<div class="footbar" style="position: fixed; bottom: 0; left: 0; z-index: 99; width: 100%; height: 60px; background: #E7DFDE; display: table;">
+    <div class="barhome"><a href="/mob">首页</a></div>
+    <div class="barcateory"><a href="@Url.Action("list", "category")">分类</a></div>
+    <div class="barcart" style="position: relative;">
+        <a href="@Url.Action("index", "cart")">购物车</a>
+        @{var cartCount = Carts.GetCartProductCount(WorkContext.Uid, WorkContext.Sid);}
+        <span class="littlemescount">@cartCount</span>
+    </div>
+    <div class="baruser" style="position: relative;">
+        <a href="@Url.Action("index", "ucenter")">个人中心</a>
+        @*<span class="littlemescount">0</span>*@
+    </div>
+    <div class="barcode"><a href="@Url.Action("sharecode", "ucenter")">我的二维码</a></div>
+</div>
+<style>
+    .littlemescount {
+        position: absolute;
+        top: 0;
+        left: 55%;
+        border: 1px solid #f23715;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        border-radius: 50%;
+        background: #D02424;
+        color: #FFF;
+    }
+
+    .footbar a {
+        text-decoration: none;
+        color: #000;
+        font-size: 15px;
+    }
+
+        .footbar a:visited {
+            color: #000;
+        }
+
+    .footbar div {
+        width: 20%;
+        text-align: center;
+        display: table-cell;
+    }
+
+    .barhome:before {
+        margin: 0 auto;
+        background: url(/mobile/images/barhome.png) no-repeat;
+        background-size: 100%;
+        width: 25%;
+        height: 30px;
+        display: block;
+        margin-top: 10px;
+        content: "";
+    }
+
+    .barcateory:before {
+        margin: 0 auto;
+        background: url(/mobile/images/catelist.png) no-repeat;
+        background-size: 100%;
+        width: 25%;
+        height: 30px;
+        display: block;
+        margin-top: 10px;
+        content: "";
+    }
+
+    .barcart:before {
+        margin: 0 auto;
+        background: url(/mobile/images/barcart.png) no-repeat;
+        background-size: 100%;
+        width: 25%;
+        height: 30px;
+        display: block;
+        margin-top: 10px;
+        content: "";
+    }
+
+    .baruser:before {
+        margin: 0 auto;
+        background: url(/mobile/images/baruser.png) no-repeat;
+        background-size: 100%;
+        width: 25%;
+        height: 30px;
+        display: block;
+        margin-top: 10px;
+        content: "";
+    }
+
+    .barcode:before {
+        margin: 0 auto;
+        background: url(/mobile/images/barcode.png) no-repeat;
+        background-size: 100%;
+        width: 25%;
+        height: 30px;
+        margin-top: 10px;
+        display: block;
+        content: "";
+    }
+</style>
+
+
+<script>
+    window.onscroll = function () {
+        var scroll_top = document.documentElement.scrollTop || document.body.scrollTop;
+        if (parseInt(scroll_top) < 300) {
+            $("#returnTop").fadeOut(200);
+        }
+        else {
+            $("#returnTop").fadeIn(200);
+        }
+    }
+</script>
+
+
+
+
+

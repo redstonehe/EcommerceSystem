@@ -1,0 +1,137 @@
+﻿@model VMall.Web.MallAdmin.Models.StoreListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>店铺列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">店铺管理</a></li>
+            <li class="active">店铺列表</li>
+        </ol>
+
+        <div class="right">
+            <a href="@Url.Action("addstore")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("storelist", "store"))
+    {
+        <div class="dataListSearch" style="display: none;">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="35">
+                            <img id="searchImg" src="/admin_mall/content/images/search1.gif" /></td>
+                        <td>店铺等级：
+                        </td>
+                        <td width="110">
+                            @Html.DropDownListFor(x => x.StoreRid, ViewData["storeRankList"] as List<SelectListItem>)
+                        </td>
+                        <td>店铺行业：
+                        </td>
+                        <td width="110">
+                            @Html.DropDownListFor(x => x.StoreIid, ViewData["storeIndustryList"] as List<SelectListItem>)
+                        </td>
+                        <td>店铺状态：
+                        </td>
+                        <td width="90">
+                            @Html.DropDownListFor(x => x.State, ViewData["storeStateList"] as List<SelectListItem>)
+                        </td>
+                        <td>店铺名：
+                        </td>
+                        <td width="130">
+                            @Html.TextBox("StoreName", Model.StoreName, new { height = "18" })
+                        </td>
+                        <td>
+                            <input id="SearchStore" name="SearchStore" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>名称</th>
+                                        <th>平台归属</th>
+                                        @*<th>等级</th>*@
+                                        <th>创建时间</th>
+                                        @* <th>管理员</th>*@
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.StoreList.Rows)
+                                    {
+                                        <tr>
+
+                                            <td>@row["storeid"]</td>
+                                            <td>@row["name"]</td>
+                                            <td>自营商城 
+                                            </td>
+                                            @*<td>@row["title"]</td>*@
+                                            <td>@(TypeHelper.ObjectToDateTime(row["createtime"]).ToString("g"))</td>
+                                            @*<td>
+    @if (TypeHelper.ObjectToInt(row["admincount"]) > 0)
+    {
+        @:有
+    }
+    else
+    {
+        @:无
+    }
+    </td>*@
+                                            <td>
+                                                @*@Html.ActionLink("[编辑店铺优惠]", "editstorediscount", new { storeId = row["storeid"] }, new { @class = "editOperate" })*@
+                                                @Html.ActionLink("[店长信息]", "editstorekeeper", new { storeId = row["storeid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[店铺分类]", "storeclasslist", new { storeId = row["storeid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[配送模板]", "storeshiptemplatelist", new { storeId = row["storeid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[管理员设置]", "setstoreadminer", new { storeId = row["storeid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[编辑]", "editstore", new { storeId = row["storeid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[删除]", "delstore", new { storeId = row["storeid"] }, new { @class = "deleteOperate" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+        <div class="dataListEdit">
+            <div class="page">
+                @*    @Html.MallAdminPager(Model.PageModel)*@
+            </div>
+        </div>
+    }
+}

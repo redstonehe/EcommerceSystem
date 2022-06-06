@@ -1,0 +1,271 @@
+﻿@model VMall.Services.UserParentNet
+@section header{
+    <title>代理网络</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+    <link href="/admin_mall/content/css/master.css" rel="stylesheet" type="text/css" />
+    <script src="/admin_mall/content/js/jquery.blockui.js" type="text/javascript"></script>
+     <script src="/admin_mall/content/js/jquery.treetableagent.js?201711_1" type="text/javascript" charset=""></script>
+    <style>
+        a.editOperate {display: inline-block;
+    color: #fff;
+    background-color: #428bca;
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    /* text-shadow: 0 1px 1px rgba(255,255,255,0.75); */
+    vertical-align: middle;
+    cursor: pointer;
+        }
+        a.editOperate:hover {
+                background-color: #006dcc;
+                color: #fff;
+            }
+    </style>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var treetable = $(".example").treeTable({
+                //expandable: false //false为全部展开
+                treeColumn: 0,
+                clickableNodeNames: false
+            });
+            // Drag & Drop Example Code，如果不需移动效果下面可以删除
+            //$("#dnd-example .file, #dnd-example .folder").draggable({
+            //    helper: "clone",
+            //    opacity: .75,
+            //    refreshPositions: true, // Performance?
+            //    revert: "invalid",      //没有到drop范围内，会恢复到原位置，在drop范围则不会.  设置为ture也有回复效果，但在drop范围也会有回复效果。
+            //    revertDuration: 300,
+            //    scroll: true,
+            //    start: function (e, ui) { },      //开始拖动执行的函数  
+            //    drag: function (e, ui) { },       //拖动时执行的函数
+            //    stop: function (e, ui) { }
+            //});
+
+            //// Drag & Drop Example Code，如果不需移动效果下面可以删除
+            //$("#dnd-example .folder").each(function () {
+            //    $($(this).parents("tr")[0]).droppable({ //当节点落下时候触发事件
+            //        accept: ".file, .folder",             //允许接收drop的元素class名称,如<td><span class="file">bullet_toggle_minus.png</span></td>
+            //        drop: function (e, ui) {               //落下后执行--将被移动节点加到移动到的节点上
+            //            //alert($(ui.draggable).parents("tr")[0].id)被移动的节点ID this.id=为要移动到的节点
+            //            $($(ui.draggable).parents("tr")[0]).appendBranchTo(this); //附加节点操作
+            //        },
+            //        hoverClass: "accept",
+            //        over: function (e, ui) {               //drop:之后执行
+            //            if (this.id != $(ui.draggable.parents("tr")[0]).id && !$(this).is(".expanded")) {
+            //                $(this).expand();                 //移动后展开被移动的节点
+            //            }
+            //        }
+            //    });
+            //});
+
+            //移动节点时候的行变色效果
+            $("table#dnd-example tbody tr").mousedown(function () {
+                $("tr.selected").removeClass("selected"); // Deselect currently selected rows
+                $(this).addClass("selected");
+            });
+
+            $("table#dnd-example tbody tr span").mousedown(function () {
+                $($(this).parents("tr")[0]).trigger("mousedown");
+            });
+
+            //鼠标过行的变色效果
+            $("table#dnd-example tbody tr").mouseover(function () {
+                $(this).addClass("over");
+            });
+
+            $("table#dnd-example tbody tr").mouseout(function () {
+                $(this).removeClass("over");
+            });
+
+        });
+
+        //para1:传入后台按钮类型，根据按钮类型来执行特定的方法
+        //para2:真实业务的主键，可以做其他一系列的操作，例如删除需要主键，上下移动需要根据主键得到上移或下移目标节点的ID
+        //      然后将本节点和上(下)移目标节点在后台DB中调换(当然至少需要db中有一个排序栏位)，然后将本节点和目标节点丢回来
+        //      在通过js进行画面的调换动作
+        function ajaxCallMessage(btnType, wdId) {
+            var blockCss = { border: 'none', padding: '15px', backgroundColor: '#000', '-webkit-border-radius': '10px', '-moz-border-radius': '10px', opacity: .5, color: '#fff' };
+            $.ajax({
+                url: 'async_json_data.json?id=' + wdId + '&btnType=' + btnType, //调用后台方法并返回结果，目前测试基本没有用到
+                type: 'POST',
+                dataType: 'json', //xml、script、html、json
+                timeout: 1000,
+                beforeSend: function (XMLHttpRequest) {
+                    $.blockUI({ message: '请稍等...', css: blockCss }); //遮罩效果
+                },
+                complete: function (XMLHttpRequest, textStatus) {
+                    $.unblockUI();                                     //移除遮罩效果
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("textStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                },
+                success: function (json, textStatus) {
+                    if (json.IS_SUCCESS == "True") {
+                        /*if(json.BTN_TYPE=="UP"){
+                        up("#node-11","#node-1");
+                        }else if(json.BTN_TYPE=="DOWN"){
+                        down("#node-1","#node-11");
+                        }*/
+                        if (btnType == "UP") {
+                            up("#node-11", "#node-1");   //参数1和2均应该是通过ajax带回，目前写死
+                        } else if (btnType == "DOWN") {
+                            down("#node-1", "#node-11"); //参数1和2均应该是通过ajax带回，目前写死
+                        } else if (btnType == "DEL") {
+                            remove("node-11");          //参数1是通过ajax带回，目前写死
+                        }
+                    } else {
+                        alert('error');
+                    }
+                }
+
+            });
+        }
+
+  </script>
+ <script type="text/javascript">
+
+     function remove(currentRow) {
+         $("#" + currentRow).remove();
+         removeChild(currentRow);
+         //$($(ui.draggable).parents("tr")[0]).appendBranchTo(this);//附加节点操作
+         //$(tr).appendBranchTo($(tr2));//附加节点操作
+         //alert("child-of-"+($(tis).parents("tr")[0].id))
+         ///////////////////////////////////////////////////////////////////
+     }
+
+     function btnClick(btnType, keyid) {
+         ajaxCallMessage(btnType, keyid);
+     }
+
+     //下移(通过ajax返回当前行和需要互换的行ID)
+     function down(currentRow, hasBeenOptRow) {
+
+         current_tr = $(currentRow)[0];   //当前操作行
+
+         var actiontr = $(hasBeenOptRow);   //将要互换的行
+
+         $(current_tr).after(actiontr);  //将操作行放在互换行的前方
+
+         findAndSetAfterChild(current_tr.id); //进行子节点的互换操作
+
+         current_tr = actiontr[0];           //当前操作行
+
+         findAndSetAfterChild(current_tr.id);
+     }
+
+     //上移(通过ajax返回当前行和需要互换的行ID)
+     function up(currentRow, hasBeenOptRow) {
+
+         current_tr = $(currentRow)[0]; //当前操作行
+
+         var actiontr = $(hasBeenOptRow);   //将要互换的行
+
+         $(current_tr).after(actiontr); //将操作行放在互换行的前方
+
+         findAndSetAfterChild(current_tr.id); //进行子节点的互换操作
+
+         current_tr = actiontr[0];     //当前操作行
+
+         findAndSetAfterChild(current_tr.id);
+     }
+
+     var current_tr; //当前操作行
+
+     //根据tr id 找到class为".child-of-"+trid的子节点ID
+     function findAndSetAfterChild(trid) {
+
+         ($("tr").filter(".child-of-" + trid)).each(function (index, item) {
+
+             $(current_tr).after($(item)[0]);
+
+             current_tr = $(item)[0];
+
+             findAndSetAfterChild(item.id)
+
+         });
+     }
+
+     //移除父节点下所有的子节点
+     function removeChild(trid) {
+         ($("tr").filter(".child-of-" + trid)).each(function (index, item) {
+             var id = item.id;
+             $(item).remove();
+             removeChild(item.id)
+         });
+     }
+
+</script>
+
+    <script>
+        function showtree(ele) {
+            $(ele).find("td").eq(0).find("span").eq(0).click();
+            //$(".expander").click();
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 代理网络
+        <div class="right">
+             <a href="@Url.Action("AgentNetChart", new { uid= Model.Uid})" class="menuBT">
+                <img src="/admin_mall/content/images/edit.jpg" />图形网络</a>
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回用户列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("accountlist", "user"))
+    {
+        <div class="dataList">
+            <table width="100%" class="example" id="dnd-example">
+                <thead>
+                    <tr>
+
+                        <th width="140" align="left">用户编号</th>
+                        <th width="140" align="left">用户手机</th>
+                        <th width="140" align="left">用户昵称</th>
+                        <th width="140" align="left">姓名</th>
+                        <th width="180" align="left">会员级别</th>
+                        <th width="180" align="left">代理等级</th>
+                        <th width="180" align="left">代理来源</th>
+                        <th width="80" align="left">激活时间</th>
+                       @* <th width="76" align="left">推荐网络总数</th>*@
+                        <th width="150" align="left">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="node-@Model.Uid" class="@((Model.ChildrenCount==null||Model.ChildrenCount==0)?"":"parent" )" ondblclick="showtree(this)">
+                        <td><span  class="@((Model.ChildrenCount==null||Model.ChildrenCount==0)?"file":"folder")">@Model.UserName</span></td>
+                        <td>@Model.UserMobile</td>
+                        <td>@Model.NickName</td>
+                        <td>@Model.RealName</td>
+                        <td>@Model.UserRank</td>
+                        <td>@Model.AgentRank</td>
+                        <td>@Model.AgentSource</td>
+                        <td>@Model.RegisterTime</td>
+                       @* <td>@Model.ChildrenCount</td>*@
+                        @{int puid = Users.GetAgentidByPidAndPtype(Model.AgentPid, Model.AgentPType);}
+                        <td>
+                            @if(puid==0){
+                            
+                            }else{
+                                @Html.ActionLink("查看上级", "AgentNet", new { uid = puid }, new { @class = "editOperate" }) 
+                                                                                                                  
+                            }
+                            @Html.ActionLink("查看详情", "List", new {userName=Model.UserName,   mobile=Model.UserMobile }, new { @class = "editOperate" }) 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    }
+}

@@ -1,0 +1,89 @@
+﻿@model VMall.Web.Models.SubmitApplyModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "升级成功-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+@*<script type="text/javascript">
+        returnUrl = "@Model.ReturnUrl";
+        shadowName = "@Model.ShadowName";
+    </script>*@
+@*<script type="text/javascript">
+            window.onload = function(){   
+            var time = 5; //设置时间为几秒   
+            var timer = document.getElementById('timer'); //获取ID为timer的对象   
+            timer.innerHTML = time; //初始化显示秒数   
+            time = time - 1;   
+            var g = window.setInterval(function(){   
+            if(time<0){   
+                window.clearTimeout(g); //清除动画   
+                window.location.href = '/'; //跳转到指定地址   
+                //window.history.back(-1); //后退   
+            } else {   
+                showTime();   
+            }   
+            },1000);   
+            //显示函数   
+            function showTime(){   
+                timer.innerHTML = time;   
+                time--;   
+            }      
+            };
+        </script>*@
+<div class="result box">
+    <div style="text-align: center; margin-bottom: 20px;">
+
+        @if (Model.State)
+        {
+            <h2>恭喜您，您已经成功申请，请等待系统审核。 </h2>
+        }
+        else
+        {
+            <h2>@Model.Message </h2>
+        }
+
+    </div>
+    <div style="text-align: center; font-size: 16px;">
+    </div>
+    <div class="return" style="margin-top: 30px;">
+        <a href="/" style="font-size: 18px; color: orange;">返回首页</a>
+    </div>
+</div>
+<style>
+    .result {
+        background: #FFF;
+        width: 900px;
+        height: 150px;
+        padding: 30px 0;
+        border: 1px solid #DDD;
+        font-family: arial,"宋体";
+    }
+
+    .box div {
+        text-align: center;
+    }
+
+        .box div p {
+            width: 200px;
+            margin: 20px auto;
+        }
+
+            .box div p span {
+                color: red;
+            }
+
+    .return {
+        height: 40px;
+    }
+
+        .return a:hover {
+            color: #D02424;
+        }
+</style>
+
+
+
+

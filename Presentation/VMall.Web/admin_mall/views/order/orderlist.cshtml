@@ -1,0 +1,509 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>订单列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js?v=201610"></script>
+    <link rel="stylesheet" type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" />
+    @*<link rel="stylesheet" href="/admin_mall/content/css/bootstrap.css" />*@
+    <link rel="stylesheet" href="/admin_mall/content/css/multiple-select.css" />
+    @*<script src="/admin_mall/scripts/jquery.min.js"></script>*@
+    <script src="/admin_mall/scripts/multiple-select.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js?ddd"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/date.js"></script>
+    <link href="/admin_mall/content/css/uploadify.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        //防止chrome缓存jquery.uploadify.js文件，而引起chrome崩溃
+        document.write("<script type='text/javascript' "
+            + "src='/admin_mall/scripts/jquery.uploadify.js?" + new Date()
+            + "'></s" + "cript>");
+    </script>
+    <script>
+        $(function () {
+            $("#uploadify").uploadify({
+                'formData': { 'uid': '@WorkContext.Uid', 'password': '@WorkContext.EncryptPwd' },
+                'swf': '/admin_mall/content/flashes/uploadify.swf',
+                'uploader': '/malladmin/order/excelImport',
+                'buttonText': '导入文件',
+                'height': 24,
+                'width': 80,
+                //'fileTypeDesc': 'All Files',
+                // 'fileTypeExts': '*.xls,*.xlsx',
+                'fileSizeLimit': '5000000',
+                'auto': true,
+                'multi': false,
+                'removeTimeout': 2,
+                'onUploadSuccess': function (file, data, response) {
+                    if (data == "-1")
+                        $.jBox.alert('上传文件不能为空', '提示');
+                    else if (data == "-2")
+                        $.jBox.alert('上传文件的类型不允许，仅支持xls,xlsx后缀类型', '提示');
+                    else if (data == "-3")
+                        $.jBox.alert('上传文件超过系统允许的最大大小，最大不超过5M', '提示');
+                    else {
+                        $.jBox.success(data, '提示', {
+                            closed: function () {
+                                window.location.href = window.location.href;
+                            }
+                        });
+
+                    }
+                }
+            });
+        });
+    </script>
+    <style>
+        .dataListSearch table td {
+            width: 100px;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dataListSearch table tr {
+            border-left: 1px solid #ddd;
+            /*border-bottom:1px solid #ddd;*/
+            margin: 10px;
+        }
+
+        .over-x {
+            overflow-x: hidden;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            if ($("#IsOutPut")) {
+                $("#IsOutPut").val("0");
+            }
+        });
+
+        function output() {
+            $("#IsOutPut").val("1");
+            $("form").submit();
+        }
+        function search() {
+            $("#IsOutPut").val("0");
+            $("form").submit();
+        }
+        $(function () {
+            $('#ms').change(function () {
+                console.log($(this).val());
+            }).multipleSelect({
+                width: '100%',
+                placeholder: '选择订单状态',
+                selectAllText: '全部',
+                allSelected: '全部',
+                selectAll: true,
+                minimumCountSelected: 12,
+                onCheckAll: function () {
+                    $("#OrderState").val($("#ms").multipleSelect("getSelects"));
+                },
+                onUncheckAll: function () {
+                    $("#OrderState").val("0");
+                },
+                onClick: function (view) {
+                    $("#OrderState").val($("#ms").multipleSelect("getSelects"));
+                    //var eventResult = $("#eventResult").text();
+                    //eventResult += view.value;
+                    //$("#eventResult").text(view.label + '(' + view.value + ') ');
+                    //$("#eventResult").text(view.label + '(' + view.value + ') ' +
+                    // (view.checked ? 'checked' : 'unchecked'));
+                }
+            });
+        });
+
+        function show(code) {
+            var url = "/malladmin/user/list?userName=" + code;
+            // 用iframe显示http://www.baidu.com的内容，并设置了标题、宽与高、按钮
+            $.jBox("iframe:" + url, {
+                title: "详情",
+                width: 1500,
+                height: 600,
+                buttons: { '关闭': true }
+            });
+
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">订单管理</a></li>
+            <li class="active">订单列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("orderlist", "order", FormMethod.Post, new { @class = "over-x" }))
+    { 
+        <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+        <input type="hidden" value="@Model.SortColumn" id="sortColumn" name="sortColumn" />
+        <input type="hidden" value="@Model.SortDirection" id="sortDirection" name="sortDirection" />@*
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="40">商品店铺：</td>
+                        <td width="100">
+                            <div class="selectBt">
+                                <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)"  style="height:22px; line-height:22px;background:url(/admin_mall/content/images/selectbgico.gif) no-repeat 6px center; padding-left:22px; padding-right:10px;"/>
+                                <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                            </div>
+                        </td>
+                        <td width="50">订单编号：</td>
+                        <td width="180">@Html.TextBox("OSN", Model.OSN, new { height = "18", size = "30" })</td>
+                        <td width="50">&nbsp;&nbsp;&nbsp;开始时间：</td>
+                        <td width="90">@Html.TextBox("StartDate", Model.StartDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+                        <td width="50">&nbsp;&nbsp;&nbsp;结束时间：</td>
+                        <td width="90">@Html.TextBox("EndDate", Model.EndDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+                        <td width="70">&nbsp;支付开始时间：</td>
+                        <td width="90">@Html.TextBox("PayStartDate", Model.PayStartDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+                        <td width="70">&nbsp;支付结束时间：</td>
+                        <td width="90">@Html.TextBox("PayEndDate", Model.PayEndDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })</td>
+                        <td rowspan="3" style="width: 200px; border-left: 1px solid #ddd;">
+                            <input id="SearchOrder" name="SearchOrder" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" onclick="search();" />
+                            <input id="ExportOrder" name="ExportOrder" type="button" style="width: 63px; height: 24px;" class="searchBut submit" value="导出订单" onclick="output();" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>商品编号：</td>
+                        <td width="80">@Html.TextBox("Pid", Model.Pid, new { height = "28", size = "10" })</td>
+                        <td>商品名称：</td>
+                        <td width="180">@Html.TextBox("ProductName", Model.ProductName, new { height = "28", size = "30" })</td>
+                        <td>下单会员：</td>
+                        <td width="90">@Html.TextBox("AccountName", Model.AccountName, new { height = "18" })</td>
+                        <td width="50">收货人：</td>
+                        <td width="120">@Html.TextBox("Consignee", Model.Consignee, new { height = "18" })</td>
+                        <td width="50">&nbsp;&nbsp;&nbsp;收货人手机：</td>
+                        <td width="120">@Html.TextBox("ConsigneeMobile", Model.ConsigneeMobile, new { height = "18" })</td>
+                        <td width="50">&nbsp;&nbsp;&nbsp;订单状态：</td>
+                        <td width="100">
+                           
+                            <input type="hidden" class="OrderState" id="OrderState" name="OrderState" value="@Model.OrderState" />
+                            <select id="ms" multiple="multiple">
+                                @foreach (var item in ViewData["orderStateList"] as List<SelectListItem>)
+                                {
+                                    <option value="@item.Value" @(StringHelper.ArrayContainsForNum(item.Value, Model.OrderState) ? "selected='selected'" : "")>@item.Text</option> 
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="55">支付方式：</td>
+                        <td width="100">@Html.DropDownListFor(x => x.PayName, ViewData["PayList"] as List<SelectListItem>, new { width = "90" })</td>
+                        <td width="55">是否咖啡选货：</td>
+                        <td width="100">@Html.DropDownListFor(x => x.IsKFXH, ViewData["KFXFList"] as List<SelectListItem>, new { width = "90" })</td>
+                        @if (WorkContext.MallAGid == 2 || WorkContext.MallAGid == 5)
+                        { 
+                            <td width="55">导入快递单号：</td>
+                            <td width="15">
+                                <input type="file" name="uploadify" id="uploadify" style="margin: 10px; padding: 10px;" />
+                            </td>
+                            <td colspan="8"><a href="#" target="_blank" style="text-decoration: underline; color: #359fc0;">导入模板</a>
+                                <a href="/admin_mall/content/doc/导入快递单号模板.xls" class="download" style="color: #359fc0; margin-left: 20px;">下载</a>
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>*@
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>商品店铺：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                    <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>订单编号：</label>
+                                @Html.TextBox("OSN", Model.OSN, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <label>开始时间：</label>
+                                @Html.TextBox("StartDate", Model.StartDate, new { @class = "form-control", onclick = "HS_setDate(this);" })
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <label>结束时间：</label>
+                                @Html.TextBox("EndDate", Model.EndDate, new { @class = "form-control", onclick = "HS_setDate(this);" })
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <label>支付开始时间：</label>
+                                @Html.TextBox("PayStartDate", Model.PayStartDate, new { @class = "form-control", onclick = "HS_setDate(this);" })
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <label>支付结束时间：</label>
+                                @Html.TextBox("PayEndDate", Model.PayEndDate, new { @class = "form-control", onclick = "HS_setDate(this);" })
+                            </div>
+                            <div class="form-group">
+                                <label>支付方式：</label>
+                                @Html.DropDownListFor(x => x.PayName, ViewData["PayList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div style="height:8px;"></div>
+                        <div class="form-inline">
+
+                            <div class="form-group">
+                                <label>订单状态：</label>
+                                <input type="hidden" class="OrderState" id="OrderState" name="OrderState" value="@Model.OrderState" />
+                                <div style="display: inline-block; width: 90px;">
+                                    <select id="ms" multiple="multiple" class="">
+                                        @foreach (var item in ViewData["orderStateList"] as List<SelectListItem>)
+                                        {
+                                            <option value="@item.Value" @(StringHelper.ArrayContainsForNum(item.Value, Model.OrderState) ? "selected='selected'" : "")>@item.Text</option> 
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>商品编号：</label>
+                                @Html.TextBox("Pid", Model.Pid, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>商品名称：</label>
+                                @Html.TextBox("ProductName", Model.ProductName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>下单会员：</label>
+                                @Html.TextBox("AccountName", Model.AccountName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>收货人：</label>
+                                @Html.TextBox("Consignee", Model.Consignee, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>收货人手机：</label>
+                                @Html.TextBox("ConsigneeMobile", Model.ConsigneeMobile, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" id="SearchOrder" name="SearchOrder" class="btn btn-default  searchBut submit" onclick="search();"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                       @* <th>平台来源</th>*@
+                                        <th>ID序号</th>
+                                        <th>订单编号</th>
+                                        <th>店铺</th>
+                                        <th>下单会员</th>
+                                        @*<th>订单实际会员</th>*@
+                                        <th>会员等级</th>
+                                        <th>下单时间</th>
+                                        <th name="sortTitle" column="orderamount" direction="ASC">订单金额</th>
+                                        <th name="sortTitle" column="surplusmoney" direction="ASC">应付金额</th>
+                                       <th>订单@(MallKey.MallCoin)</th>
+                                        @* <th>订单PV</th>*@
+                                        <th>支付方式</th>
+                                        <th>订单状态</th>
+                                        <th>备注</th>
+                                        @*<th>身份证</th>*@
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.OrderList.Rows)
+                                    {
+                                        string state = string.Empty;
+                                        if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+                                        {
+                                            if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed)
+                                            {
+                                                state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString() + "-" + row["changetype"].ToString();
+                                            }
+                                            else if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+                                            {
+                                                state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"]));
+                                        }
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@row["oid"]" selectItem="true" name="oid" /></td>
+                                           @* <td>
+                                                    @Enum.GetName(typeof(MallSourceType), TypeHelper.ObjectToInt(row["mallsource"]))
+                                            </td>*@
+                                            <td>@row["oid"] </td>
+                                            <td>@row["osn"] </td>
+                                            <td>@row["storename"] </td>
+                                            <td>
+                                                @{string showname = string.IsNullOrEmpty(row["username"].ToString().Trim()) ? (string.IsNullOrEmpty(row["usermobile"].ToString().Trim()) ? (string.IsNullOrEmpty(row["useremail"].ToString().Trim()) ? "" : row["useremail"].ToString().Trim()) : row["usermobile"].ToString().Trim()) : row["username"].ToString().Trim();}
+                                                <div>
+                                                    <a href="javascript:show('@showname')" class="btn-link" target="_blank">@showname
+                                                        <br />
+                                                        @row["usermobile"].ToString()
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            @*<td>
+                                                @{PartUserInfo actualUser = Users.GetPartUserById(TypeHelper.ObjectToInt(row["actualuid"]));                                    }
+                                                @if (actualUser != null)
+                                                {
+                                                    @(string.IsNullOrEmpty(actualUser.UserName.Trim()) ? (string.IsNullOrEmpty(actualUser.Mobile.Trim()) ? (string.IsNullOrEmpty(actualUser.Email.Trim()) ? "" : actualUser.Email.Trim()) : actualUser.Mobile.Trim()) : actualUser.UserName.Trim())
+                                                }
+
+                                            </td>*@
+                                            <td>
+                                                @Enum.GetName(typeof(AgentTypeEnum),TypeHelper.ObjectToInt(row["agenttype"]))
+                                            </td>
+
+                                            <td>
+                                                <div>@(TypeHelper.ObjectToDateTime(row["addtime"]).ToString("yyyy-MM-dd HH:mm:ss"))</div>
+                                            </td>
+                                            <td>@row["orderamount"]</td>
+
+                                            <td>@row["surplusmoney"]</td>
+                                            <td>@if (TypeHelper.ObjectToDecimal(row["cashdiscount"]) > 0)
+                                                {
+                                                @:0.00
+                                 }
+                                                else
+                                                {
+                                                @row["orderhaimi"]
+                                                }
+                                            </td>
+                                           @* <td>@if (TypeHelper.ObjectToDecimal(row["cashdiscount"]) > 0)
+                                                {
+                                                @:0.00
+                                 }
+                                                else
+                                                {
+                                                @row["orderpv"]
+                                                }
+                                            </td>*@
+                                            <td>@row["payfriendname"]</td>
+                                            <td>
+                                                @switch (state)
+                                                {
+                                                    case "WaitPaying":
+                                                    @:<span style="color:lightgray;">等待付款</span>
+            break;
+                                                    case "Confirming":
+                                                    @:待确认
+            break;
+                                                    case "Confirmed":
+                                                    @:<span style="color:#5eb95e">已确认</span>
+            break;
+                                                    case "PreProducting":
+                                                    @:<span style="color:#5eb95e">备货中</span>
+            break;
+                                                    case "Sended":
+                                                    @:<span style="color:#5eb95e">已发货</span>
+            break;
+                                                    case "Completed-0-0":
+                                                    @:<span style="color:#0c79b1">已完成</span>
+            break;
+                                                    case "Completed-0-1":
+                                                    @:<span style="color:#d7342e;">换货审核中</span>
+            break;
+                                                    case "Completed-0-2":
+                                                    @:<span style="color:#d7342e;">换货审核通过</span>
+            break;
+                                                    case "Completed-0-3":
+                                                    @:<span style="color:#d7342e;">换货等待发货</span>
+            break;
+                                                    case "Completed-0-4":
+                                                    @:<span style="color:#d7342e;">换货确认收货</span>
+            break;
+                                                    case "Completed-0-5":
+                                                    @:<span style="color:#0c79b1">换货完成</span>
+            break;
+                                                    case "Completed-1-0":
+                                                    @:<span style="color:#e0690c;">退货审核中</span>
+            break;
+                                                    case "Settled":
+                                                    @:已结算
+                                    break;
+                                                    case "Cancelled":
+                                                    @:<span style="color:lightgray;">取消</span>
+            break;
+                                                    case "Returned-2":
+                                                    @:<span style="color:#e0690c;">退货审核通过</span>
+            break;
+                                                    case "Returned-3":
+                                                    @:<span style="color:#e0690c;">退款审核中</span>
+            break;
+                                                    case "Returned-4":
+                                                    @:<span style="color:#0c79b1"></span>退款成功
+            break;
+                                                    case "Changed": 
+                                                    @:<span style="color:#d7342e;">换货</span>
+            break;
+                                                    case "Locked":
+                                                    @:锁定
+            break;
+                                                    default:
+                                                    @:未知状态
+            break;
+                                                }
+                                            </td>
+                                            <td>@(row["buyerremark"].ToString().Contains("-身份证") ? row["buyerremark"].ToString().Substring(0, row["buyerremark"].ToString().IndexOf("-身份证")) : row["buyerremark"].ToString())</td>
+                                            @* <td>@(row["buyerremark"].ToString().Contains("-身份证") ? row["buyerremark"].ToString().Substring(row["buyerremark"].ToString().IndexOf("-身份证") + 5) : "")</td>*@
+                                            <td>
+                                                @Html.ActionLink("[详细信息]", "orderinfo", new { oid = row["oid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[打印]", "printorder", new { oid = row["oid"] }, new { @class = "editOperate", target = "_blank" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+        <div class="dataListEdit">
+            @*@if (WorkContext.OperateRights.Exists(x => x.Operate == "batchpreproduct"))
+            {
+                <a href="#" delUrl="@Url.Action("BatchPreProduct")" class="batch batchPreProduct">批量备货</a>
+            }*@
+            <div class="page">
+
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

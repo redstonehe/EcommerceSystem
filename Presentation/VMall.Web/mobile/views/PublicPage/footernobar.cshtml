@@ -1,0 +1,43 @@
+﻿@*<footer style="position: relative;">
+    <div class="footerTop">
+        @if (WorkContext.Uid < 1)
+        {
+            <div class="left"><a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", WorkContext.Url } })">登录</a> | <a href="@Url.Action("register", "account")">注册</a></div>
+        }
+        else
+        {
+            <div class="left"><a href="@Url.Action("index", "ucenter")">@WorkContext.NickName</a> | <a href="@Url.Action("logout", "account")">退出</a></div>   
+        }
+        <div class="right"><a href="#top">回到顶部 </a></div>
+        <div class="clear"></div>
+    </div>
+    <div class="footerCon"><a href="@Url.Action("index", "home")" class="hot"></a><a href="/">电脑版</a></div>
+    <div class="copyright" align="center">
+        <p>Copyright © 2016-2018 </p>
+        <p style="margin-top: 10px;">
+            @WorkContext.MallConfig.SiteTitle @WorkContext.MallConfig.SiteUrl 版权所有
+        </p>
+    </div>*@
+    <div id="returnTop" style="position: fixed; bottom: 75px; right: 20px; width: 35px; height: 35px; display: none;" onclick="$('body,html').animate({scrollTop:0},700);">
+        <img src="/images/returntop.png" alt="" width="50" height="50" />
+
+    </div>
+@*</footer>*@
+
+
+<script>
+    window.onscroll = function () {
+        var scroll_top = document.documentElement.scrollTop || document.body.scrollTop;
+        if (parseInt(scroll_top) < 300) {
+            $("#returnTop").fadeOut(200);
+        }
+        else {
+            $("#returnTop").fadeIn(200);
+        }
+    }
+</script>
+
+
+
+
+

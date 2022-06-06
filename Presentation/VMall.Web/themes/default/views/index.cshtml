@@ -1,0 +1,112 @@
+﻿@model VMall.Web.Models.StoreIndexModel
+@{
+    Layout = "~/views/shared/_layout.cshtml";
+    ViewBag.Title = "首页-" + WorkContext.StoreInfo.Name + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 1;
+}
+
+@if (WorkContext.StoreInfo.Banner.Length > 0)
+{
+    <div id="DPbanner" style="zoom: 1; text-align: center; overflow: hidden;">
+        <a href="javascript:void(0)">
+            <img src="/upload/store/@WorkContext.StoreId/banner/@WorkContext.StoreInfo.Banner" width="1920" height="500" /></a>
+    </div>
+    <script type="text/javascript">
+        var storeBanner = document.getElementById("DPbanner");
+        var bannerImg = storeBanner.getElementsByTagName("img")[0];
+        var bodyW = document.body.offsetWidth;
+        var imgW = bannerImg.offsetWidth;
+        var imgH = bannerImg.offsetHeight;
+
+        if (bodyW <= imgW) {
+            storeBanner.style.width = bodyW + "px";
+            storeBanner.style.height = imgH + "px";
+            var aTag = storeBanner.getElementsByTagName("a")[0];
+            aTag.style.position = "absolute";
+            aTag.style.left = (-(imgW - bodyW) / 2) + "px";
+        }
+    </script>
+}
+
+@*@{
+    List<StoreClassInfo> storeClassList = Stores.GetStoreClassList(WorkContext.StoreId);
+}*@
+
+<div class="box1210" id="DP">
+    <div id="listL">
+
+        <div id="DPserach">
+            <div class="DPtitle">店内搜索</div>
+            <div class="storeseach">
+                关键字:
+    <input type="text" id="storeSearchKeyword" class="text searchinput" style="width: 168px" />
+                价格:
+    <input type="text" id="startPrice" class="text" style="" value="" />&nbsp;&nbsp;到&nbsp;&nbsp;
+    <input type="text" id="endPrice" class="text searchinput" style="" value="" />
+                <a href="javascript:void(0)" onclick="storeSearch(@WorkContext.StoreId, $('#storeSearchKeyword').val(),0,$('#startPrice').val(),$('#endPrice').val())" class="grayBT">搜&nbsp;&nbsp;索</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="listR">
+
+        <div class="proList">
+            <div class="DPtitle orderList">
+                全部产品
+    @*<a href="#" class="more">更多</a>*@
+                <div class="orderPage">
+                <span class="ProNB">共 @Model.PageModel.TotalCount 个商品</span>
+                <span class="orderPageNB"><b>@if (Model.PageModel.TotalPages > 0)
+                                             {@Model.PageModel.PageNumber}
+                                             else
+                                             {<text>0</text>}</b>/@Model.PageModel.TotalPages</span>
+                @if (Model.PageModel.HasPrePage)
+                { 
+                    <a href="@Url.Action("index", "store", new RouteValueDictionary { { "storeId", Model.StoreId }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.PrePageNumber } })">&lt;</a>
+                }
+                else
+                {
+                    <a href="javascript:void(0);" class="disabled">&lt;</a>
+                }
+                @if (Model.PageModel.HasNextPage)
+                {
+                    <a href="@Url.Action("index", "store", new RouteValueDictionary { { "storeId", Model.StoreId }, { "sortColumn", Model.SortColumn }, { "sortDirection", Model.SortDirection }, { "page", Model.PageModel.NextPageNumber } })">&gt;</a>
+                }
+                else
+                {
+                     <a href="javascript:void(0);" class="disabled">&gt;</a>
+                }
+                <div class="clear"></div>
+            </div>
+            </div>
+            @if (Model.ProductList.Rows.Count > 0)
+            {
+                <ul>
+                    @{int x = 1;}
+                    @foreach (DataRow info in Model.ProductList.Rows)
+                    {
+                        <li @(x % 4 == 0 ? "style='padding-right:0;'" : "")><a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info["pid"] } })">
+                            <img src="/upload/store/@info["storeid"]/product/show/thumb230_230/@info["showimg"]" onerror="src='/images/230.jpg'" width="100%" /><em>@info["pname"]</em></a><b>¥@info["shopprice"]</b>
+                            @*<div class="info">
+                                <div class="star"><span class="star_yellow" style=" width:@Html.Raw((info.GetStarLevel() * 20).ToString())%;">&nbsp;</span></div>
+                                <a href="javascript:void(0);">已有 @info["reviewcount"] 人评价</a>
+                            </div>*@
+                            <div class="info2">
+                                <span onclick="addProductToFavorite(@info["pid"])" class="addFav">加入收藏</span>
+                                <span onclick="addProductToCart(@info["pid"], 1)" class="addShopping">加入购物车</span></div>
+                        </li>
+                        x++;
+                    }
+                    <div class="clear"></div>
+                </ul>
+            }
+        </div>
+
+        @Html.WebPager(Model.PageModel)
+
+    </div>
+    <div class="clear"></div>
+
+</div>
+

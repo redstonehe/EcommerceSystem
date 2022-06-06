@@ -1,0 +1,9 @@
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Custompay\obj\Debug\VMall.PayPlugin.Custompay.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\db.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\plugin.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\views\admincustompay\config.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\views\show.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\VMall.PayPlugin.Custompay.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Custompay\VMall.PayPlugin.Custompay.pdb
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Custompay\obj\Debug\VMall.PayPlugin.Custompay.dll
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Custompay\obj\Debug\VMall.PayPlugin.Custompay.pdb

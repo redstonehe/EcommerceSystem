@@ -1,0 +1,98 @@
+﻿@model VMall.Web.MallAdmin.Models.MallAdminGroupListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>管理员组列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">管理员组管理</a></li>
+            <li class="active">管理员组列表</li>
+        </ol>
+        <div class="right">
+            <a href="@Url.Action("add")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <div class="table_top"></div>
+    @using (Html.BeginForm("list", "malladmingroup"))
+    {
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>名称</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (MallAdminGroupInfo info in Model.MallAdminGroupList)
+                                    {
+                                        if (info.MallAGid > 1 && info.MallAGid != 8)
+                                        {
+                                        <tr>
+                                            <td>@info.MallAGid</td>
+                                            <td>@info.Title</td>
+                                            <td>
+                                                @*@{
+      if (info.MallAGid > 2)
+      {
+          
+        @Html.ActionLink("[编辑]", "edit", new { mallAGid = info.MallAGid }, new { @class = "editOperate" })
+
+        @Html.ActionLink("[删除]", "del", new { mallAGid = info.MallAGid }, new { @class = "deleteOperate" })
+      }
+        }*@
+                                                @{
+                                            if (info.MallAGid != 8)
+                                            {
+                                                    @Html.ActionLink("[组用户]", "groupuserlist", new { mallAGid = info.MallAGid }, new { @class = "editOperate" })
+                                                if (info.MallAGid != 2)
+                                                {
+                                                    @Html.ActionLink("[编辑]", "edit", new { mallAGid = info.MallAGid }, new { @class = "editOperate" })
+                                    
+                                                }
+
+                                            }
+                                                }
+                                            </td>
+                                            @*@Html.ActionLink("[删除]", "del", new { mallAGid = info.MallAGid }, new { @class = "deleteOperate" })*@
+                                        </tr>
+                                        }
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+    }
+    <div class="table_bottom"></div>
+}

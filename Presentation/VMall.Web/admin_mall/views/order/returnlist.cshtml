@@ -1,0 +1,179 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderReturnListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>订单退货列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <style>
+        .returnApplyList {
+            width: 110px;
+            height: 24px;
+            border: 1px solid #ddd;
+            line-height: 24px;
+            display: inline-block;
+            padding: 0 10px;
+            vertical-align: middle;
+            margin-left: 20px;
+            color: #fff;
+            background-color: #428bca;
+        }
+
+            .returnApplyList:hover {
+                background-color: #006dcc;
+            }
+    </style>
+    <script>
+        function output() {
+            //string storeName, string osn, int state = 1, int storeId = -1
+            var storeId = $("#StoreId").val();
+            var osn = $("#OSN").val();
+            var state = $("#state").val();
+            window.open("/malladmin/order/ReturnOutPutOrder?StoreId=" + StoreId + "&osn=" + osn + "&state=" + state);
+        }
+    </script>
+}
+
+@section body{
+
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">订单管理</a></li>
+            <li class="active">退货列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("returnlist", "order"))
+    {
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>商品店铺：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                    <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>订单编号：</label>
+                                @Html.TextBox("OSN", Model.OSN, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>状态：</label>
+                                @Html.DropDownListFor(x => x.state, new List<SelectListItem>() { new SelectListItem() { Text = "待审核", Value = "1" }, new SelectListItem() { Text = "审核通过", Value = "2", Selected = true }, new SelectListItem() { Text = "已收货确认", Value = "3" } }, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="Search" name="Search" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        
+                                        @* <th>订单id</th>*@
+                                        <th>订单编号</th>
+
+                                        <th>添加时间</th>
+                                        <th>店铺</th>
+
+                                        <th>退货原因、说明</th>
+                                        <th>退货运费承担</th>
+                                        <th>运费承担说明</th>
+                                        <th>状态</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var info in Model.OrderReturnList)
+                                    {
+                                        <tr>
+                                           
+                                            @*<td>@info.Oid</td>*@
+                                            <td><a href="@Url.Action("orderinfo", new { oid = info.Oid })" class="btn-link">@info.OSN</a></td>
+                                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                            <td>@info.StoreName</td>
+
+                                            <td>@info.ReturnDesc</td>
+                                            <td>@info.ReturnShipFee</td>
+                                            <td>@info.ReturnShipDesc</td>
+
+                                            <td>
+                                                @if (info.State == 1)
+                                                { 
+                                                    <span style="color: green;">正在审核</span>
+                                                }
+                                                @if (info.State == 2)
+                                                { 
+                                                    <span style="color: red;">审核通过</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (info.State == 2)
+                                                {
+                                                    //@Html.ActionLink("[确认退款]", "ConfirmReturn","Order", new  {  oid=info.Oid ,refundId=info.RefundId }, new { @class = "editOperate" })
+@*<a href="/malladmin/Order/ConfirmReturn?oid=@info.Oid&refundId=@info.RefundId" class = "editOperate">确认退款</a>*@
+@*<a href="javascript:ConfirmReturn(@info.Oid,@info.ReturnId);" class = "editOperate">退货收货确认</a>*@
+                                                    <a href="@Url.Action("ConfirmReceiveReturn", new { oid = info.Oid, returnid = info.ReturnId })" class = "editOperate">[退货收货确认]</a>
+                                                }
+                                                else if (info.State == 1)
+                                                {
+                                                    <a href="@Url.Action("orderinfo", new { oid = info.Oid })" class = "editOperate">[审核]</a>}
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

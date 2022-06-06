@@ -1,0 +1,77 @@
+﻿@model VMall.Web.MallAdmin.Models.StockModifyModel
+@section header{
+    <title>库存变更</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt;库存变更
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+                <input type="hidden" id="Pid" name="Pid" value="@Model.Pid" />
+                <input type="hidden" id="Uid" name="Uid" value="@Model.Uid" />
+                 <tr>
+                    <td width="80px" align="right">产品名称：</td>
+                    <td><input type="text" disabled="disabled" value="@Model.ProductName" /></td>
+                </tr>
+                <tr>
+                    <td width="80px" align="right">会员：</td>
+                    <td><input type="text" disabled="disabled" value="@Model.UserName" /></td>
+                </tr>
+                <tr>
+                    <td width="80px" align="right">金额：</td>
+                    <td>@Html.TextBoxFor(x => x.Amount, new { @class = "input", size = "30" })@Html.ValidationMessageFor(x => x.Amount)</td>
+                </tr>
+                <tr>
+                    <td align="right">类型：</td>
+                    <td>
+                        @*@Html.DropDownListFor(x => x.Type, ViewData["TypeList"] as List<SelectListItem>) @Html.ValidationMessageFor(x => x.Type)*@
+
+                        <label>@Html.RadioButtonFor(x => x.Type, 1, new { @class = "checkbox" }) 收入</label>
+                        <label>@Html.RadioButtonFor(x => x.Type, 2, new { @class = "checkbox" }) 支出</label>
+                        @Html.ValidationMessageFor(x => x.Type)
+                    </td>
+                </tr>
+                <tr>
+                    <td width="80px" align="right">订单号：</td>
+                    <td>@Html.TextBoxFor(x => x.OrderCode, new { @class = "input", size = "30" })@Html.ValidationMessageFor(x => x.OrderCode)</td>
+                </tr>
+                <tr>
+                    <td align="right">说明：</td>
+                    <td>@Html.TextAreaFor(x => x.DetailDes, new { cols = "40", rows = "6" })@Html.ValidationMessageFor(x => x.DetailDes)</td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

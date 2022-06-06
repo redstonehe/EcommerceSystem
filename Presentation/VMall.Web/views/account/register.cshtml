@@ -1,0 +1,275 @@
+﻿@model VMall.Web.Models.RegisterModel
+@{
+    Layout = "~/views/shared/_layout_login.cshtml";
+    ViewBag.Title = "用户注册-" + WorkContext.MallConfig.SiteTitle;
+   
+}
+<script>
+    function checkName(ele) {
+        var pName = $(ele).val();
+
+        $.ajax({
+            type: "POST",
+            url: "/mob/account/ajaxGetNameByCode?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { pName: pName },
+            success: function (result) {
+                //console.log("==="+result);
+                // var result = eval("(" + result + ")");
+                $("#showname").html("(姓名：" + result + ")");
+            }
+        });
+    }
+    function sendMsg() {
+        var mobile = $(".userName").val();
+        if ($.trim(mobile) == "") {
+            alert("请输入手机号码");
+            $(".userName").focus();
+            return ;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            alert('请输入正确的手机号码!!!');
+            $(".userName").focus();
+            return ;
+        }
+        @*var Vcode = '@ViewData["VerifyCodeForRegister"]';*@
+        var diglog = $("#showMsg").html();
+        layer.open({
+            type: 1,
+            title: '确认发送',
+            area: ['600px', '400px'],
+            shadeClose: false, //点击遮罩关闭
+            content: $("#showMsg").html(),//diglog//$("#header")
+            success: function () {
+                $(".layui-layer-content #verifyImage").click();
+            }
+        });
+        
+    }
+
+    function sendMoblieVerify() {
+        var mobile = $(".userName").val();
+        var Vcode = $(".layui-layer-content #confirmCode2").val();
+        //alert(Vcode);
+        if ($.trim(Vcode) == "") {
+            alert("请输入验证码");
+            $("#confirmCode2").focus();
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/account/SendMoblieVerify?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { mobile: mobile, Vcode: Vcode },
+            success: function (data) {
+                var result = eval("(" + data + ")");
+                console.log("===" + data);
+                if (result.state == "success") {
+                    $("#sendSuccess").show();
+                    $("#sendBtn").attr("href", "javascript:void(0);").css("color", "red");
+                    layer.closeAll();
+                    timeCheck(120, $("#sendBtn"));
+                }
+                else if (result.state == "error") {
+                    $(".layui-layer-content #verifyImage").click();
+                    alert(result.content);
+                }
+            }
+        });
+
+    }
+    function closeLayer() {
+        layer.closeAll()();
+    };
+    function timeCheck(n, o) {
+        var t = n;
+        if (n == 0) {
+            //console.log("timeout");
+            //o.disabled = false;
+            $(o).attr("href", "javascript:sendMsg();");
+            $(o).css("color", "black").html('重新发送');
+            window.location.href = window.location.href;
+            n = t;
+        } else {
+            n--;
+            //o.disabled = true;
+            $(o).html('重新发送&nbsp;' + n );
+            setTimeout(function () {
+                timeCheck(n, o);
+            }, 1000);
+        }
+    }
+    function confirmVoiceCode() {
+        var mobile = $(".userName").val();
+        if ($.trim(mobile) == "") {
+            alert("请输入手机号码");
+            $(".userName").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            alert('请输入正确的手机号码!!!');
+            $(".userName").focus();
+            return;
+        }
+        var diglog = $("#showMsg").html();
+        layer.open({
+            type: 1,
+            title: '确认发送',
+            area: ['600px', '400px'],
+            shadeClose: false, //点击遮罩关闭
+            content: $("#showMsg").html(),//diglog//$("#header")
+            success: function () {
+                $(".layui-layer-content #verifyImage").click();
+            }
+        });
+       @* var VcodeCall = '@ViewData["VerifyCodeForRegisterCall"]';*@
+        
+    }
+    function timeCheckVoice(n, o) {
+        var t = n;
+        if (n == 0) {
+            //console.log("timeout");
+            //o.disabled = false;
+            $(o).attr("onclick", "confirm"+"VoiceCode();");
+            $(o).find("a").css("color", "#008cff");
+            window.location.href = window.location.href;
+            n = t;
+        } else {
+            n--;
+            //o.disabled = true;
+            $(o).find("span").html('&nbsp;' + n + '&nbsp; S');
+            setTimeout(function () {
+                timeCheckVoice(n, o);
+            }, 1000);
+        }
+    }
+</script>
+<div style="border-bottom:1px solid #dcdcdc;margin-bottom: 30px;">
+<div id="loginTop" class="box">
+    <a href="/" class="left">
+        <img src="/images/logo-65.jpg" width="280" height="65" /></a>
+    <h2>欢迎注册</h2>
+    <div class="clear"></div>
+</div>
+</div>
+@*<div class="regTitle box">我已经注册，现在就 <a href="@Url.Action("login")" class="Fblue">登录</a></div>*@
+<div class="reg box">
+
+    <form name="registerForm" action="">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr class="succ_on">
+                <th width="190"><em>*</em>手机号码：</th>
+                <td width="275">
+                    <input type="text" name="@Model.ShadowName" value="" class="text userName"  maxlength="11" style="text-align:left"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="succ_on">
+                <th width="190"><em>*</em>手机验证码：</th>
+                <td width="200" style="width: 200px;font-size:0">
+                    <input type="text" name="verifyCode" style="float: left; width: 80px;" autocomplete="off" value="" class="text YZM" maxlength="6" />
+                    <a href="javascript:sendMsg();" id="sendBtn"  style="cursor:pointer;text-align:center;margin:0 auto; height: 38px;width:80px; line-height: 38px;margin-left:3px; vertical-align: middle;display:inline-block;background-color:#F2F2F2;text-decoration:none;padding:0 2px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;font-size:12px;"  title="获取验证码" @*onclick="sendMsg();"*@  >获取验证码</a>
+                    <div style="clear: both;"></div>
+                </td>
+                <td>
+                    <p style="margin-left: 20px;color: gray; display: none;" id="sendSuccess">发送成功，验证码5分钟内有效</p>
+                </td>
+            </tr>
+            @*<tr>
+                <td>&nbsp;</td>
+                <td><p class="voice-code" onclick="confirmVoiceCode();">短信验证码收不到？试试<a href="javascript:;" style="color: #008cff;">语音验证码</a>
+                    <span style="color:red;"></span>
+
+                    </p></td>
+            </tr>*@
+            @*<tr class="succ_on">
+                <th><em>*</em>请设置密码：</th>
+                <td>
+                    <input type="password" name="password" value="" class="text passWord" /></td>
+                <td><div class="tipBox"><div class="tip">4-12为中文 示信息 提示信息</div></div></td>
+            </tr>
+            <tr class="succ_on">
+                <th><em>*</em>请确认密码：</th>
+                <td>
+                    <input type="password" name="confirmPwd" value="" class="text passWord confirmPwd" /></td>
+                <td><div class="tipBox"><div class="tip"><p style="line-height:1em; margin:5px;">4-12为中文 提示信息</p></div></div></td>
+            </tr>*@
+            <tr class="succ_on">
+                <th width="190"><em>*</em>推荐人：</th>
+                <td width="275">
+                    @{string showname = ViewData["showname"] as string; }
+                    <input type="text" id="pname" name="pname" value="@(ViewData["pname"])"  onblur="checkName(this);" class="text pname" /></td>
+                <td><span style="color: red; font-size: 12px;" id="showname">
+                    @if (!string.IsNullOrEmpty(showname))
+                    {
+                        @:(姓名：@showname)
+                    }
+                </span></td>
+            </tr>
+            @*@if (Model.IsVerifyCode)
+            { 
+                <tr class="succ_on">
+                    <th width="190"><em>*</em>验证码：</th>
+                    <td width="200" style="width: 200px;">
+                        <input type="text" name="verifyCode" autocomplete="off" value="" class="text YZM" maxlength="4" />
+                        <img id="verifyImage" style="cursor: hand; height: 38px; line-height: 38px; vertical-align: middle;" height="34" title="点击刷新验证码" onclick="this.src='/tool/verifyimage?time=' + new Date()" src="/tool/verifyimage" />
+                    </td>
+                    <td></td>
+                </tr>
+            }
+
+  <tr class="succ_ok">
+    <th><em>*</em>验证手机：</th>
+    <td><input type="password" class="text tel" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th><em>*</em>短信验证码：</th>
+    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="132"><input type="text" class="YZM text" /></td>
+    <td> <img src="#" width="100" height="38" style="margin-left:5px;" /></td>
+  </tr>
+</table>
+</td>
+    <td><div class="tipBox"><a href="#">看不清？换一张</a></div></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td><label><input type="checkbox" style="vertical-align:-2px; margin-right:5px;" />我已阅读并同意<a href="#" class="Fblue">《用户注册协议》</a></label></td>
+    <td>&nbsp;</td>
+  </tr>*@
+
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td><a href="javascript:void(0);" class="regBt redBT" onclick="registerNew()">立即注册</a></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                  <td><div class="" style="text-align:center;padding:20px;">已有帐号，直接 <a href="@Url.Action("login")" style="color:#008cff;">登录</a></div></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+
+ <div id="showMsg" style="display: none">
+        <div class="layer_1">
+        </div>
+        <div class="layer_2">
+            <p style="height: 60px;line-height: 60px;display:inline-block;vertical-align: top;">验证码：  </p>
+           <img id="verifyImage" src="/mob/tool/verifyimage" onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" style="width: 100px; margin: 0 10%; height: 60px;" />@*<a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/mob/tool/verifyimage?time=' + new Date()" class="left" style="line-height: 60px;">换一张</a>*@  
+            <input type="text" class="text confirmCode2" id="confirmCode2" name="verifyCode2" placeholder="请输入验证码" maxlength="4" style=" width: 70%;display: inline-block;vertical-align: middle;font-size: 1.4875em;color: #666;padding: 20px;" val=""/>
+        </div>
+        @*<div class="layer_1">
+           <img id="verifyImage" src="/mob/tool/verifyimage" onclick="this.src='/mob/tool/verifyimage?time=' + new Date()" style="width: 100px; margin: 0 10%; height: 60px;" /><a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/mob/tool/verifyimage?time=' + new Date()" class="left" style="line-height: 60px;">换一张</a>
+        </div>*@
+        <div class="layer_3">
+            <a onclick='sendMoblieVerify();'>发送</a>
+            <a onclick='closeLayer();'>取消</a>
+        </div>
+
+
+    </div>
+</div>

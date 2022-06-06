@@ -1,0 +1,227 @@
+﻿@model VMall.Web.Mobile.Models.ChannelModel
+@using VMall.Web.Mobile
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = (Model.GroupProductInfo != null ? Model.GroupProductInfo.GroupTitle + "-" : "") + Model.ChannelInfo.Name;
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+<style>
+    .proItme .fullicon {
+        width: 24px;
+    }
+
+    .proItme .chaozhi_99 {
+        width: 70px;
+    }
+</style>
+<div class="searchBox">
+    <div class="newSearch topsearch">
+        <input type="text" id="keyword" name="keyword" class="new-srch-input" value="" style="color: #999999;margin-left: 5px;">
+        <a href="javascript:void(0);" onclick="$('#keyword').val('')" target="_self" class="new-s-close"></a>
+        <a href="javascript:mallSearch(document.getElementById('keyword').value);" target="_self" class="new-s-srch"><span></span></a>
+        <ul id="word-list2"></ul>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function closeSelectR() {
+        document.getElementById("filterBlock1").style.display = "none";
+        document.getElementById("filterBlock2").style.display = "none";
+        document.getElementById("filterBlock3").style.display = "none";
+    }
+    function filterBlockSH(type) {
+        if (type == 0) {
+            document.getElementById("filterBlock1").style.display = "none";
+            document.getElementById("filterBlock2").style.display = "none";
+            document.getElementById("filterBlock3").style.display = "none";
+        }
+        else {
+            document.getElementById("filterBlock1").style.display = "block";
+            document.getElementById("filterBlock2").style.display = "block";
+            document.getElementById("filterBlock3").style.display = "block";
+        }
+    }
+
+    function filterItemSH(obj) {
+        var divList1 = obj.parentNode.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList1.length; i++) {
+            divList1[i].style.display = "none";
+        }
+
+        var divList2 = obj.parentNode.getElementsByTagName("div");
+        for (var i = 0; i < divList2.length; i++) {
+            divList2[i].style.display = "block";
+        }
+    }
+</script>
+<div class="proList">
+
+    @*<div class="new-tab-type">
+        <div class="new-tbl-type">
+            <a href="javascript:void(0)" class="new-tbl-cell on"><span class="new-bar"></span><span class="new-p-re">排序<span class="new-icon-down"></span></span></a>
+            <a href="javascript:filterBlockSH(1)" class="new-tbl-cell"><span class="new-bar"></span><span class="icon">筛选<span></span></span></a>
+        </div>
+    </div>*@
+
+    <div class="new-tab-type2" style="overflow: hidden; height: 45px">
+        <div class="new-tbl-type">
+            <a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 1 }, { "page", 1 } })" class="new-tbl-cell w60"><span @(Model.SortColumn == 0 ? "class='on'" : "")>默认</span></a>
+            <a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 1 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 1 ? "class='on'" : "")>销量
+                    @if (Model.SortColumn != 1)
+                    {
+                        <i class="icon_sort"></i>
+                    }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 1)
+                    {
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 1)
+                    {  
+                        <i class="icon_sort_up"></i>
+                    }
+
+                </span></a>
+            <a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 2 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 2 ? "class='on'" : "")>价格
+                     @if (Model.SortColumn != 2)
+                     {
+                         <i class="icon_sort"></i>
+                     }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 2)
+                    { 
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 2)
+                    { 
+                        <i class="icon_sort_up"></i>
+                    }
+
+                </span></a>
+            @*<a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 3 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 3 ? "class='on'" : "")>评价
+             @if (Model.SortColumn != 3)
+             {
+                 <i class="icon_sort"></i>
+             }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 3)
+                    {  
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 3)
+                    {  
+                        <i class="icon_sort_up"></i>
+                    }
+                </span></a>*@
+            <a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 5 }, { "sortDirection", Model.SortDirection == 0 ? 1 : 0 }, { "page", 1 } })" class="new-tbl-cell w60">
+                <span @(Model.SortColumn == 5 ? "class='on'" : "")>人气
+                @if (Model.SortColumn != 5)
+                {
+                    <i class="icon_sort"></i>
+                }
+                    @if (Model.SortDirection == 1 && Model.SortColumn == 5)
+                    { 
+                        <i class="icon_sort_down"></i>
+                    }
+                    else if (Model.SortDirection == 0 && Model.SortColumn == 5)
+                    { 
+                        <i class="icon_sort_up"></i>
+                    }
+                </span></a>
+            <a href="javascript:filterBlockSH(1)" class="new-tbl-cell w60"><span class="new-bar"></span><span class="icon">筛选<span></span></span></a>
+        </div>
+    </div>
+
+    <div id="categoryProductListBlock">
+        @Html.Partial("/mobile/views/Channel/ajaxchannel.cshtml")
+    </div>
+    <div class="loading">
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a id="loadBut" href="javascript:getChannelProductList(@Model.ChId,@Model.GId,@Model.CateId,@Model.BrandId,@Model.FilterPrice,0,@Model.SortColumn,@Model.SortDirection,chListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        else
+        {
+            <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+            <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+        }
+        <div id="loadPrompt" style="display: none;" class="loadAnimate">
+            <p class="list-loading"><span></span>加载中...</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="filterBlock1" class="bg" style="display: none; position: absolute; left: 0px; top: 0px; background-color: rgb(13, 13, 13); filter: alpha(opacity=60); opacity: 0.6; width: 70%; height: 100%; z-index: 8888;" onclick="closeSelectR();"></div>
+<a id="filterBlock2" href="javascript:filterBlockSH(0)" class="new-abtn-slid" style="display: none; z-index: 8889; left: auto; right: 32%"></a>
+<div id="filterBlock3" class="selectR" style="display: none;">
+    <ul>
+
+        @if (Model.BrandList.Count > 0)
+        {
+            <li>
+                <a href="javascript:void(0)" onclick="filterItemSH(this)" class="dt">分类</a>
+                <div class="selectCon">
+                    <ul>
+                        <li><a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", 0 }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.BrandId == 0)
+                                                                                                                                                                                                                                                                                                          { <text>class="on"</text>}><span>全部</span></a></li>
+                        @foreach (BrandInfo info in Model.BrandList)
+                        {
+                            <li><a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", info.BrandId }, { "filterPrice", Model.FilterPrice }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.BrandId == info.BrandId)
+                                                                                                                                                                                                                                                                                                                         {<text>class="on"</text>}><span>@info.Name</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+
+        @if (Model.CatePriceRangeList.Length > 0)
+        {
+            <li>
+                <a href="javascript:void(0)" onclick="filterItemSH(this)" class="dt">价格</a>
+                <div class="selectCon">
+                    <ul>
+                        <li><a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", 0 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.FilterPrice == 0)
+                                                                                                                                                                                                                                                                                                      { <text>class="on"</text>}><span>全部</span></a></li>
+                        @for (int i = 0; i < Model.CatePriceRangeList.Length; i++)
+                        {
+                            <li><a href="@Url.Action("index", new RouteValueDictionary { { "chId", Model.ChId }, { "gid", Model.GId }, { "cateId", Model.CateId }, { "brandId", Model.BrandId }, { "filterPrice", i + 1 }, { "onlyStock", 0 }, { "sortColumn", 0 }, { "sortDirection", 0 }, { "page", 1 } })" @if (Model.FilterPrice == (i + 1))
+                                                                                                                                                                                                                                                                                                              { <text>class="on"</text>}><span>@Model.CatePriceRangeList[i]</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+
+    </ul>
+</div>
+<script type="text/javascript">
+    //高度需要计算 .bg的高度 = 当前body的高度
+    document.getElementById("filterBlock1").style.height = document.body.scrollHeight + "px";
+    //document.getElementById("filterBlock3").style.height = document.body.scrollHeight + "px";
+    //获得频道商品列表
+    var chListNextPageNumber = 2;
+    var hasNextPage = false;
+    function getChannelProductList(chId, gid, cateId, brandId, filterPrice, onlyStock, sortColumn, sortDirection, page) {
+        document.getElementById("loadBut").style.display = "none";
+        document.getElementById("loadPrompt").style.display = "block";
+        Ajax.get("/mob/channel/Index?chId=" + chId + "&gid=" + gid + "&cateId=" + cateId + "&brandId=" + brandId + "&filterPrice=" + filterPrice + "&onlyStock=" + onlyStock + "&sortColumn=" + sortColumn + "&sortDirection=" + sortDirection + "&page=" + page, false, function (data) {
+            $("#categoryProductListBlock").append(data);
+            if (hasNextPage) {
+                $("#loadBut").css("display", "block");
+                $("#loadPrompt").css("display", "none");
+                chListNextPageNumber += 1;
+            }
+            else {
+                $("#loadBut").css("display", "none");
+                $("#loadPrompt").css("display", "none");
+                $("#lastPagePrompt").css("display", "block");
+            }
+        })
+    }
+</script>
+

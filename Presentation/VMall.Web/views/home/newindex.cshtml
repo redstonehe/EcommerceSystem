@@ -1,0 +1,544 @@
+﻿@{
+    ViewBag.Title = "newindex";
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@WorkContext.MallConfig.SiteTitle</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />-->
+    <link rel="shortcut icon" href="http://www.hhwtop.com/images/haihui.ico" />
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link href="/css/newhome.css?ddd" rel="stylesheet" />
+
+    <script src="/scripts/jquery.js" type="text/javascript"></script>
+    <script src="/scripts/common.js" type="text/javascript"></script>
+    <script src="/scripts/utils.js" type="text/javascript"></script>
+
+    <script src="/scripts/sidebar.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/jquery.bxslider.css" />
+
+    <script type="text/javascript" src="/scripts/jquery.bxslider.min.js"></script>
+    <script type="text/javascript">
+        uid = @WorkContext.Uid;
+        isGuestSC = @WorkContext.MallConfig.IsGuestSC;
+        scSubmitType = @WorkContext.MallConfig.SCSubmitType;
+    </script>
+
+</head>
+<body>
+    <!-- top start -->
+    <div id="headtop" class="top">
+        <div class="top-wrap box1000">
+            <div class="top-left Fleft">
+                <!--<span>山东</span>
+                <span>青岛</span>
+                <a href="javascript:;">【切换城市】</a>-->
+                <span class="Fleft;">欢迎来到 @WorkContext.MallConfig.SiteTitle !</span>
+
+                <span id="showappcode"><a href="javascript:void(0); " class="">下载手机端</a></span>
+                <span><a href="http://www.healthen.com" target="_blank" class="">HEALTHEN官网</a></span>
+                <div style="clear: both;"></div>
+                <div id="appweixincode">
+                    <img src="/images/appcode.png" alt="下载app" />
+                </div>
+            </div>
+
+            <div class="top-right Fright">
+                @if (WorkContext.Uid < 1)
+                {
+                    <a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", WorkContext.Url } })" style="color:#F22E00;">Hi，请登录</a>
+                    <a href="@Url.Action("register", "account")" class="A_b">免费注册</a><span></span>
+                }
+                else
+                {<span>欢迎&nbsp;@WorkContext.NickName</span>
+                    <a href="@Url.Action("logout", "account")">注销</a>
+                }
+                @if (WorkContext.MallAGid > 1)
+                {
+                    <a href="@Url.Action("index", "home", new RouteValueDictionary { { "area", "malladmin" } })">商城管理</a>
+                }
+                <a href="@Url.Action("orderlist", "ucenter")" >我的订单</a>
+                <a href="@Url.Action("userinfo", "ucenter")" id="usercenter">个人中心<span class="user-center">0</span></a>
+                <a href="/help/question?id=7" target="_blank">客服中心</a>
+                <a href="@Url.Action("index", "cart")" id="shoppingcart" >
+                    <span>
+                        <img src="/images/topcart-1.png" alt="" style="" width="19" height="15" /></span>
+                    购物车
+                    <span class="shop-cart">@WorkContext.CartProductCount</span>
+                </a>
+                <div id="cartlist">
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <!-- top end -->
+
+    <!--topAdv start-->
+    @{
+        List<AdvertInfo> homeTopAdvertList = Adverts.GetAdvertList(6);
+    }
+    @if (homeTopAdvertList != null && homeTopAdvertList.Count > 0)
+    {
+        <div id="topADBox" style="background:@homeTopAdvertList[0].ExtField1">
+            <div class="topAdv">
+                <a href="@homeTopAdvertList[0].Url">
+                    <img src="/upload/advert/@homeTopAdvertList[0].Body" width="1000" height="80" alt=""/></a>
+                <a href="javascript:;" class="close" onclick="this.parentNode.style.display='none'">x</a>
+            </div>
+        </div>
+    }
+
+    <!--topAdv end-->
+    <!-- header start -->
+    <div id="header" class="header">
+        <div class="header-wrap box1000">
+            <div class="logo Fleft">
+                <a href="/">
+                    <img src="/images/logonew.png" width="315" height="55" alt="" /></a>
+
+            </div>
+            <div class="search-bar Fright">
+                <div class="">
+                    <input type="text" name="search" class="search-ipt" value="家庭净水系统" onfocus="if(value == '家庭净水系统') {value =''}" onblur="if(value == ''){value ='家庭净水系统'}" autocomplete="off" onkeydown="javascript:if(event.keyCode==13) mallSearch($('.search-ipt').val());" />
+                    <input type="button" value="搜  索" class="search-btn" onclick="mallSearch($('.search-ipt').val())" />
+                    <div style="clear: both;"></div>
+                </div>
+                <div class="search-text ">
+                    @{
+                        List<AdvertInfo> searchWordAdvertList = Adverts.GetAdvertList(5);
+                    }
+                    @Html.Raw(searchWordAdvertList[0].Body)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+
+    <!-- nav start -->
+    <div id="nav" class="nav">
+        <div class="category box1000">
+            <!--onmouseover="$('#showcateory').removeClass();" onmouseout="$('#showcateory').addClass('hide');"-->
+            <div class="nav-left">
+                <h2 class="all-category">
+                    <img src="/images/allcateory.png" alt="全部商品分类" style="vertical-align: middle;" />全部商品分类</h2>
+                <div id="showcateory" class="hide">
+                    <ul class="cateorylist">
+                        <li>
+                            <a href="/list/78.html">
+                                <img src="/images/cateoty-1.jpg" alt="鳄鱼油系列" /></a></li>
+
+                        <li>
+                            <a href="/list/76.html">
+                                <img src="/images/cateoty-2.jpg" alt="美妆个护类" /></a></li>
+                        <li>
+                            <a href="/list/77.html">
+                                <img src="/images/cateoty-3.jpg" alt="特效能量" /></a></li>
+                        <li>
+                            <a href="/list/75.html">
+                                <img src="/images/cateoty-4.jpg" alt="保健食品类" /></a></li>
+                        <li>
+                            <a href="/list/79.html">
+                                <img src="/images/cateoty-5.jpg" alt="皇家生态锅" /></a></li>
+                        <li>
+                            <a href="/list/80.html">
+                                <img src="/images/cateoty-6.jpg" alt="磁化净水" /></a></li>
+                    </ul>
+                </div>
+            </div>
+            @{
+                string logstateUrl = string.Empty;
+                string AppKey = "22dbd1b598b311e59d7e08606ed9d972";
+                logstateUrl = string.Format("?islogin={0}&loginname={1}&isok={2}", WorkContext.Uid > 0 ? "1" : "0", WorkContext.Uid > 0 && !string.IsNullOrEmpty(WorkContext.UserName) ? WorkContext.UserName : "", WorkContext.Uid > 0 ? SecureHelper.MD5("1" + WorkContext.UserName + AppKey) : "");
+            }
+            <div class="nav-list nav-right">
+                <a href="/channel/1.html">HEALTHEN旗舰店</a>
+                <a href="/channel/4.html">全球购</a>
+                <a href="/channel/2.html">红包专区</a>
+                <a href="/channel/3.html" id="channel3">旅游专区</a>
+                <a href="http://www.tymall.net.cn/home/index.shtml@(logstateUrl)" target="_blank">综合商城</a>
+                <a href="/channel/6.html">兑换专区</a>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //导航
+            $(function () {
+                $("#channel3").mouseover(function () {
+                    $(this).text("敬请期待").attr("href", "javascript:void(0);");
+                });
+                $("#channel3").mouseout(function () {
+                    $(this).text("旅游专区");
+                });
+            });
+        </script>
+    </div>
+    <!-- nav end -->
+
+    <!-- banner start -->
+    <div id="banner" class="banner">
+        <div class="slider">
+            <!--<a href="javascript:;" class="prev"><</a>
+            <a href="javascript:;" class="next">></a>-->
+            @{
+                BannerInfo[] bannerList = Banners.GetHomeBannerList(0);
+            }
+
+            <ul class="bxslider">
+                @foreach (BannerInfo info in bannerList)
+                {
+                    <li style="background: @info.ExtField1"><a href="@info.Url">
+                        <img src="/upload/banner/@info.Img"  alt=""/></a></li>
+                }
+                @* <li style="background: #ae1064">
+                    <a href="/63.html" target="_blank">
+                        <img src="/images/banner.jpg" alt="" />
+                    </a>
+                </li>
+                <li style="background: #abe7e7">
+                    <a href="/70.html" target="_blank">
+                        <img src="/images/banner2.jpg" alt="" />
+                    </a>
+                </li>
+                <li style="background: #ede7f1">
+                    <a href="http://www.hhwtop.com/channel/1-26-0-0-0-0-1.html" target="_blank">
+                        <img src="/images/banner3.jpg" alt="溯然本色" />
+                    </a>
+                </li>
+                <li style="background: #ee8100">
+                    <a href="http://www.hhwtop.com/channel/1-27-0-0-0-0-1.html" target="_blank">
+                        <img src="/images/banner4.jpg" alt="源创生活" />
+                    </a>
+                </li>*@
+            </ul>
+            @if (bannerList.Length > 1)
+            {
+                <script type="text/javascript">
+                    $(function () {
+
+                        $('.bxslider').bxSlider({
+                            auto: true,
+                            mode: 'fade',
+                            //speed:5000,
+                            autoHover: true,
+                            pause: 5000,
+                            controls:false,
+                            autoControls: false,
+                        });
+                    });
+                </script>
+            }
+        </div>
+        @* <div class="others">
+            <div class="pagination">
+            </div>
+        </div>*@
+        <!-- 动态-推荐 -->
+        <div class="banner-wrap">
+            <div class="banner-adv">
+                <div class="adv-module">
+                    <div class="adv-title">
+                        <span><i>
+                            <img src="/images/news.png" alt="最新动态" /></i>最新动态</span>
+                        <a href="@Url.Action("list", "news")">更多&gt;&gt;</a>
+                    </div>
+                    <div class="adv-list">
+                        <ul>
+                            @{
+                                DataTable homeNewsList = News.GetHomeNewsList(0, 6);
+                            }
+                            @foreach (DataRow row in homeNewsList.Rows)
+                            {
+                                <li><a href="@Url.Action("details", "news", new RouteValueDictionary { { "newsId", row["newsid"] } })">@row["title"]</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="adv-module">
+                    <div class="adv-title">
+                        <span><i>
+                            <img src="/images/hotrecommend.png" alt="热品推荐" /></i>热品推荐</span>
+
+                    </div>
+                    <div class="adv-list">
+                        <a href="/71.html">
+                            <img src="/images/specialrecommend.png" alt="" /></a>
+                    </div>
+                </div>
+                <div class="mask"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- banner end -->
+
+    <!-- main start -->
+    <div id="content" class="main box1000">
+        <!-- 第一个商品图片列表 -->
+        <div class="hot-goods-box">
+            <div class="sgb-title">
+                <div class="stl-left Fleft">
+                    <!-- 标题文字类型明确 -->
+                    <h2><i style="display: inline;">
+                        <img src="/images/hotsale-icon.png" alt="" style="padding-right: 5px;" /></i>热销产品</h2>
+                </div>
+                <div class="stl-right Fright">
+                    <a href="/74.html">体重控制</a><span>|</span>
+                    <a href="/75.html">能量补充</a><span>|</span>
+                    <a href="/70.html">眼霜</a><span>|</span>
+                    <a href="/72.html">鳄鱼</a><span>|</span>
+                    <a href="/87.html">皇家锅具</a><span></span>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="sgb-cont">
+                <div class="hot-left Fleft">
+                    <a href="/67.html">
+                        <img src="/images/hot-sale-1.jpg" alt=""></a>
+                </div>
+                <div class="hot-right Fright">
+                    <!-- scr-group纯粹是为了第四个商品列表与第一个商品列表的差异而设置 -->
+                    <ul class="hot_img">
+                        <li class="imgbg1"><a href="/88.html">
+                            <img src="/images/hot-sale-2.png" alt="" /></a></li>
+                        <li class="imgbg2"><a href="/64.html">
+                            <img src="/images/hot-sale-3.png" alt="" /></a></li>
+                        <li class="imgbg1"><a href="/68.html">
+                            <img src="/images/hot-sale-4.png" alt="" /></a></li>
+                        <li class="imgbg2"><a href="/80.html">
+                            <img src="/images/hot-sale-5.png" alt="" /></a></li>
+                    </ul>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+        <!-- 第二个商品列表 -->
+        <div class="b-goods-box">
+            <div class="bgb-title">
+                <div class="btl-left Fleft">
+                    <!-- 标题文字类型不明，使用图片 -->
+                    <!--<i>
+                        <img src="//images/naturelife-brand.png" alt="源创生活" /></i>-->
+                    <h2>
+                        <img src="/images/naturelife-brand.png" alt="源创生活" /></h2>
+                </div>
+                <div class="btl-right Fright">
+                    <a href="/88.html">净水</a><span>|</span>
+                    <a href="/76.html">提神</a><span>|</span>
+                    <a href="/75.html">营养补充</a><span>|</span>
+                    <a href="/82.html">螺旋藻</a><span>|</span>
+                    <a href="/147.html">能量鞋</a><span></span>
+                </div>
+            </div>
+            <div class="bgb-cont">
+                <!-- 左边第一张 -->
+                <div class="bc-left Fleft">
+                    <a href="/75.html">
+                        <img src="/images/oceanlife-left-1.jpg" width="240" height="440"></a>
+                </div>
+                <!-- 右边部分 -->
+                <div class="bc-right Fleft">
+                    <!-- 右边第一部分 -->
+                    <div class="shop-cont Fleft floormid">
+                        <!-- 高度和宽度写死，根据图片大小和浮动自动排列 -->
+                        <div class="shop-list floormidtop">
+                            <a href="/85.html">
+                                <img src="/images/oceanlife-mid-2.jpg">
+                            </a>
+                        </div>
+                        <div class="shop-list ">
+                            <a href="/139.html" class="Fleft">
+                                <img src="/images/oceanlife-mid-3.png"></a>
+                            <a href="/76.html" class="Fleft">
+                                <img src="/images/oceanlife-mid-4.png"></a>
+                        </div>
+                    </div>
+                    <!-- 右边第二部分 -->
+                    <div class="shop-cont Fleft">
+                        <!-- 高度和宽度写死，根据图片大小和浮动自动排列 -->
+                        <div class="shop-list floorrighttop">
+                            <a href="/74.html" class="Fleft">
+                                <img src="/images/oceanlife-right-5.png">
+                            </a>
+                            <a href="/86.html" class="Fleft">
+                                <img src="/images/oceanlife-right-6.png">
+                            </a>
+                            <a href="/77.html" class="Fleft">
+                                <img src="/images/oceanlife-right-7.png">
+                            </a>
+                            <a href="/521.html" class="Fleft">
+                                <img src="/images/oceanlife-right-8.png">
+                            </a>
+                        </div>
+                        <div class="shop-list">
+                            <a href="/81.html" class="Fleft">
+                                <img src="/images/oceanlife-right-9.png"></a>
+                            <a href="/83.html" class="Fleft">
+                                <img src="/images/oceanlife-right-10.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+        <!-- 第三个商品列表 -->
+        <div class="b-goods-box">
+            <div class="bgb-title">
+                <div class="btl-left Fleft">
+                    <!-- 标题文字类型不明，使用图片 -->
+                    <i>
+                        <img src="/images/oceanlife-brand.png" alt="源创生活" /></i>
+                    <!-- <h2><img src="/images/oceanlife-brand.png" alt="源创生活" /></h2>-->
+                    <!--<img src="">-->
+                </div>
+                <div class="btl-right Fright">
+                    <a href="/71.html">鳄鱼油</a><span>|</span>
+                    <a href="/68.html">面膜</a><span>|</span>
+                    <a href="/67.html">护肤</a><span>|</span>
+                    <a href="/63.html">清洁</a><span>|</span>
+                    <a href="/72.html">淡斑</a><span></span>
+                </div>
+            </div>
+            <div class="bgb-cont">
+                <!-- 左边第一张 -->
+                <div class="bc-left Fleft">
+                    <a href="/70.html">
+                        <img src="/images/naturelife-left-1.png" width="240" height="440"></a>
+                </div>
+                <!-- 右边部分 -->
+                <div class="bc-right Fleft">
+                    <!-- 右边第一部分 -->
+                    <div class="shop-cont Fleft floormid">
+                        <!-- 高度和宽度写死，根据图片大小和浮动自动排列 -->
+                        <div class="shop-list floormidtop">
+                            <a href="/69.html">
+                                <img src="/images/naturelife-mid-2.jpg">
+                            </a>
+                        </div>
+                        <div class="shop-list floormidtop">
+                            <a href="/66.html" class="Fleft">
+                                <img src="/images/naturelife-mid-3.png"></a>
+                            <a href="/64.html" class="Fleft">
+                                <img src="/images/naturelife-mid-4.png"></a>
+                        </div>
+                    </div>
+                    <!-- 右边第二部分 -->
+                    <div class="shop-cont Fleft">
+                        <!-- 高度和宽度写死，根据图片大小和浮动自动排列 -->
+                        <div class="shop-list floorrighttop">
+                            <a href="/65.html" class="Fleft">
+                                <img src="/images/naturelife-right-5.png">
+                            </a>
+                            <a href="/99.html" class="Fleft">
+                                <img src="/images/naturelife-right-6.png">
+                            </a>
+                            <a href="/72.html" class="Fleft">
+                                <img src="/images/naturelife-right-7.png">
+                            </a>
+                            <a href="/67.html" class="Fleft">
+                                <img src="/images/naturelife-right-8.png">
+                            </a>
+                        </div>
+                        <div class="shop-list floorrighttop">
+                            <a href="/71.html" class="Fleft">
+                                <img src="/images/naturelife-right-9.png"></a>
+                            <a href="/63.html" class="Fleft">
+                                <img src="/images/naturelife-right-10.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+        <!-- 第四个商品列表 -->
+        <div class="s-goods-box">
+            <div class="qqg-title">
+                <div class="stl-left Fleft">
+                    <!-- 标题文字类型明确 -->
+
+                    <h2><i style="display: inline;">
+                        <img src="/images/quanqiugou-icon.png" alt="" style="padding-right: 5px;" /></i>全球购</h2>
+                </div>
+                <div class="stl-right Fright">
+                    <a href="">BOSS</a><span>|</span>
+                    <a href="">CHANEl</a><span>|</span>
+                    <a href="">HIPP</a><span>|</span>
+                    <a href="">GNC</a><span>|</span>
+                    <a href="">ADIDAS</a><span></span>
+                </div>
+            </div>
+            <div class="sgb-cont">
+                <div class="sc-left Fleft">
+                    <a href="/215.html">
+                        <img src="/images/quanqiugou-1.jpg"></a>
+                </div>
+                <div class="sc-mid Fleft">
+                    <a href="/384.html" class="Fleft">
+                        <img src="/images/quanqiugou-2.jpg"></a>
+                    <a href="/420.html" class="Fleft">
+                        <img src="/images/quanqiugou-3.jpg"></a>
+                </div>
+                <div class="sc-right Fleft">
+
+                    <a href="/374.html" class="Fleft">
+                        <img src="/images/quanqiugou-4.jpg"></a>
+                    <a href="/365.html" class="Fleft">
+                        <img src="/images/quanqiugou-5.jpg"></a>
+                    <a href="/369.html" class="Fleft">
+                        <img src="/images/quanqiugou-6.jpg"></a>
+                    <a href="/234.html" class="Fleft">
+                        <img src="/images/quanqiugou-7.jpg"></a>
+                </div>
+            </div>
+        </div>
+        <!-- 品牌logo部分 -->
+        <div class="brand">
+            <a href="http://www.hhwtop.com/channel/4-56-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-1.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-29-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-2.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-67-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-3.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-39-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-4.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-57-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-5.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-78-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-6.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-68-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-7.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-43-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-8.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-77-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-9.jpg">
+            </a>
+            <a href="http://www.hhwtop.com/channel/4-52-0-0-0-0-1.html">
+                <img src="/images/quanqiulogo-10.jpg">
+            </a>
+        </div>
+    </div>
+    <!-- main end -->
+
+    <!-- footer start -->
+
+    @Html.Partial("/views/publicpage/newfooter.cshtml")
+    
+</body>
+</html>
+@*<script src="/scripts/banner.js" type="text/javascript"></script>*@
+

@@ -1,0 +1,157 @@
+﻿@model VMall.Web.Models.PayResultModel
+@using VMall.Web;
+@{
+    Layout = "~/views/shared/_layout_order.cshtml";
+    ViewBag.Title = "支付结果-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="box">
+    <div style="text-align: center; margin: 10px auto; width: 100%; font-size: 36px; color: #D02424; height: 40px; line-height: 40px;">
+        @if (Model.State == 1)
+        {
+            @:支付成功 
+        }
+        else
+        {
+            @:支付失败 
+    }
+    </div>
+
+</div>
+@{decimal chongXiaoCount = Orders.GetListForChongXiao(WorkContext.Uid);}
+@if (WorkContext.IsDirSaleUser && chongXiaoCount >= 600)
+{ 
+    <div id="fenqi" style="text-align: center; margin: 20px auto; width: 1002px; padding: 20px; font-size: 20px">
+        <div style="border: 1px solid #ddd">
+            <p style="text-align: center; margin: 20px;">您已完成本月重消，已分期。</p>
+           @* <div id="choseJoin" style="text-align: center; margin: 20px auto">
+                <a href="@Url.Action("ChongXiaoFenQi", new { oids = string.Join(",", Model.SuccessOrderList.Select(x => x.Oid).ToArray()), PhasedType = 2 })">分期</a>
+                <a href="@Url.Action("ChongXiaoFenQi", new { oids = string.Join(",", Model.SuccessOrderList.Select(x => x.Oid).ToArray()), PhasedType = 1 })">不分期
+
+                </a>
+            </div>*@
+        </div>
+    </div>
+}
+else if (WorkContext.IsDirSaleUser && chongXiaoCount >= 300 && chongXiaoCount < 600)
+{
+    <div id="fenqifinish" style="text-align: center; margin: 20px auto; width: 1002px; padding: 20px; font-size: 20px">
+        <div style="border: 1px solid #ddd">
+            <p style="text-align: center; color: black; font-size: 24px; margin: 10px;">您已完成本月重消！</p>
+
+        </div>
+    </div>
+}
+
+@*@{List<OrderProductInfo> productList = Orders.GetOrderProductList(string.Join(",", Model.SuccessOrderList.FindAll(x => x.CashDiscount <= 0).Select(x => x.Oid)));
+  string dirSaleRank = "0";
+  if (WorkContext.IsDirSaleUser)
+  {
+      dirSaleRank = AccountUtils.GetUserRank(WorkContext.PartUserInfo.DirSaleUid);
+  }
+}*@
+
+@*@if (productList.Sum(x => x.BuyCount * x.ProductPV) >= 5900 && WorkContext.IsDirSaleUser && Model.State == 1 && dirSaleRank == "4")
+{ //消费pv大于5900 并且是直销白金卡会员 级别为4
+    <div id="joinPlan" style="text-align: center; margin: 20px auto; width: 1002px; padding: 20px; font-size: 20px">
+        <div>
+            <p style="text-align: center;">您本次购物PV已达5900PV，请您确认是否扣除5900PV参加年终东南亚邮轮旅游？</p>
+            <div id="choseJoin" style="text-align: center; margin: 20px auto">
+                <a href="@Url.Action("goTrip", new { uid = WorkContext.Uid, oids = string.Join(",", Model.SuccessOrderList.FindAll(x => x.CashDiscount <= 0).Select(x => x.Oid)) })">参加</a>
+                <a href="@Url.Action("noGoTrip", new { uid = WorkContext.Uid, oids = string.Join(",", Model.SuccessOrderList.FindAll(x => x.CashDiscount <= 0).Select(x => x.Oid)) })">不参加
+
+                </a>
+            </div>
+        </div>
+    </div>
+}*@
+@{
+    string Astoreids = WebHelper.GetConfigSettingsInt("AgentStoreId") + "," + WebHelper.GetConfigSettingsInt("AgentSuitStoreId");
+    bool isagentstore=StringHelper.ArrayContainsForNum(string.Join(",", Model.SuccessOrderList.Select(x => x.StoreId)), Astoreids);
+    PartUserInfo user = Users.GetPartUserById(WorkContext.Uid);
+    }
+@if (user != null) { 
+if (user.AgentType > 0 && !(user.IsDirSaleUser) && isagentstore)
+{ 
+    <script type="text/javascript">
+            window.onload = function(){   
+            var time = 3; //设置时间为几秒   
+            var timer = document.getElementById('timer'); //获取ID为timer的对象   
+            timer.innerHTML = time; //初始化显示秒数   
+            time = time - 1;   
+            var g = window.setInterval(function(){   
+            if(time<0){   
+                window.clearTimeout(g); //清除动画   
+                window.location.href = '/ucenter/agentinfo?uid=@WorkContext.Uid&type=1'; //跳转到指定地址   
+                //window.history.back(-1); //后退   
+            } else {   
+                showTime();   
+            }   
+            },1000);   
+            //显示函数   
+            function showTime(){   
+                timer.innerHTML = time;   
+                time--;   
+            }      
+            };
+        </script>
+    <div class="return" style="margin-top: 30px;">
+       @* <p style="text-align: center; color: black; font-size: 24px; margin: 10px;">您已成为汇购优选代理！</p>*@
+         <p style="text-align: center; color: black; font-size: 24px; margin: 30px;"><span id="timer" style="color:red;">5</span> 秒后自动跳转至信息填写页面。</p>  
+       @* <a href="/" style="font-size: 18px; color: orange;">返回首页</a>*@
+    </div>
+}
+}
+
+@*<script>
+    //function fenqi(oids, PhasedType) {
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/order/ChongXiaoFenQi?r=" + Math.random(),
+    //        data: { oids: oids, PhasedType: PhasedType },
+    //        success: function (result) {
+    //            var result = eval("(" + result + ")");
+    //            if (result.state == "success") {
+    //                alert(result.content);
+    //                $("#fenqi").hide();
+    //                window.location.href = "/";
+    //            }
+    //            else {
+    //                alert(result.content);
+    //            }
+    //        }
+    //    });
+    //}
+</script>*@
+
+@*@if (Model.SuccessOrderList.FindAll(x => x.StoreId.ToString() == WebSiteConfig.HealthenStoreId).Sum(x => x.ProductAmount) >= 5800 && !WorkContext.IsDirSaleUser && Model.State == 1)
+{//海之圣专区满5800 才有加入资格 
+    <div id="joinPlan" style="text-align: center; margin: 20px auto; width: 1002px; padding: 20px; font-size: 20px">
+        <div>
+            <p style="text-align: center;">您的订单金额已符合蓝钻计划，是否加入？</p>
+            <div id="choseJoin" style="text-align: center; margin: 20px auto">
+                <a href="@Url.Action("joinplan", new RouteValueDictionary { { "oids", Model.SuccessOrderList.FindAll(x => x.StoreId.ToString() == WebSiteConfig.HealthenStoreId).FirstOrDefault().Oid } })">加入</a>
+                <a href="@Url.Action("orderlist", "ucenter")">不加入
+
+                </a>
+            </div>
+        </div>
+    </div>
+}*@
+

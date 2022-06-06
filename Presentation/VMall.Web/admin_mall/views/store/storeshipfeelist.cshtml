@@ -1,0 +1,333 @@
+﻿@model VMall.Web.MallAdmin.Models.StoreShipFeeListModel
+@section header{
+    <title>配送费用列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <style>
+        h3 {
+            margin: 20px 0;
+        }
+    </style>
+}
+
+@section body{
+    <h1 class="rightH1">店铺管理 &gt;&gt; 配送费用列表
+        <div class="right">
+            <a href="@Url.Action("StoreShipTemplateList", new { StoreId = Model.StoreId })" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <a href="@Url.Action("addstoreshipfee", new { StoreSTid = Model.StoreSTid })" class="menuBT">
+                <img src="/admin_mall/content/images/add.jpg" />添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    <div class="table_top"></div>
+
+    <div class="dataList">
+        @if (Model.Free == 3 || Model.Free == 4)
+        {
+            if (Model.Free == 3)
+            {
+            <h3>包邮运费<span style="font-size: 14px; color: red;"> （满足包邮价格，部分地区仍然需要计算运费）</span></h3>
+            }
+            if (Model.Free == 4)
+            {
+            <h3>小于特定数量发快递<span style="font-size: 14px; color: red;"> </span></h3>
+            }
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="4"></th>
+                        <th width="400" align="left">区域</th>
+                        @if (Model.Free == 3 || Model.Free == 4)
+                        {
+                            <th width="70" align="left">运费类型</th>
+                        }
+                        <th width="70" align="left">计费类型</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>首件</text>}
+                                                    else
+                                                    {<text>首重</text>}</th>
+                        <th width="70" align="left">首费</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>续件</text>}
+                                                    else
+                                                    {<text>续重</text>}</th>
+                        <th width="70" align="left">续费</th>
+                        <th width="76" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (StoreShipFeeInfo row in Model.StoreShipFeeList.FindAll(x => x.ShipType == 0))
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                @if (row.RegionId == "-1")
+                                {
+                                    @:默认区域
+    }
+                                else if (row.RegionId == "0")
+                                {
+                                    @:全国
+    }
+                                else
+                                {
+                                    var RegionName = Regions.GetRegionNamesByregionids(row.RegionId, row.CityId);
+                                    @RegionName
+                                }
+                            </td>
+
+                            @if (Model.Free == 3)
+                            {
+                                <td>
+                                    @if (row.ShipType == 0)
+                                    {
+                               
+                                        @:包邮运费
+                            }
+                                    else
+                                    {
+                                        @:不包邮运费
+                            }
+                                </td>
+                            }
+                            @if (Model.Free == 4)
+                            {
+                                <td>
+                                    @if (row.ShipType == 0)
+                                    {
+                               
+                                        @:小于特定件数快递运费
+                            }
+                                    else
+                                    {
+                                        @:大于特定件数物流运费
+                            }
+                                </td>
+                            }
+                            <td>
+                                @if (Model.Type == 0)
+                                {
+                                    @:按件数计算
+                            }
+                                else
+                                {
+                                    @:按重量计算
+                            }
+                            </td>
+
+                            <td>@row.StartValue</td>
+                            <td>@row.StartFee</td>
+                            <td>@row.AddValue</td>
+                            <td>@row.AddFee</td>
+                            <td>
+                                <a href="@Url.Action("editstoreshipfee", new { recordId = row.RecordId, StoreSTid = Model.StoreSTid })" class="editOperate">[修改]</a>
+                                @if (row.RegionId.ToString() != "-1")
+                                {
+                                    <a href="@Url.Action("delstoreshipfee", new { recordId = row.RecordId })" class="deleteOperate">[删除]</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            if (Model.Free == 3) { 
+            <h3>不包邮运费 <span style="font-size: 14px; color: red;"></span></h3>
+            }
+            if (Model.Free == 4)
+            {
+            <h3>大于特定数量发物流<span style="font-size: 14px; color: red;"> </span></h3>
+            }
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="4"></th>
+                        <th width="400" align="left">区域</th>
+                        @if (Model.Free == 3 || Model.Free == 4)
+                        {
+                            <th width="70" align="left">运费类型</th>
+                        }
+                        <th width="70" align="left">计费类型</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>首件</text>}
+                                                    else
+                                                    {<text>首重</text>}</th>
+                        <th width="70" align="left">首费</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>续件</text>}
+                                                    else
+                                                    {<text>续重</text>}</th>
+                        <th width="70" align="left">续费</th>
+                        <th width="76" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (StoreShipFeeInfo row in Model.StoreShipFeeList.FindAll(x => x.ShipType == 1))
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                @if (row.RegionId == "-1")
+                                {
+                                    @:默认区域
+    }
+                                else if (row.RegionId == "0")
+                                {
+                                    @:全国
+    }
+                                else
+                                {
+                                    var RegionName = Regions.GetRegionNamesByregionids(row.RegionId, row.CityId);
+                                    @RegionName
+                                }
+                            </td>
+
+                            @if (Model.Free == 3)
+                            {
+                                <td>
+                                    @if (row.ShipType == 0)
+                                    {
+                               
+                                        @:包邮运费
+                            }
+                                    else
+                                    {
+                                        @:不包邮运费
+                            }
+                                </td>
+                            }
+                            @if (Model.Free == 4)
+                            {
+                                <td>
+                                    @if (row.ShipType == 0)
+                                    {
+                               
+                                        @:小于特定件数快递运费
+                            }
+                                    else
+                                    {
+                                        @:大于特定件数物流运费
+                            }
+                                </td>
+                            }
+                            <td>
+                                @if (Model.Type == 0)
+                                {
+                                    @:按件数计算
+                            }
+                                else
+                                {
+                                    @:按重量计算
+                            }
+                            </td>
+
+                            <td>@row.StartValue</td>
+                            <td>@row.StartFee</td>
+                            <td>@row.AddValue</td>
+                            <td>@row.AddFee</td>
+                            <td>
+                                <a href="@Url.Action("editstoreshipfee", new { recordId = row.RecordId, StoreSTid = Model.StoreSTid })" class="editOperate">[修改]</a>
+                                @if (row.RegionId.ToString() != "-1")
+                                {
+                                    <a href="@Url.Action("delstoreshipfee", new { recordId = row.RecordId })" class="deleteOperate">[删除]</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="4"></th>
+                        <th width="400" align="left">区域</th>
+                        @if (Model.Free == 3)
+                        {
+                            <th width="70" align="left">运费类型</th>
+                        }
+                        <th width="70" align="left">计费类型</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>首件</text>}
+                                                    else
+                                                    {<text>首重</text>}</th>
+                        <th width="70" align="left">首费</th>
+                        <th width="70" align="left">@if (Model.Type == 0)
+                                                    {<text>续件</text>}
+                                                    else
+                                                    {<text>续重</text>}</th>
+                        <th width="70" align="left">续费</th>
+                        <th width="76" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (StoreShipFeeInfo row in Model.StoreShipFeeList)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                @if (row.RegionId == "-1")
+                                {
+                                    @:默认区域
+    }
+                                else if (row.RegionId == "0")
+                                {
+                                    @:全国
+    }
+                                else
+                                {
+                                    var RegionName = Regions.GetRegionNamesByregionids(row.RegionId, row.CityId);
+                                    @RegionName
+                                }
+                            </td>
+
+                            @if (Model.Free == 3)
+                            {
+                                <td>
+                                    @if (row.ShipType == 0)
+                                    {
+                               
+                                        @:包邮运费
+                            }
+                                    else
+                                    {
+                                        @:不包邮运费
+                            }
+                                </td>
+                            }
+
+                            <td>
+                                @if (Model.Type == 0)
+                                {
+                                    @:按件数计算
+                            }
+                                else
+                                {
+                                    @:按重量计算
+                            }
+                            </td>
+
+                            <td>@row.StartValue</td>
+                            <td>@row.StartFee</td>
+                            <td>@row.AddValue</td>
+                            <td>@row.AddFee</td>
+                            <td>
+                                <a href="@Url.Action("editstoreshipfee", new { recordId = row.RecordId, StoreSTid = Model.StoreSTid })" class="editOperate">[修改]</a>
+                                @if (row.RegionId.ToString() != "-1")
+                                {
+                                    <a href="@Url.Action("delstoreshipfee", new { recordId = row.RecordId })" class="deleteOperate">[删除]</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <div class="table_bottom"></div>
+}

@@ -1,0 +1,131 @@
+﻿@model VMall.Web.Models.MyAgentModel
+@using VMall.Core;
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "我的代理-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "我的代理";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<script>
+</script>
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="position: relative;">
+            <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+            @if (Model.State)
+            {
+                if (Model.AgentState == 1)
+                { 
+                <div>@Model.Message  </div>
+                }
+                else if (Model.AgentState == 2)
+                {
+                <div style="border: 1px solid #DDDDDD; margin: 20px; text-align: center; padding: 20px; font-size: 18px;">
+                    您的代理级别为：
+                        <span style="color: red; font-size: 24px; font-weight: 400;">
+                            @if (WorkContext.PartUserInfo.AgentType == 1)
+                            {
+                                @:事业伙伴
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 2)
+                            {
+                                @:星级经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 3)
+                            {
+                                @:VIP经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 4)
+                            {
+                                @:大区经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 5)
+                            {
+                                @:合伙人
+                            }
+                        </span>
+                    @*<p style="margin-top:10px;">
+                        <a href=""><span class="submitBT" style="font-size: 14px; padding: 3px 20px;">查看授权证书</span>
+                        </a>
+                    </p>*@
+
+                </div>
+                <h2 id="memberRT">未安置会员</h2>
+                <div id="subList">
+                    <table width="100%" border="0" cellspacing="0" class="dingdan">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>会员编号</th>
+                                <th>会员手机</th>
+                                <th>会员姓名</th>
+                                <th>代理等级</th>
+                                <th>操作</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int k = 1;}
+                            @foreach (var item in Model.UserList)
+                            {
+                                //string showName = string.IsNullOrEmpty(item.UserName) ? (string.IsNullOrEmpty(item.Email) ? (string.IsNullOrEmpty(item.Mobile) ? item.NickName : item.Mobile) : item.Email) : item.UserName;
+                                <tr>
+                                    <td>@k</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Mobile</td>
+                                    <td>@item.RealName</td>
+                                    <td>
+                                        @if (item.AgentType == 1)
+                                        {
+                                            @:事业伙伴
+                            }
+                                        else if (item.AgentType == 2)
+                                        {
+                                            @:星级经销商
+                            }
+                                        else if (item.AgentType == 3)
+                                        {
+                                            @:VIP经销商
+                            }
+                                        else if (item.AgentType == 4)
+                                        {
+                                            @:大区经销商
+                            }
+                                        else if (item.AgentType == 5)
+                                        {
+                                            @:合伙人
+                            }
+                                    </td>
+                                    <td>
+                                        <a href="/ucenter/agentinfo?uid=@item.Uid&type=2"  style="text-decoration:underline">帮他安置</a>
+
+
+                                    </td>
+
+                                </tr>
+                                        k++;
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                }
+            }
+            else
+            {
+                <div>@Model.Message  </div>
+            }
+
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+
+

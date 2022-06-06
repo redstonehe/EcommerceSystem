@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "安全中心";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<div class="userInfo">
+<ul>
+<li><a href="@Url.Action("safeverify", new RouteValueDictionary { { "act", "updatePassword" } })">修改密码<span></span></a></li>
+@*<li><a href="@Url.Action("safeverify", new RouteValueDictionary { { "act", "updateEmail" } })">
+        @if (WorkContext.PartUserInfo.Email.Length > 0)
+        {
+            if (WorkContext.PartUserInfo.VerifyEmail == 0)
+            {
+                @:验证邮箱
+            }
+            else
+            {
+                @:修改邮箱
+            }
+        }
+        else
+        {
+            @:绑定邮箱
+        }
+<span></span></a></li>*@
+<li><a href="@Url.Action("safeverify", new RouteValueDictionary { { "act", "updateMobile" } })">
+        @if (WorkContext.PartUserInfo.Mobile.Length > 0)
+        {
+            if (WorkContext.PartUserInfo.VerifyMobile == 0)
+            {
+                @:验证手机
+            }
+            else
+            {
+                @:修改手机
+            }
+        }
+        else
+        {
+            @:绑定手机
+        }
+<span></span></a></li>
+<li><a href="@Url.Action("shipaddresslist")">收货地址<span></span></a></li>
+ <li><a href="@Url.Action("safeverify", new RouteValueDictionary { { "act", "updatePayPassword" } })">支付密码<span></span></a></li>
+</ul>
+</div>

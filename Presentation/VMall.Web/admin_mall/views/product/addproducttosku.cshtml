@@ -1,0 +1,137 @@
+﻿@model VMall.Core.ProductInfo
+@section header{
+    <title>合并SKU</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js?aaaaaaaaaaaa"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/product.js"></script>
+    <script type="text/javascript">
+        productPageType = 3;
+
+        @*@{
+            StringBuilder productSKUItemListStr = new StringBuilder();
+            if(Model.AttrValueIdList!=null && Model.AttrValueIdList.Length>0)
+            {
+                productSKUItemListStr.Append("[");
+                for (int i = 0;i < Model.AttrValueIdList.Length; i++)
+                {
+                    productSKUItemListStr.AppendFormat("{0}'attrId':'{1}','attrValueId':'{2}','inputValue':'{3}'{4},", "{", Model.AttrIdList[i], Model.AttrValueIdList[i], Model.AttrInputValueList[i], "}");
+                }
+                productSKUItemListStr.Remove(productSKUItemListStr.Length - 1, 1);
+                productSKUItemListStr.Append("]");
+            }
+            else
+            {
+                productSKUItemListStr.Append("null");
+            }
+         }
+       //商品sku项列表
+        productSKUItemList = @Html.Raw(productSKUItemListStr.ToString());*@ 
+
+        @*var cateattr='@(Html.Raw(ViewData["cateattr"].ToString()))';
+
+        var result = eval("(" + cateattr + ")");
+        $("#addSkuBut").before(buildSKUAttrSelectTable(result));*@
+        $(function () {
+            //$("#skuAttributeTable").find("tr:not('.keepTr')").remove();
+            $.get("/malladmin/category/aandvjsonlist?cateId=" + @Model.CateId + "&time=" + new Date(), function (data) {
+
+                var result = eval("(" + data + ")");
+                $("#addSkuBut").before(buildSKUAttrSelectTableForSingle(result));
+
+                //选中对应属性
+                if (productSKUItemList != undefined && productSKUItemList != null && productSKUItemList.length > 0) {
+                    //for (var i = 0; i < productSKUItemList.length; i++) {
+                    //    $("#skuAttributeTable").find("input[name=attrValue][type=checkbox][value=" + productSKUItemList[i].attrValueId + "]").attr("checked", true);
+                    //    $("#skuAttributeTable").find("input[name=inputValue][attrId=" + productSKUItemList[i].attrId + "]").val(productSKUItemList[i].inputValue);
+                    //}
+                    selectSKUAttrValue();
+
+                }
+
+            })
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $(".sumbitBut").click(function () {
+                var targetpid = $(".Pid").val();
+                var attrid = $("input[name=AttrIdList]").val();
+                var attrvalueid = $("input[name=AttrValueIdList]").val()
+                $(".targetpid").val(targetpid);
+                $(".attrid").val(attrid);
+                $(".attrvalueid").val(attrvalueid);
+                if (attrvalueid > 0 && attrid > 0 && targetpid>0) {
+                    $("form:first").submit();
+                    return false;
+                }
+            })
+        });
+    </script>
+}
+@section body{
+    <h1 class="rightH1">商品管理 &gt;&gt; 合并SKU
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </h1>
+    @*<ul class="addTag">
+        <li><a href="javascript:;">规格信息</a></li>
+        
+        <div class="clear">
+        </div>
+    </ul>*@
+    @using (Html.BeginForm())
+    {
+        
+        <div class="addTable ">
+            <table width="100%" id="skuAttributeTable">
+                <tr>
+                    <td width="110px;" align="right"></td>
+                    <td>适用于将产品添加到其他已经添加了Sku的产品，实现不同规格产品在一个页面上集中关联显示的效果</td>
+                </tr>
+                <tr>
+                    <td width="130px" align="right">选择商品：</td>
+                    <td>
+                        <input type="hidden" class="OldPid" id="OldPid" name="OldPid" value="@Model.Pid" />
+                        <input type="hidden" value="0" class="targetpid" id="targetpid" name="targetpid">
+                        <input type="hidden" value="0" class="attrid" id="attrid" name="attrid">
+                        <input type="hidden" value="0" class="attrvalueid" id="attrvalueid" name="attrvalueid">
+                        <div class="selectBt">
+                            <input type="button" value="选择商品" onclick="openProductSelectLayer(this, 0)" />
+                            <input type="hidden" class="Pid" id="Pid" name="Pid" value="0" />
+                            <input type="hidden" class="ProductName" id="ProductName" name="ProductName" value="选择商品" />
+                        </div>
+                        @* @Html.TextBoxFor(x => x.Pid, new { @class = "input", size = "30" })@Html.ValidationMessageFor(x => x.Pid)*@
+                        <span>(将产品集中到选择产品的页面显示)</span>
+                    </td>
+                </tr>
+                <tr id="addSkuBut" class="keepTr">
+                    <td align="right"></td>
+                    <td>
+                        <a href="" class="addBt sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                    </td>
+                </tr>
+                <tr class="keepTr">
+                    <td align="right">&nbsp;
+                    </td>
+                    <td>&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+    }
+}

@@ -1,0 +1,79 @@
+﻿@model List<VMall.Core.CashCouponInfo>
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "汇购卡";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<style>
+    .cashitem {
+        /*background:url(/images/cashbg.png) no-repeat;background-size:300px;*/
+        width: 90%;
+        margin: 10px auto;
+        text-align: center;
+         padding: 10px 0;
+        position: relative;
+        border-bottom:1px dashed #c8c7cc;
+    }
+
+    .cashvalue {
+        position: absolute;
+        top: 75%;
+        left: 10px;
+        text-align: left;
+        
+    }
+
+        .cashvalue span {
+            color: #C80510;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+
+    .banlance {
+        margin-left: 10px;
+    }
+</style>
+
+
+
+<div class="myAssetsNav">
+    <a href="@Url.Action("accountinfo")" ><strong>资产账户</strong></a>
+    @if (WorkContext.IsDirSaleUser)
+            { 
+    <a href="@Url.Action("CashCouponList")"  class="hot"><strong>汇购卡</strong></a>
+    }
+    <a href="@Url.Action("couponlist")"><strong>优惠券</strong></a>
+    <a href="@Url.Action("subrecommendlist")"><strong>分享会员</strong></a>
+</div>
+
+
+<div class="myAssetsCon">
+    @if (Model.Any())
+    {
+        foreach (var item in Model)
+        {
+        <a href="@Url.Action("CashDetail", new { CashId= item.CashId })">
+            <div class="cashitem">
+                <img src="/images/cashbg.png" alt="" width="100%" />
+                <p class="cashvalue">
+                    <span>卡&nbsp;&nbsp;&nbsp;号:@item.CashCouponSN</span>
+                    <br />
+
+                    <span>有效期:@item.ValidTime.ToString("yyyy/MM/dd")</span>
+                    <span class="banlance">余额:@item.Banlance</span>
+                </p>
+
+            </div>
+        </a>
+        }
+    }
+    else
+    { 
+        @:无
+    
+    }
+</div>
+
+

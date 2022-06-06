@@ -1,0 +1,261 @@
+﻿@Html.Partial("/views/publicpage/headertop2016.cshtml")
+<!--topAdv start-->
+    @{
+        List<AdvertInfo> homeTopAdvertList = Adverts.GetAdvertList(6);
+    }
+    @if (homeTopAdvertList != null && homeTopAdvertList.Count > 0)
+    {
+        <div id="topADBox" style="background:@homeTopAdvertList[0].ExtField1">
+            <div class="topAdv">
+                <a href="@homeTopAdvertList[0].Url">
+                    <img src="/upload/advert/@homeTopAdvertList[0].Body" width="1000" height="80" alt=""/></a>
+                <a href="javascript:;" class="close" onclick="this.parentNode.style.display='none'">x</a>
+            </div>
+        </div>
+    }
+    <!--topAdv end-->
+<style>
+    .topsearch {position:relative;
+    }
+    .topsearch ul {
+        display:none;
+        position:absolute;
+        top:37px;left:0;
+        list-style: none;
+    padding: 0px;
+    margin: 0px;
+    width: 400px;
+    border: 1px solid #C0C0C0;
+    border-top:none;
+    z-index:9999999;
+    background:#fff;
+    }
+    .topsearch ul li{
+		padding: 0px;
+		margin:0px;
+
+	}
+	.topsearch ul li:hover{
+		background:#f1f1f1;
+	}
+	.topsearch ul li a{    padding: 0 10px;
+		text-decoration: none;
+		color:#333;
+		height:24px;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width:100%;
+		line-height: 24px;
+	}
+
+</style>
+<script>
+    //$(function () {
+    //    $(".searchResult").click(function () {
+    //        //alert(this);
+    //    });
+    //});
+    window.onload = function () {
+        var $input = $('#search-ipt2'), $wordList = $('#word-list2');
+        $input.on('input', function () {
+            var $val = $(this).val();
+
+            if ($.trim($val).length <= 0)
+                return;
+            setTimeout(function () {
+                $.ajax({
+                    type: 'get',
+                    cache: false,
+                    url: '/home/SearchWordTips',
+                    dataType: 'json',
+                    data: { word: $val },
+                    success: function (data) {
+                        $wordList.html('');
+                        //alert(data);
+                        if (data.length > 0) {
+                            var showLent = data.length;
+                            console.log(showLent);
+                            for (var i = 0 ; i < showLent; i++) {
+                                console.log(data[i].Keyword);
+                                var oList = document.createElement('li');
+                                var htmlText = '<a target="_blank" href="/catalog/search?keyword=' + data[i].Keyword + '">' + data[i].Keyword + '</a>';
+                                oList.innerHTML = htmlText;
+                                $wordList[0].appendChild(oList);
+                            }
+                            $wordList.show();
+                        } else {
+                            $wordList.hide();
+                        }
+                    }
+                })
+            }, 1000);
+        });
+        $('#word-list2').blur(function () {
+            $wordList.hide();
+        });
+        //$input.on('focus', function () {
+        //    $wordList.show();
+        //});
+        $wordList.on('mouseover', function () {
+            $wordList.show();
+        });
+    }
+
+</script>
+@if (DateTime.Now<=new DateTime(2017,5,11))
+    {
+        <div id="topADBox" style="background:#fff;">
+            <div class="topAdv">
+                <a href="#">
+                    <img src="/images/topadv.jpg" width="1000" height="80" alt=""/></a>
+                <a href="javascript:;" class="close" onclick="this.parentNode.style.display='none'">x</a>
+            </div>
+        </div>
+    }
+    <!-- header start -->
+    <div id="header" class="header">
+        <div class="header-wrap box1000">
+            <div class="logo Fleft">
+                <a href="/">
+                    <img src="/images/logo-65.jpg" width="315" height="65" alt="@WorkContext.MallConfig.SiteTitle" /></a>
+            </div>
+            <div class="search-bar Fright">
+                
+                <div class="topsearch">
+                    <input type="text" id="search-ipt2" name="search" class="search-ipt" value="奶粉" onfocus="if(value == '奶粉') {value =''}" onblur="if(value == ''){value ='奶粉'}" autocomplete="off" onkeydown="javascript:if(event.keyCode==13) mallSearch($('.search-ipt').val());" />
+                    <input type="image" src="/images/search.jpg" class="search-btn" onclick="mallSearch($('.search-ipt').val())" />
+                    <div class="clear"></div>
+                    <ul id="word-list2">
+                        
+                    </ul>
+                </div>
+                <div class="search-text ">
+                    @{
+                        List<AdvertInfo> searchWordAdvertList = Adverts.GetAdvertList(76).OrderBy(x => x.DisplayOrder).ToList();
+                    }
+                    @if (searchWordAdvertList.Count > 0)
+                    {
+                        foreach (var info in searchWordAdvertList)
+                        {
+                            <a href="@info.Url">@info.Body</a><span>|</span> 
+                        }
+
+                        //Html.Raw(searchWordAdvertList[0].Body)
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+@{
+    List<NavInfo> navList = Navs.GetNavList();
+}
+    <!-- nav start -->
+    <div id="nav" class="nav">
+        <div class="category box1000">
+            <!--onmouseover="$('#showcateory').removeClass();" onmouseout="$('#showcateory').addClass('hide');"-->
+            <div class="nav-left">
+                <h2 class="all-category">
+                    <img src="/images/allcateory.png" alt="全部商品分类"  />全部商品分类</h2>
+                <div id="showcateory" class="hide">
+                   @* class="hide"*@
+                    <div class="cateorylist">
+                        @foreach (NavInfo info in navList.FindAll(x => x.Pid == 0).OrderBy(x => x.Id))
+                        { 
+                        <h3 class="item" onmouseover="this.className='item hotItem'" onmouseout="this.className='item'">
+                            @*<a @if (navList.FindAll(x => x.Pid == info.Id).OrderBy(x => x.Id).ToList().Count == 0)
+                               {<text>href="@info.Url"</text>} class="nvatitle">*@
+                            <a href="@info.Url" class="nvatitle">
+                                @info.Name
+                                <i>&gt;</i>
+                            </a>
+                            @if (navList.FindAll(x => x.Pid == info.Id).OrderBy(x => x.Id).ToList().Count > 0)
+                            {
+                            <div class="subNav">
+                               @foreach (NavInfo subinfo in navList.FindAll(x => x.Pid == info.Id).OrderBy(x => x.Id))
+                               {
+                                   <dl>
+                                       <dt>
+                                            <a style="" href="@subinfo.Url">@subinfo.Name<span>&gt;</span></a>
+                                       </dt>
+                                       <dd>
+                                           @foreach (NavInfo sub2info in navList.FindAll(x => x.Pid == subinfo.Id).OrderBy(x => x.Id))
+                                           {
+                                           <em><a style="" href="@sub2info.Url">@sub2info.Name</a></em>
+                                           }
+                                       </dd>
+                                       <div class="clear"></div>
+                                   </dl>
+
+                               }
+
+                            </div>
+                            }
+                        </h3>
+                        }
+                       @* <li>
+                            <a href="/list/78.html">
+                                <img src="/images/cateoty-1.jpg" alt="鳄鱼油系列" /></a></li>
+                        <li>
+                            <a href="/list/76.html">
+                                <img src="/images/cateoty-2.jpg" alt="美妆个护类" /></a></li>
+                        <li>
+                            <a href="/list/77.html">
+                                <img src="/images/cateoty-3.jpg" alt="特效能量" /></a></li>
+                        <li>
+                            <a href="/list/75.html">
+                                <img src="/images/cateoty-4.jpg" alt="保健食品类" /></a></li>
+                        <li>
+                            <a href="/list/79.html">
+                                <img src="/images/cateoty-5.jpg" alt="皇家生态锅" /></a></li>
+                        <li>
+                            <a href="/list/80.html">
+                                <img src="/images/cateoty-6.jpg" alt="磁化净水" /></a></li>*@
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-list nav-right">
+                <a href="/" class="channeltitle" id="channel_0">首页</a>
+                @{
+                    List<ChannelInfo> ChannelList = Channel.GetChannelList().FindAll(x => x.State == 1).ToList();}
+                @foreach (var item in ChannelList.OrderByDescending(x => x.DisplayOrder)) {
+                    if (item.LinkType == 0) { 
+                         <a href="javascript:;" class="channeltitle" id="channel_@(item.ChId)">@item.Name</a>
+                    }
+                    else if (item.LinkType == 1)
+                    {
+                         <a href="/channel/@(item.ChId).html" class="channeltitle" id="channel_@(item.ChId)">@item.Name</a>
+                    }
+                    else if (item.LinkType == 2)
+                    {
+                        <a href="/channel/subindex?chId=@(item.ChId)" class="channeltitle" id="channel_@(item.ChId)">@item.Name</a>
+                    }
+                    else if (item.LinkType == 3)
+                    {
+                        <a href="@item.LinkUrl" class="channeltitle" id="channel_@(item.ChId)" target="_blank">@item.Name</a>
+                    }
+                    else if (item.LinkType == 4)
+                    {
+                        <a href="@item.LinkUrl" class="channeltitle" id="channel_@(item.ChId)" target="_blank">@item.Name</a>
+                    }
+                    else
+                    { 
+                        <a href="javascript:;" class="channeltitle" id="channel_@(item.ChId)">@item.Name</a>
+                    }
+                }
+               @* <a href="/channel/1.html" class="channeltitle" id="channel_1">和治友德旗舰店</a>
+                <a href="/channel/youxuan" class="channeltitle" id="channel_2">汇购优选</a>
+                <a href="/channel/4.html" class="channeltitle" id="channel_4">全球购</a>
+                <a href="/channel/subindex?chId=9" class="channeltitle" id="channel_9">优选商家</a>
+                <a href="/channel/6.html" class="channeltitle" id="channel_6">汇生鲜</a>
+                <a href="/home/DaMeiLink" class="channeltitle" id="channel_3" target="_blank">汇购大美旅行</a>
+                <a href="/channel/7.html" class="channeltitle" id="channel_7">尚睿淳</a>*@
+              
+            </div>
+        </div>
+    </div>
+    <!-- nav end -->

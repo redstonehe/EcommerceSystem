@@ -1,0 +1,65 @@
+﻿@model VMall.Web.MallAdmin.Models.OperateModel
+@section header{
+    <title>增加菜单</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">权限管理 &gt;&gt; 增加操作
+        <div class="right">
+            <a href="" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+
+    @using (Html.BeginForm("AddRights", "malladminaction"))
+    {
+        <div class="addTable">
+            <table width="100%">
+                 @Html.HiddenFor(x => x.aid, new { @class = "input", size = "35", maxlength = "20" }) @Html.ValidationMessageFor(x => x.aid)
+                <tr>
+                    <td width="86px" align="right">菜单：</td>
+                    <td>
+                       @ViewData["parentactionname"].ToString() > @ViewData["actionname"].ToString()
+                    </td>
+                </tr>
+                <tr>
+                    <td width="86px" align="right">操作：</td>
+                    <td>
+                        @Html.TextBoxFor(x => x.Operate, new { @class = "input", size = "35", maxlength = "20" }) @Html.ValidationMessageFor(x => x.Operate)</td>
+                </tr>
+
+                <tr>
+                    <td align="right">操作名称：</td>
+                    <td>@Html.TextBoxFor(x => x.OperateName, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.OperateName)</td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    
+    }
+}

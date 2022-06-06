@@ -1,0 +1,175 @@
+﻿@model VMall.Web.MallAdmin.Models.OrderRefundListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>订单退款列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script>
+        function output() {
+            // string paySystemName, string osn, int state = 1, int storeId = -1
+            var storeId = $("#StoreId").val();
+            var osn = $("#OSN").val();
+            var state = $("#state").val();
+            var paySystemName=$("#paySystemName").val();
+            window.open("/malladmin/order/RefundOutPutOrder?StoreId=" + StoreId + "&osn=" + osn + "&state=" + state + "&paySystemName=" + paySystemName);
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">订单管理</a></li>
+            <li class="active">退款列表</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("refundlist", "order"))
+    {
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>商品店铺：</label>
+                                <div class="selectBtn btn-default">
+                                    <input type="button" value="@Model.StoreName" onclick="openStoreSelectLayer(this)" class="form-control selectBtn-ipt"/>
+                                    <input type="hidden" class="StoreId" id="StoreId" name="StoreId" value="@Model.StoreId" />
+                                    <input type="hidden" class="StoreName" id="StoreName" name="StoreName" value="@Model.StoreName" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>订单编号：</label>
+                                @Html.TextBox("OSN", Model.OSN, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>付款方式：</label>
+                                @Html.DropDownListFor(x => x.paySystemName, new List<SelectListItem>() { new SelectListItem() { Text = "全部", Value = "" }, new SelectListItem() { Text = "微信支付", Value = "wechatpay" }, new SelectListItem() { Text = "支付宝支付", Value = "alipay" }, new SelectListItem() { Text = "银行汇款", Value = "emsremit" } }, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>状态：</label>
+                                @Html.DropDownListFor(x => x.state, new List<SelectListItem>() { new SelectListItem() { Text = "未处理", Value = "0" }, new SelectListItem() { Text = "已处理", Value = "1" } }, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="Search" name="Search" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>订单编号</th>
+                                        <th>支付金额</th>
+                                        <th>退款金额</th>
+                                        <th>支付单号</th>
+                                        <th>支付方式</th>
+                                        <th>退款单号</th>
+                                        <th>退款流水号</th>
+                                        <th>退款方式</th>
+                                        <th>退款时间</th>
+                                        <th>备注</th>
+                                        <th>退款状态</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (OrderRefundInfo info in Model.OrderRefundList)
+                                    {
+                                        <tr>
+                                            <td><a href="@Url.Action("orderinfo", new { oid = info.Oid })" class="btn-link">@info.OSN</a></td>
+                                            <td>@info.PayMoney</td>
+                                            <td>@info.RefundMoney</td>
+                                            <td>@info.PaySN</td>
+                                            <td>@info.PayFriendName</td>
+                                            <td>@info.RefundSN</td>
+                                            <td>@info.RefundTranSN</td>
+                                            <td>@info.RefundFriendName</td>
+                                            <td>@info.RefundTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                            <td>@info.ReMark</td>
+                                            <td>
+                                                @if (info.State == 0)
+                                                { 
+                                                    <span style="color: #0D9F9F;">已申请，系统正在处理</span>
+                                                }
+                                                @if (info.State == 1)
+                                                { 
+                                                    <span style="color: red;">退款成功</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (info.State == 0)
+                                                {
+                                                    //@Html.ActionLink("[确认退款]", "ConfirmReturn","Order", new  {  oid=info.Oid ,refundId=info.RefundId }, new { @class = "editOperate" })
+@*<a href="/malladmin/Order/ConfirmReturn?oid=@info.Oid&refundId=@info.RefundId" class = "editOperate">确认退款</a>*@
+                                                    if (info.RefundSystemName == "alipay")
+                                                    { 
+                                                    <a href="/malladmin/Order/ConfirmRefund?oid=@info.Oid&refundId=@info.RefundId"  class = "editOperate" target="_blank">确认退款</a>
+                                                    }
+                                                    else
+                                                    {
+                                                    <a href="javascript:ConfirmRefund(@info.Oid,@info.RefundId);" class = "editOperate">确认退款</a>
+                                                    }
+@*<a  href="@Url.Action("ReFund", "adminwechat", new RouteValueDictionary { { "oid", info.Oid } })" >微信退款测试</a>*@
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        <script>
+            function ConfirmRefund(oid, refundId) {
+                if (confirm("确定要退款吗？\r\n 请务必在收到退货后执行此操作！！！")) {
+                    window.location.href = "/malladmin/Order/ConfirmRefund?oid=" + oid + "&refundId=" + refundId;
+                }
+            }
+        </script>
+        
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

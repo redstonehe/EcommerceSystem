@@ -1,0 +1,466 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "活动专区";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+
+<link href="@{@WorkContext.CSSCDN}/mobile/css/home.css?aaaa" rel="stylesheet" type="text/css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="/mobile/css/swiper.min.css">
+<!-- Swiper JS -->
+<script src="/mobile/scripts/swiper.min.js"></script>
+<style>
+    .title_more {
+        text-decoration: none;
+        float: right;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        color: #D60008;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+        .title_more:hover {
+            color: blue;
+        }
+
+    .floorCon1 {
+        display: box;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        width: 100%;
+        z-index: 100;
+    }
+
+        .floorCon1 .fc-list {
+            border: 1px solid #fff;
+            width: 49%;
+            display: -webkit-box;
+            display: box;
+            -webkit-box-pack: justify;
+            -webkit-box-orient: vertical;
+        }
+
+            .floorCon1 .fc-list a {
+                display: block;
+                width: 100%;
+            }
+
+    .floorCon .fc-list a img {
+        max-width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    .topsearch {
+        position: relative;
+    }
+
+        .topsearch ul {
+            display: none;
+            width: 97%;
+            position: absolute;
+            top: 53px;
+            left: 9px;
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+            /*width: 400px;*/
+            border: 1px solid #C0C0C0;
+            border-top: none;
+            z-index: 9999999;
+            background: #fff;
+        }
+
+            .topsearch ul li {
+                padding: 0px;
+                margin: 0px;
+            }
+
+                .topsearch ul li:hover {
+                    background: #f1f1f1;
+                }
+
+                .topsearch ul li a {
+                    padding: 0 10px;
+                    text-decoration: none;
+                    color: #333;
+                    height: 24px;
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 100%;
+                    line-height: 24px;
+                }
+
+    .sortList ul li {
+        border: 2px solid #fff;
+        width: 49.5%;
+        height: 182px;
+    }
+
+    .floor .title {
+        width: 70%;
+    }
+</style>
+<style>
+    img:hover {
+        opacity: .7;
+    }
+
+    .info2 a:hover {
+        background-color: #089E9C;
+    }
+
+    .gprolist li {
+        margin: 1%;
+        /*border: 1px solid #eee;*/
+        float: left;
+        width: 48%;
+        /*height: 13em;*/
+        margin-top: 2px;
+        cursor: pointer;
+        padding-bottom: 10px;
+    }
+
+    .floor {
+        margin-bottom: 0px;
+    }
+
+        .floor .floortitle h2 {
+            float: left;
+            /*margin: 10px 0 0;*/
+            height: 30px;
+            line-height: 40px;
+        }
+
+            .floor .floortitle h2:before {
+                content: "";
+                display: block;
+                width: 3px;
+                height: 30px;
+                float: left;
+                background: #d8505c;
+                margin: 15px 0px 0 0;
+            }
+
+    .floortitle {
+        border-bottom: 1px solid #ddd;
+        height: 50px;
+        position: relative;
+    }
+
+    .floor .floortitle p {
+        float: left;
+        height: 70px;
+        overflow: hidden;
+        margin: 10px 0 0 20px;
+        line-height: 78px;
+        color: #999;
+        font-size: 14px;
+    }
+
+    .floortitle .more {
+        position: absolute;
+        top: 20px;
+        right: 0px;
+        font-size: 18px;
+        color: #D02424;
+    }
+
+        .floortitle .more a {
+            color: #D02424;
+        }
+
+    .gprolist li h4 {
+        font-weight: 400;
+        text-align: center;
+        color: #666;
+        padding: 5px;
+        max-width: 100%;
+        _width: 178px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .gprolist li {
+        background: #fff;
+    }
+
+        .gprolist li .index_mod_iconprice {
+            color: #fe575f;
+            text-align: center;
+            max-width: 100%;
+            _width: 178px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+            .gprolist li .index_mod_iconprice del {
+                color: #9C9A9C;
+            }
+
+    .itemdiv {
+        background-color: #eee;
+        padding-top: 1%;
+    }
+
+    .headerBar {
+        background: #eee;
+    }
+
+    .search-textfile {
+        background: #fff;
+        display: inline-block;
+        width: 86%;
+        float: left;
+        margin: 0 1%;
+    }
+
+    .searchText {
+        background: #fff;
+    }
+
+    .cate-icon {
+        background: url(/mobile/images/cate-icons.png) 50% 50% no-repeat;
+        background-size: 95%;
+        width: 10%;
+        height: 42px;
+        line-height: 66px;
+        display: inline-block;
+        float: left;
+    }
+
+    .news-more {
+        width: 95%;
+        text-decoration: none;
+        margin: 0.5rem auto 0.5rem auto;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        display: block;
+        background: #e4e4e4;
+        color: #333;
+    }
+</style>
+<!-- Demo styles -->
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+    .price {
+        color: #f23030;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/mobile/css/jquery.bxslider.css" />
+
+<script type="text/javascript" src="/mobile/scripts/jquery.bxslider.min.js"></script>
+<script>
+    window.onload = function () {
+        $(".slider").css("height", $(".sliderBox ul li").css("height"));
+    };
+    $(function () {
+        var a = $(".gprolist li a img").width();
+        $(".gprolist li a img").css("height", a);
+    });
+</script>
+
+
+<div class="homeBanner floor">
+    @{
+        BannerInfo[] bannerList = Banners.GetHomeBannerList(5).OrderBy(x => x.DisplayOrder).ToArray();
+    }
+    <div class="sliderBox">
+        <ul class="slider" id="bannerImgList0" style="height: auto;">
+            @foreach (BannerInfo info in bannerList)
+            {
+                <li><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"></a></li>
+            }
+        </ul>
+        <script type="text/javascript">
+            $(function () {
+                var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                var liList = document.getElementById("bannerImgList0").getElementsByTagName("li");
+                for (var i = 0; i < liList.length; i++) {
+                    liList[i].style.width = width + "px";
+                }
+                $('#bannerImgList0').bxSlider({
+                    auto: true,
+                    mode: 'horizontal',
+                    //speed:5000,
+                    autoHover: true,
+                    pause: 5000,
+                    controls: false,
+                    autoControls: false,
+                });
+            });
+        </script>
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title">热卖专区</h2>
+    <div class="homeBanner floor">
+        @*@{
+        BannerInfo[] bannerList = Banners.GetHomeBannerList(2).OrderBy(x => x.DisplayOrder).ToArray();
+    }*@
+        @*<div class="sliderBox">
+            <ul class="slider" id="bannerImgList1" style="height: auto;">
+               
+                <li><a href="javascript:void(0);">
+                    <img src="/mobile/images/adv_1.jpg"></a></li>
+            </ul>
+            <script type="text/javascript">
+                $(function () {
+                    var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                    var liList = document.getElementById("bannerImgList1").getElementsByTagName("li");
+
+                    for (var i = 0; i < liList.length; i++) {
+                        liList[i].style.width = width + "px";
+                    }
+                    //$('#bannerImgList1').bxSlider({
+                    //    auto: true,
+                    //    mode: 'horizontal',
+                    //    //speed:5000,
+                    //    autoHover: true,
+                    //    pause: 5000,
+                    //    controls: false,
+                    //    autoControls: false,
+                    //});
+                });
+            </script>
+        </div>*@
+    </div>
+    <div class="floorCon  ">
+        <div class="floor">
+            @{
+                List<AdvertInfo> floor1 = Adverts.GetAdvertList(107).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor1)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">
+                                    ¥@(string.IsNullOrEmpty(info.ExtField3) ? info.ExtField2 : info.ExtField3)
+                                    <del>@(string.IsNullOrEmpty(info.ExtField3) ? "" : "¥" + info.ExtField2)</del>
+                                </p>
+                            </li>
+                        }
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="floorI floor">
+    <h2 class="title">全球购专区</h2>
+    <div class="homeBanner floor">
+        @*@{
+        BannerInfo[] bannerList = Banners.GetHomeBannerList(2).OrderBy(x => x.DisplayOrder).ToArray();
+    }*@
+        <div class="sliderBox">
+            <ul class="slider" id="bannerImgList3" style="height: auto;">
+                @*@foreach (BannerInfo info in bannerList)
+            {
+                <li><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"></a></li>
+            }*@
+                <li><a href="javascript:void(0);">
+                    <img src="/mobile/images/adv_3.jpg"></a></li>
+            </ul>
+            <script type="text/javascript">
+                $(function () {
+                    var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                    var liList = document.getElementById("bannerImgList3").getElementsByTagName("li");
+                    for (var i = 0; i < liList.length; i++) {
+                        liList[i].style.width = width + "px";
+                    }
+                    //$('#bannerImgList3').bxSlider({
+                    //    auto: true,
+                    //    mode: 'horizontal',
+                    //    //speed:5000,
+                    //    autoHover: true,
+                    //    pause: 5000,
+                    //    controls: false,
+                    //    autoControls: false,
+                    //});
+                });
+            </script>
+        </div>
+    </div>
+    <div class="floorCon  ">
+        <div class="floor">
+            @{
+                List<AdvertInfo> floor3 = Adverts.GetAdvertList(100).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor3)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">
+                                    ¥@(string.IsNullOrEmpty(info.ExtField3) ? info.ExtField2 : info.ExtField3)
+                                    <del>@(string.IsNullOrEmpty(info.ExtField3) ? "" : "¥" + info.ExtField2)</del>
+                                </p>
+                            </li>
+                        }
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div style="position: relative;">
+    <div class="footerTop">
+        <div class="clear"></div>
+    </div>
+    <a href="/mob" class="news-more">返回首页</a>
+
+</div>
+
+

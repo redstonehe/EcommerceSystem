@@ -1,0 +1,174 @@
+﻿@model VMall.Web.MallAdmin.Models.AccountDetailModel
+@section header{
+    <title>帐号详情记录</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script>
+        function show(type, code) {
+
+            var url = "";
+            if (type == 1) {
+                url = "/malladmin/order/orderlist?osn=" + code;
+            }
+            else if (type == 2) {
+                //Url.Action("SendOrderList", "AgentSendOrder", new { osn = row.OrderCode })
+                url = "/malladmin/AgentSendOrder/SendOrderList?osn=" + code;
+            }
+            else if (type == 3) {
+                //Url.Action("List", "HaimiDrawCash", new { csn = row.OrderCode })
+                url = "/malladmin/HaimiDrawCash/List?csn=" + code;
+            }
+            else if (type == 4) {
+                //Url.Action("IncomeList", "HaimiDrawCash", new { csn = row.OrderCode })
+                url = "/malladmin/HaimiDrawCash/IncomeList?csn=" + code;
+            }
+            else {
+                return false;
+            }
+            // 用iframe显示http://www.baidu.com的内容，并设置了标题、宽与高、按钮
+            $.jBox("iframe:" + url, {
+                title: "详情",
+                width: 1500,
+                height: 600,
+                buttons: { '关闭': true }
+            });
+
+            //$.jBox("get:/malladmin/order/orderlist?osn=7220180302114926224375");
+        }
+    </script>
+}
+
+
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 帐号详情记录
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("accountdetail", "user"))
+    {
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline ">
+                            @Html.Hidden("uid", Model.Uid, new { height = "18" })
+                            @Html.Hidden("accountId", Model.AccountId, new { height = "18" })
+                            @Html.Hidden("accountName", Model.AccountName, new { height = "18" })
+                            <div class="form-group">
+                                <label>关联订单号：</label>
+                                @Html.TextBox("OrderCode", Model.OrderCode, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchUser" name="SearchUser" class="btn btn-default  searchBut submit" onclick="search();"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>账户名称</th>
+                                        <th>创建时间</th>
+                                        <th>类型</th>
+                                        <th>金额</th>
+                                        <th>当前余额</th>
+                                        <th>关联订单号</th>
+                                        <th>说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in Model.AccountDetailList)
+                                    {
+                                        <tr>
+                                            <td>@Model.AccountName</td>
+                                            <td>@row.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>
+                                                @if (row.InAmount > 0)
+                                                { 
+                                                    @:收入
+                                }
+                                                @if (row.OutAmount > 0)
+                                                {
+                                                    @:支出
+                                }
+                                            </td>
+                                            <td>
+                                                @if (row.InAmount > 0)
+                                                { 
+                                                    @("+" + row.InAmount.ToString("f2"))
+                                                }
+                                                @if (row.OutAmount > 0)
+                                                {
+                                                    @("-" + row.OutAmount.ToString("f2"))
+                                                }
+                                            </td>
+                                            <td>@row.CurBanlance.ToString("f2")</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(row.OrderCode))
+                                                {
+                                                    if (row.OrderCode.StartsWith("MO1"))
+                                                    {
+@* <a href="@Url.Action("orderlist", "order", new { osn = row.OrderCode })" target="_blank" class="pro_link">@row.OrderCode </a>*@
+                                                    <a href="javascript:show(1,'@row.OrderCode');"  class="pro_link">@row.OrderCode </a>
+                                                    }
+                                                    else if (row.OrderCode.StartsWith("YJTX"))
+                                                    {
+@*<a href="@Url.Action("IncomeList", "HaimiDrawCash", new { csn = row.OrderCode })" target="_blank" class="pro_link">@row.OrderCode </a>*@
+                                                    <a href="javascript:show(4,'@row.OrderCode');"  class="pro_link">@row.OrderCode </a>
+                                                    }
+                                                    else
+                                                    { 
+                                                    @row.OrderCode 
+                                                    }
+                                                }</td>
+
+                                            <td>@row.DetailDes</td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <!-- /.content -->
+        
+        <div class="dataListEdit">
+
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

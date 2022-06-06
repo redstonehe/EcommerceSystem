@@ -1,0 +1,187 @@
+﻿@model VMall.Web.MallAdmin.Models.AdvertListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>广告列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <style>
+        .state {
+            cursor: pointer;
+            border: 1px solid #ddd;
+            padding: 0 10px;
+        }
+
+            .state:hover {
+                color: red;
+            }
+    </style>
+    <script type="text/javascript">
+        /**/
+        $(function () {
+            $(".mainimgspan").click(function () {
+                var mainimgspanobj = $(this);
+                var state = mainimgspanobj.attr("state");
+                var newstate = state == "1" ? 0 : 1;
+                var newshowstate = state == "1" ? "隐藏" : "展示";
+                var newcolor = state == "1" ? "#ddd" : "green";
+                var adid = mainimgspanobj.attr("adid");
+                $.jBox.confirm("您确认要进行此设置吗？", "提示", function (v, h, f) {
+                    if (v == 'ok') {
+                        $.jBox.tip("正在设置...", 'loading');
+                        $.get(mainimgspanobj.attr("url") + "&t=" + new Date(), function (data, textStatus) {
+
+                            if (data != "0") {
+                                mainimgspanobj.html(newshowstate).attr("state", newstate);
+                                mainimgspanobj.attr("url", "/malladmin/advert/setadvstate?adid=" + adid + "&state=" + state);
+                                mainimgspanobj.css("color", newcolor);
+                                $.jBox.tip('设置成功！', 'success');
+                            } else {
+                                $.jBox.error('设置失败，请联系管理员！', '设置失败');
+                            }
+                        });
+                    }
+                    else if (v == 'cancel') {
+                        // 取消
+                    }
+
+                    return true; //close
+                });
+
+            });
+        });</script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">广告管理</a></li>
+            <li class="active">广告列表</li>
+        </ol>
+        <div class="right">
+            <a href="@Url.Action("addadvert")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("advertlist", "advert"))
+    {
+       <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>标题：</label>
+                                @Html.TextBox("Title", Model.Title, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>广告位置：</label>
+                                @Html.DropDownListFor(x => x.AdPosId, ViewData["advertPositionList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="Search" name="Search" class="btn btn-default  searchBut submit"><i class="fa fa-search"></i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+      
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-10">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>标题</th>
+                                        <th>位置</th>
+                                        <th>类型</th>
+                                        <th>开始时间</th>
+                                        <th>结束时间</th>
+                                        <th>排序</th>
+                                        <th>状态</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.AdvertList.Rows)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@row["adid"]" selectItem="true" name="idList" /></td>
+
+                                            <td>@row["atitle"]</td>
+                                            <td>@row["aptitle"].ToString().TrimEnd()</td>
+                                            <td>
+                                                @if (row["type"].ToString() == "0")
+                                                {
+                                                    @:文字
+      }
+                                                else if (row["type"].ToString() == "1")
+                                                {
+                                                    @:图片
+      }
+                                                else if (row["type"].ToString() == "2")
+                                                {
+                                                    @:Flash
+      }
+                                                else
+                                                {
+                                                    @:代码
+      }
+                                            </td>
+                                            <td>@(TypeHelper.ObjectToDateTime(row["starttime"]).ToString("f"))</td>
+                                            <td>@(TypeHelper.ObjectToDateTime(row["endtime"]).ToString("f"))</td>
+                                            <td>@row["displayorder"]</td>
+                                            <td>
+                                                @if (row["state"].ToString() == "0")
+                                                {
+                                                    <span class="state mainimgspan" style="color:#ddd;" url="@Url.Action("setadvstate", new { adid = row["adid"], state = 1 })" state="0" adid="@row["adid"]">隐藏</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="state mainimgspan" style="color:green;" url="@Url.Action("setadvstate", new { adid = row["adid"], state = 0 })" state="1" adid="@row["adid"]">展示</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("[编辑]", "editadvert", new { adId = row["adid"] }, new { @class = "editOperate" })
+                                                @Html.ActionLink("[删除]", "deladvert", new { adId = row["adid"] }, new { @class = "deleteOperate" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <div class="dataListEdit">
+            <a href="#" delUrl="@Url.Action("BatchDel")" class="batch batchDel">批量删除</a>
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

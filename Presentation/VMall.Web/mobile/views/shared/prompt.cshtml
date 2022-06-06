@@ -1,0 +1,9 @@
+﻿@model VMall.Web.Framework.PromptModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "消息提示";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+
+<div style="padding:40px; font-size:20px; text-align:center;">@Model.Message</div>

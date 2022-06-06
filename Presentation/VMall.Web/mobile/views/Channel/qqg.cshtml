@@ -1,0 +1,473 @@
+﻿@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "全球购";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 2;
+}
+
+<link href="@{@WorkContext.CSSCDN}/mobile/css/home.css?aaaa" rel="stylesheet" type="text/css">
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="/mobile/css/swiper.min.css">
+<!-- Swiper JS -->
+<script src="/mobile/scripts/swiper.min.js"></script>
+<!-- Demo styles -->
+<link rel="stylesheet" type="text/css" href="/mobile/css/jquery.bxslider.css" />
+
+<script type="text/javascript" src="/mobile/scripts/jquery.bxslider.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/mobile/css/subindex.css" />
+
+<script>
+    window.onload = function () {
+        $(".slider").css("height", $(".sliderBox ul li").css("height"));
+    };
+
+    $(function(){
+        var a=$(".gprolist li a img").width();
+        $(".gprolist li a img").css("height", a);
+    });
+</script>
+<script>
+</script>
+<div class="page-header">
+    <div class="cf-container">
+
+        <ul class="cf-content" id="nav-bar">
+            <li class="cf-tab-item"><a class="cur-cf-tab" href="#">首页</a></li>
+            <li class="cf-tab-item"><a href="#m=category&amp;a=lists&amp;cat_id=140">尚品优选</a></li>
+            <li class="cf-tab-item"><a href="#m=category&amp;a=lists&amp;cat_id=1">功能保健</a></li>
+            <li class="cf-tab-item"><a href="#m=category&amp;a=lists&amp;cat_id=141">塑身管理</a></li>
+            <li class="cf-tab-item"><a href="#m=category&amp;a=lists&amp;cat_id=137">美容护肤</a></li>
+        </ul>
+    </div>
+</div>
+<div class="homeBanner floor">
+    @{
+        BannerInfo[] bannerList = Banners.GetHomeBannerList(2).OrderBy(x => x.DisplayOrder).ToArray();
+    }
+    <div class="sliderBox">
+        <ul class="slider" id="bannerImgList" style="height: auto;">
+            @foreach (BannerInfo info in bannerList)
+            {
+                <li><a href="@info.Url">
+                    <img src="/upload/banner/@info.Img"></a></li>
+            }
+        </ul>
+        @if (bannerList.Length > 1)
+        {
+            <script type="text/javascript">
+                        
+                $(function () {
+                    var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                    var liList = document.getElementById("bannerImgList").getElementsByTagName("li");
+
+
+                    for (var i = 0; i < liList.length; i++) {
+                        liList[i].style.width = width + "px";
+                    }
+                    $('#bannerImgList').bxSlider({
+                        auto: true,
+                        mode: 'horizontal',
+                        //speed:5000,
+                        autoHover: true,
+                        pause: 5000,
+                        controls: false,
+                        autoControls: false,
+                    });
+                });
+            </script>
+        }
+        else
+        {
+            <div class="bannerBt" id="bannerTabList">
+                @for (int i = 0; i < bannerList.Length; i++)
+                {
+                    <span class="point @(i == 0 ? "hot" : "")"></span> 
+                }
+            </div>
+            <script type="text/javascript">
+                //首页切换图片需要计算：根据当前分辨率计算每个图片的宽度赋值给li（图片是根据li的宽度自适应的）
+                var width = document.body.getElementsByTagName("div")[0].clientWidth;
+                var liList = document.getElementById("bannerImgList").getElementsByTagName("li");
+                var spanList = document.getElementById("bannerTabList").getElementsByTagName("span");
+                $(".slider").css("height",$(".sliderBox").css("height"));
+                for (var i = 0; i < liList.length; i++) {
+                    liList[i].style.width = width + "px";
+                }
+                //banner滚动
+                var bannerImgIndex = 0;
+                var bannerImgCount = @bannerList.Length;
+                if(bannerImgCount > 1) {
+                    window.setInterval(function () {
+                        if (bannerImgIndex == (bannerImgCount - 1)) {
+                            bannerImgIndex = 0;
+                        }
+                        else {
+                            bannerImgIndex += 1;
+                        }
+                        for (var i = 0; i < liList.length; i++) {
+                            liList[i].style.display = "none";
+                            liList[i].setAttribute("type","nocheck");
+                        }
+                        for (var i = 0; i < spanList.length; i++) {
+                            spanList[i].className = "point";
+                        }
+                        liList[bannerImgIndex].style.display = "block";
+                        liList[bannerImgIndex].setAttribute("type","check");
+                        spanList[bannerImgIndex].className = "point hot";
+                    }, 3000)
+                }
+            </script>
+        }
+    </div>
+
+
+</div>
+<nav class="m-hg-nav">
+
+    @*@foreach (var item in NvaList)
+            {
+                <a href="@item.Url" class="m-hg-link shopping-cart">
+                    <img src="/upload/advert/@item.Body" alt="" width="50" height="50" />
+                    <div class="m-gh-nav-title">@item.Title</div>
+                </a> 
+            }*@
+    <a href="/mob/channel/4-0-123-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/bjyp.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">保健用品</div>
+    </a>
+    @*<a href="/mob/channel/4-0-126-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/jkms.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">进口美食</div>
+    </a>*@
+    <a href="/mob/channel/4-0-170-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/mzcp.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">美妆产品</div>
+    </a>
+    <a href="/mob/channel/4-0-170-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/grhl.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">个人护理</div>
+    </a>
+    <a href="/mob/channel/4-0-177-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/riyong.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">居家日用</div>
+    </a>
+    <a href="/mob/channel/4-0-190-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/muying.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">母婴</div>
+    </a>
+    @*<a href="/mob/channel/4-0-121-0-0-0-0-1-1.html" class="m-hg-link shopping-cart">
+        <img src="/mobile/images/taocan.png" alt="" width="50" height="50" />
+        <div class="m-gh-nav-title">超值套餐</div>
+    </a>*@
+</nav>
+@*//}*@
+
+<div class="floorI floor">
+    <h2 class="title">热销产品</h2>
+    <div class="floorCon  ">
+        <!-- Swiper -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @{
+                    List<AdvertInfo> hotList = Adverts.GetAdvertList(86).OrderBy(x => x.DisplayOrder).ToList();
+                }
+                @foreach (var item in hotList)
+                { 
+                    <div class="swiper-slide">
+                        <a href="@item.Url" class ="">
+                            <div>
+                                <img src="/upload/advert/@item.Body" alt="" width="100%" />
+                                <div style="display: block;">
+                                    <p>@item.Title</p>
+                                    @*<p>100.00</p>*@
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @*<div class="swiper-slide">
+                    <div>
+                        <img src="/mobile/images/hb-1.jpg" alt="" width="100%" />
+                        <div style="display: block;">
+                            <p>黄桃k</p>
+                            <p>100.00</p>
+                        </div>
+                    </div>
+
+                </div>
+                *@
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+        <!-- Initialize Swiper -->
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '',
+                slidesPerView: 3,
+                scrollbar:'.swiper-scrollbar',
+                scrollbarHide:false,
+                paginationHide :true,
+                slidesOffsetAfter : 100,
+                spaceBetween: 30
+            });
+        </script>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title">商城推荐</h2>
+    <div class="floorCon  ">
+        <!-- Swiper -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @{
+                    List<AdvertInfo> recomendList = Adverts.GetAdvertList(87).OrderBy(x => x.DisplayOrder).ToList();
+                }
+                @foreach (var item in recomendList)
+                {
+                    <div class="swiper-slide">
+                        <a href="@item.Url">
+                            <div>
+                                <img src="/upload/advert/@item.Body" alt="" width="100%" />
+                                <div style="display: block;">
+                                    <p>@item.Title</p>
+                                    @*<p>100.00</p>*@
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+                @*<div class="swiper-slide">
+                    <div>
+                        <img src="/mobile/images/hb-1.jpg" alt="" width="100%" />
+                        <div style="display: block;">
+                            <p>黄桃k</p>
+                            <p>100.00</p>
+                        </div>
+                    </div>
+
+                </div>
+                *@
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+        <!-- Initialize Swiper -->
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '',
+                slidesPerView: 3,
+                scrollbar:'.swiper-scrollbar',
+                scrollbarHide:false,
+                paginationHide :true,
+                slidesOffsetAfter : 100,
+                spaceBetween: 30
+            });
+        </script>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/4-0-123-0-0-0-0-1-1.html'">保健用品</h2>
+    <a href="/mob/channel/4-0-123-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/4-0-123-0-0-0-0-1-1.html">
+            <img src="/mobile/images/baojian_cate.jpg" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @*@{string[] catePriceRangeList = new string[] { };
+              string catePath = Channel.GetAllChildrenCateory(123, 4);
+              List<StoreProductInfo> ProductList = Channel.GetChannelProductList(6, 1, 4, catePath, 0, 0, catePriceRangeList, 0, 1, 1);}*@
+            @{
+                List<AdvertInfo> floor1 = Adverts.GetAdvertList(90).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor1)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/4-0-244-0-0-0-0-1-1.html'">美妆产品</h2>
+    <a href="/mob/channel/4-0-244-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+
+        <a href="/mob/channel/4-0-244-0-0-0-0-1-1.html">
+            <img src="/mobile/images/meizhuang_cate.jpg" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @*@{
+                string catePath2 = Channel.GetAllChildrenCateory(244, 4);
+                List<StoreProductInfo> ProductList2 = Channel.GetChannelProductList(6, 1, 4, catePath2, 0, 0, catePriceRangeList, 0, 1, 1);}*@
+            @{
+                List<AdvertInfo> floor3 = Adverts.GetAdvertList(92).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor3)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/4-0-245-0-0-0-0-1-1.html'">个人护理</h2>
+    <a href="/mob/channel/4-0-245-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/4-0-245-0-0-0-0-1-1.html">
+            <img src="/mobile/images/geren_cate.jpg" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @*@{
+                string catePath8 = Channel.GetAllChildrenCateory(245, 4);
+                List<StoreProductInfo> ProductList8 = Channel.GetChannelProductList(6, 1, 4, catePath8, 0, 0, catePriceRangeList, 0, 1, 1);}*@
+            @{
+                List<AdvertInfo> floor4 = Adverts.GetAdvertList(93).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor4)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/4-0-177-0-0-0-0-1-1.html'">居家日用</h2>
+    <a href="/mob/channel/4-0-177-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/4-0-177-0-0-0-0-1-1.html">
+            <img src="/mobile/images/jujia_cate.jpg" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @*@{
+                string catePath3 = Channel.GetAllChildrenCateory(177, 4);
+                List<StoreProductInfo> ProductList3 = Channel.GetChannelProductList(6, 1, 4, catePath3, 0, 0, catePriceRangeList, 0, 1, 1);}*@
+            @{
+                List<AdvertInfo> floor5 = Adverts.GetAdvertList(94).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor5)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="floorI floor">
+    <h2 class="title" onclick="window.location.href='/mob/channel/4-0-190-0-0-0-0-1-1.html'">母婴</h2>
+    <a href="/mob/channel/4-0-190-0-0-0-0-1-1.html" class="title_more">进入分类>></a>
+    <div>
+        <a href="/mob/channel/4-0-190-0-0-0-0-1-1.html">
+            <img src="/mobile/images/muying_cate.jpg" alt="" width="100%" /></a>
+
+    </div>
+    <div class="floorCon  ">
+
+        <div class="floor">
+            @* @{
+                string catePath4 = Channel.GetAllChildrenCateory(190, 4);
+                List<StoreProductInfo> ProductList4 = Channel.GetChannelProductList(6, 1, 4, catePath4, 0, 0, catePriceRangeList, 0, 1, 1);}*@
+            @{
+                List<AdvertInfo> floor6 = Adverts.GetAdvertList(95).OrderBy(x => x.DisplayOrder).ToList();
+            }
+            <div class="hot-goods-box">
+                <div class="sgb-cont itemdiv" id="hot1">
+                    <ul class="gprolist">
+                        @foreach (var info in floor6)
+                        { 
+                            <li class="">
+                                <a href="@info.Url">
+                                    <img src="/upload/advert/@info.Body" alt="" width="100%"  /></a>
+                                <h4>@info.ExtField1</h4>
+                                <p class="index_mod_iconprice">¥@info.ExtField2</p>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

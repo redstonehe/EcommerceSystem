@@ -1,0 +1,59 @@
+﻿@model VMall.Web.MallAdmin.Models.AgentStockModel
+@section header{
+    <title>库存查询</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 库存查询
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回用户列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("getstock", "user"))
+    {
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th valign="bottom">商品信息</th>
+                        <th>库存数量</th>
+                        <th>库存金额</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.AgentStockList.Rows)
+                    {
+                        <tr>
+                            <td>
+                                <div class="proList">
+                                    <img src="/upload/store/@row["storeid"]/product/show/thumb60_60/@row["showimg"]" width="50" height="50" />
+                                    <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", row["pid"] } })">@row["name"]<br />
+                                    </a>
+                                    <div class="clear"></div>
+                                </div>
+                            </td>
+                            <td>@row["balance"]<br />
+                            </td>
+                            <td>@row["agentamount"]<br />
+                            </td>
+                            <td><a href="@Url.Action("GetStockDetail", new { uid=row["uid"],pid = row["pid"] })">查看详情</a>|
+                                @if (WorkContext.MallAGid == 2 || WorkContext.MallAGid == 24 || WorkContext.MallAGid == 16)
+                                { 
+                                <a href="@Url.Action("StockModify", new { uid=row["uid"],pid = row["pid"] })">库存修改</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+}

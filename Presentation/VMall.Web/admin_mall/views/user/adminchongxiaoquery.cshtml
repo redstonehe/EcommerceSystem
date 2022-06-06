@@ -1,0 +1,71 @@
+﻿@model VMall.Web.MallAdmin.Models.ReorderPVModel
+@section header{
+    <title>重消查询</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/date.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <style>
+    .queryresult {
+        margin:20px 0;
+    }
+</style>
+}
+
+@section body{
+    <h1 class="rightH1">用户管理 &gt;&gt; 重消查询
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回用户列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("AdminChongXiaoQuery", "user"))
+    {
+    <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        @*<td>查询年月：
+                        </td>*@
+                        <td width="90">
+                           @* @Html.TextBox("TargetDate", Model.TargetDate.ToString("yyyy-MM"), new { @class = "input", size = "18", onfocus = "WdatePicker({el:'TargetDate',dateFmt:'yyyy-MM'})" })*@
+                            @*@Html.TextBox("TargetDate", Model.TargetDate, new { @style = "width:60px;", onclick = "HS_setDate(this);" })*@
+                        </td>
+                         @Html.Hidden("uid", Model.Uid, new { height = "18" })
+                        <td>
+                            @*<input id="SearchUser" name="SearchUser" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dataList queryresult">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="140" align="left">用户名</th>
+                        <th width="140" align="left">手机号</th>
+                        <th width="80" align="left">月份</th>
+                        <th width="180" align="left">重销业绩</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>@Model.UserInfo.UserName</td>
+                            <td>@Model.UserInfo.Mobile</td>
+                            <td>@Model.TargetDate.ToString("yyyy-MM")</td>
+                           
+                            <td>@(Model.CurrentTotalPV)  PV</td>
+                            
+                        </tr>
+                    
+                </tbody>
+            </table>
+
+        </div>
+    }
+    
+}

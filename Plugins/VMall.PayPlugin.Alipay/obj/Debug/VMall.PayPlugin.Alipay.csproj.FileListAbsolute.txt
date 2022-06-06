@@ -1,0 +1,9 @@
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Alipay\obj\Debug\VMall.PayPlugin.Alipay.csprojResolveAssemblyReference.cache
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\plugin.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\views\adminalipay\config.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\db.config
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\views\show.cshtml
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\VMall.PayPlugin.Alipay.dll
+C:\develop\德鹿商城\Presentation\VMall.Web\plugins\VMall.PayPlugin.Alipay\VMall.PayPlugin.Alipay.pdb
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Alipay\obj\Debug\VMall.PayPlugin.Alipay.dll
+C:\develop\德鹿商城\Plugins\VMall.PayPlugin.Alipay\obj\Debug\VMall.PayPlugin.Alipay.pdb

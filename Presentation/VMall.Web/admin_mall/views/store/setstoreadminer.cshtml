@@ -1,0 +1,116 @@
+﻿@model VMall.Web.MallAdmin.Models.StoreAdminerModel
+
+@section header{
+    <title>管理员设置</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css"/>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript">
+        /**/
+        $(function () {
+            $(".mainimgspan").click(function () {
+                var mainimgspanobj = $(this);
+              
+                var uid = mainimgspanobj.attr("uid");
+                $.jBox.confirm("您确认要进行此设置吗？", "提示", function (v, h, f) {
+                    if (v == 'ok') {
+                        $.jBox.tip("正在设置...", 'loading');
+                        $.get(mainimgspanobj.attr("url") + "&t=" + new Date(), function (data, textStatus) {
+                            if (data != "0") {
+                                
+                                $.jBox.tip('设置成功！', 'success');
+                                window.location.href = window.location.href;
+                            } else {
+                                $.jBox.error('设置失败，请联系管理员！', '设置失败');
+                            }
+                        });
+                    }
+                    else if (v == 'cancel') {
+                        // 取消
+                    }
+
+                    return true; //close
+                });
+
+            });
+        });</script>
+}
+
+@section body{
+<h1 class="rightH1">
+店铺管理 &gt;&gt; 管理员设置
+<div class="right">
+    <a href="@Url.Action("storelist")" class="menuBT"><img src="/admin_mall/content/images/goback.jpg"/>返回列表</a>
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</h1>
+<div class="dataList">
+<table width="100%">
+<thead>
+  <tr>
+    <th width="40" align="center">@*<input type="checkbox" id="allSelect"/>*@</th>
+    <th width="140" align="left">用户名</th>
+    <th width="150" align="left">手机</th>
+    <th width="100" align="left">邮箱</th>
+    <th width="100" align="left">昵称</th>
+    <th width="100" align="left">姓名</th>
+    <th width="100" align="left">管理员组</th>
+    <th width="76" align="left">管理操作</th>
+    </tr>
+</thead>
+  <tbody>
+  @foreach (DataRow row in Model.AdminAccountList.Rows)
+  {
+  <tr>
+    <td align="center">@*<input type="checkbox" value="@row["uid"]" selectItem="true" name="uidList" />*@</td>
+    <td>@row["username"]</td>
+    <td>@row["mobile"]</td>
+    <td>@row["email"]</td>
+    <td>@row["nickname"]</td>
+    <td>@row["realname"]</td>
+    <td>@row["title"]</td>
+    <td>
+        <a class="editOperate mainimgspan" href="javascript:void(0);" uid="@row["uid"]" url="@Url.Action("RemoveStoreAdminer", new { uid = row["uid"]})">[撤销店铺管理员]</a>
+    </td>
+    </tr>
+  }
+</tbody>
+</table>
+</div>
+@using (Html.BeginForm())
+{
+<div class="addTable">
+<table width="100%">
+         <tr>
+    <td width="106px" align="right">用户账号：</td>
+    <td>
+    @Html.TextBoxFor(x => x.AccountName, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.AccountName)
+    </td>
+    </tr>
+
+    <tr>
+    <td align="right">&nbsp;</td>
+    <td>
+    <a href="" class="addBt" id="sumbitBut" ><img src="/admin_mall/content/images/submit.jpg" /></a>
+            <script type="text/javascript">
+                $(function () {
+                    $("#sumbitBut").click(function () {
+                        $("form:first").submit();
+                        return false;
+                    })
+                });
+        </script>
+    </td>
+    </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+    </tr>
+</table>
+</div>
+}
+}

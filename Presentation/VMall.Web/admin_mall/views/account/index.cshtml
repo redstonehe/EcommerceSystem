@@ -1,0 +1,241 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>管理员登录 - @WorkContext.MallConfig.SiteTitle</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- basic styles -->
+    <link href="/admin_mall/content/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/admin_mall/content/css/font-awesome.min.css" />
+
+    <!--[if IE 7]>
+		  <link rel="stylesheet" href="/admin_mall/content/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="/admin_mall/content/css/ace.min.css" />
+    <link rel="stylesheet" href="/admin_mall/content/css/ace-rtl.min.css" />
+    <script src="/scripts/jquery.js"></script>
+    <script src="/scripts/utils.js"></script>
+
+    <!--[if lte IE 8]>
+		  <link rel="stylesheet" href="/admin_mall/content/css/ace-ie.min.css" />
+		<![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+		<script src="/admin_mall/content/js/html5shiv.js"></script>
+		<script src="/admin_mall/content/js/respond.min.js"></script>
+		<![endif]-->
+    <script>
+        $(function () {
+    document.onkeydown = function (ev) {
+        var oEvent = ev || event;
+        if (!ev) ev = window.event;
+        if ((ev.keyCode || ev.which) == 13) {
+            login();
+        }
+
+        //if (oEvent.keyCode == 116) {
+        //    $('input[type="text"]').val('').blur();
+        //}
+    };
+})</script>
+</head>
+
+<body class="login-layout">
+    <div class="main-container">
+        <div class="main-content">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="login-container">
+                        <div class="center">
+                            <h1>
+                                <i class=""></i>
+                                <span class="red">@WorkContext.MallConfig.SiteTitle</span>
+                                <span class="white">后台管理系统</span>
+                            </h1>
+                            <h4 class="blue">&copy; @WorkContext.MallConfig.SiteAuthor</h4>
+                        </div>
+
+                        <div class="space-6"></div>
+
+                        <div class="position-relative">
+                            <div id="login-box" class="login-box visible widget-box no-border">
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <h4 class="header blue lighter bigger">
+                                            <i class=""></i>
+                                            请输入你的登录信息
+                                        </h4>
+
+                                        <div class="space-6"></div>
+
+                                        <form name="loginForm">
+                                            <fieldset>
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" class="form-control userName" placeholder="用户名" name="userName" />
+                                                        <i class=""></i>
+                                                    </span>
+                                                </label>
+
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="password" class="form-control password" placeholder="密码" name="password" />
+                                                        <i class=""></i>
+                                                    </span>
+                                                </label>
+                                                 <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="text" style="float:left;" class="width-50 form-control YZM" placeholder="验证码" maxlength="5" name="verifyCode" />
+                                                        <img id="verifyImage" class="width-45 left" style="float:left;margin-left:5%;cursor:hand" height="34" src="/tool/VerifyImage2" onclick="this.src='/tool/VerifyImage2?time=' + new Date()" title="点击刷新验证码" >
+                                                        <div style="clear:both;"></div>
+                                                        <i class=""></i>
+                                                    </span>
+                                                </label>
+                                                <div class="space"></div>
+
+                                                <div class="clearfix">
+                                                    @*<label class="inline">
+                                                        <input type="checkbox" class="" style="vertical-align: -2px; margin-right: 3px;" name="isRemember" />
+                                                        <span class="lbl">记住密码</span>
+                                                    </label>*@
+
+                                                    <button type="button" class="width-100 pull-right btn btn-sm btn-primary" onclick="login();">
+                                                        <i class=""></i>
+                                                        登录
+                                                    </button>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="space-4"></div>
+                                            </fieldset>
+                                        </form>
+
+                                    </div>
+                                    <!-- /widget-main -->
+
+                                </div>
+                                <!-- /widget-body -->
+                            </div>
+                            <!-- /login-box -->
+
+                        </div>
+                        <!-- /position-relative -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <!-- /.main-container -->
+    <!-- basic scripts -->
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='/admin_mall/content/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/admin_mall/content/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+    <script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='/admin_mall/content/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        function show_box(id) {
+            jQuery('.widget-box.visible').removeClass('visible');
+            jQuery('#' + id).addClass('visible');
+        }
+
+        //用户登录
+        function login() {
+            var loginForm = document.forms["loginForm"];
+            var accountName = loginForm.elements["userName"].value;
+            var password = loginForm.elements["password"].value;
+            var verifyCode = loginForm.elements["verifyCode"] ? loginForm.elements["verifyCode"].value : undefined;
+            var isRemember = loginForm.elements["isRemember"] ? loginForm.elements["isRemember"].checked ? 1 : 0 : 0;
+
+            if (!verifyLogin(accountName, password, verifyCode)) {
+                return;
+            }
+            //$(".loginBt .loginIn").html("正在登录...").removeAttr("onclick");
+            var parms = new Object();
+            parms["userName"] = $.trim(accountName);
+            parms["password"] = password;
+            parms["verifyCode"] = verifyCode;
+            parms["isRemember"] = isRemember;
+            Ajax.post("/malladmin/account/login", parms, false, loginResponse)
+        }
+
+        //验证登录
+        function verifyLogin(accountName, password, verifyCode) {
+            if (accountName.length == 0) {
+                alert("请输入帐号名");
+                $(".userName").focus();
+                return false;
+            }
+            if ($.trim(accountName).length < 2 || accountName.Length > 50) {
+                alert("账户名必须大于2且不大于50个字符");
+                $(".userName").focus();
+                return false;
+            }
+            var regName = /[\u4e00-\u9fa5]+/gi;
+            if (regName.test(accountName)) {
+                alert("账户名不能包含中文字符");
+                $(".userName").focus();
+                return false;
+            }
+            if (password.length == 0) {
+                alert("请输入密码");
+                $(".passWord").focus();
+                return false;
+            }
+            if (password.length < 6) {
+                alert("密码长度必须大于6位");
+                $(".passWord").focus();
+                return false;
+            }
+            if (verifyCode != undefined && verifyCode.length == 0) {
+                alert("请输入验证码");
+                $(".YZM").focus();
+                return false;
+            }
+            return true;
+        }
+
+        //处理登录的反馈信息
+        function loginResponse(data) {
+            var result = eval("(" + data + ")");
+            if (result.state == "success") {
+                window.location.href = "http://" + window.location.host + "/malladmin/";
+            }
+            else if (result.state == "fail") {
+                alert(result.content);
+                $("#verifyImage").click();
+            }
+
+        }
+    </script>
+</body>
+</html>

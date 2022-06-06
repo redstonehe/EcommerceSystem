@@ -1,0 +1,45 @@
+﻿<!-- top start -->
+    <div id="headtop" class="top">
+        <div class="top-wrap box1000">
+            <div class="top-left Fleft">
+                <span class="Fleft;">欢迎来到@(WorkContext.MallConfig.SiteTitle)!</span>
+                <span id="showappcode"><a href="javascript:void(0); " class="">手机版</a></span>
+                <span><a href="http://www.qidexitong.com/" target="_blank" class="">SEED官网</a></span>
+                <div class="clear"></div>
+                <div id="appweixincode" >
+                    <img src="/images/mobilecode.jpg" alt="下载app" width="80" height="80" />
+                    <p>微信扫一扫</p>
+                    <p>推广购物更方便</p>
+                </div>
+            </div>
+            <div class="top-right Fright">
+                @if (WorkContext.Uid < 1)
+                {
+                    <a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", WorkContext.Url } })" class="toplogin" >Hi，请登录</a>
+                    <a href="@Url.Action("register", "account")" class="A_b">免费注册</a><span></span>
+                }
+                else
+                {<span>欢迎&nbsp;@WorkContext.NickName</span>
+                    <a href="@Url.Action("logout", "account")">注销</a>
+                }
+                @*@if (WorkContext.MallAGid > 1)
+                {
+                    <a href="@Url.Action("index", "home", new RouteValueDictionary { { "area", "malladmin" } })">商城管理</a>
+                }*@
+                <a href="@Url.Action("orderlist", "ucenter")" >我的订单</a>
+                <a href="@Url.Action("userinfo", "ucenter")" id="usercenter">个人中心<span class="user-center">0</span></a>
+                <a href="/help/question?id=20" target="_blank">客服中心</a>
+                <a href="/orderview" target="_blank">订单查询</a>
+                <a href="@Url.Action("index", "cart")" id="shoppingcart" >
+                   @* <span>
+                        <img src="/images/topcart2016.jpg" alt="购物车" width="19" height="15" /></span>*@
+                    购物车
+                    <span class="shop-cart">@WorkContext.CartProductCount</span>
+                </a>
+                <div id="cartlist">
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- top end -->

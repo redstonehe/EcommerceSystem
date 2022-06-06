@@ -1,0 +1,138 @@
+﻿@model VMall.Web.MallAdmin.Models.IncomeAccountModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>佣金查询</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    @*<script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>*@
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <script>
+        $(function () {
+            if ($("#IsOutPut")) {
+                $("#IsOutPut").val("0");
+            }
+        });
+        function search() {
+            $("#IsOutPut").val("0");
+            $("form").submit();
+        }
+        function output() {
+            $("#IsOutPut").val("1");
+            $("form").submit();
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">用户管理</a></li>
+            <li class="active">佣金查询</li>
+        </ol>
+        <div class="right">
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("IncomeAccount", "haimidrawcash"))
+    {
+       <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+       <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>账号名：</label>
+                                @Html.TextBox("UserName", Model.UserName, new {@class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>姓名：</label>
+                                @Html.TextBox("RealName", Model.RealName, new {@class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>状态：</label>
+                                @Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchUser" name="SearchUser" class="btn btn-default  searchBut submit" onclick="search();"><i class="fa fa-search"></i>搜索</button>
+                                 <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出有效余额</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+                
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>账户类型</th>
+                                        <th>用户名</th>
+                                        <th>手机</th>
+                                        @*<th>邮箱</th>*@
+                                        <th>昵称</th>
+                                        <th>姓名</th>
+                                        <th>余额</th>
+                                        <th>冻结余额</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.IncomeAccountList.Rows)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="" selectitem="true" name="uidList" /></td>
+                                            <td>@row["AccountName"]</td>
+                                            <td>@row["username"]</td>
+                                            <td>@row["mobile"]</td>
+                                            @*<td>@row["email"]</td>*@
+                                            <td>@row["nickname"]</td>
+                                            <td>@row["realname"]</td>
+                                            <td>@row["Banlance"]</td>
+                                            <td>@row["LockBanlance"]</td>
+
+                                            <td>
+                                                @Html.ActionLink("[查看详情]", "accountdetail", "user", new { uid = row["UserId"], accountId = row["AccountId"], accountName = row["AccountName"] }, new { @class = "editOperate" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+
+        <div class="dataListEdit">
+            @*<a href="#" delUrl="@Url.Action("del")" class="batch batchDel">批量删除</a>*@
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

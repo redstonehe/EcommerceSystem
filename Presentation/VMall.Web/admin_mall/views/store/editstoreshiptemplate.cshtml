@@ -1,0 +1,135 @@
+﻿@model VMall.Web.MallAdmin.Models.EditStoreShipTemplateModel
+@section header{
+    <title>编辑配送模板</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.validate.unobtrusive.js"></script>
+    <link type="text/css" href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js?201708"></script>
+}
+
+@section body{
+    <script>
+        function changeFreeStart(type) {
+            if (type == 0 || type == 1) {
+                $("#freestartprice").hide();
+                $(".freestartprice").val(0);
+            }
+            else {
+                $("#freestartprice").show();
+            }
+        }
+    </script>
+    <h1 class="rightH1">店铺管理 &gt;&gt; 编辑配送模板
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    @using (Html.BeginForm())
+    {
+        <div class="addTable">
+            <table width="100%">
+
+                <tr>
+                    <td width="150px" align="right">模板标题：</td>
+                    <td>@Html.TextBoxFor(x => x.TemplateTitle, new { @class = "input", size = "35" })@Html.ValidationMessageFor(x => x.TemplateTitle)</td>
+                </tr>
+                <tr>
+                    <td align="right">免运费：</td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.Free, 0, new { @class = "checkbox", onclick = "changeFreeStart(0);" })不免运费</label>
+                            <label>@Html.RadioButtonFor(x => x.Free, 1, new { @class = "checkbox", onclick = "changeFreeStart(1);" })免运费</label>
+                            <label>@Html.RadioButtonFor(x => x.Free, 2, new { @class = "checkbox", onclick = "changeFreeStart(2);" }) 满足包邮价格免运费 </label>
+                            <label>@Html.RadioButtonFor(x => x.Free, 3, new { @class = "checkbox", onclick = "changeFreeStart(3);" }) 满足包邮价格部分区域免运费 </label>
+                            <label>@Html.RadioButtonFor(x => x.Free, 4, new { @class = "checkbox", onclick = "changeFreeStart(4);" }) 小于数量快递、大于数量物流</label>
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                <tr id="freestartprice" @if (Model.Free == 0 || Model.Free == 1)
+                                        {<text>style="display:none;"</text>}>
+                    <td align="right">包邮起步价格<br />(快递/物流数量起步)：</td>
+                    <td>
+                        @Html.TextBoxFor(x => x.FreeStartPrice, new { @class = "input freestartprice", size = "3" })@Html.ValidationMessageFor(x => x.FreeStartPrice)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">计费类型：</td>
+                    <td>
+                        <p>
+                            <label>@Html.RadioButtonFor(x => x.Type, 0, new { @class = "checkbox" })按件数</label>
+                            <label>@Html.RadioButtonFor(x => x.Type, 1, new { @class = "checkbox" })按重量</label>
+                            <br />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">备注：</td>
+                    <td>
+                        @Html.TextAreaFor(x => x.TemplateRemark, new { cols = "40", rows = "6" })@Html.ValidationMessageFor(x => x.TemplateRemark)
+                    </td>
+                </tr>
+                <tr >
+                    <td align="right">不配送地区:</td>
+                    <td style="margin:10px;">
+
+                        <div class="selectBt" >
+                            <input type="button" value="选择区域" onclick="openRegionSelectLayer(this)" />
+                            <input type="hidden" class="RegionId" id="NoSendArea" name="NoSendArea" value="@Model.NoSendArea" />
+                            <input type="hidden" class="CityId" id="NoSendCity" name="NoSendCity" value="@Model.NoSendCity" />
+                            <input type="hidden" class="RegionName" id="RegionName" name="RegionName" value="" />
+                        </div>
+                        @Html.ValidationMessageFor(x => x.NoSendArea)
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"></td>
+                    <td>
+                       
+                        <div style="margin:10px;text-align:left;">
+                            原不发货地区：
+                            @if (Model.NoSendArea == "")
+                            {
+                                @:无
+                            }
+                            else
+                            {
+                                var RegionName = Regions.GetRegionNamesByregionids(Model.NoSendArea,Model.NoSendCity);
+                                @RegionName
+                            }
+                            <br />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <a href="" class="addBt" id="sumbitBut">
+                            <img src="/admin_mall/content/images/submit.jpg" /></a>
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#sumbitBut").click(function () {
+                                    $("form:first").submit();
+                                    return false;
+                                })
+                            });
+                        </script>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    }
+}

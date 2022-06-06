@@ -1,0 +1,198 @@
+﻿@using VMall.Web.Controllers
+
+@Html.Partial("/views/publicpage/headertop.cshtml")
+
+ @{
+     List<AdvertInfo> homeTopAdvertList = Adverts.GetAdvertList(6);
+     }
+     @if (homeTopAdvertList != null && homeTopAdvertList.Count > 0)
+     {
+<div class="headerAD box1210">
+    <a href="@homeTopAdvertList[0].Url"><img src="/upload/advert/@homeTopAdvertList[0].Body" width="1210" height="70" /></a>
+    <a href="javascript:;" class="close" onclick="this.parentNode.style.display='none'">x</a>
+</div>
+     }
+
+    <div id="header" class="bigBox">
+        <div class="@(ViewBag.IsBox1210 == 1 ? "box1210" : "box")" id="header1">
+            <a href="/" class="logo left">
+                <img src="/images/logo-65.jpg" /></a>
+            <div class="search left">
+                <div class="searchCon">
+                    <input type="text" id="keyword" name="keyword" class="Stext" autocomplete="off" onkeydown="javascript:if(event.keyCode==13) mallSearch(document.getElementById('keyword').value);" value="@WorkContext.SearchWord" />
+                    <input name="" type="button" value="搜索" class="Sbutton" onclick="mallSearch(document.getElementById('keyword').value)" />
+                    <div class="clear"></div>
+                </div>
+
+                <div class="searchHot">
+                    
+ @{
+     List<AdvertInfo> searchWordAdvertList = Adverts.GetAdvertList(5);
+ }
+                    @Html.Raw(searchWordAdvertList[0].Body)
+                </div>
+
+            </div>
+
+            <div class="shopping right" onmousemove="getCartSnap()" id="cartSnapBox" onmouseout="closeCartSnap(event)">
+                <h2><a href="@Url.Action("index", "cart")">我的购物车<b id="cartSnapProudctCount">@WorkContext.CartProductCount</b></a></h2>
+                <div id="cartSnap" class="shoppingList" style="display: none;">
+                    <div class="loding">
+                        <img src="/images/loading.gif" /><br />
+                        加载中，请稍候... </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+
+<div id="nav" class="bigBox">
+<div class="@(ViewBag.IsBox1210 == 1 ? "box1210" : "box")">
+<!-- 分类导航 -->
+
+<div id="categorys" @(ViewBag.Mark > 1 ? "onmouseover=document.getElementById('categorysCon').className='' onmouseout=document.getElementById('categorysCon').className='hide'" : "")>
+<h2>全部商品分类</h2>
+   @* || !WorkContext.Url.Contains("news/list")|| !WorkContext.Url.Contains("news/details")*@
+<div id="categorysCon" @(ViewBag.Mark > 1 ? "class=hide" : "")>
+    <style type="text/css">
+        .putonmouse {
+            /*border-top:1px solid #C0C0C0;
+            border-bottom:1px solid #C0C0C0;
+            border-right:3px solid #0D9F9F;*/
+            background-color: #EDEDED;
+            /*margin-right:-3px;*/
+            /*background-color:#0D9F9F;*/
+        }
+    </style>
+@{
+    List<NavInfo> navList = Navs.GetNavList();
+    }
+@{
+    int layerFlag = 0;
+    foreach (NavInfo info in navList)
+    {
+        if (info.Layer == 1)
+        {
+            if (layerFlag == 1)
+            {
+               @:</div></div>
+            }
+            @:<div class="item" onmouseover="this.className='item putonmouse'" onmouseout="this.className='item'"><h3><a href="@(info.Url)">@info.Name</a></h3><div class="itmeSon">
+            layerFlag = 1;
+        }
+        else if (info.Layer == 2)
+        {
+            @:<dl><dt><a style="" href="@(info.Url)">@info.Name</a></dt><dd>
+            foreach (NavInfo nav in navList.FindAll(x => x.Pid == info.Id))
+            {
+                 @:<em><a style="" href="@nav.Url">@nav.Name</a></em>
+            }
+            @:</dd><div class="clear"></div></dl>
+        }
+    }
+    @:</div></div>
+}
+
+</div>
+
+</div>
+<script>
+    $(function () {
+        //$("#channel2").mouseover(function () {
+        //    $(this).children("a").text("敬请期待").attr("href", "javascript:void(0);");
+
+        //});
+        //$("#channel2").mouseout(function () {
+        //    $(this).children("a").text("红包专区").css("color", "white");
+
+        //});
+        $("#channel_3").mouseover(function () {
+            $(this).children("a").text("敬请期待").attr("href", "javascript:void(0);");
+
+        });
+        $("#channel_3").mouseout(function () {
+            $(this).children("a").text("旅游专区").css("color", "white");
+
+        });
+        //$("#channel4").mouseover(function () {
+        //    $(this).children("a").text("敬请期待").attr("href", "javascript:void(0);");
+
+        //});
+        //$("#channel4").mouseout(function () {
+        //    $(this).children("a").text("全球购").css("color", "white");
+
+        //});
+        //$("#channel6").mouseover(function () {
+        //    $(this).children("a").text("敬请期待").attr("href", "javascript:void(0);");
+
+        //});
+        //$("#channel6").mouseout(function () {
+        //    $(this).children("a").text("兑换专区").css("color", "white");
+
+        //});
+    });
+</script>
+<!-- 分类导航结束 -->
+@{List<ChannelInfo> channelList = Channel.GetChannelList();}
+<ul id="navItme">
+    
+    <li style="margin-left:198px;"><a href="/">首页</a></li>
+    @{int i = 1;}
+    @foreach (ChannelInfo item in channelList.OrderBy(x => x.ChId).Take(3))
+    { 
+        <li id="channel_@(i)">
+            <a href="@Url.Action("index", "channel", new RouteValueDictionary { { "chId", item.ChId } })">@(item.Name + "")</a></li>
+        i++;
+    }
+    <li id="channel4">
+            <a href="@Url.Action("index", "channel", new RouteValueDictionary { { "chId", 4 } })" style="width:60px;">全球购</a></li>
+    <li >
+        @{
+            //string[] tylogin = (string[])ViewData["loginstate"];
+            string logstateUrl = string.Empty;
+            string AppKey = "22dbd1b598b311e59d7e08606ed9d972";
+            logstateUrl = string.Format("?islogin={0}&loginname={1}&isok={2}", WorkContext.Uid > 0 ? "1" : "0", WorkContext.Uid > 0 && !string.IsNullOrEmpty(WorkContext.UserName) ? WorkContext.UserName : "", WorkContext.Uid > 0 ? SecureHelper.MD5("1" + WorkContext.UserName + AppKey) : "");
+            
+            
+            }
+            <a href="http://www.tymall.net.cn/home/index.shtml@(logstateUrl)" target="_blank">综合商城</a>
+            </li>
+    <li id="channel6">
+            <a href="@Url.Action("index", "channel", new RouteValueDictionary { { "chId", 6 } })">兑换专区</a></li>
+    <li >
+   @* <li ><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 79 } })">海之圣专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 75 } })">个人零售专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 76 } })">海米红包专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 77 } })">咖啡劵购物专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 78 } })">旅游产品专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 78 } })">市场行业劵专区</a></li>
+    <li><a href="@Url.Action("category", "catalog", new RouteValueDictionary { { "cateId", 80 } })">综合商城</a></li>*@
+
+</ul>
+<style>
+    .nav_hot {
+        background: rgba(0, 0, 0, 0) url("/images/hot_nav.png") repeat-x scroll 0 0;
+        /*background-position: -132px -50px;*/
+        height: 25px;
+        position: absolute;
+        left: 390px;
+        top: -10px;
+        width: 45px;
+        z-index: 99;
+        /*right: 405px;*/
+    }
+</style>
+<script>
+    //$(function () {
+    //    function hotPlay() {
+    //        $(".nav_hot").stop(true, false).animate({ top: "-8px" }, 200).animate({ top: "-10px" }, 200).animate({ top: "-12px" }, 200).animate({ top: "-10px" }, 200);
+    //    };
+    //    ys_timeer = setInterval(hotPlay, 800);
+    //}
+    //);
+
+</script>
+<p class="nav_hot" ></p>
+</div>
+</div>

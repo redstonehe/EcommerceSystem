@@ -1,0 +1,43 @@
+﻿@model VMall.Services.MemberInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "提交结果";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .return {
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #e4393c;
+        border-radius: 3px;
+        background-color: #f5f4f4;
+        background: -webkit-gradient(linear,0 0,0 100%,from(#FC5C5F),to(#e4393c));
+        line-height: 29px;
+        display: block;
+        text-align: center;
+        padding: 3px 0;
+        margin: 10px auto;
+        width: 60%;
+        margin-top: 30px;font-size: 18px; 
+    }
+</style>
+<div class="userFormC">
+    <div class="result ">
+        <div class="result ">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h1>提交成功！！！</h1>
+            </div>
+            <a class="return" href="@Url.Action("getstock")" style="">返回</a>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+

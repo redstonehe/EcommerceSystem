@@ -1,0 +1,66 @@
+﻿@model VMall.Web.MallAdmin.Models.CashCouponDetailListModel
+@section header{
+    <title>卡券详情</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">汇购卡列表 &gt;&gt; 卡券详情
+        <div class="right">
+            <a href="@Html.Raw(ViewData["referer"].ToString())" class="menuBT">
+                <img src="/admin_mall/content/images/goback.jpg" />返回列表</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+
+    @using (Html.BeginForm("CashDetailList", "cashcoupon"))
+    {
+        
+        @Html.Hidden("CashId",Model.CashId)
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="10"></th>
+                        <th width="200" align="left">创建时间</th>
+                        <th width="200" align="left">收入</th>
+                        <th width="180" align="left">支出</th>
+                        <th width="180" align="left">消费订单</th>
+                        <th width="100" align="left">说明</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var info in Model.CashCouponDetailList)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>@info.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>@info.InAmount.ToString("0.00")</td>
+                            <td>@info.OutAmount.ToString("0.00")</td>
+                            <td class="createoid"><a href="@Url.Action("orderinfo", "order", new { oid=info.Oid})" style="color:blue;text-decoration:underline">@info.OSN</a></td>
+                            <td>@info.DetailDes</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

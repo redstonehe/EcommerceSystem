@@ -1,0 +1,57 @@
+﻿@model VMall.Web.Models.SafeSuccessModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "修改成功-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "修改成功";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+
+
+<div class="bigBox" id="member">
+<div class="box">
+@Html.Partial("/views/ucenter/leftNav.cshtml")
+
+<div id="memberR">
+<h2 id="memberRT">@ViewBag.PositionTitle</h2>
+
+<div class="step">
+<ul>
+    <li><s>1</s>验证身份</li>
+    <li><s>2</s>修改信息</li>
+    <li class="hot"><s>3</s>完成</li>
+    <div class="clear"></div>
+</ul>
+</div>
+
+<div class="safeYZ">
+
+    <div class="safeSuccessTip">
+    @if (Model.Action == "updatepassword")
+    {
+        @:密码更新成功
+    }
+    else if (Model.Action == "updatemobile")
+    {
+        @:手机更新成功
+    }
+    else if (Model.Action == "updateemail")
+    {
+        @:邮箱更新成功：@Model.Remark
+    }
+    else if (Model.Action == "updatepaypassword")
+    {
+        @:支付密码更新成功 
+    }
+    </div>
+
+</div>
+
+</div>
+
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</div>
+

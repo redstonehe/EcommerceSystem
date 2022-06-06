@@ -1,0 +1,44 @@
+﻿@section header{
+    <title>分区系列列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+}
+
+@section body{
+    <h1 class="rightH1">二级主页管理 &gt;&gt; 列表
+        <div class="right">
+
+            
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+
+    <div class="dataList">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th align="left">名称</th>
+                    <th width="176" align="left">管理操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>蜜采优选</td>
+                    <td>
+                        @Html.ActionLink("[编辑]", "GroupList", new { channelid = 2 }, new { @class = "editOperate" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>优选商家</td>
+                    <td>
+                        @Html.ActionLink("[编辑]", "GroupList", new { channelid = 9 }, new { @class = "editOperate" })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+}

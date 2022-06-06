@@ -1,0 +1,127 @@
+﻿@model VMall.Core.UserInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "编辑资料";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link href="/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<div class="loginTable">
+    <form name="registerForm" action="" class="am-form am-form-horizontal">
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">昵称：</label>
+            <div class="am-u-sm-8">
+                <input type="text" class=" nickName" name="nickName" placeholder="昵称" value="@Model.NickName" />
+            </div>
+        </div>
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">姓名:</label>
+            <div class="am-u-sm-8">
+                <input type="text" class=" realName" name="realName" placeholder="姓名" value="@Model.RealName"/>
+            </div>
+        </div>
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">身份证:</label>
+            <div class="am-u-sm-8">
+                <input type="text" class=" idCard" name="idCard" maxlength="18" placeholder="身份证号码" value="@Model.IdCard" />
+            </div>
+        </div>
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">银行名称:</label>
+            @{string[] banklist = StringHelper.SplitString(BMAConfig.MallConfig.BankList); }
+            <div class="am-u-sm-8">
+                <select id="BankName" name="BankName" class="BankName">
+                    @if (banklist.Length == 0)
+                    {
+                        <option selected="selected" value="-1">请选择</option>
+                    }
+                    else
+                    {
+                        <option selected="selected" value="">请选择</option>
+                        for (int i = 0; i < banklist.Length; i++)
+                        {
+                        <option  value="@banklist[i]" @if (banklist[i] == Model.BankName)
+                                                      {<text>selected = "selected"</text>} >@banklist[i]</option>
+                        }
+                    }
+                </select>
+            </div>
+            <span class="am-form-caret"></span>
+        </div>
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">银行卡号:</label>
+            <div class="am-u-sm-8">
+                <input type="text" class=" BankCardCode" name="BankCardCode" maxlength="30" placeholder="银行卡号" value="@Model.BankCardCode" />
+
+            </div>
+        </div>
+        <div class="itmeC am-form-group">
+            <label class="am-u-sm-4 am-form-label">银行开户人:</label>
+            <div class="am-u-sm-8">
+                <input type="text" class=" BankUserName" name="BankUserName" maxlength="18" placeholder="银行开户人" value="@Model.BankUserName" />
+
+            </div>
+        </div>
+        <div class="itmeC am-form-group ">
+            <div class="am-u-sm-12">
+                <a href="javascript:editUser()" class="am-btn am-btn-default am-btn-block" style="">确定修改</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function editUser() {
+        var nickName = $.trim($(".nickName").val());
+        var realName = $.trim($(".realName").val());
+        if (realName.length > 5) {
+            alert("姓名输入不合法,请重新输入");
+            $(".realName").focus();
+            return;
+        }
+        var idCard = $.trim($(".idCard").val());
+        if (idCard.length > 0) {
+            var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if (!reg.test(idCard)) {
+                alert("身份证输入不合法,请重新输入");
+                $(".idCard").focus();
+                return;
+            }
+        }
+        var BankName = $.trim($(".BankName").val())
+        var BankCardCode = $.trim($(".BankCardCode").val())
+        var BankUserName = $.trim($(".BankUserName").val())
+        $.ajax({
+            type: "POST",
+            url: "/mob/ucenter/EditUser?r=" + Math.random(),
+            //contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: { nickName: nickName, realName: realName, idCard: idCard, 'BankName': BankName, 'BankCardCode': BankCardCode, 'BankUserName': BankUserName },
+            success: function (result) {
+
+                var result = eval("(" + result + ")");
+                if (result.state == "success") {
+
+                    alert(result.content);
+                    window.location.href = "/mob/ucenter/";
+                }
+                else if (result.state == "exception") {
+                    alert(result.content);
+                }
+                else if (result.state == "error") {
+                    var verifyErrorList = result.content;
+                    if (verifyErrorList != undefined && verifyErrorList != null && verifyErrorList.length > 0) {
+                        var msg = "";
+                        var key = "";
+                        for (var i = 0; i < verifyErrorList.length; i++) {
+                            msg += verifyErrorList[i].msg + "\n";
+                            key += verifyErrorList[i].key;
+                        }
+                        alert(msg);
+
+                    }
+                }
+            }
+        });
+    }
+
+</script>

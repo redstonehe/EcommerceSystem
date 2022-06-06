@@ -1,0 +1,54 @@
+﻿@model VMall.Core.PartProductInfo
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "修改头像";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/main.css" rel="stylesheet" type="text/css">
+
+<div id="personal">
+    <div class="swipebox">
+        <div class="xg bor_radius4">
+            <div class="headpic rel width101">
+                <img id="pCurrentPhoto" src="@(string.IsNullOrEmpty(WorkContext.PartUserInfo.Avatar) ? "/mobile/images/member.png" : (!string.IsNullOrEmpty(WorkContext.PartUserInfo.OtherLoginId) && !WorkContext.PartUserInfo.Avatar.Contains(".") ? "http://wx.qlogo.cn/mmopen/" + WorkContext.PartUserInfo.Avatar : "/upload/userheadpic/" + WorkContext.PartUserInfo.Avatar))" onerror="src='/mobile/images/ff.gif'"width="152" height="152">
+            </div>
+            <div class="width101 sm">
+                <p>我们只接受jpg，jpeg，gif，png，bmp格式图像。图像最大不要超过4Mb或4096Kb。</p>
+            </div>
+
+            <div class=" width101">
+                <form action="/mob/ucenter/changephoto" method="post" enctype="multipart/form-data" id="btnsubmit">
+                    <div class="btnchose">
+                        <input id="uploadInput" name="uploadInput" type="file" hidden="hidden">
+                        <a href="javascript:void(0)" onclick="$('#uploadInput').click()">
+                            <span class="con_btn_5 bg_color_green fl bor_radius4 fn16 white rel">
+                                <img src="/mobile/images/mod_head_01.gif" width="20" height="20" class="hp_dw"><span class="hpw_dw">选择文件</span></span></a>
+                    </div>
+                    <div class="btn">
+
+                        <a href="javascript:void(0)" id="btn_submit" onclick="$('#btnsubmit').submit()">
+                            <span class="con_btn_5 bg_color fl bor_radius4 fn16 white rel marl12">
+                                <img src="/mobile/images/mod_head_02.gif" width="20" height="20" class="hp_dw2"><span class="hpw_dw2">上&nbsp;&nbsp;&nbsp;&nbsp;传</span></span></a>
+                    </div>
+                </form>
+
+                <div id="objDiv" class="gwtips" style="width: 180px; height: 50px; background: #454545; color: #fff; -moz-box-shadow: 0px 0px 8px #999999; box-shadow: 0px 0px 8px #999999; text-align: center; line-height: 50px; display: none; z-index: 1; position: fixed; left: 0; right: 0; margin-left: auto; margin-right: auto; top: 140px; border-radius: 4px;"></div>
+                <script>var intTimeStep = 20; var isIe = (window.ActiveXObject) ? true : false; var intAlphaStep = (isIe) ? 5 : 0.05; var curSObj = null; var curOpacity = null; var stopTime = 0; function startObjMessage(objId) { curSObj = document.getElementById(objId); if (isIe) { curSObj.style.cssText = 'DISPLAY: none; Z-INDEX: 1; FILTER: alpha(opacity=0); POSITION: absolute;' } setMessage() } function setMessage() { if (isIe) { curSObj.filters.alpha.opacity = 0 } else { curOpacity = 0; curSObj.style.opacity = 0 } curSObj.style.display = ''; setMessageShow() } function setMessageShow() { if (isIe) { curSObj.filters.alpha.opacity += intAlphaStep; if (curSObj.filters.alpha.opacity < 100) { setTimeout('setMessageShow()', intTimeStep) } else { stopTime += 10; if (stopTime < 500) { setTimeout('setMessageShow()', intTimeStep) } else { stopTime = 0; setMessageClose() } } } else { curOpacity += intAlphaStep; curSObj.style.opacity = curOpacity; if (curOpacity < 1) { setTimeout('setMessageShow()', intTimeStep) } else { stopTime += 10; if (stopTime < 200) { setTimeout('setMessageShow()', intTimeStep) } else { stopTime = 0; setMessageClose() } } } } function setMessageClose() { if (isIe) { curSObj.filters.alpha.opacity -= intAlphaStep; if (curSObj.filters.alpha.opacity > 0) { setTimeout('setMessageClose()', intTimeStep) } else { curSObj.style.display = 'none' } } else { curOpacity -= intAlphaStep; if (curOpacity > 0) { curSObj.style.opacity = curOpacity; setTimeout('setMessageClose()', intTimeStep) } else { curSObj.style.display = 'none' } } }</script>
+                <div hidden="" class="width101 fl xsk mart15">
+                    <span class="rel">
+                        <img src="/mobile/images/ff.gif" width="20" height="20" class="de_dw">
+                        <input type="text" name="upfile" id="upfile">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

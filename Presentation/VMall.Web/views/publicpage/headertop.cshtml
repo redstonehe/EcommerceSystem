@@ -1,0 +1,32 @@
+﻿<div id="headerBar" class="bigBox">
+<div class="@(ViewBag.IsBox1210 == 1 ? "box1210" : "box")">
+欢迎来到 @(WorkContext.MallConfig.SiteTitle)！
+    @if (WorkContext.Uid < 1)
+    {
+    <a href="@Url.Action("login", "account", new RouteValueDictionary { { "returnUrl", WorkContext.Url } })" style="color:#F22E00;">Hi，请登录</a><span>|</span>
+        <a href="@Url.Action("register", "account")" class="A_b">免费注册</a><span></span>
+    }
+<div  class="headerLink">
+    
+     @if (WorkContext.Uid >= 1)
+    {
+        @:您好: @WorkContext.NickName
+        <a href="@Url.Action("logout", "account")">退出</a><span>|</span>
+        if (WorkContext.PartUserInfo.StoreId > 1)
+        {
+        @*<a href="@Url.Action("index", "home", new RouteValueDictionary { { "area", "storeadmin" } })">店铺管理</a><span>|</span>*@
+        }
+        if (WorkContext.MallAGid > 1)
+        {
+        <a href="@Url.Action("index", "home", new RouteValueDictionary { { "area", "malladmin" } })">商城管理</a><span>|</span>
+        }
+        
+    }
+    
+    <a href="@Url.Action("orderlist", "ucenter")">我的订单</a><span>|</span>
+    <a href="@Url.Action("userinfo", "ucenter")">个人中心</a><span>|</span>
+    <a href="/help/question?id=7" target="_blank">客户服务</a><span>|</span>
+     <a href="#">网站导航</a><span>|</span>
+</div>
+</div> 
+</div>

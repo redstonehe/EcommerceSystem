@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1323CA44-E7C4-47B1-A316-22E80777D885}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VMall.Services</RootNamespace>
+    <AssemblyName>VMall.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="aliyun-net-sdk-core">
+      <HintPath>..\..\RefDLL\aliyun-net-sdk-core.dll</HintPath>
+    </Reference>
+    <Reference Include="aliyun-net-sdk-dysmsapi">
+      <HintPath>..\..\RefDLL\aliyun-net-sdk-dysmsapi.dll</HintPath>
+    </Reference>
+    <Reference Include="DirSale.Common">
+      <HintPath>..\..\RefDLL\DirSale\DirSale.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Maticsoft.DBUtility">
+      <HintPath>..\..\RefDLL\Maticsoft.DBUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TopSdk">
+      <HintPath>..\..\RefDLL\TopSdk.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\Account.cs" />
+    <Compile Include="Admin\AdminChannel.cs" />
+    <Compile Include="Admin\AdminCoupons.cs" />
+    <Compile Include="Admin\AdminOperate.cs" />
+    <Compile Include="Admin\AdminOperateRights.cs" />
+    <Compile Include="Admin\AdminOrderRefunds.cs" />
+    <Compile Include="Admin\AdminOrders.cs" />
+    <Compile Include="Admin\AdminPlugins.cs" />
+    <Compile Include="Admin\AdminSearchHistories.cs" />
+    <Compile Include="Admin\AdminShipCompanies.cs" />
+    <Compile Include="Admin\AdminStoreIndustries.cs" />
+    <Compile Include="Admin\AdminStoreRanks.cs" />
+    <Compile Include="Admin\AdminTopic.cs" />
+    <Compile Include="Admin\MallAdminActions.cs" />
+    <Compile Include="Admin\AdminAdverts.cs" />
+    <Compile Include="Admin\AdminBannedIPs.cs" />
+    <Compile Include="Admin\AdminBanners.cs" />
+    <Compile Include="Admin\AdminBrands.cs" />
+    <Compile Include="Admin\AdminCategories.cs" />
+    <Compile Include="Admin\AdminCredits.cs" />
+    <Compile Include="Admin\AdminFilterWords.cs" />
+    <Compile Include="Admin\AdminFriendLinks.cs" />
+    <Compile Include="Admin\MallAdminGroups.cs" />
+    <Compile Include="Admin\AdminHelps.cs" />
+    <Compile Include="Admin\AdminNavs.cs" />
+    <Compile Include="Admin\AdminNews.cs" />
+    <Compile Include="Admin\MallAdminLogs.cs" />
+    <Compile Include="Admin\AdminProductConsults.cs" />
+    <Compile Include="Admin\AdminProductReviews.cs" />
+    <Compile Include="Admin\AdminProducts.cs" />
+    <Compile Include="Admin\AdminPromotions.cs" />
+    <Compile Include="Admin\AdminStores.cs" />
+    <Compile Include="Admin\AdminUserRanks.cs" />
+    <Compile Include="Admin\AdminUsers.cs" />
+    <Compile Include="Admin\StoreAdminLogs.cs" />
+    <Compile Include="Adverts.cs" />
+    <Compile Include="AgentSendOrder.cs" />
+    <Compile Include="AgentStock.cs" />
+    <Compile Include="AgentStockDetail.cs" />
+    <Compile Include="Asyn.cs" />
+    <Compile Include="BannedIPs.cs" />
+    <Compile Include="Banners.cs" />
+    <Compile Include="Brands.cs" />
+    <Compile Include="BrowseHistories.cs" />
+    <Compile Include="Carts.cs" />
+    <Compile Include="CashCoupon.cs" />
+    <Compile Include="CashCouponDetail.cs" />
+    <Compile Include="Categories.cs" />
+    <Compile Include="Channel.cs" />
+    <Compile Include="Coupons.cs" />
+    <Compile Include="Credits.cs" />
+    <Compile Include="DataBases.cs" />
+    <Compile Include="DirSale\AccountUtils.cs" />
+    <Compile Include="DirSale\OrderUtils.cs" />
+    <Compile Include="DirSale\qdAPI\APIClient.cs" />
+    <Compile Include="DirSale\qdAPI\APIDictionary.cs" />
+    <Compile Include="DirSale\qdAPI\APIUtils.cs" />
+    <Compile Include="DirSale\ResultModelUtils.cs" />
+    <Compile Include="DirSale\WebUtils.cs" />
+    <Compile Include="Emails.cs" />
+    <Compile Include="EventLogs.cs" />
+    <Compile Include="ExChangeCoupons.cs" />
+    <Compile Include="ExCodeProducts.cs" />
+    <Compile Include="ExCodeTypes.cs" />
+    <Compile Include="FavoriteProducts.cs" />
+    <Compile Include="FavoriteStores.cs" />
+    <Compile Include="FilterWords.cs" />
+    <Compile Include="FriendLinks.cs" />
+    <Compile Include="GeetestConfig.cs" />
+    <Compile Include="GeetestLib.cs" />
+    <Compile Include="GroupProducts.cs" />
+    <Compile Include="HaiMiDrawCash.cs" />
+    <Compile Include="Helps.cs" />
+    <Compile Include="IPSearch.cs" />
+    <Compile Include="Kftransfer2severb.cs" />
+    <Compile Include="LoginFailLogs.cs" />
+    <Compile Include="MallUtils.cs" />
+    <Compile Include="Manage\LogHelper.cs" />
+    <Compile Include="Manage\Logs.cs" />
+    <Compile Include="MergePayOrder.cs" />
+    <Compile Include="Navs.cs" />
+    <Compile Include="News.cs" />
+    <Compile Include="OAuths.cs" />
+    <Compile Include="OnlineUsers.cs" />
+    <Compile Include="OrderActions.cs" />
+    <Compile Include="OrderApply.cs" />
+    <Compile Include="OrderChange.cs" />
+    <Compile Include="OrderRefunds.cs" />
+    <Compile Include="Orders.cs" />
+    <Compile Include="Order\OrderGift.cs" />
+    <Compile Include="Plugins.cs" />
+    <Compile Include="ProductConsults.cs" />
+    <Compile Include="ProductReviews.cs" />
+    <Compile Include="Products.cs" />
+    <Compile Include="ProductStats.cs" />
+    <Compile Include="Promotions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PVStats.cs" />
+    <Compile Include="Randoms.cs" />
+    <Compile Include="Regions.cs" />
+    <Compile Include="Searches.cs" />
+    <Compile Include="SearchHistories.cs" />
+    <Compile Include="Sessions.cs" />
+    <Compile Include="ShipAddresses.cs" />
+    <Compile Include="ShipCompanies.cs" />
+    <Compile Include="SMSes.cs" />
+    <Compile Include="SmsSender.cs.cs" />
+    <Compile Include="StoreIndustries.cs" />
+    <Compile Include="StoreRanks.cs" />
+    <Compile Include="Stores.cs" />
+    <Compile Include="Topics.cs" />
+    <Compile Include="Ucenter\Complain.cs" />
+    <Compile Include="Ucenter\Inform.cs" />
+    <Compile Include="Ucenter\Informtype.cs" />
+    <Compile Include="UserRanks.cs" />
+    <Compile Include="Users.cs" />
+    <Compile Include="OrderReturn.cs" />
+    <Compile Include="SuitPromotions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VMall.Core\VMall.Core.csproj">
+      <Project>{6b8e6156-1bd0-49e4-a693-a3f88025cf4c}</Project>
+      <Name>VMall.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMall.Data\VMall.Data.csproj">
+      <Project>{ff1483fc-ba6f-4257-9443-0ea61d71b555}</Project>
+      <Name>VMall.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

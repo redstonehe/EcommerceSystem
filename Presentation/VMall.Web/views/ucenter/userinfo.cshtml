@@ -1,0 +1,182 @@
+﻿@model VMall.Web.Models.UserInfoModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "个人资料-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "个人资料";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<script type="text/javascript">
+    provinceId = @ViewData["provinceId"]; //省id
+    cityId = @ViewData["cityId"]; //市id
+    countyId = @ViewData["countyId"]; //县或区id
+</script>
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="position: relative;">
+            <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+
+            <div id="sharecode">
+                <p style="text-align: left;">
+                    <h4>分享好友扫码加入:</h4>
+                </p>
+                <img src="@(ViewData["codeImg"])" alt="" onerror="src='/images/60.jpg'" width="150" height="200"/>
+                <p>
+                    注册即送100元红包
+                    <br />
+                    遇见更健康的生活方式
+                </p>
+            </div>
+
+            <form name="userInfoForm" action="">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="memberTable">
+                    <tr>
+                        <th width="100" align="right">用户名/手机：</th>
+                        <td>
+                            @{var userName = string.IsNullOrEmpty(Model.UserInfo.UserName) ? (string.IsNullOrEmpty(Model.UserInfo.Mobile) ? (string.IsNullOrEmpty(Model.UserInfo.Email) ? "" : Model.UserInfo.Email) : Model.UserInfo.Mobile) : Model.UserInfo.UserName;}
+                            @userName
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">昵称：</th>
+                        <td>
+                            <input type="text" name="nickName" value="@Model.UserInfo.NickName" class="text" maxlength="15" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">真实姓名：</th>
+                        <td>
+                            <input type="text" name="realName" value="@Model.UserInfo.RealName" class="text" maxlength="15" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">性别：</th>
+                        <td>
+                            <label class="radio">
+                                <input type="radio" name="gender" value="1" @{if (Model.UserInfo.Gender == 1)
+                                                                              {<text>checked="checked"</text>}} />男</label>
+                            <label class="radio">
+                                <input type="radio" name="gender" value="2" @{if (Model.UserInfo.Gender == 2)
+                                                                              {<text>checked="checked"</text>}} />女</label>
+                            <label class="radio">
+                                <input type="radio" name="gender" value="0" @{if (Model.UserInfo.Gender == 0)
+                                                                              {<text>checked="checked"</text>}} />保密</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">银行名称：</th>
+                        <td>
+                            @*<input type="text" name="BankName" value="@Model.UserDetailInfo.BankName" class="text" maxlength="18" style="width:200px" />*@
+                            @{string[] banklist = StringHelper.SplitString(BMAConfig.MallConfig.BankList); }
+                                <select id="BankName" name="BankName" style="width: 212px">
+                                    @if (banklist.Length == 0)
+                                    {
+                                        <option selected="selected" value="-1">请选择</option>
+                                    }
+                                    else
+                                    {
+                                        <option selected="selected" value="">请选择</option>
+                                        for (int i = 0; i < banklist.Length; i++)
+                                        {
+                                        <option  value="@banklist[i]" @if (banklist[i] == Model.UserDetailInfo.BankName)
+                                                                      {<text>selected = "selected"</text>} >@banklist[i]</option>
+                                        }
+                                    }
+                                </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">银行卡号：</th>
+                        <td>
+                            <input type="text" name="BankCardCode" value="@Model.UserDetailInfo.BankCardCode" class="text" maxlength="30" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">银行开户人：</th>
+                        <td>
+                            <input type="text" name="BankUserName" value="@Model.UserDetailInfo.BankUserName" class="text" maxlength="18" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">身份证号码：</th>
+                        <td>
+                            <input type="text" name="idCard" value="@Model.UserInfo.IdCard" class="text" maxlength="18" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">出生日期：</th>
+                        <td>
+                            <input type="text" name="bday" value="@Model.UserInfo.Bday.ToString("yyyy-MM-dd")" class="text" maxlength="15" style="width:200px" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">详细地址：</th>
+                        <td>
+                            <select id="provinceId" name="provinceId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="cityId" name="cityId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="regionId" name="regionId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                        @*<span class="tip">这里是提示信息</span></td>*@
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">详细地址：</th>
+                        <td>
+                            <input type="text" name="address" value="@Model.UserInfo.Address" class="text" maxlength="15" />@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">@*<em>*</em>*@个人简介：</th>
+                        <td>
+                            <textarea rows="5" cols="40" name="bio" class="text" style="height: 100px;">@Model.UserInfo.Bio</textarea>@*<span class="tip">这里是提示信息</span>*@</td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">&nbsp;</th>
+                        <td><span  class="submitBT" style="font-size: 14px; padding: 3px 20px;" onclick="editUser()">提交</span></td>
+                    </tr>
+                </table>
+            </form>
+            <script type="text/javascript">
+                //绑定省列表的改变事件
+                Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+                    var selectedProvinceId = getSelectedOption(this).value;
+                    if (selectedProvinceId > 0) {
+                        document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+                        bindCityList(selectedProvinceId, document.getElementById("cityId"));
+                    }
+                })
+
+
+                //绑定市列表的改变事件
+                Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+                    var selectedCityId = getSelectedOption(this).value;
+                    if (selectedCityId > 0) {
+                        bindCityList(selectedCityId, document.getElementById("regionId"));
+                    }
+                })
+
+                //绑定省列表
+                bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+                if (cityId > 0) {
+                    bindCityList(provinceId, document.getElementById("cityId"), cityId);
+                    bindCountyList(cityId, document.getElementById("regionId"), countyId);
+                }
+            </script>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+
+

@@ -1,0 +1,46 @@
+﻿@model VMall.Web.Mobile.Models.SafeSuccessModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "修改成功-账户安全";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 8;
+}
+
+<div class="userForm">
+
+<div class="userFormT">
+<ul>
+<li class="T1"><span>1</span></li>
+<li class="Tline"><strong></strong></li>
+<li class="T2"><span class="hot">2</span></li>
+</ul>
+</div>
+
+<div class="userFormT" style="padding:0 20px;">
+<ul>
+<li style="width:96px;">身份验证</li>
+<li>&nbsp;</li>
+<li style="width:96px; text-align:right;">修改安全信息</li>
+</ul>
+</div>
+
+<div class="userFormC">
+    @if (Model.Action == "updatepassword")
+    {
+        @:密码更新成功
+    }
+    else if (Model.Action == "updatemobile")
+    {
+        @:手机更新成功
+    }
+    else if (Model.Action == "updateemail")
+    {
+        @:邮箱更新成功：@Model.Remark
+    }
+    else if (Model.Action == "updatepaypassword")
+    {
+        @:支付密码更新成功 
+    }
+</div>
+
+</div>

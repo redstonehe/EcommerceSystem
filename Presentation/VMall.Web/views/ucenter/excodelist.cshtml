@@ -1,0 +1,136 @@
+﻿@model List<ExChangeCouponsInfo>
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "兑换码-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "兑换码";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<style>
+    .cashitem {
+        /*background:url(/images/cashbg.png) no-repeat;background-size:300px;*/
+        width: 50%;
+        margin: 10px auto;
+        text-align: center;
+        padding: 10px 0;
+        position: relative;
+        border-bottom: 1px dashed #c8c7cc;
+        float:left;
+    }
+
+    .cashvalue1 {
+        position: absolute;
+        top: 50%;
+        /*left: 40%;*/
+        width: 100%;
+        /*//text-align: left;*/
+    }
+    .cashvalue2 {
+        position: absolute;
+        top: 64%;
+        /*left: 40%;*/
+        width: 100%;
+        /*//text-align: left;*/
+    }
+
+        .cashvalue1 span, .cashvalue2 span {
+            /*color: #fff;*/
+            font-size: 20px;
+            font-weight: bolder;
+            margin: 2px;
+        }</style>
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR">
+            <h2 id="memberRT">@ViewBag.PositionTitle
+            </h2>
+            <div class="searchList">
+
+                <div class="clear"></div>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="cashitem">
+                    @if (item.codetypeid == 2)
+                    {
+                        <img src="/images/excode2.png" alt="" width="90%" height="60%" />
+                    }
+                    @if (item.codetypeid == 3)
+                    {
+                        <img src="/images/excode3.png" alt="" width="90%" />
+                    }
+                    @if (item.codetypeid == 4)
+                    {
+                        <img src="/images/excode4.png" alt="" width="90%" />
+                    }
+                    @if (item.codetypeid == 5)
+                    {
+                        <img src="/images/excode5.png" alt="" width="90%" height="60%" />
+                    }
+                    <p class="@(item.codetypeid >= 3 ? "cashvalue2" : "cashvalue1")" style="@(item.codetypeid >= 3 ? "color:#c49964" : "color:#cfcfcf")">
+                        <span>兑换码:@item.exsn</span>
+                        
+                        <br />
+                        <span>有效期:@item.validtime.ToString("yyyy/MM/dd")</span>
+                        
+                        <br />
+                        @if (item.oid > 0)
+                        {
+                            <span>已使用</span>
+                        }
+                        else if (item.oid == 0 && item.validtime < DateTime.Now)
+                        {
+                            <span>已过期</span>
+                        }
+                    </p>
+
+                </div>
+        
+            }
+            @*<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+                <thead>
+                    <tr>
+                        <th width="100px" align="left">兑换码</th>
+                        <th width="120px" align="left">创建时间</th>
+                        <th width="80px" align="left">是否使用</th>
+                        <th width="160px" align="left">有效期</th>
+                        <th width="60px" align="left">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model)
+                    {
+                        <tr>
+                            <td align="center">@row.exsn</td>
+                            <td align="center">@row.createtime.ToString("yyyy-MM-dd HH:mm")</td>
+
+                            <td align="center">
+                                @if (row.oid > 0)
+                                {
+                                    @:已使用
+             }
+                                else if (row.oid == 0 && row.validtime < DateTime.Now)
+                                {
+                                    @:已过期
+                                }
+
+
+                            </td>
+                            <td align="center">
+                                @row.validtime.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td align="center"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
+
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+

@@ -1,0 +1,96 @@
+﻿@model VMall.Web.Models.FavoriteStoreListModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "收藏店铺-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "收藏店铺";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+
+<div class="bigBox" id="member">
+<div class="box">
+@Html.Partial("/views/ucenter/leftNav.cshtml")
+
+<div id="memberR">
+    <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+    <div class="favT">
+      @*<label><input type="checkbox" />全选</label>*@
+        <div class="favTpage">
+            共有 <b>@Model.PageModel.TotalCount</b> 条记录<i>
+            <font color="#ff6600">@Model.PageModel.PageNumber</font>/@Model.PageModel.TotalPages </i> &nbsp; 
+            @if (Model.PageModel.HasPrePage)
+            { 
+                <a href = "@Url.Action("favoritestorelist", new RouteValueDictionary { { "page", Model.PageModel.PrePageNumber } })" class="whiteBT">上一页</a>@:&nbsp; 
+            }
+            else
+            {
+                <a href="javascript:;" class="whiteBT">上一页</a>@:&nbsp; 
+            }
+            @if (Model.PageModel.HasNextPage)
+            {
+                <a href = "@Url.Action("favoritestorelist", new RouteValueDictionary { { "page", Model.PageModel.NextPageNumber } })" class="whiteBT">下一页</a>
+            }
+            else
+            {
+                <a href="javascript:;" class="whiteBT">下一页</a>
+            } 
+        </div>
+    </div>
+    <table width="100%" border="0" cellspacing="0" class="dingdan">
+         <thead>
+          <tr>
+            <th @*colspan="2"*@ valign="bottom">店铺信息</th>
+            <th>收藏时间</th>
+            <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.StoreList.Rows)
+            {
+           <tr id="favoriteStore@{@row["storeid"]}">
+                @*<td><input type="checkbox" /></td>*@
+                <td>
+                <div class="proList">
+                    <img src="/upload/store/@row["storeid"]/logo/thumb50_50/@row["logo"]" width="50" height="50" /><a href="#">@row["name"]<br /></a>
+                    <div class="clear"></div>
+                </div>
+                </td>
+                <td>@((row["addtime"]).ToString())<br /></td>
+                <td><a href="javascript:delFavoriteStore(@row["storeid"])">删除</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+<div class="favT">
+    @*<label><input type="checkbox" />全选</label>*@
+    <div class="favTpage">
+        共有 <b>@Model.PageModel.TotalCount</b> 条记录<i>
+        <font color="#ff6600">@Model.PageModel.PageNumber</font>/@Model.PageModel.TotalPages </i> &nbsp; 
+        @if (Model.PageModel.HasPrePage)
+        { 
+            <a href = "@Url.Action("favoritestorelist", new RouteValueDictionary { { "page", Model.PageModel.PrePageNumber } })" class="whiteBT">上一页</a>@:&nbsp; 
+        }
+        else
+        {
+            <a href="javascript:;" class="whiteBT">上一页</a>@:&nbsp; 
+        }
+        @if (Model.PageModel.HasNextPage)
+        {
+            <a href = "@Url.Action("favoritestorelist", new RouteValueDictionary { { "page", Model.PageModel.NextPageNumber } })" class="whiteBT">下一页</a>
+        }
+        else
+        {
+            <a href="javascript:;" class="whiteBT">下一页</a>
+        } 
+    </div>
+</div>
+
+</div>
+
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</div>
+

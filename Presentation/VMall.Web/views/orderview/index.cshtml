@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "订单查询" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "订单查询";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+ 
+}
+
+<style>
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        <form name="registerForm" action="@Url.Action("OrderViewList", "OrderView")" method="post">
+            <div id="memberR" style="padding-bottom: 0px; height: auto; width: 968px">
+
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="memberTable">
+                    <tr>
+                        <th width="100" align="right">收货手机号：</th>
+                        <td>
+                            <input type="text" name="oinfo" value="" class="text oinfo" style="width: 200px" /></td>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">验证码：</th>
+                        <td>
+                            <input type="text" class="text viewCode" name="viewCode" placeholder="" value="" style="width: 200px" maxlength="5" /><img id="verifyImage" src="/agent/tool/verifyimage2" onclick="this.src='/agent/tool/verifyimage2?time=' + new Date()" style="width: 120px; margin: 0  10px; vertical-align: middle; height: 32px; line-height: 32px;" /><a href="javascript:void(0)" onclick="document.getElementById('verifyImage').src='/agent/tool/verifyimage2?time=' + new Date()" class="" style="line-height: 60px;">换一张</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th width="100" align="right">&nbsp;</th>
+                        <td><span class="submitBT" style="font-size: 14px; padding: 3px 20px;" onclick="viewquery()">提交</span></td>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+    function viewquery() {
+        var oinfo = $.trim($(".oinfo").val());
+        var viewCode = $.trim($(".viewCode").val());
+        if (oinfo == "") {
+            alert("请输入收货手机号码");
+            $(".oinfo").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test(oinfo)) {
+            alert('请输入正确的手机号码!!!');
+            $(".oinfo").focus();
+            return;
+        }
+        if (viewCode == "") {
+            alert("请输入验证码");
+            $(".viewCode").focus();
+            return;
+        }
+        $("form:first").submit();
+        return false;
+    }
+
+</script>

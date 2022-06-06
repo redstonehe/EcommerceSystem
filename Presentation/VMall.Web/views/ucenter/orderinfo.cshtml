@@ -1,0 +1,241 @@
+﻿@model VMall.Web.Models.OrderInfoModel
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "订单详情-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "订单详情";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<style>
+    #choseJoin a {
+        background-color: #D02424;
+        border-radius: 1px;
+        display: inline-block;
+        color: white;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        border: 0;
+        margin-left: 40px;
+        font-size: 14px;
+    }
+</style>
+
+@*@{var osn = Model.OrderInfo.OSN.Trim();
+  var osnT = osn.Substring(0, osn.Length - 1) + "<span style='font-size: 22px;vertical-align: middle;padding-top: -6px;display: inline-block;font-weight: bolder; height: 18px;'>*</span>";}*@
+<div class="breadcrumb box">
+    <strong>会员中心</strong>
+    <span>&nbsp;&gt;&nbsp;<a href="@Url.Action("orderlist")">我的订单</a>&nbsp;&gt;&nbsp;<a href="@Url.Action("orderinfo", new RouteValueDictionary { { "oid", Model.OrderInfo.Oid } })">订单详情
+ 
+
+    </a></span>
+</div>
+
+<div class="box">
+    <h2 class="DDstatus">订单号：@Model.OrderInfo.OSN
+        @*@if ((int)Model.OrderInfo.OrderState < 90)
+         { 
+                                        
+             @osnT
+         }
+         else
+         {
+             @osn
+         }*@
+        @*状态：*@
+        <font color="#12A000">
+    @*@{
+        OrderState orderState = (OrderState)Model.OrderInfo.OrderState;
+    }
+    @switch (orderState)
+    {
+        case OrderState.WaitPaying:
+            @:等待付款
+            break;
+        case OrderState.Confirming:
+            @:待确认
+            break;
+        case OrderState.Confirmed:
+            @:已确认
+            break;
+        case OrderState.PreProducting:
+            @:备货中
+            break;
+        case OrderState.Sended:
+            @:已发货
+            break;
+        case OrderState.Completed:
+            @:已完成
+            break;
+        case OrderState.Cancelled:
+            @:取消
+            break;
+        case OrderState.Returned:
+            @:退货
+            break;
+        case OrderState.Locked:
+            @:锁定
+            break;
+        default:
+            @:未知状态
+            break;
+    }*@
+</font>
+    </h2>
+
+    <div id="DDcon">
+        <ul>
+            <li><a href="#" class="hot">订单跟踪</a></li>
+            @*<li><a href="#">付款信息</a></li>*@
+            <div class="clear"></div>
+        </ul>
+        <div style="padding: 15px;">
+            <table width="100%" cellpadding="0" cellspacing="0" class="ddgzTable">
+                <thead>
+                    <tr>
+                        <th width="15%" align="left"><strong>处理时间</strong></th>
+                        <th width="50%" align="left"><strong>处理信息</strong></th>
+                        <th width="35%" align="left"><strong>操作人</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (OrderActionInfo info in Model.OrderActionList)
+                    {
+                        <tr>
+                            <td>@info.ActionTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            @if (info.ActionType == 4)
+                            { 
+                                <td>您的订单已经发货,发货方式为:@Model.OrderInfo.ShipCoName,物流单号：@Model.OrderInfo.ShipSN</td>
+                            }
+                            else
+                            {
+                                <td>@info.ActionDes</td>
+                            }
+                            <td>@info.RealName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @*<b style="padding:10px 0; display:block;">送货方式：普通快递 承运人：北京盛泰物流(大家电外埠)</b>*@
+        </div>
+
+    </div>
+    
+    <div id="DDinfo">
+        <h2>订单信息</h2>
+        <div id="DDinfoCon">
+            <dl>
+                <dt>收货人信息</dt>
+                <dd>收 货 人：@Model.OrderInfo.Consignee</dd>
+                @if (Model.RegionInfo != null)
+                {
+                    <dd>收货地址：@Model.RegionInfo.ProvinceName @Model.RegionInfo.CityName @Model.RegionInfo.Name @Model.OrderInfo.Address</dd>
+                }
+                else
+                {
+                    @Model.OrderInfo.Address
+                }
+                <dd>手机号码：@Model.OrderInfo.Mobile</dd>
+            </dl>
+
+            <dl>
+                <dt>支付及配送方式</dt>
+                <dd>支付方式：@Model.OrderInfo.PayFriendName</dd>
+                <dd>配送方式：@Model.OrderInfo.ShipCoName</dd>
+                <dd>快递单号：@Model.OrderInfo.ShipSN</dd>
+                <dd>&nbsp;</dd>
+                <dd>确认收货时间：
+                    @if (Model.OrderInfo.ReceivingTime < Model.OrderInfo.AddTime)
+                        {
+                            @:未收货
+                        }
+                        else
+                        {
+                           @Model.OrderInfo.ReceivingTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        }
+                    
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>发票及订单备注</dt>
+                <dd>发票：@Model.OrderInfo.InvoiceMore</dd>
+                <dd>订单备注：@Model.OrderInfo.BuyerRemark</dd>
+            </dl>
+            <dl style="border-bottom: none;">
+                <dt>商品清单</dt>
+                <dd style="padding-top: 10px;">
+                    <table width="100%" border="0" cellspacing="0" class="dingdan">
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>价格</th>
+                                <th>数量</th>
+                                <th>合计</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (OrderProductInfo info in Model.OrderProductList)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="proList">
+                                            <img src="/upload/store/@info.StoreId/product/show/thumb60_60/@info.ShowImg" width="50" height="50" />
+                                            <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">@if (info.Type == 3)
+                                                                                                                                          {
+                                                <span style="color: red;">[套装]</span>
+                                                                                                                                          }@info.Name<br />
+                                                <br />
+                                                <br />
+                                            </a>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </td>
+                                    <td>¥@info.DiscountPrice</td>
+                                    <td>@info.RealCount</td>
+                                    <td>
+                                        @if (info.Type == 3)
+                                        {
+                                            @Html.Raw((info.DiscountPrice * info.RealCount).ToString())}
+                                        else
+                                        {
+                                            @Html.Raw((info.DiscountPrice * info.BuyCount).ToString())
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </dd>
+            </dl>
+
+
+        </div>
+
+        <div class="right DDsum">
+            <p><i>¥@Model.OrderInfo.ProductAmount</i><span>总商品金额：</span></p>
+            <p><i>¥@Model.OrderInfo.FullCut.ToString("0.00")</i><span>- 满减：</span></p>
+            <p><i>¥@Model.OrderInfo.ShipFee</i><span>+ 运费：</span></p>
+            @*<p><i>¥@Model.OrderInfo.PayFee</i><span>+ 税费：</span></p>*@
+            @if (Model.OrderInfo.TaxAmount > 0)
+            {
+    
+                <p><i>¥@Model.OrderInfo.TaxAmount</i>@(Model.OrderInfo.TaxAmount > 50 ? "" : "（免税）")<span>+ 关税税费：</span></p>
+            }
+            <p><i>¥@Model.OrderInfo.CouponMoney.ToString("0.00")</i><span>- 优惠劵：</span></p>
+            <p><i>¥@Model.OrderInfo.HaiMiDiscount</i><span>-海米抵扣：</span></p>
+            <p><i>¥@Model.OrderInfo.HongBaoDiscount</i><span>-红包减免：</span></p>
+            <p><i>¥@Model.OrderInfo.AgentDiscount</i><span>-代理账户抵现：</span></p>
+            <p><i>¥@Model.OrderInfo.CommisionDiscount</i><span>-佣金账户抵现：</span></p>
+            <p><i>¥@Model.OrderInfo.CashDiscount</i><span>-汇购卡券减免：</span></p>
+            @*<p><i>¥@Model.OrderInfo.PayCreditMoney</i><span>- @WorkContext.PayCreditName：</span></p>*@
+            <div class="clear"></div>
+            <hr color="#ddd" size="1" />
+            <b>应付总额：<em>¥@Model.OrderInfo.SurplusMoney</em></b>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+</div>
+
+

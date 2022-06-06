@@ -1,0 +1,366 @@
+﻿@model VMall.Web.Mobile.Models.ConfirmOrder_AgentModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "确认订单";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 6;
+}
+<style>
+    body { /*font-size: 1rem;*/
+        font-family: "Microsoft YaHei";
+        /*background: #f0f0f0;*/
+        color: #444;
+        /*line-height: 0.22rem;*/
+    }
+
+    .cashamount {
+        color: #E4393C;
+        width: 60px;
+        display: inline-block;
+    }
+
+    #CashSumCon ul li {
+        border-bottom: 1px dashed #e4e4e4;
+        padding: 5px 10px;
+    }
+
+    .con input[type=text] {
+        padding: 5px;
+        width: 70%;
+            line-height: 34px;
+    height: 34px;
+    }
+    .con select {
+        padding: 5px;
+        width: 70%;
+            line-height: 34px;
+    height: 34px;
+    }
+
+    .con input[type=password] {
+        padding: 5px;
+    }
+
+    .con .cartItme .proInfo .proInfo2 .text a {
+        padding: 5px 0;
+    }
+
+    .paytype-cash {
+        height: 24px;
+        width: 24px;
+    }
+
+    .ordersummaryT tr td {
+        width: 50%;
+    }
+
+    .subSum p {
+        text-align: right;
+        height: 24px;
+        line-height: 24px;
+        padding-right: 10px;
+    }
+
+    .subSum i {
+        color: #f00;
+    }
+
+    .proInfoItem {
+        display: block;
+        padding: 5px 30px 5px 10px;
+    }
+
+        .proInfoItem span {
+            color: #f00;
+        }
+
+    .preInfo a[class='redBt'], .preInfo a[class='gayBt'], .preInfo1 a[class='redBt'] {
+        padding: 0 10px;
+        display: inline-block;
+        color: #fff;
+        background: #FB5433;
+    }
+
+    .preInfo a[class='gayBt'] {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+    .proInfo {
+        margin: 0;
+    }
+
+    .preInfo {
+        margin: 10px;
+    }
+
+    .cashwarn {
+        color: red;
+        display: none;
+        margin-bottom: 5px;
+    }
+
+    .contitle {
+        width: 85px;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .countwarn {
+        font-size: 10px;
+        color: #fff;
+        background-color: #ff5000;
+        padding: 1px 4px;
+        text-align: center;
+        border-radius: 3px;
+    }
+</style>
+<script type="text/javascript">
+    //isGuestSC = @WorkContext.MallConfig.IsGuestSC;
+    //提交订单
+    function submitOrder_Agent() {
+        var pid = $.trim($("#pid").val());
+        var pcount=parseInt($(".pcount").val());
+        var payName =$.trim($("#payName").val());
+        var consignee = $.trim($("#consignee").val());
+        var mobile = $.trim($("#mobile").val());
+        var idcard = $.trim($("#idcard").val());
+        var regionId = $.trim($("#regionId").val());
+        var address = $.trim($("#address").val());
+
+        if (consignee == "") {
+            alert("请填写收货人");
+            return false;
+        }
+        if (mobile == "") {
+            alert("请填写手机号");
+            return false;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test($.trim(mobile))) {
+            alert('请输入正确的手机号码!!!');
+            return ;
+        }
+        if (idcard == "") {
+            alert("身份证号码不能为空");
+            $("#idcard").focus();
+            return false;
+        }
+        //var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        var reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+        if (reg.test(idcard) === false) {
+            alert("身份证格式不正确,请重新输入");
+            $("#idcard").focus();
+            return false;
+        }
+        if (parseInt(regionId) < 1) {
+            alert("请选择区域");
+            return false;
+        }
+        if (address == "") {
+            alert("请填写详细地址");
+            return false;
+        }
+        var buyerRemark = $.trim($("#buyerRemark").val()) ;
+        
+        //防重复提交
+        $(".orderSumRight .addOrderBtn").html("正在提交...").attr("href", "javascript:void(0);");
+        Ajax.post("/mob/order/SubmitOrder_DirectBuy",
+            { 'pid': pid, 'payName': payName, 'pcount': pcount, 'consignee': consignee, 'mobile': mobile, 'idcard': idcard, 'regionId': regionId, 'address': address, 'buyerRemark': buyerRemark },
+                    false,submitOrderResponse);
+    }
+
+    //改变商品数量
+    function changeAgentCount(pid, buyCount,type) {
+        if (!isInt(buyCount)) {
+            alert('请输入数字');
+        }
+        else {
+            var oldcount=parseInt($(".pcount").val());
+            var shopprice=parseFloat($(".shopprice").val());
+            if(type==1){
+                $(".pcount").val(oldcount-buyCount);
+                $(".storeamount").html((oldcount-buyCount)*shopprice);
+                $(".allamount").html((oldcount-buyCount)*shopprice);
+            }
+            else if (type==2)
+            {
+                $(".pcount").val(oldcount+buyCount);
+                $(".storeamount").html((oldcount+buyCount)*shopprice);
+                $(".allamount").html((oldcount+buyCount)*shopprice);
+            }
+        }
+    }
+
+</script>
+<div id="mainBlock">
+    <div class="allCon">
+        <div class="title">支付信息</div>
+        <div class="con">
+            <a href="javascript:showPayPluginList()"><span>@Model.DefaultPayPluginInfo.FriendlyName</span></a>
+            <span class="icon-arr"></span>
+        </div>
+        <div class="title">商品确认</div>
+        <div class="con" style="padding: 0">
+            <div class="cartItme" style="border: none;">
+                <div class="proInfo" style="margin: 0;">
+                    <div class="proInfo2">
+                        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", Model.Product.Pid } })" class="proImg">
+                            <img src="/upload/store/@Model.Product.StoreId/product/show/thumb300_300/@Model.Product.ShowImg" width="59" height="59" /></a>
+                        <div class="text">
+                            <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", Model.Product.Pid } })" style="padding: 5px 0;">@Model.Product.Name</a>
+                            <div class="nb">
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">数量： 
+                                       @* <span class="gayBt" onclick="changeAgentCount(@Model.Product.Pid,1,1)">-</span>*@
+                                    <span class="gayBt">
+                                        <input class="pcount" value="1" disabled="disabled"/></span>
+                                    @*<span class="gayBt" onclick="changeAgentCount(@Model.Product.Pid,1,2)">+</span>*@
+                                    <br />
+                                </a>
+                                <a href="javascript:void(0);" class="proInfoItem" style="padding: 5px 0;">单价：<span>¥@Model.Product.ShopPrice.ToString("f2")</span>
+                                    <del>¥@Model.Product.MarketPrice</del>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="subSum f12">
+                    <p class=""><span>商品合计：<i class="hg_red f16 hg_yahei storeamount">@Model.AllProductAmount</i></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="title">个人信息</div>
+       
+        <div class="con " style="padding: 5px;">
+            <i class="contitle consigneetitle"><span style="color: red;">*</span>收货人：</i>
+            <input class="text" type="text" value="" id="consignee" name="consignee" style="margin: 5px;" placeholder="必填，收货人真实姓名" />
+        </div>
+        <div class="con " style="padding: 5px;">
+            <i class="contitle"><span style="color: red;">*</span>手机号：</i>
+            <input class="text" type="text" value="" id="mobile" name="mobile" maxlength="11" style="margin: 5px;" placeholder="必填，收货人电话号码" />
+        </div>
+        <div class="con" style="padding: 5px" >
+            <i class="contitle"><span style="color: red;">*</span>身份证：</i>
+            <input class="text" type="text" value="" id="idcard" name="idcard" style="margin: 5px;" maxlength="18" placeholder="必填，身份证" />
+        </div>
+        <div class="con " style="padding: 5px;">
+            <i class="contitle"><span style="color: red;">*</span>省份：</i>
+            <select id="provinceId" name="provinceId" class="select" style="width: 50%; padding: 4px; margin: 5px;">
+                <option selected="selected" value="-1">请选择</option>
+            </select>
+        </div>
+        <div class="con " style="padding: 5px;">
+            <i class="contitle"><span style="color: red;">*</span>城市：</i>
+            <select id="cityId" name="cityId" class="select" style="width: 50%; padding: 4px; margin: 5px;">
+                <option selected="selected" value="-1">请选择</option>
+            </select>
+        </div>
+        <div class="con " style="padding: 5px;">
+            <i class="contitle"><span style="color: red;">*</span>区域：</i>
+            <select id="regionId" name="regionId" class="select" style="width: 50%; padding: 4px; margin: 5px;">
+                <option selected="selected" value="-1">请选择</option>
+            </select>
+        </div>
+        <div class="con " style="padding: 5px;">
+            <i class="contitle">详细地址：</i>
+            <input class="text" type="text" value="" id="address" name="address" style="margin: 5px;" placeholder="必填，详细地址" />
+        </div>
+        <div class="con" style="padding: 5px" id="buyerRemarkDiv">
+            <i class="contitle">买家留言：</i>
+            <input class="text" type="text" value="" id="buyerRemark" name="buyerRemark" style="margin: 5px;" placeholder="选填，可填写您和卖家达成一致的要求" />
+        </div>
+    </div>
+
+    <div class="orderInfo">
+        <span class="bg-border"><span class="icon"></span></span>
+        <div style="padding: 10px 30px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ordersummaryT">
+                <tr>
+                    <td>商品金额</td>
+                    <td align="right">¥<span class="allamount">@Model.AllProductAmount</span> </td>
+                </tr>
+                <tr>
+                    <td>运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费</td>
+                    <td align="right">¥@Model.AllShipFee.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <form action="@Url.Action("confirmorder_DirectBuy")" method="post" id="confirmOrderForm">
+        <input type="hidden" id="shopprice" class="shopprice" name="shopprice" value="@Model.Product.ShopPrice" />
+        <input type="hidden" id="pid" name="pid" value="@Model.Pid" />
+
+        @if (Model.DefaultPayPluginInfo != null)
+        {
+            <input type="hidden" value="@Model.DefaultPayPluginInfo.SystemName" name="payName" id="payName" />
+        }
+        else
+        {
+            <input type="hidden" value="" name="payName" id="payName" />
+        }
+
+    </form>
+    <a href="javascript:submitOrder_Agent()" class="redBt subOrder" style="border-radius: 0;">提交订单</a>
+    <a href="@Url.Action("product", "catalog", new { pid = Model.Pid })" class=" subOrder" style="background: #e4e4e4; padding: 4px 15px; line-height: 36px; font-size: 14px; color: #333">返回</a>
+</div>
+
+<div class="allCon" id="shipAddressListBlock" style="display: none;"></div>
+
+<div class="allCon" id="payPluginListBlock" style="display: none;">
+    <div class="title">支付信息</div>
+    @foreach (PluginInfo info in Model.PayPluginList)
+    {
+        if (info.SystemName != "alipay")
+        {
+            if (info.SystemName != "IPSpay")
+            {
+                if (info.SystemName == "IPSWXpay")
+                {
+                    if (WebHelper.GetConfigSettings("TestUidList").Split(',').ToList().Contains(WorkContext.Uid.ToString()))
+                    {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+                    }
+                }
+                else
+                {
+        <div class="allCell" onclick="selectPayPlugin('@info.SystemName')"><span class="radio"></span>@info.FriendlyName</div>
+                }
+            }
+        }
+
+    }
+</div>
+
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+

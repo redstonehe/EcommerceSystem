@@ -1,0 +1,154 @@
+﻿<link href="/css/footer2016.css" rel="stylesheet" />
+<script src="/scripts/sidebar.js" type="text/javascript"></script>
+<style>
+    .cooperation {
+        margin-top:20px;
+    }
+    .cooperation ul li {
+        float: left;
+        width: 380px;
+        margin-left: 20px;
+    }
+
+    .cooperationitem {
+        width: 350px;
+        height: 200px;
+    }
+</style>
+@if (ViewBag.Mark == 1) { 
+<div class="cooperation box1000">
+    <p style="font-size: 24px;color:red;">合作单位</p>
+    <ul class="bkzf-list ">
+        @foreach (var item in WorkContext.FriendLinkList.OrderBy(x => x.Id))
+        { 
+            <li>
+                <a href="@item.Url" target="@(item.Target==1?"_blank":"_self")">
+                    <div class="cooperationitem">
+                        <img src="/upload/friendlink/@item.Logo" alt="@item.Title" width="100%"/>
+                    </div>
+                </a>
+            </li>
+        }
+
+    </ul>
+    <div class="clear"></div>
+</div>
+}
+<!-- footer start -->
+<div class="footer">
+    <!-- 快递服务部分 -->
+    <div class="bkzf box1000">
+        <ul class="bkzf-list ">
+            <li>
+                <div class="footservice1">
+                    <p class="bl-title">全国包邮</p>
+                    <p class="bl-text">全国各大城市满99包邮</p>
+                </div>
+            </li>
+            <li>
+                <div class="Fleft footservice2">
+                    <p class="bl-title">H-BOX</p>
+                    <p class="bl-text">优质物流极速送达</p>
+                </div>
+            </li>
+            <li>
+                <div class="Fleft footservice3">
+                    <p class="bl-title">正品保障</p>
+                    <p class="bl-text">层层筛选购物无忧</p>
+                </div>
+            </li>
+            <li>
+                <div class="Fleft footservice4">
+                    <p class="bl-title">售后无忧</p>
+                    <p class="bl-text">7×24小时无休客服</p>
+                </div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+
+    <!-- 新手指引部分 -->
+    <div class="xszy box1000">
+        <ul class="xszy-list">
+            @foreach (HelpInfo info in WorkContext.HelpList.FindAll(x => x.Pid == 0 && x.Id != 27))
+            {
+                <li>
+                    <span>@info.Title</span>
+                    @foreach (HelpInfo item in WorkContext.HelpList.FindAll(x => x.Pid == info.Id))
+                    {
+                        if (item.Url.Length == 0)
+                        {
+                        <p>
+                            <a href="@Url.Action("question", "help", new RouteValueDictionary { { "id", item.Id } })">@item.Title</a>
+                        </p>
+                        }
+                        else
+                        {
+                        <p>
+                            <a href="@item.Url">@item.Title</a>
+                        </p>
+                        }
+                    }
+                </li>
+            }
+
+        </ul>
+
+    </div>
+
+    <div class="clear"></div>
+</div>
+
+<!-- 网站链接-备案 -->
+<div class="link-record">
+    <!-- 链接 -->
+    <div class="link">
+        @foreach (HelpInfo item in WorkContext.HelpList.FindAll(x => x.Pid == 27).OrderBy(x => x.Id))
+        {
+            if (item.Url.Length == 0)
+            { 
+            <a href="@Url.Action("question", "help", new RouteValueDictionary { { "id", item.Id } })">@item.Title</a><span>|</span> 
+            }
+            else
+            { 
+            <a href="@item.Url">@item.Title</a><span>|</span> 
+            }
+
+        }
+        @* <a href="#">关于我们</a><span>|</span>
+        <a href="/help/servicecenter">联系我们</a><span>|</span>
+        <a href="#">人才招聘</a><span>|</span>
+        <a href="#">商家入驻</a><span>|</span>
+        <a href="#">营销中心</a><span>|</span>
+        <a href="/mob">手机端</a><span>|</span>
+        <a href="#">友情链接</a><span>|</span>
+        <a href="#">新闻动态</a><span>|</span>
+        <a href="#">网站导航</a><span>|</span>
+        <a href="#">帮助中心</a><span>|</span>
+        <a href="#">广告合作</a><span>|</span>
+        <a href="/malladmin/account/default">管理中心</a><span></span>*@
+    </div>
+
+    <!-- 备案 -->
+    <div class="record">
+        <p>网络ICP备案号：@WorkContext.MallConfig.ICP   @WorkContext.MallConfig.SiteAuthor 版权所有 Copyright© 2016-2018 @WorkContext.MallConfig.SiteUrl. All Rights Reserved</p>
+    </div>
+    <div class="authentication">
+        <a href="http://www.cyberpolice.cn/" target="_blank">
+            <img width="108" height="40" src="/images/foot3.png" class="footImg"></a>
+        @*<a href="javascript:void(0);" target="_blank">
+            <img width="108" height="40" src="/images/foot2.png" class="footImg"></a>
+        <a href="javascript:void(0);" target="_blank">
+            <img width="108" height="40" src="/images/foot4.png" class="footImg"></a>*@
+        <a href="http://www.12377.cn/" target="_blank">
+            <img width="108" height="40" src="/images/foot1.png" class="footImg"></a>
+        @*<a href="http://www.miitbeian.gov.cn/" target="_blank">
+            <img width="108" height="40" src="/images/foot8.png" class="footImg"></a>*@
+        @* <a href="http://kexin.knet.cn/" target="_blank">
+            <img width="108" height="40" src="/images/foot9.png" class="footImg"></a>*@
+        @*<a href="http://www.szfw.org/" target="_blank">
+            <img width="112" height="40" src="/images/foot10.png" class="footImg"></a>*@
+    </div>
+</div>
+</div>
+<!-- footer end -->

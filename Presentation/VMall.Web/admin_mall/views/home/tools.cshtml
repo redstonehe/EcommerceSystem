@@ -1,0 +1,257 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>工具页面-@WorkContext.MallConfig.SiteTitle</title>
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <style type="text/css">
+        .btnlink {    display: inline-block;
+    color: #fff;
+    background-color: #428bca;
+    padding: 4px 12px;
+    margin: 20px 60px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    /* text-shadow: 0 1px 1px rgba(255,255,255,0.75); */
+    vertical-align: middle;
+    cursor: pointer;
+        }
+    </style>
+    <script>
+        function DecryptPwd() {
+            var password = $.trim($("#Encrypt").val());
+            if (password == "") {
+                alert("不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/home/JieMi?r=" + Math.random(),
+                data: { password: password },
+                success: function (result) {
+                    $("#Decrypt").val(result);
+                }
+            });
+        }
+        
+        function RemoveKey() {
+            var key = $.trim($("#key").val());
+            if (key == "") {
+                alert("不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/home/ClearCache?r=" + Math.random(),
+                data: { key: key },
+                success: function (result) {
+                    alert(result);
+                }
+            });
+        }
+
+        function DecryptPwd2() {
+            var uid = $.trim($("#Encrypt2").val());
+            if (uid == "") {
+                alert("不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/home/AdminGetPWDByUid?r=" + Math.random(),
+                data: { uid: uid },
+                success: function (result) {
+                    $("#Decrypt2").val(result);
+                }
+            });
+        }
+        function DecryptPwd3() {
+            var uid = $.trim($("#Encrypt3").val());
+            if (uid == "") {
+                alert("不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/home/AdminGetPaypwdByUid?r=" + Math.random(),
+                data: { uid: uid },
+                success: function (result) {
+                    $("#Decrypt3").val(result);
+                }
+            });
+        }
+
+        function DecryptPwd10() {
+            var pwd = $.trim($("#Encrypt10").val());
+            if (pwd == "") {
+                alert("不能为空");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/home/CreateEncryptPwd?r=" + Math.random(),
+                data: { pwd: pwd },
+                success: function (result) {
+                    $("#Decrypt10").val(result);
+                }
+            });
+        }
+        function GetUserCode() {
+            $.ajax({
+                type: "POST",
+                url: "/malladmin/user/GetUniqueUserCode?r=" + Math.random(),
+                success: function (result) {
+                    $("#usercode").val(result);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具：获取密码</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">密码密文：</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Encrypt" id="Encrypt" value="" />
+                        <input type="button" name="name" class="submit" id="submit" value="解密" onclick="DecryptPwd();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" width="10px">解密密码:</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Decrypt" id="Decrypt" value="" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具2：清楚指定键缓存</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">缓存键：</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="key" class="key" id="key" value="" />
+                        <input type="button" name="name" class="submit" id="submit2" value="清除缓存" onclick="RemoveKey();" />
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <ul>
+            <li>频道缓存键：/Mall/ChannelList </li>
+        </ul>
+    </div>
+    <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具3：根据Uid获取密码</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">UID：</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Encrypt2" id="Encrypt2" value="" />
+                        <input type="button" name="name" class="submit" id="submit" value="获取" onclick="DecryptPwd2();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" width="10px">密码:</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Decrypt2" id="Decrypt2" value="" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+     <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具8：根据Uid获取支付密码</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">UID：</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Encrypt3" id="Encrypt3" value="" />
+                        <input type="button" name="name" class="submit" id="submit" value="获取" onclick="DecryptPwd3();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" width="10px">支付密码:</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Decrypt3" id="Decrypt3" value="" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具9：获取唯一会员编号</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">会员编号：</td>
+                    <td align="left" width="100px">
+                        <input type="input" name="name" class="usercode" id="usercode" value="" />
+                        <input type="button" name="name" class="submit" id="submit" value="获取唯一会员编号" onclick="GetUserCode();" />
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+     <div>
+        <table width="50%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="4">商城工具10：生成可解密密码</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left" width="10px">明文：</td>
+                    <td align="left" width="100px">
+                        <input type="input" name="name" class="Encrypt10" id="Encrypt10" value="" />
+                        <input type="button" name="name" class="submit" id="submit" value="生成" onclick="DecryptPwd10();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" width="10px">密文密码:</td>
+                    <td align="left" width="100px">
+                        <input type="type" name="name" class="Decrypt3" id="Decrypt10" value="" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

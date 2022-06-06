@@ -1,0 +1,506 @@
+﻿@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "1980代报单-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "1980代报单";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/css/account.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/scripts/account.js?dddd" type="text/javascript"></script>
+<link href="/admin_mall/content/css/uploadify.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.CSSCDN}/scripts/layer/layer.js" type="text/javascript"></script>
+
+@*<script type="text/javascript" src="http://validform.rjboy.cn/Validform/v5.3.2/Validform_v5.3.2.js"></script>*@
+<script>
+    //$(function () {
+    //    $(".userInfoForm").Validform({
+    //        btnSubmit: ".submitReg",
+    //        tiptype: function (msg, o) {
+    //            if (o.type == 3) {
+    //                // 只有在验证失败的时候，才会弹出相关的信息
+    //                alert(msg);
+    //            }
+    //        }
+    //    });
+    //});
+</script>
+<script type="text/javascript">
+    //防止chrome缓存jquery.uploadify.js文件，而引起chrome崩溃
+    document.write("<script type='text/javascript' "
+        + "src='/admin_mall/scripts/jquery.uploadify.js?" + new Date()
+        + "'></s" + "cript>");
+</script>
+<style>
+/*==========以下部分是Validform必须的===========*/
+.Validform_checktip{
+    margin-left:8px;
+    line-height:20px;
+    height:20px;
+    overflow:hidden;
+    color:#999;
+    font-size:12px;
+}
+.Validform_right{
+    color:#71b83d;
+    padding-left:20px;
+    background:url(../images/right.png) no-repeat left center;
+}
+.Validform_wrong{
+    color:red;
+    padding-left:20px;
+    white-space:nowrap;
+    background:url(../images/error.png) no-repeat left center;
+}
+.Validform_loading{
+    padding-left:20px;
+    background:url(../images/onLoad.gif) no-repeat left center;
+}
+.Validform_error{
+    background-color:#ffe7e7;
+}
+#Validform_msg{color:#7d8289; font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif; width:280px; -webkit-box-shadow:2px 2px 3px #aaa; -moz-box-shadow:2px 2px 3px #aaa; background:#fff; position:absolute; top:0px; right:50px; z-index:99999; display:none;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');}
+#Validform_msg .iframe{position:absolute; left:0px; top:-1px; z-index:-1;}
+#Validform_msg .Validform_title{line-height:25px; height:25px; text-align:left; font-weight:bold; padding:0 8px; color:#fff; position:relative; background-color:#000;}
+#Validform_msg a.Validform_close:link,#Validform_msg a.Validform_close:visited{line-height:22px; position:absolute; right:8px; top:0px; color:#fff; text-decoration:none;}
+#Validform_msg a.Validform_close:hover{color:#cc0;}
+#Validform_msg .Validform_info{padding:8px;border:1px solid #000; border-top:none; text-align:left;}
+</style>
+<style>
+    .radio {
+        width: 30px;
+        font-size: 24px;
+    }
+
+    #managerType {
+        font-size: 14px;
+    }
+
+    .info th {
+        font-weight: normal;
+        font-size: 14px;
+        color: #999;
+        padding-right: 10px;
+        width: 190px;
+        text-align: right;
+        height: 45px;
+    }
+
+    .info .succ_on .text {
+        border: 1px solid #C0C0C0;
+    }
+
+    .info .text {
+        width: 238px;
+        height: 16px;
+        padding: 10px 25px 10px 5px;
+        border: 1px solid #cccccc;
+        float: none;
+        font-size: 14px;
+        color: #999;
+        overflow: hidden;
+        outline: none;
+    }
+
+        .info .text:focus {
+            border: 1px solid #3879d9;
+        }
+
+    .info .regBt {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFF;
+        display: block;
+        text-align: center;
+        width: 270px;
+        padding: 7px 0;
+        font-weight: normal;
+        margin-top: 10px;
+    }
+
+    .redBT {
+        padding: 1px 10px;
+        background: #D02424;
+        color: #FFF;
+        border: 1px solid #9F1F24;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .select {
+        width: 270px;
+        text-align: center;
+        margin: 0 auto;
+        height: 38px;
+        border: 1px solid #C0C0C0;
+    }
+
+    .upload {
+        position: relative;
+        height: 90px;
+        line-height: 90px;
+    }
+
+    .uploadProgressBar {
+        position: absolute;
+        top: 0px;
+        left: 94px;
+        width: 400px;
+    }
+
+    .uploadPreview {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border: 1px solid #cfcfcf;
+        width: 88px;
+        height: 88px;
+        line-height: 88px;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    //弹窗组件
+    window.alert = function (msg) { layerOpenMsgDiv(msg) };
+
+    $(function () {
+        $("#uploadify").uploadify({
+            'formData': { 'uid': '@WorkContext.Uid', 'password': '@WorkContext.EncryptPwd' },
+            'swf': '/admin_mall/content/flashes/uploadify.swf',
+            'uploader': '/tool/upload?operation=uploadpayimg',
+            'buttonText': '上传支付凭证',
+            'height': 30,
+            'width': 100,
+            'fileSizeLimit': '@ViewData["maxImgSize"]',
+            'fileTypeDesc': 'Image Files',
+            'fileTypeExts': '@ViewData["allowImgType"]',
+            'auto': true,
+            'multi': false,
+            'removeTimeout': 2,
+            'onUploadSuccess': function (file, data, response) {
+                if (data == "-1")
+                    alert('上传图片不能为空');
+                else if (data == "-2")
+                    alert('上传图片的类型不允许');
+                else if (data == "-3")
+                    alert('上传图片超过系统允许的最大大小');
+                else if (data == "-4")
+                    alert('上传异常');
+                else {
+                    $(".uploadPreview").empty().append("<img width=\"88\" height=\"88\" src=\"/upload/order/payimg/" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "/" + data + "\"  />");
+                    //alert(data);
+                    $("#payImg").val(data);
+                    //$(".upload span[htmlFor='ShowImg']").empty();
+                }
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    function submitReg() {
+        var pid = parseInt($.trim($("#pid").val()));
+        var userCode = $.trim($("#userCode").val());
+        var realName = $.trim($("#realName").val());
+        var idCard = $.trim($("#idCard").val());
+       
+        var parentCode = $.trim($("#parentCode").val());
+        var managerCode = $.trim($("#managerCode").val());
+        var placeSide = $.trim($("#placeSide").val());
+        var consignee = $.trim($("#consignee").val());
+        var consignMobile = $.trim($("#consignMobile").val());
+        var regionId = parseInt($.trim($("#regionId").val()));
+        var address = $.trim($("#address").val());
+        var payImg = $.trim($("#payImg").val());
+        var verifyCode = $.trim($(".verifyCode").val());
+
+        if (!checkInput(pid, userCode, realName, idCard,consignMobile, regionId, address, parentCode, payImg, verifyCode)) {
+            return;
+        }
+        $(".submitReg").hide();
+        $(".regLoding").show();
+        Ajax.post("/ucenter/DSOrderApplySubmit",
+                { 'pid': pid, 'userCode': userCode, 'realName': realName, 'idCard': idCard, 'consignee': consignee, 'consignMobile': consignMobile, 'regionId': regionId, 'address': address, 'parentCode': parentCode, 'managerCode': managerCode, 'placeSide': placeSide, 'payImg': payImg, 'verifyCode': verifyCode }, false, function (data) {
+                    var result = eval("(" + data + ")");
+                    if (result.state == "success") {
+                        var msg = "提交成功";
+                        var yesFunc = function () {
+                            layer.closeAll(); //如果设定了yes回调，需进行手工关闭
+                            window.location.href = window.location.href;
+                        };
+                        var cancelFunc = function () {
+                            window.location.href = window.location.href;
+                        };
+                        layerOpen2(msg, yesFunc, cancelFunc);
+                        
+                    }
+                    else if (result.state == "error") {
+                        alert(result.content[0].msg);
+                        $(".submitReg").show();
+                        $(".regLoding").hide()
+                        $("#verifyImage").click();
+                    }
+                    else {
+                        alert("提交失败");
+                        $(".submitReg").show();
+                        $(".regLoding").hide()
+                        $("#verifyImage").click();
+                    }
+                });
+    }
+    //检查输入
+    function checkInput(pid, userCode, realName, idCard,consignMobile, regionId, address, parentCode, payImg, verifyCode) {
+        if (pid <= 0) {
+            alert("请选择产品");
+            $("#pid").focus();
+            return false;
+        }
+        if (userCode == "") {
+            alert("会员编号不能为空");
+            $("#userCode").focus();
+            return false;
+        }
+        var regName = /[\u4e00-\u9fa5]+/gi;
+        if (regName.test(userCode)) {
+            alert("会员编号不能包含中文字符");
+            $(".userCode").focus();
+            return false;
+        }
+        if (userCode.length > 15) {
+            alert("会员编号长度不能超过15字符");
+            $("#userCode").focus();
+            return false;
+        }
+        if (realName == "") {
+            alert("姓名不能为空");
+            $("#realName").focus();
+            return false;
+        }
+        if (idCard == "") {
+            alert("身份证号码不能为空");
+            $("#idCard").focus();
+            return false;
+        }
+        //var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        var reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+        if (reg.test(idCard) === false) {
+            alert("身份证格式不正确,请重新输入");
+            $("#idCard").focus();
+            return false;
+        }
+        if (consignMobile == "") {
+            alert("请输入收货手机号码");
+            $(".consignMobile").focus();
+            return;
+        }
+        var mobileReg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!mobileReg.test(consignMobile)) {
+            alert('请输入正确的手机号码!!!');
+            $(".consignMobile").focus();
+            return;
+        }
+        if (regionId < 1) {
+            alert("请选择区域");
+            $("#regionId").focus();
+            return false;
+        }
+        if (address == "") {
+            alert("请填写详细地址");
+            $("#address").focus();
+            return false;
+        }
+        if (parentCode == "") {
+            alert("推荐人编号不能为空");
+            $("#parentCode").focus();
+            return false;
+        }
+        //var patrn = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+        //var userPhone = $.trim($("#userPhone").val());
+        //if (userPhone != "" && !patrn.test(userPhone)) {
+        //    alert('对不起,您输入的手机号码格式错误,请重新输入,谢谢!');
+        //    $("#userPhone").focus();
+        //    return false;
+        //}
+        if (payImg == "") {
+            alert("请上传支付凭证");
+            return false;
+        }
+        if (verifyCode == "") {
+            alert("请输入验证码");
+            $(".verifyCode").focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="bigBox" id="member">
+    <div class="box info">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+        <div id="memberR" style="position: relative;">
+            <h2 id="memberRT">@ViewBag.PositionTitle</h2>
+            <a href="@Url.Action("DsorderHistory", new { operateuid=WorkContext.Uid})" style="font-size: 12px; color: red; cursor: pointer; float: right; margin-right: 20px;">报单历史记录</a>
+            <form name="userInfoForm" class="userInfoForm" action="" method="post">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="memberTable">
+                    <tr class="succ_on">
+                        <th width="190">产品：</th>
+                        <td width="275">
+                            <select id="pid" name="pid" class="select">
+                                <option value="0">请选择产品</option>
+                                @foreach (var item in ViewData["productList"] as List<SelectListItem>)
+                                { 
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                                
+                            </select>
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">会员编号：</th>
+                        <td width="275">
+                            <input type="text" id="userCode" name="userCode" value="" class="text" maxlength="15" placeholder="新报单会员编号或手机号"/></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">姓名：</th>
+                        <td width="275">
+                            <input type="text" id="realName" name="realName" value=""  class="text" maxlength="10" /></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">身份证号：</th>
+                        <td width="275">
+                            <input type="text" id="idCard" name="idCard" value="" class="text" maxlength="18" /></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">推荐人编号：</th>
+                        <td width="275">
+                            <input type="text" id="parentCode" name="parentCode" value="" class="text" /></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+
+                    <tr class="succ_on" id="managerCodeTr">
+                        <th width="190"><em></em>安置人编号：</th>
+                        <td width="275">
+                            <input type="text" id="managerCode" name="managerCode" value="" class="text" /></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190"><em></em>安置分区：</th>
+                        <td width="275">
+                            <select id="placeSide" name="placeSide" class="select">
+                                <option value="1">&nbsp;A&nbsp;区&nbsp;
+                                </option>
+                                <option value="2">&nbsp;B&nbsp;区&nbsp;
+                                </option>
+                            </select>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan ="3" style="text-align:center;margin-top:10px;font-size:16px">收货信息</td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">收货人：</th>
+                        <td width="275">
+                           <input type="text" id="consignee" name="consignee" value="" class="text" maxlength="10"  />
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">收货电话：</th>
+                        <td width="275">
+                            <input type="text" id="consignMobile" name="consignMobile" value="" class="text" maxlength="11" datatype="m" errormsg="格式错误"/>
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">收货地址：</th>
+                        <td width="275">
+                            <select id="provinceId" name="provinceId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="cityId" name="cityId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                            <select id="regionId" name="regionId">
+                                <option selected="selected" value="-1">请选择</option>
+                            </select>
+                        </td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    <tr class="succ_on">
+                        <th width="190">收货地址：</th>
+                        <td width="275">
+                            <input type="text" id="address" name="address" value="" class="text" /></td>
+                        <td><em class="required">*</em></td>
+                    </tr>
+                    
+                    <tr class="succ_on">
+                        <th width="190">上传支付凭证：</th>
+                        <td width="275">
+                            <div class="upload">
+                                <div class="uploadPreview">暂无图片</div>
+                                <div class="uploadProgressBar" id="uploadify-queue"></div>
+                                <div class="uploadBut">
+                                    <input type="file" name="uploadify" id="uploadify" />
+                                </div>
+                                <input type="hidden" name="payImg" id="payImg" value="" />
+                                <div style="position: absolute; top: 30px; left: 180px;"></div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">验证码：</th>
+                        <td>
+                            <input type="text" name="verifyCode" autocomplete="off" class="YZM text left verifyCode" maxlength="4" style="width: 200px; margin-right: 10px; float: left;" />
+                            <img id="verifyImage" style="cursor: hand" title="点击刷新验证码" onclick="this.src='/tool/verifyimage?time=' + new Date()" src="/tool/verifyimage" height="34" class="left" />
+                            <a href="javascript:$('#verifyImage').click();" style="margin-left: 5px; height: 34px; line-height: 34px;">看不清，换一张</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100" align="right">&nbsp;</th>
+                        <td>
+                            <span class="submitBT submitReg" style="font-size: 14px; padding: 3px 20px;" onclick="submitReg()">提交</span>
+                            <span class="submitBT regLoding" style="font-size: 14px; padding: 3px 20px; display: none;">正在提交...</span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+    //绑定省列表的改变事件
+    Event.addHandler(document.getElementById("provinceId"), "change", function (event) {
+        var selectedProvinceId = getSelectedOption(this).value;
+        if (selectedProvinceId > 0) {
+            document.getElementById("regionId").innerHTML = "<option value='-1'>请选择</option>";
+            bindCityList(selectedProvinceId, document.getElementById("cityId"));
+        }
+    })
+
+
+    //绑定市列表的改变事件
+    Event.addHandler(document.getElementById("cityId"), "change", function (event) {
+        var selectedCityId = getSelectedOption(this).value;
+        if (selectedCityId > 0) {
+            bindCityList(selectedCityId, document.getElementById("regionId"));
+        }
+    })
+
+    //绑定省列表
+    bindProvinceList(document.getElementById("provinceId"), provinceId);
+
+    if (cityId > 0) {
+        bindCityList(provinceId, document.getElementById("cityId"), cityId);
+        bindCountyList(cityId, document.getElementById("regionId"), countyId);
+    }
+</script>
+

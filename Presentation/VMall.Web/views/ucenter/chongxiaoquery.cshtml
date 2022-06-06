@@ -1,0 +1,42 @@
+﻿
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "重消查询-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "重消查询";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+
+<style>
+    table {
+        margin-bottom: 40px;
+    }
+
+        table tr {
+            height: 35px;
+            line-height: 35px;
+        }
+</style>
+
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR" style="padding-bottom: 0px; height: 200px;">
+            <h2 id="memberRT">
+                <strong>@ViewBag.PositionTitle</strong>&nbsp; 
+    
+    <div class="clear"></div>
+            </h2>
+
+            您本月重消的业绩为：@(((decimal)ViewData["PVTotal"]).ToString("0.00"))  PV
+            @if (((decimal)ViewData["PVTotal"])>=300) { 
+                <p style="font-size:24px;margin-top:30px;">您已完成本月重消！</p>
+            }
+            
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

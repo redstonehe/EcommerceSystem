@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46AFA412-EA80-4DA7-88FE-347524C9D3EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VMall.Web.Mobile</RootNamespace>
+    <AssemblyName>VMall.Web.Mobile</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\RefDLL\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="VMall.Web.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\VMall.Web.Framework\bin\Debug\VMall.Web.Framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AreaRegistration.cs" />
+    <Compile Include="controllers\AccountController.cs" />
+    <Compile Include="controllers\CartController.cs" />
+    <Compile Include="controllers\CatalogController.cs" />
+    <Compile Include="controllers\CategoryController.cs" />
+    <Compile Include="controllers\ChannelController.cs" />
+    <Compile Include="controllers\CouponController.cs" />
+    <Compile Include="controllers\HomeController.cs" />
+    <Compile Include="controllers\OrderController.cs" />
+    <Compile Include="controllers\OrderViewController.cs" />
+    <Compile Include="controllers\StoreController.cs" />
+    <Compile Include="controllers\ToolController.cs" />
+    <Compile Include="controllers\UCenterController.cs" />
+    <Compile Include="controllers\CodeImgController.cs" />
+    <Compile Include="controllers\TestController.cs" />
+    <Compile Include="controllers\ErrorController.cs" />
+    <Compile Include="controllers\HelpController.cs" />
+    <Compile Include="MallPublic\MD5Util.cs" />
+    <Compile Include="MallPublic\TenpayUtil.cs" />
+    <Compile Include="MallPublic\UpfilePublic.cs" />
+    <Compile Include="MallPublic\WebSiteConfig.cs" />
+    <Compile Include="MallPublic\WxLoginConfig.cs" />
+    <Compile Include="MallPublic\WxShare.cs" />
+    <Compile Include="models\AccountModel.cs" />
+    <Compile Include="models\CartModel.cs" />
+    <Compile Include="models\CatalogModel.cs" />
+    <Compile Include="models\CategoryModel.cs" />
+    <Compile Include="models\HelpModel.cs" />
+    <Compile Include="models\OrderModel.cs" />
+    <Compile Include="models\StoreModel.cs" />
+    <Compile Include="models\UCenterModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\VMall.Core\VMall.Core.csproj">
+      <Project>{6b8e6156-1bd0-49e4-a693-a3f88025cf4c}</Project>
+      <Name>VMall.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\VMall.Services\VMall.Services.csproj">
+      <Project>{1323ca44-e7c4-47b1-a316-22e80777d885}</Project>
+      <Name>VMall.Services</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="static\AmazeUI\fonts\fontawesome-webfont.eot" />
+    <None Include="static\AmazeUI\fonts\fontawesome-webfont.ttf" />
+    <None Include="static\AmazeUI\fonts\fontawesome-webfont.woff" />
+    <None Include="static\AmazeUI\fonts\fontawesome-webfont.woff2" />
+    <None Include="static\AmazeUI\fonts\FontAwesome.otf" />
+    <None Include="static\dropload\json\more.json" />
+    <None Include="static\dropload\json\update.json" />
+    <None Include="views\account\findpwd.cshtml" />
+    <None Include="views\account\login2.cshtml" />
+    <None Include="views\account\register2.cshtml" />
+    <None Include="views\account\resetpwd.cshtml" />
+    <None Include="views\account\selectfindpwdtype.cshtml" />
+    <Content Include="css\base2.css" />
+    <Content Include="css\loaders.min.css" />
+    <Content Include="css\loading.css" />
+    <Content Include="css\style.css" />
+    <Content Include="css\subindex.css" />
+    <Content Include="css\swiper.min.css" />
+    <Content Include="css\subindex.css" />
+    <Content Include="images\address_icon.png" />
+    <Content Include="images\agentcenter.png" />
+    <Content Include="images\aim-sprites.png" />
+    <Content Include="images\baojian_cate.jpg" />
+    <Content Include="images\barcart.png" />
+    <Content Include="images\barcode.png" />
+    <Content Include="images\barhome.png" />
+    <Content Include="images\baruser.png" />
+    <Content Include="images\bg2.png" />
+    <Content Include="images\cate-icons.png" />
+    <Content Include="images\cateadv.jpg" />
+    <Content Include="images\catelist.png" />
+    <Content Include="images\Classfic.png" />
+    <Content Include="images\Classfic_on.png" />
+    <Content Include="images\comen.png" />
+    <Content Include="images\downarrow.png" />
+    <Content Include="images\excode.png" />
+    <Content Include="images\ff.gif" />
+    <Content Include="images\g-bar-cart-icon.png" />
+    <Content Include="images\g-bar-fav-act-icon.png" />
+    <Content Include="images\g-bar-fav-icon.png" />
+    <Content Include="images\g-bar-home-icon.png" />
+    <Content Include="images\g-service-icon.png" />
+    <Content Include="images\geren_cate.jpg" />
+    <Content Include="images\gift_icon.png" />
+    <Content Include="images\Home.png" />
+    <Content Include="images\Home_on.png" />
+    <Content Include="images\ic5.png" />
+    <Content Include="images\icon-updown-arrow.png" />
+    <Content Include="images\icondown.png" />
+    <Content Include="images\iconorder.png" />
+    <Content Include="images\icons.jpg" />
+    <Content Include="images\icontop.png" />
+    <Content Include="images\icon_zichan.png" />
+    <Content Include="images\index.png" />
+    <Content Include="images\index_on.png" />
+    <Content Include="images\jujia_cate.jpg" />
+    <Content Include="images\leftarrow.png" />
+    <Content Include="images\login.png" />
+    <Content Include="images\logout.png" />
+    <Content Include="images\meishi_cate.jpg" />
+    <Content Include="images\meizhuang_cate.jpg" />
+    <Content Include="images\memberbg.jpg" />
+    <Content Include="images\mod_head_01.gif" />
+    <Content Include="images\mod_head_02.gif" />
+    <Content Include="images\muying_cate.jpg" />
+    <Content Include="images\myuser.png" />
+    <Content Include="images\myuser_on.png" />
+    <Content Include="images\orderlist.png" />
+    <Content Include="images\orderlist_on.png" />
+    <Content Include="images\part1.jpg" />
+    <Content Include="images\password.png" />
+    <Content Include="images\search.png" />
+    <Content Include="images\search_on.png" />
+    <Content Include="images\switcher.png" />
+    <Content Include="images\topmore.png" />
+    <Content Include="images\user.png" />
+    <Content Include="images\user_on.png" />
+    <Content Include="images\verifycode.png" />
+    <Content Include="images\wcode.png" />
+    <Content Include="images\wecode.png" />
+    <Content Include="images\wecode_on.png" />
+    <Content Include="images\weixincode-1.png" />
+    <Content Include="images\weixincode-2.png" />
+    <Content Include="scripts\swiper.min.js" />
+    <Content Include="static\AmazeUI\css\admin.css" />
+    <Content Include="static\AmazeUI\css\amazeui.css" />
+    <Content Include="static\AmazeUI\css\amazeui.flat.css" />
+    <Content Include="static\AmazeUI\css\amazeui.flat.min.css" />
+    <Content Include="static\AmazeUI\css\amazeui.min.css" />
+    <Content Include="static\AmazeUI\css\app.css" />
+    <Content Include="static\AmazeUI\i\app-icon72x72%402x.png" />
+    <Content Include="static\AmazeUI\i\examples\admin-chrome.png" />
+    <Content Include="static\AmazeUI\i\examples\admin-firefox.png" />
+    <Content Include="static\AmazeUI\i\examples\admin-ie.png" />
+    <Content Include="static\AmazeUI\i\examples\admin-opera.png" />
+    <Content Include="static\AmazeUI\i\examples\admin-safari.png" />
+    <Content Include="static\AmazeUI\i\examples\adminPage.png" />
+    <Content Include="static\AmazeUI\i\examples\blogPage.png" />
+    <Content Include="static\AmazeUI\i\examples\landing.png" />
+    <Content Include="static\AmazeUI\i\examples\landingPage.png" />
+    <Content Include="static\AmazeUI\i\examples\loginPage.png" />
+    <Content Include="static\AmazeUI\i\examples\sidebarPage.png" />
+    <Content Include="static\AmazeUI\i\favicon.png" />
+    <Content Include="static\AmazeUI\i\startup-640x1096.png" />
+    <Content Include="static\AmazeUI\js\amazeui.ie8polyfill.js" />
+    <Content Include="static\AmazeUI\js\amazeui.ie8polyfill.min.js" />
+    <Content Include="static\AmazeUI\js\amazeui.js" />
+    <Content Include="static\AmazeUI\js\amazeui.min.js" />
+    <Content Include="static\AmazeUI\js\amazeui.widgets.helper.js" />
+    <Content Include="static\AmazeUI\js\amazeui.widgets.helper.min.js" />
+    <Content Include="static\AmazeUI\js\app.js" />
+    <Content Include="static\AmazeUI\js\handlebars.min.js" />
+    <Content Include="static\AmazeUI\js\jquery.min.js" />
+    <Content Include="static\dropload\dropload.css" />
+    <Content Include="static\dropload\dropload.js" />
+    <Content Include="static\dropload\dropload.min.js" />
+    <Content Include="static\dropload\jquery.min.js" />
+    <Content Include="static\dropload\zepto.min.js" />
+    <None Include="views\account\login.cshtml" />
+    <None Include="views\account\register.cshtml" />
+    <None Include="views\cart\ajaxindex.cshtml" />
+    <None Include="views\cart\index.cshtml" />
+    <Content Include="css\jquery.bxslider.css" />
+    <Content Include="css\main.css" />
+    <Content Include="scripts\jquery.bxslider.min.js" />
+    <Content Include="views\catalog\applytryfree.cshtml" />
+    <None Include="views\catalog\category.cshtml" />
+    <None Include="views\catalog\productdetails.cshtml" />
+    <None Include="views\catalog\product.cshtml" />
+    <None Include="views\catalog\productconsultlist.cshtml" />
+    <None Include="views\catalog\productreviewlist.cshtml" />
+    <None Include="views\catalog\productsuitlist.cshtml" />
+    <None Include="views\catalog\search.cshtml" />
+    <None Include="views\catalog\ajaxproductreviewlist.cshtml" />
+    <None Include="views\catalog\ajaxsearch.cshtml" />
+    <None Include="views\catalog\outproduct.cshtml" />
+    <None Include="views\catalog\searchindex.cshtml" />
+    <None Include="views\catalog\categoryAjax.cshtml" />
+    <None Include="views\catalog\list.cshtml" />
+    <None Include="views\catalog\list2.cshtml" />
+    <None Include="views\catalog\list3.cshtml" />
+    <None Include="views\catalog\listAjax.cshtml" />
+    <None Include="views\Channel\suitlist.cshtml" />
+    <None Include="views\category\list.cshtml" />
+    <Content Include="views\Channel\index.cshtml" />
+    <Content Include="views\Channel\ajaxchannel.cshtml" />
+    <Content Include="views\Channel\fslist.cshtml" />
+    <Content Include="views\Channel\ajaxfs.cshtml" />
+    <None Include="views\category\list2.cshtml" />
+    <Content Include="views\Channel\subindex.cshtml" />
+    <Content Include="views\Channel\qqg.cshtml" />
+    <Content Include="views\Channel\fresh.cshtml" />
+    <Content Include="views\Channel\youxuan.cshtml" />
+    <Content Include="views\Channel\fohow.cshtml" />
+    <Content Include="views\Channel\hbarea.cshtml" />
+    <None Include="views\codeimg\Index.cshtml" />
+    <Content Include="views\coupon\couponcenter.cshtml" />
+    <None Include="views\error\index.cshtml" />
+    <None Include="views\help\index.cshtml" />
+    <None Include="views\help\question.cshtml" />
+    <None Include="views\home\index.cshtml" />
+    <None Include="views\home\index2019.cshtml" />
+    <None Include="views\orderview\index.cshtml" />
+    <None Include="views\orderview\orderviewlist.cshtml" />
+    <None Include="views\order\confirmorder.cshtml" />
+    <None Include="views\order\confirmorder_chongzhi.cshtml" />
+    <None Include="views\order\confirmorder_directbuy.cshtml" />
+    <None Include="views\order\payresult.cshtml" />
+    <None Include="views\order\payshow.cshtml" />
+    <None Include="views\order\submitresult.cshtml" />
+    <None Include="views\order\joinplan.cshtml" />
+    <None Include="views\order\joinresult.cshtml" />
+    <None Include="views\order\chongxiaofenqi.cshtml" />
+    <None Include="views\PublicPage\footer.cshtml" />
+    <None Include="views\PublicPage\header.cshtml" />
+    <None Include="views\PublicPage\footernobar.cshtml" />
+    <None Include="views\PublicPage\footer2017.cshtml" />
+    <None Include="views\shared\404.cshtml" />
+    <None Include="views\shared\error.cshtml" />
+    <None Include="views\shared\prompt.cshtml" />
+    <None Include="views\shared\_layout.cshtml" />
+    <Content Include="css\base.css" />
+    <Content Include="css\buy.css" />
+    <Content Include="css\content.css" />
+    <Content Include="css\home.css" />
+    <Content Include="css\list.css" />
+    <Content Include="css\account.css" />
+    <Content Include="css\ucenter.css" />
+    <Content Include="css\store.css" />
+    <Content Include="images\arrow.png" />
+    <Content Include="images\bg_line.png" />
+    <Content Include="images\card-border.png" />
+    <Content Include="images\cartNull.png" />
+    <Content Include="images\change.png" />
+    <Content Include="images\check.png" />
+    <Content Include="images\checked.png" />
+    <Content Include="images\del.png" />
+    <Content Include="images\del2.png" />
+    <Content Include="images\home-icons.png" />
+    <Content Include="images\icon.png" />
+    <Content Include="images\icon10.png" />
+    <Content Include="images\icon11.png" />
+    <Content Include="images\icon12.png" />
+    <Content Include="images\icon13.png" />
+    <Content Include="images\icon14.png" />
+    <Content Include="images\icon18.png" />
+    <Content Include="images\icon19.png" />
+    <Content Include="images\icon2.png" />
+    <Content Include="images\icon20.png" />
+    <Content Include="images\icon21.png" />
+    <Content Include="images\icon23.png" />
+    <Content Include="images\icon24.png" />
+    <Content Include="images\icon29.png" />
+    <Content Include="images\icon2b.png" />
+    <Content Include="images\icon3.png" />
+    <Content Include="images\icon37.png" />
+    <Content Include="images\icon4.png" />
+    <Content Include="images\icon5.png" />
+    <Content Include="images\icon9.png" />
+    <Content Include="images\icon_detail.png" />
+    <Content Include="images\icon_heart.png" />
+    <Content Include="images\icon_order.png" />
+    <Content Include="images\icon_pop_star2.png" />
+    <Content Include="images\icon_slid.png" />
+    <Content Include="images\icon_star2.png" />
+    <Content Include="images\icon_star3.png" />
+    <Content Include="images\icon_suc.png" />
+    <Content Include="images\line2.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\member-icons.png" />
+    <Content Include="images\member.png" />
+    <Content Include="images\memberBg.png" />
+    <Content Include="images\msj.jpg" />
+    <Content Include="images\radio.png" />
+    <Content Include="images\radio1.png" />
+    <Content Include="images\yhj-2.png" />
+    <Content Include="images\yhj-line.png" />
+    <Content Include="images\yhj-line1.png" />
+    <Content Include="images\yhj.png" />
+    <Content Include="scripts\jquery.js" />
+    <Content Include="scripts\timeconvertor.js" />
+    <Content Include="views\store\class.cshtml" />
+    <Content Include="views\store\search.cshtml" />
+    <Content Include="views\store\index.cshtml" />
+    <None Include="views\shared\_layout_account.cshtml" />
+    <None Include="views\store\coupontypelist.cshtml" />
+    <None Include="views\ucenter\account.cshtml" />
+    <Content Include="views\ucenter\accountdetail.cshtml" />
+    <None Include="views\ucenter\confirmordergift.cshtml" />
+    <None Include="views\ucenter\couponlist.cshtml" />
+    <None Include="views\ucenter\addshipaddress.cshtml" />
+    <None Include="views\ucenter\editshipaddress.cshtml" />
+    <None Include="views\ucenter\help.cshtml" />
+    <None Include="views\ucenter\index.cshtml" />
+    <None Include="views\ucenter\orderactionlist.cshtml" />
+    <None Include="views\ucenter\orderinfo.cshtml" />
+    <None Include="views\ucenter\orderlist.cshtml" />
+    <None Include="views\ucenter\revieworder.cshtml" />
+    <None Include="views\ucenter\rewarddraw.cshtml" />
+    <None Include="views\ucenter\safesuccess.cshtml" />
+    <None Include="views\ucenter\safeupdate.cshtml" />
+    <None Include="views\ucenter\safeverify.cshtml" />
+    <None Include="views\ucenter\shipaddresslist.cshtml" />
+    <None Include="views\ucenter\accountinfo.cshtml" />
+    <None Include="views\ucenter\orderlistAjax.cshtml" />
+    <None Include="views\ucenter\subrecommendlist.cshtml" />
+    <None Include="views\ucenter\changeheadpic.cshtml" />
+    <None Include="views\ucenter\sharecode.cshtml" />
+    <None Include="views\ucenter\subrecommendlistajax.cshtml" />
+    <None Include="views\ucenter\userinfo.cshtml" />
+    <Content Include="views\ucenter\accountdetailajax.cshtml" />
+    <None Include="views\ucenter\returninfo.cshtml" />
+    <None Include="views\ucenter\changeinfo.cshtml" />
+    <Content Include="views\ucenter\cashdetailajax.cshtml" />
+    <None Include="views\ucenter\favoriteproductlist.cshtml" />
+    <Content Include="views\ucenter\favprolistajax.cshtml" />
+    <Content Include="views\ucenter\drawhistory.cshtml" />
+    <Content Include="views\ucenter\drawcashhistoryajax.cshtml" />
+    <None Include="views\ucenter\agentresult.cshtml" />
+    <None Include="views\ucenter\confirmsendorder.cshtml" />
+    <None Include="views\ucenter\commissiondraw.cshtml" />
+    <None Include="views\ucenter\addcomplain.cshtml" />
+    <None Include="views\ucenter\complainlist.cshtml" />
+    <None Include="views\ucenter\informlist.cshtml" />
+    <None Include="views\ucenter\informdetail.cshtml" />
+    <None Include="views\ucenter\ordergiftdetail.cshtml" />
+    <None Include="views\ucenter\accounttranfer.cshtml" />
+    <None Include="views\Web.config" />
+    <None Include="views\_ViewStart.cshtml" />
+    <None Include="Web.config" />
+    <None Include="Web.linux.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="scripts\account.js" />
+    <Content Include="scripts\cart.js" />
+    <Content Include="scripts\common.js" />
+    <Content Include="scripts\order.js" />
+    <Content Include="scripts\product.js" />
+    <Content Include="scripts\region.js" />
+    <Content Include="scripts\ucenter.user.js" />
+    <Content Include="scripts\ucenter.order.js" />
+    <Content Include="scripts\ucenter.safe.js" />
+    <Content Include="scripts\utils.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\hbarea_subindex\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

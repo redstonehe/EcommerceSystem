@@ -1,0 +1,191 @@
+﻿@model VMall.Web.Mobile.Models.MyAgentModel
+@{
+     Layout = "~/mobile/views/shared/_layout.cshtml";
+     ViewBag.SubTitle = "我的代理";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 0;
+}
+<link href="@{@WorkContext.CSSCDN}/mobile/css/account.css" rel="stylesheet" type="text/css" />
+<link href="@{@WorkContext.CSSCDN}/mobile/css/ucenter.css" rel="stylesheet" type="text/css" />
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/account.js?dddd" type="text/javascript"></script>
+<style>
+    .viewport {
+    width: 500px;
+    max-width: 600px;
+    /* margin: 0 auto; */
+    }
+     .radio {
+        width:30px;
+        font-size:24px;
+    }
+    #managerType {
+         font-size:14px;
+    }
+    .reg {text-align:center;
+          margin:40px;
+    }
+    .reg th {
+    font-weight: normal;
+    font-size: 14px;
+    /*color: #999;
+    padding-right: 10px;*/
+    width: 190px;
+    text-align: right;
+    height: 30px;
+}
+    html body .reg .regBt {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFF;
+    display: block;
+    text-align: center;
+    width: 170px;
+    padding: 7px 0;
+    font-weight: normal;
+    margin-top: 10px;
+        margin-left: 50px;
+}
+html body .redBT {
+    padding: 1px 10px;
+    background: #D02424;
+    color: #FFF;
+    border: 1px solid #9F1F24;
+        padding: 4px 15px;
+    border: 1px solid #e4393c;
+    border-radius: 3px;
+    background-color: #f5f4f4;
+    background: -webkit-gradient(linear,0 0,0 100%,from(#FC5C5F),to(#e4393c));
+    line-height: 29px;
+    font-size: 14px;
+    color: #FFF;
+  
+    display: block;
+    text-align: center;
+    padding: 3px 0;
+    margin: 10px 0;
+}
+    th {
+        font-weight: normal;
+    font-size: 14px;
+    color: #333;
+    padding-right: 10px;
+    width: 190px;
+    text-align: right;
+    height: 35px;
+    line-height:35px;
+    }
+   table td {
+    border: 1px solid #808080;
+    padding: 5px;
+    vertical-align: middle;
+    font-size:12px;
+}
+</style>
+<div class="myAssetsNav">
+    <a href="javascript:void(0);" class="hot"><strong>我的代理</strong></a>
+    <a href="@Url.Action("getstock")"><strong>库存查询</strong></a>
+    <a href="@Url.Action("incomewithdraw")"><strong>代理提现</strong></a>
+    <a href="@Url.Action("CommissionWithDraw")" ><strong>佣金提现</strong></a>
+</div>
+<div class="myAssetsCon">
+   @if (Model.State)
+            {
+                if (Model.AgentState == 1)
+                { 
+                <div>@Model.Message  </div>
+                }
+                else if (Model.AgentState == 2)
+                {
+                <div style="border: 1px solid #DDDDDD; margin: 20px; text-align: center; padding: 20px; font-size: 18px;">
+                    您的代理级别为：
+                        <span style="color: red; font-size: 24px; font-weight: 400;">
+                            @if (WorkContext.PartUserInfo.AgentType == 1)
+                            {
+                                @:事业伙伴
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 2)
+                            {
+                                @:星级经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 3)
+                            {
+                                @:VIP经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 4)
+                            {
+                                @:大区经销商
+                            }
+                            else if (WorkContext.PartUserInfo.AgentType == 5)
+                            {
+                                @:合伙人
+                            }
+                        </span>
+                </div>
+                <h2 id="memberRT">未安置会员</h2>
+                <div id="subList">
+                    <table width="100%" border="0" cellspacing="0" class="dingdan">
+                        
+                        <tbody>
+                            <tr style="background: #DCDCDC;">
+                                <th width="10%">序号</th>
+                                <th width="20%">会员编号</th>
+                                <th width="20%">会员手机</th>
+                                <th width="20%">会员姓名</th>
+                                <th width="20%">代理等级</th>
+                                <th width="10%">操作</th>
+                            </tr>
+                            @{int k = 1;}
+                            @foreach (var item in Model.UserList)
+                            {
+                                //string showName = string.IsNullOrEmpty(item.UserName) ? (string.IsNullOrEmpty(item.Email) ? (string.IsNullOrEmpty(item.Mobile) ? item.NickName : item.Mobile) : item.Email) : item.UserName;
+                                <tr>
+                                    <td>@k</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Mobile</td>
+                                    <td>@item.RealName</td>
+                                    <td>
+                                        @if (item.AgentType == 1)
+                                        {
+                                            @:事业伙伴
+                            }
+                                        else if (item.AgentType == 2)
+                                        {
+                                            @:星级经销商
+                            }
+                                        else if (item.AgentType == 3)
+                                        {
+                                            @:VIP经销商
+                            }
+                                        else if (item.AgentType == 4)
+                                        {
+                                            @:大区经销商
+                            }
+                                        else if (item.AgentType == 5)
+                                        {
+                                            @:合伙人
+                            }
+                                        </td>
+                                    <td>
+                                        <a href="/ucenter/agentinfo?uid=@item.Uid&type=2"  style="text-decoration:underline">帮他安置</a>
+                                        
+
+                                    </td>
+
+                                </tr>
+                                        k++;
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                }
+            }
+            else
+            {
+                <div>@Model.Message  </div>
+            }
+    
+</div>
+
+
+

@@ -1,0 +1,464 @@
+﻿@model VMall.Web.Mobile.Models.OrderListModel
+@{
+    Layout = "~/mobile/views/shared/_layout.cshtml";
+    ViewBag.SubTitle = "订单列表";
+    ViewBag.Title = ViewBag.SubTitle + "-" + WorkContext.MallConfig.SiteTitle + "";
+    ViewBag.Mark = 9;
+}
+<script src="@{@WorkContext.ScriptCDN}/mobile/scripts/timeconvertor.js?ddd" type="text/javascript"></script>
+<link rel="stylesheet" href="/mobile/static/dropload/dropload.css">
+<!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+@* <script src="/mobile/static/dropload/zepto.min.js"></script>*@
+<script src="/mobile/static/dropload/jquery.min.js"></script>
+
+<script src="/mobile/static/dropload/dropload.min.js"></script>
+<style>
+    .viewport {
+        background: #F2F2F2;
+    }
+</style>
+<script type="text/javascript">
+    //确认收货
+    function confirmReceip(oid) {
+        if (confirm("确定要确认收货吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/mob/UCenter/ConfirmReceiving?r=" + Math.random(),
+                data: { oid: oid, },
+                success: function (result) {
+
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+    //退货申请
+    function returnApply(oid) {
+        if (confirm("确定要申请退货吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/mob/UCenter/ReturnApply?r=" + Math.random(),
+                data: { oid: oid, },
+                success: function (result) {
+
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+    //换货申请 
+    //function changeApply(oid) {
+    //    //int said,int changeType,string changeDesc,int oid = -1
+    //    var said = 2;
+    //    var changeType = 0;
+    //    var changeDesc = "尺码不合适，换大一点";
+    //    if (confirm("确定要申请换货吗？")) {
+    //        $.ajax({
+    //            type: "POST",
+    //            url: "/UCenter/ChangeApply",//said: said, changeType: changeType, changeDesc: changeDesc, 
+    //            data: { oid: oid },
+    //            success: function (result) {
+
+    //                var result = eval("(" + result + ")");
+    //                if (result.state == "success") {
+
+    //                    alert(result.content);
+    //                    window.location.href = window.location.href;
+    //                }
+    //                else if (result.state == "exception") {
+    //                    alert(result.content);
+    //                }
+    //                else if (result.state == "error") {
+    //                    showVerifyError(result.content);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+
+    function deleteOrder(oid) {
+        if (confirm("删除订单后将不能对订单进行操作，确定要删除订单吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/mob/UCenter/DeleteOrder",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+    function extentreceive(oid) {
+        if (confirm("延长收货期的期限为5天，确定要延长收货吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "/mob/UCenter/ExtendReceive",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+
+    function changeReceive(oid) {
+        if (confirm("确定要确认换货收货吗？？")) {
+            $.ajax({
+                type: "GET",
+                url: "/mob/UCenter/ChangReceive",
+                data: { oid: oid, },
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    if (result.state == "success") {
+                        alert(result.content);
+                        window.location.href = window.location.href;
+                    }
+                    else if (result.state == "exception") {
+                        alert(result.content);
+                    }
+                    else if (result.state == "error") {
+                        showVerifyError(result.content);
+                    }
+                }
+            });
+        }
+    }
+
+
+    //捕手申请
+    function BSfundOrder(oid, cancelReason) {
+        if (confirm("确定要申请退款该订单吗？")) {
+            Ajax.post("/mob/ucenter/BSApplyOrderRdFund", { 'oid': oid, 'cancelReason': cancelReason }, false, BSfundOrderResponse);
+        }
+    }
+    function BSfundOrderResponse(data) {
+        var result = eval("(" + data + ")");
+        if (result.state == "success") {
+            alert("申请退款成功，请等待系统处理！");
+            window.location.href = window.location.href;
+        }
+        else {
+            alert(result.content);
+        }
+    }
+</script>
+
+<div class="pro inner" id="orderListBlock">
+    <div class="lists">
+        @Html.Partial("/mobile/views/ucenter/orderlistAjax.cshtml",Model)
+        @*@foreach (DataRow row in Model.OrderList.Rows)
+        {
+            OrderState orderStates = new OrderState();
+            string state = string.Empty;
+            if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed || TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+            {
+                if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Completed)
+                {
+                    state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString() + "-" + row["changetype"].ToString();
+                }
+                else if (TypeHelper.ObjectToInt(row["orderstate"]) == (int)OrderState.Returned)
+                {
+                    state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"])) + "-" + row["returntype"].ToString();
+                }
+            }
+            else
+            {
+                state = Enum.GetName(typeof(OrderState), TypeHelper.ObjectToInt(row["orderstate"]));
+
+            }
+            OrderState orderState = (OrderState)TypeHelper.ObjectToInt(row["orderstate"]);
+            List<OrderProductInfo> orderProductList = Orders.GetOrderProductList(TypeHelper.ObjectToInt(row["oid"]), Model.OrderProductList);
+            <div class="proItme">
+                <div class="proTitle">
+                    <span class="storeName">@row["storename"]</span><i class="am-icon-angle-right"></i>
+                    <span class="proState">@switch (state)
+                                           {
+                                               case "WaitPaying":
+                        @:等待付款
+            break;
+                                               case "Confirming":
+                        @:待确认
+            break;
+                                               case "Confirmed":
+                        @:已确认
+            break;
+                                               case "PreProducting":
+                        @:备货中
+            break;
+                                               case "Sended":
+                        @:已发货
+            break;
+                                               case "Completed-0-0":
+                        @:已完成
+            break;
+                                               case "Completed-0-1":
+                        @:<span class="font-color-red">换货审核中</span>
+            break;
+                                               case "Completed-0-2":
+                        @:<span class="font-color-red">换货审核通过</span>
+            break;
+                                               case "Completed-0-3":
+                        @:<span class="font-color-red">换货等待发货</span>
+            break;
+                                               case "Completed-0-4":
+                        @:<span class="font-color-red">换货确认收货</span>
+            break;
+                                               case "Completed-0-5":
+                        @:<span>换货完成</span>
+            break;
+                                               case "Completed-1-0":
+                        @:<span class="font-color-red">退货审核中</span>
+            break;
+                                               case "Settled":
+                        @:已结算
+                                    break;
+                                               case "Cancelled":
+                        @:取消
+            break;
+                                               case "Returned-2":
+                        @:<span class="font-color-red">退货审核通过</span>
+            break;
+                                               case "Returned-3":
+                        @:<span class="font-color-red">退款审核中</span>
+            break;
+                                               case "Returned-4":
+                        @:退款成功
+            break;
+                                               case "Changed":
+                        @:换货
+            break;
+                                               case "Locked":
+                        @:锁定
+            break;
+                                               default:
+                        @:未知状态
+            break;
+                                           }</span>
+                </div>
+                @foreach (var info in orderProductList)
+                {
+                    <a href="@Url.Action("orderinfo", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">
+                        <div class="proItme-goods">
+                            <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg">
+                            <div class="order-msg">
+                                <p class="nametitle">
+                                    @if (info.Type == 3)
+                                    {
+                                        <span class="font-color-red">[套装]</span>
+                                    }
+                                    @info.Name
+                                </p>
+                                <p>
+                                    <span class="price">¥@(info.DiscountPrice) </span>
+                                    <span class="order-data">x 
+                                    @(info.Type == 3 ? info.RealCount : info.BuyCount)
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </a>
+                }
+                <div class="proCount">
+                    <span>共<label>@Carts.SumOrderProductCount(orderProductList)</label>件商品 &nbsp;  &nbsp;实付款：<label>¥@row["surplusmoney"]</label>(含运费¥@row["shipfee"])
+                    </span>
+                </div>
+                <div class="proBt" dat-dd="@row["paysystemname"].ToString().Trim()">
+                    <a  href="@Url.Action("orderactionlist", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" id="orderActionList@{@row["oid"]}">订单跟踪</a>
+                    @if (orderState == OrderState.WaitPaying && TypeHelper.ObjectToInt(row["paymode"]) == 1)
+                    {
+                        <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">在线支付</a>
+                    }
+                    else if ((orderState == OrderState.WaitPaying && TypeHelper.ObjectToInt(row["paymode"]) == 2))
+                    {
+                        if (row["paysystemname"].ToString().Trim() == "custompay")
+                        {
+                        <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">微信收款码付款</a>
+                        }
+                        else
+                        { 
+                        <a class="" href="@Url.Action("payshow", "order", new RouteValueDictionary { { "oidList", TypeHelper.ObjectToInt(row["oid"]) } })" id="payOrderBut@{@row["oid"]}">银行汇款</a>
+                        }
+
+                    }
+                    @if (orderState == OrderState.Completed && StringHelper.StrContainsForNum(WebHelper.GetConfigSettings("HQBSRefundOid"), row["oid"].ToString()))
+                    {
+                        <a class="" href="javascript:BSfundOrder(@row["oid"], 0)">申请退款</a>
+                    }
+                    @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["isreview"]) == 0)
+                    {
+                        <a class="" href="@Url.Action("revieworder", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">订单评价</a>
+                    }
+                    @if (orderState == OrderState.Sended)
+                    {
+                        if (TypeHelper.ObjectToInt(row["isextendreceive"]) != 1)
+                        {
+                        <a class="" href="javascript:extentreceive(@row["oid"]);">延长收货</a>
+                        }
+                        <a class="confirmReceip" href="javascript:confirmReceip(@row["oid"]);">确认收货</a>
+                    }
+                    @if (orderState == OrderState.WaitPaying || (orderState <= OrderState.Confirmed && TypeHelper.ObjectToInt(row["paymode"]) == 1))
+                    {
+                        <a class="" href="javascript:cancelOrder(@row["oid"], 0)" id="cancelOrderBut@{@row["oid"]}">取消订单</a>
+                    }
+                    @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(7) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+                    {
+                        if (TypeHelper.ObjectToInt(row["suboid"]) <= 0)
+                        {
+                        <a class="" href="@Url.Action("returnapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })" >申请退货</a>
+                        }
+                    }
+                    @if (orderState == OrderState.Completed && (TypeHelper.ObjectToDateTime(row["receivingtime"]).AddDays(15) > DateTime.Now) && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 0)
+                    { 
+                        <a class="" href="@Url.Action("changeapply", new RouteValueDictionary { { "oid", TypeHelper.ObjectToInt(row["oid"]) } })">申请换货</a>
+                    }
+                    @if (orderState == OrderState.Completed && TypeHelper.ObjectToInt(row["returntype"]) == 0 && TypeHelper.ObjectToInt(row["changetype"]) == 4)
+                    { 
+                        <a class="" href="javascript:changeReceive(@row["oid"])">换货确认收货</a>
+                    }
+                    @if (orderState == OrderState.Cancelled)
+                    { 
+                        <a class="" href="javascript:void(0);" onclick="deleteOrder(@row["oid"]);">删除订单</a>
+                    }
+                </div>
+            </div>
+        }*@
+    </div>
+</div>
+@*<div class="loading">
+    @if (Model.PageModel.HasNextPage)
+    {
+        <a id="loadBut" href="javascript:getOrderList('@Model.StartAddTime','@Model.EndAddTime',@Model.OrderState,orderListNextPageNumber);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" style="display: none;" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    else
+    {
+        <a id="loadBut" style="display: none;" href="javascript:void(0);" class="loadMore"><span>加载更多</span></a>
+        <a id="lastPagePrompt" href="javascript:void(0);" class="loadMore">没有了</a>
+    }
+    <div id="loadPrompt" style="display: none;" class="loadAnimate">
+        <p class="list-loading"><span></span>加载中...</p>
+    </div>
+</div>*@
+<script>
+    $(function () {
+        var page = 1;
+
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea: window,
+            autoLoad: true,
+            domUp: {
+                domClass: 'dropload-up',
+                domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+                domUpdate: '<div class="dropload-update">↑释放更新</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>'
+            },
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load"><span class="am-icon-spinner am-icon-spin"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">————我已经到底啦————</div>'
+            },
+            loadUpFn: function (me) {
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/mob/ucenter/OrderList?orderState=@Model.OrderState&startAddTime=@Model.StartAddTime&endAddTime=@Model.EndAddTime&page=' + page,
+                    //dataType: 'json',
+                    success: function (data) {
+                        //alert(data);
+                        var result = '';
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            //$('.lists').html(result);
+                            window.location.href = window.location.href;
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                            // 解锁loadDownFn里锁定的情况
+                            me.unlock();
+                            me.noData(false);
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            },
+            loadDownFn: function (me) {
+                page++;
+                $.ajax({
+                    type: 'GET',
+                    @*@Model.CateId,@Model.BrandId,@Model.FilterPrice,'@Model.FilterAttr',0,@Model.SortColumn,@Model.SortDirection,cpListNextPageNumber*@
+                    url: '/mob/ucenter/OrderList?orderState=@Model.OrderState&startAddTime=@Model.StartAddTime&endAddTime=@Model.EndAddTime&page=' + page,
+                    // dataType: 'json',
+                    success: function (data) {
+
+                        if (data.indexOf("proItme") <= -1) {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            $('.lists').append(data);
+                            // 每次数据加载完，必须重置
+                            dropload.resetload();
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        console.log('Ajax error!');
+                        // 即使加载出错，也得重置
+                        dropload.resetload();
+                    }
+                });
+            }
+        });
+    });
+        </script>
+

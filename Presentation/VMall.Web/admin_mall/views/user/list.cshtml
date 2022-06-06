@@ -1,0 +1,289 @@
+﻿@model VMall.Web.MallAdmin.Models.UserListModel
+@{
+    Layout = "~/admin_mall/views/shared/_layout_adminlte.cshtml";
+}
+@section header{
+    <title>用户列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    @*<link rel="stylesheet" href="/admin_mall/content/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="/admin_mall/content/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+    <style>
+        /*td {
+            font-size: 13px;
+        }*/
+        .downarrow {
+            height: 30px;
+        }
+        /*.btn-group {
+            margin-top: 5px;
+        }*/
+    </style>
+    <script>
+        $(function () {
+            if ($("#IsOutPut")) {
+                $("#IsOutPut").val("0");
+            }
+        });
+        function search() {
+            $("#IsOutPut").val("0");
+            $("form").submit();
+        }
+        function output() {
+            $("#IsOutPut").val("1");
+            $("form").submit();
+        }
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="#">用户管理</a></li>
+            <li class="active">用户列表</li>
+        </ol>
+        <div class="right">
+            <a href="@Url.Action("add")" class="btn btn-primary btn-sm border-radius-lg">
+                <i class="fa fa-plus-circle fa-lg"></i>添加</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("list", "user"))
+    {
+        <input type="hidden" value="0" id="IsOutPut" name="IsOutPut" />
+        <section class="content-search">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box-header -->
+                    <div class="box-body ">
+                        <div class="form-inline ">
+                            <div class="form-group hide">
+                                <label>会员等级：</label>
+                                @Html.DropDownListFor(x => x.UserRid, ViewData["userRankList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group hide">
+                                <label>管理员组：</label>
+                                @Html.DropDownListFor(x => x.MallAGid, ViewData["mallAdminGroupList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group hide">
+                                <label>用户类型：</label>
+                                @Html.DropDownListFor(x => x.UserType, ViewData["userTypeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>账号名：</label>
+                                @Html.TextBox("UserName", Model.UserName, new { @class = "form-control" })
+                                <span style="color: red;">(用户名或手机号)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>姓名：</label>
+                                @Html.TextBox("RealName", Model.RealName, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>会员ID：</label>
+                                @Html.TextBox("Uid", Model.Uid, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label>会员等级：</label>
+                                @Html.DropDownListFor(x => x.AgentType, ViewData["agentTypeList"] as List<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="SearchUser" name="SearchUser" class="btn btn-default  searchBut submit" onclick="search();"><i class="fa fa-search"></i>搜索</button>
+                                <button type="button" id="ExportOrder" name="ExportOrder" class="btn btn-default  searchBut submit" onclick="output();"><i class="fa fa-download"></i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example2_2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="allSelect" /></th>
+                                        <th>UID</th>
+                                        <th>用户名</th>
+                                        <th>手机</th>
+                                        <th>昵称</th>
+                                        <th>姓名</th>
+                                        <th>会员等级</th>
+                                        <th>平台来源</th>
+                                        <th>注册时间</th>
+                                        <th>最后访问时间</th>
+                                        <th>绑定微信</th>
+                                        <th>管理操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in Model.UserList.Rows)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                                <input type="checkbox" value="@row["uid"]" selectItem="true" name="uidList" /></td>
+                                            <td>@row["uid"]</td>
+                                            <td>@row["username"]</td>
+                                            <td>@row["mobile"]</td>
+                                            <td>@row["nickname"]</td>
+                                            <td>@row["realname"]</td>
+                                            <td>@Enum.GetName(typeof(AgentTypeEnum), row["agenttype"]) </td>
+                                            <td>@Enum.GetName(typeof(MallSourceType), TypeHelper.ObjectToInt(row["mallsource"])) </td>
+                                            <td>@(TypeHelper.ObjectToDateTime(row["registertime"]).ToString("yyyy-MM-dd HH:mm")) </td>
+                                            <td>@(TypeHelper.ObjectToDateTime(row["lastvisittime"]).ToString("yyyy-MM-dd HH:mm")) </td>
+                                            <td>@(string.IsNullOrEmpty(row["otherloginid"].ToString()) ? "<span style=''>未绑定</span>" : "<span style='color:#33B332;'>已绑定</span>")</td>
+                                            <td>
+                                                @if (WorkContext.MallAGid == 2)
+                                                {
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button type="button" class="btn btn-default btn-sm">
+                                                            <a href="@Url.Action("edit", new { uid = row["uid"] })">编辑</a></button>
+                                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle downarrow"
+                                                            data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">切换下拉菜单</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            @*<li><a href="@Url.Action("editrank", new { uid = row["uid"] })">更改会员身份</a></li>*@
+                                                            <li><a href="@Url.Action("EditDetail", new { uid = row["uid"] })">更改基本资料</a></li>
+                                                        </ul>
+                                                    </div>
+                                                }
+
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-sm">
+                                                        <a href="@Url.Action("accountlist", new { uid = row["uid"], isDSUser = row["isdirsaleuser"].ToString() == "1" ? true : false, DSuid = row["dirsaleuid"] })">帐户列表</a></button>
+                                                </div>
+                                                @*<div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-sm">
+                                                        <a href="@Url.Action("recommendnet", new { uid = row["uid"] })">推荐网络</a></button>
+                                                </div>*@
+
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-default btn-sm">
+                                                        <a href="@Url.Action("recommendnet", new { uid = row["uid"] })">推荐网络</a></button>
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle downarrow"
+                                                        data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">切换下拉菜单</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        @if (WorkContext.MallAGid == 2 || WorkContext.MallAGid == 3 || WorkContext.MallAGid == 11)
+                                                        {
+                                                            <li><a href="@Url.Action("RankModify", new { uid = row["uid"] })">更改代理等级</a></li>
+
+                                                            <li><a href="@Url.Action("AgentNetModify", new { uid = row["uid"] })">更改推荐关系</a></li>
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+@*
+        
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="20" align="center">
+                            <input type="checkbox" id="allSelect" /></th>
+                        <th width="40" align="left">ID</th>
+                        <th width="70" align="left">用户名</th>
+                        <th width="70" align="left">手机</th>
+                        <th width="80" align="left">昵称</th>
+                        <th width="50" align="left">姓名</th>
+                        <th width="50" align="left">会员等级</th>
+                        <th width="50" align="left">平台来源</th>
+                        <th width="70" align="left">注册时间</th>
+                        <th width="70" align="left">最后访问时间</th>
+                        <th width="45" align="left">绑定微信</th>
+                        <th width="150" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.UserList.Rows)
+                    {
+                        <tr>
+                            <td align="center">
+                                <input type="checkbox" value="@row["uid"]" selectItem="true" name="uidList" /></td>
+                            <td>@row["uid"]</td>
+                            <td>@row["username"]</td>
+                            <td>@row["mobile"]</td>
+                            <td>@row["nickname"]</td>
+                            <td>@row["realname"]</td>
+
+                            <td>
+                                @Enum.GetName(typeof(AgentTypeEnum), row["agenttype"])
+                            </td>
+                            <td>
+                                @Enum.GetName(typeof(MallSourceType), TypeHelper.ObjectToInt(row["mallsource"]))
+                            </td>
+
+                            <td>@(TypeHelper.ObjectToDateTime(row["registertime"]).ToString("yyyy-MM-dd HH:mm")) </td>
+                            <td>@(TypeHelper.ObjectToDateTime(row["lastvisittime"]).ToString("yyyy-MM-dd HH:mm")) </td>
+                            <td>@(string.IsNullOrEmpty(row["otherloginid"].ToString()) ? "<span style=''>未绑定</span>" : "<span style='color:#33B332;'>已绑定</span>")</td>
+                            <td>
+                                @if (WorkContext.MallAGid == 2)
+                                {
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-default btn-sm">
+                                            <a href="@Url.Action("edit", new { uid = row["uid"] })">编辑</a></button>
+                                        <button type="button" class="btn btn-default btn-sm dropdown-toggle downarrow"
+                                            data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">切换下拉菜单</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="@Url.Action("editrank", new { uid = row["uid"] })">更改会员身份</a></li>
+                                            <li><a href="@Url.Action("EditDetail", new { uid = row["uid"] })">更改基本资料</a></li>
+                                        </ul>
+                                    </div>
+                                }
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm">
+                                        <a href="@Url.Action("accountlist", new { uid = row["uid"], isDSUser = row["isdirsaleuser"].ToString() == "1" ? true : false, DSuid = row["dirsaleuid"] })">帐户列表</a></button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm">
+                                        <a href="@Url.Action("recommendnet", new { uid = row["uid"] })">推荐网络</a></button>
+                                </div>
+                             
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
+        
+        <div class="dataListEdit">
+            @*<a href="#" delUrl="@Url.Action("del")" class="batch batchDel">批量删除</a>*@
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

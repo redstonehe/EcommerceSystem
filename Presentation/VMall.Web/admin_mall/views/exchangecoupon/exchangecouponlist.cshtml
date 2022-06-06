@@ -1,0 +1,150 @@
+﻿@model VMall.Web.MallAdmin.Models.ExChangeCouponListModel
+@section header{
+    <title>兑换码列表</title>
+    <link type="text/css" rel="stylesheet" href="/admin_mall/content/css/site.css" />
+    <script type="text/javascript" src="/admin_mall/scripts/jquery.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/showlist.js"></script>
+    <link href="/admin_mall/content/jbox/Skins/Default/jbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/admin_mall/content/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/admin_mall/scripts/selectlist.js"></script>
+    <script type="text/javascript" src="/admin_mall/content/my97datepicker/WdatePicker.js"></script>
+    <style>
+        .createoid a:hover {
+            color: red;
+        }
+    </style>
+    <script>
+        //function output() {
+        //    var csn = $.trim($("#csn").val());
+        //    var Type = $("#Type").val();
+        //    var userName = $("#userName").val();
+        //    window.open("/malladmin/cashcoupon/OutPutList?csn=" + csn + "&userName=" + userName + "&type=" + Type);
+        //}
+        function search() {
+            $("form").submit();
+        }
+
+    </script>
+}
+
+@section body{
+    <h1 class="rightH1">促销管理 &gt;&gt; 兑换码列表
+        <div class="right">
+
+            <a href="@Url.Action("AddExChangeCoupon")" class="menuBT">
+                <img src="/admin_mall/content/images/add.jpg" />增加兑换码
+            </a>
+
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </h1>
+    @using (Html.BeginForm("exchangecouponlist", "exchangecoupon"))
+    {
+        <div class="dataListSearch">
+            <table height="32">
+                <tbody>
+                    <tr>
+                        <td width="35">
+                            <img id="searchImg" src="/admin_mall/content/images/search1.gif" /></td>
+                        <td>&nbsp;兑换码：</td>
+                        <td>@Html.TextBox("exsn", Model.EXSN, new { height = "28", size = "15" })</td>
+                        @*<td>&nbsp;&nbsp;&nbsp;状态：</td>
+                        <td>
+                            <td width="50">@Html.DropDownListFor(x => x.Type, ViewData["typeList"] as List<SelectListItem>)</td>
+                        </td>*@
+                        <td>&nbsp;用户：</td>
+                        <td>@Html.TextBox("userName", Model.UserName, new { height = "28", size = "15" })</td>
+                        <td>
+                            <input id="SearchCash" name="SearchCash" type="image" class="searchBut submit" src="/admin_mall/content/images/s.jpg" />
+                            @*<input id="ExportOrder" name="ExportOrder" type="button" style="width: 63px; height: 24px;" class="searchBut submit" value="导出" onclick="output();" />*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataList">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th width="10"></th>
+                        <th width="200" align="left">兑换码</th>
+                        <th width="200" align="left">类型</th>
+                        <th width="200" align="left">用户(用户名/手机)</th>
+                        <th width="180" align="left">创建时间</th>
+                        <th width="180" align="left">是否使用</th>
+                        <th width="180" align="left">有效期</th>
+                        <th width="50" align="left">状态</th>
+                        <th width="146" align="left">管理操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.ExChangeCouponList.Rows)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>@row["exsn"]</td>
+                            <td>@if (TypeHelper.ObjectToInt(row["codetypeid"]) == 2)
+                                {
+                                @:3月面膜兑换码
+      }
+                                else if (TypeHelper.ObjectToInt(row["codetypeid"]) == 3)
+                                {
+                                @:优兑换码
+      }
+                                else if (TypeHelper.ObjectToInt(row["codetypeid"]) == 4)
+                                {
+                                @:精兑换码
+      }
+                                else if (TypeHelper.ObjectToInt(row["codetypeid"]) == 5)
+                                {
+                                @:臻兑换码
+      }
+                                else
+                                {
+                                @:未知类型
+                                   }
+
+                            </td>
+                            <td>@row["username"]
+                                <br />
+                                @row["mobile"]  </td>
+                            <td>@TypeHelper.ObjectToDateTime(row["createtime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="createoid">
+                                @if (TypeHelper.ObjectToInt(row["oid"]) > 0)
+                                {
+                                    <a href="@Url.Action("orderinfo", "order", new { oid = row["oid"] })" style="color:blue;text-decoration:underline">已使用</a>
+                                }
+                                else
+                                {
+                                    <span>未使用</span>
+                                }
+                            </td>
+
+                            <td>@TypeHelper.ObjectToDateTime(row["validtime"]).ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="stateTd">
+                                @if (TypeHelper.ObjectToDateTime(row["validtime"]) >= DateTime.Now)
+                                {
+                                    @:有效
+      }
+                                else
+                                {
+                                    @:<span style="color:red;">无效</span>
+      }
+                            </td>
+                            <td>
+                                @*@Html.ActionLink("[禁用]", "banCash", new { CashId = row["CashId"] }, new { @class = "editOperate" })*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="dataListEdit">
+            <div class="page">
+                @Html.MallAdminPager(Model.PageModel)
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,54 @@
+﻿@model VMall.Core.TopicInfo
+@{
+    ViewBag.Title = Model.Title + "-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.Mark = 3;
+    ViewBag.IsBox1210 = 1;
+}
+@Html.Raw(Model.HeadHtml)
+
+
+<div class="box1210">
+    @Html.Raw(Model.BodyHtml)
+</div>
+
+
+<div id="footer" class="bigBox">
+  <div class="box1210">
+
+    @{
+        int flag = 1;
+        foreach (HelpInfo info in WorkContext.HelpList)
+        {
+            if (info.Pid != 0)
+            {
+                if (info.Url.Length == 0)
+                {
+            <a href="@Url.Action("question", "help", new RouteValueDictionary { { "id", info.Id } })">@info.Title</a>
+                }
+                else
+                {
+            <a href="@info.Url">@info.Title</a>
+                }
+            }
+            else
+            {
+                if (flag != 1)
+                {
+                @:</div>
+            }
+            @:<div class="footerBox"><h3>@info.Title</h3>
+            flag++;
+            }
+        }
+        if (WorkContext.HelpList.Count > 0)
+        {
+        @:</div>
+    }
+    }
+
+  <div class="clear"></div>
+  </div>
+@Html.Partial("/views/publicpage/footcopyright.cshtml")
+
+
+

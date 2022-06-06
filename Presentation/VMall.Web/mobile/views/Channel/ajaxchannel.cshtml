@@ -1,0 +1,105 @@
+﻿@model VMall.Web.Mobile.Models.ChannelModel
+@{
+    Layout = null;
+}
+<script>
+    hasNextPage = @Model.PageModel.HasNextPage.ToString().ToLower();
+</script>
+@{
+    string pids = string.Join(",", Model.ProductList.Select(x => x.Pid));
+    List<StoreProductInfo> fullcutlsit = Promotions.GetVailiFullCutProductListByPidsAndendTime(pids, DateTime.Now);
+    List<SinglePromotionInfo> lsit = Promotions.GetVailiSingleListByPidsAndendTime(pids, DateTime.Now);
+}
+@foreach (StoreProductInfo info in Model.ProductList)
+{
+    bool fullCutDiscount = false;
+    bool TJDiscount = false;
+    bool ZKJDiscount = false;
+    StoreProductInfo singleInfo = fullcutlsit.Find(x => x.Pid == info.Pid);
+    SinglePromotionInfo singleInfo2 = lsit.Find(x => x.Pid == info.Pid);
+    List<FullCutPromotionInfo> fullcutPromo = Promotions.GetAllFullCutPromotion(info.StoreId, DateTime.Now);
+
+    if (singleInfo != null)
+    {
+        fullCutDiscount = true;
+    }
+    if (singleInfo2 != null)
+    {
+        if (singleInfo2.DiscountType == 5 && singleInfo2.StartTime1 < DateTime.Now)
+        {
+            TJDiscount = true;
+        }
+        if (singleInfo2.DiscountType == 0 && singleInfo2.StartTime1 < DateTime.Now)
+        {
+            ZKJDiscount = true;
+        }
+    }
+    if (fullcutPromo.Exists(x => x.Type == 0))
+    {
+        fullCutDiscount = true;
+    }
+    <div class="proItme">
+        <a href="@Url.Action("product", "catalog", new RouteValueDictionary { { "pid", info.Pid } })">
+            <img src="/upload/store/@info.StoreId/product/show/thumb350_350/@info.ShowImg" width="100" height="100" class="img" />
+            @if (ZKJDiscount)
+            {
+                <i class="zkj_icon"></i>
+            
+            }
+            @if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488 || info.Pid == 2796 || info.Pid == 2746))
+            {
+                <i class="chaozhi_99_icon"></i>
+              
+            }
+            <span class="proDt">
+                <strong class="proDD DD1">@info.Name</strong>
+                <b class="proDD DD3" style="font-size:16px;color:#9C9A9C;">
+                    @*<em class="f16">¥</em>*@
+                    <i class="">
+                        @if (DateTime.Now >= new DateTime(2016, 11, 9) && DateTime.Now < new DateTime(2016, 11, 12) && Model.GId == 3)
+                        {
+                            @:200.00 红包+ @(info.ShopPrice - 200)
+                            }
+                        else if (TJDiscount)
+                        {
+                            @singleInfo2.DiscountValue
+                        }
+                        else if (ZKJDiscount)
+                        {
+                            @(((double)(info.ShopPrice * singleInfo2.DiscountValue) / 10.00).ToString("f2"))
+                        }
+                        else
+                        {
+                        <i>市场价：¥@(info.ShopPrice)</i>  
+                        }
+                    </i>
+                    @if (fullCutDiscount)
+                    { <i class="fullicon salewarn">满减</i>}
+                    @if (TJDiscount || ZKJDiscount)
+                    { <i class="salewarn">降</i>}
+                    @if (DateTime.Now < new DateTime(2017, 3, 9) && (info.Pid == 562 || info.Pid == 1437 || info.Pid == 1638 || info.Pid == 2828 || info.Pid == 2484 || info.Pid == 2748 || info.Pid == 2488 || info.Pid == 2796 || info.Pid == 2746))
+                    {
+                        <i class="chaozhi_99 salewarn">99超值套餐</i>
+                    }
+@* @info.ShopPrice*@
+                </b>
+                <b class="proDD DD3" style="font-size:16px;color:#9C9A9C;">会员价：¥@(info.ShopPrice-info.HongBaoCut)+@(info.HongBaoCut)积分</b>
+                @if (info.MarketPrice>info.ShopPrice){
+                <del class="markprice f12" style="color: #9C9A9C; font-size: 14px;">¥@info.MarketPrice</del>
+                }
+                @*<p class="proDD DD4">@info.ReviewCount 人评价，@Html.Raw(info.GetStarLevel().ToString())%好评</p>*@
+                @*@if (Model.ChannelInfo.ChId == 1)
+                { 
+                    <strong class="proDD DD1">
+                        <a href="javascript:void(0);" target="_blank" class="addShopping" style="color: #CECFCE; border: 1px solid #ddd; font-size: 14px;">申请免费体验</a>
+                    </strong>
+                }*@
+            </span>
+        </a>
+    </div>
+}
+
+
+
+
+

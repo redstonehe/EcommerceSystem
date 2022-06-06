@@ -1,0 +1,113 @@
+﻿@model VMall.Web.Models.CouponListModel
+
+@{
+    Layout = "~/views/shared/_layout_user.cshtml";
+    ViewBag.Title = "优惠劵-" + WorkContext.MallConfig.SiteTitle;
+    ViewBag.PositionTitle = "优惠券";
+    ViewBag.Mark = 2;
+    ViewBag.IsBox1210 = 0;
+}
+<script type="text/javascript">
+    $(function () {
+        var orderstate = '@Model.ListType';
+        $(".ts_" + orderstate).addClass('hot').siblings(".orderstate").removeClass('hot');
+    });
+</script>
+<div class="bigBox" id="member">
+    <div class="box">
+        @Html.Partial("/views/ucenter/leftNav.cshtml")
+
+        <div id="memberR">
+            <h2 id="memberRT">@ViewBag.PositionTitle
+                <a href="@Url.Action("couponcenter", "coupon")" class="moreshare" style="font-size: 12px; color: red; cursor: pointer; float: right; margin-right: 20px;">领取更多优惠券</a>
+            </h2>
+            <div class="searchList">
+                <ul>
+
+                    <li class="orderstate hot ts_0" style="width: 60px;"><a href="@Url.Action("couponlist", new { type = 0 })" >全部优惠券</a></li>
+                    <li class="orderstate ts_1"><a href="@Url.Action("couponlist", new { type = 1 })">未使用</a></li>
+                    <li class="orderstate ts_2"><a href="@Url.Action("couponlist", new { type = 2 })">已使用</a></li>
+                    <li class="orderstate ts_3"><a href="@Url.Action("couponlist", new { type = 3 })">已过期</a></li>
+
+                </ul>
+                @*<input type="text" class="text" value="商品名称、商品编号、订单编号" /><a href="javascript:;" class="whiteBT">搜索</a>*@
+                <div class="clear"></div>
+            </div>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb-void">
+                <thead>
+                    <tr>
+                        <th width="100px" align="left">编号</th>
+                        <th align="left">使用范围</th>
+                        <th width="120px" align="left">类别</th>
+                        <th width="80px" align="left">面值</th>
+                        <th width="160px" align="left">有效期</th>
+                        <th width="60px" align="left">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.CouponList.Rows)
+                    {
+                        if (row["storeid"].ToString() != WebHelper.GetConfigSettings("YX"))
+                        {
+                            if (row["storeid"].ToString() != "37")
+                            { 
+                        <tr>
+                            <td align="center">@row["couponsn"]</td>
+                            <td align="center">
+                                @if (row["channelid"] != "")
+                                {
+                                    List<ChannelInfo> channelList = Channel.GetChannelListByWhere(string.Format(" chid in ({0}) ", row["channelid"].ToString()));
+                                    var channelNames = "";
+                                    foreach (var item in channelList)
+                                    {
+                                        channelNames += item.Name + ",";
+                                    }
+                                    @("限以下专区使用（" + @channelNames.TrimEnd(',') + "）")
+                                }
+                                else if (row["storename"].ToString() == "" && row["channelid"] == "")
+                                {
+                                    @:全场通用
+        }
+                                else
+                                {
+                                    @("限以下店铺使用（" + row["storename"] + "）")
+                                    
+                                }
+                            </td>
+                            <td align="center">@row["name"]
+                                <br />
+                                @if (TypeHelper.ObjectToInt(row["orderamountlower"]) > 0)
+                                {
+                                    <i>【满 @row["orderamountlower"]可用】</i>
+                                }</td>
+                            <td align="center">@row["money"]</td>
+                            <td align="center">
+                                @TypeHelper.ObjectToDateTime(row["activatetime"]).ToString("yyyy-MM-dd HH:mm")
+                                <br />@TypeHelper.ObjectToDateTime(row["validtime"]).ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td align="center">
+                                @if (TypeHelper.ObjectToInt(row["oid"]) > 0)
+                                {
+                                    @:已使用
+             }
+                                else if (TypeHelper.ObjectToInt(row["oid"]) == 0 && TypeHelper.ObjectToDateTime(row["validtime"]) < DateTime.Now)
+                                {
+                                    @:已过期
+                                }
+
+
+                            </td>
+                        </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
