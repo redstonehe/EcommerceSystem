@@ -21,7 +21,7 @@ namespace VMall.Core
             }
             catch
             {
-                throw new BMAException("创建'异步策略对象'失败,可能存在的原因:未将'异步策略程序集'添加到bin目录中;'异步策略程序集'文件名不符合'VMall.AsynStrategy.{策略名称}.dll'格式");
+                throw new BMAException("创建'异步策略对象'失败,可能存在的原因:未将'异步策略程序集'添加到bin目录中; '异步策略程序集'文件名不符合'VMall.AsynStrategy.{策略名称}.dll'格式");
             }
         }
 
