@@ -16,10 +16,10 @@ namespace VMall.PayPlugin.WeChat
         * KEY：商户支付密钥，参考开户邮件设置（必须配置）
         * APPSECRET：公众帐号secert（仅JSAPI支付的时候需要配置）
         */
-        public const string APPID = "wx4ba227d36b5bbf42";
-        public const string MCHID = "1537367451";
-        public const string KEY = "A267B6D4ECAC4F5E8EC39015A0AD5469";
-        public const string APPSECRET = "4b33b436405a34b1f6a42afb180e9144";
+        public const string APPID = "1111111111111111";
+        public const string MCHID = "2222222222222222";
+        public const string KEY = "33333333333333333333333";
+        public const string APPSECRET = "4444444444444444444;
 
 
    
@@ -29,7 +29,7 @@ namespace VMall.PayPlugin.WeChat
         /* 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要）
         */
         public const string SSLCERT_PATH = "cert/apiclient_cert.p12";
-        public const string SSLCERT_PASSWORD = "1537367451";
+        public const string SSLCERT_PASSWORD = "1111111111111";
 
 
 
